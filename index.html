@@ -2053,7 +2053,8 @@ function saveEvent(){
 // ═══════════════ FIREBASE CLOUD SYNC (optional) ═══════════════
 let _db=null,_auth=null,_applyingRemote=false,_lastHash=null,_pushTimer=null;
 const SYNC_PREFIX='austria26_';
-const SYNC_SKIP=['austria26_user']; // per-device identity, not synced
+const MTIME_KEY='austria26_synctime'; // local last-modified stamp (not synced)
+const SYNC_SKIP=['austria26_user',MTIME_KEY]; // per-device, not synced
 
 function firebaseEnabled(){return !!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey&&FIREBASE_CONFIG.projectId);}
 
@@ -2071,7 +2072,17 @@ async function initFirebase(){
     document.getElementById('user-sync-section').style.display='block';
     // wrap localStorage.setItem so any save schedules a cloud push
     const origSet=localStorage.setItem.bind(localStorage);
-    localStorage.setItem=function(k,v){origSet(k,v);if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)schedulePush();};
+    _origSet=origSet;
+    localStorage.setItem=function(k,v){
+      origSet(k,v);
+      if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0){
+        origSet(MTIME_KEY,String(Date.now())); // stamp this local edit
+        schedulePush();
+      }
+    };
+    // flush any pending push when leaving, so a quick close doesn't drop edits
+    window.addEventListener('pagehide',flushPush);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushPush();});
     _auth.onAuthStateChanged(u=>{
       if(u){onAuthed(u);}
       else if(!_anonTried){_anonTried=true;_auth.signInAnonymously().catch(e=>console.warn('anon sign-in failed',e));}
@@ -2135,7 +2146,9 @@ function collectState(){
   return blob;
 }
 function hashState(blob){return JSON.stringify(Object.keys(blob).sort().map(k=>[k,blob[k]]));}
+let _origSet=null;
 function schedulePush(){clearTimeout(_pushTimer);_pushTimer=setTimeout(pushState,800);}
+function flushPush(){if(_pushTimer){clearTimeout(_pushTimer);_pushTimer=null;pushState();}}
 function pushState(){
   if(!_db||!_auth||!_auth.currentUser||_applyingRemote)return;
   const blob=collectState();const h=hashState(blob);
@@ -2153,11 +2166,18 @@ function subscribeState(){
   ref.onSnapshot(doc=>{
     if(!doc.exists)return;
     const remote=doc.data().data||{};
+    const remoteTime=doc.data().updatedAt||0;
     const h=hashState(remote);
     if(h===_lastHash)return; // matches our local state — nothing to do
+    // last-write-wins: if this device has local edits newer than the remote
+    // copy (e.g. added something then closed before the push ran), keep ours
+    // and push it instead of letting the older cloud copy overwrite it.
+    const localTime=Number(localStorage.getItem(MTIME_KEY)||0);
+    if(localTime>remoteTime){pushState();return;}
     _lastHash=h;
     _applyingRemote=true;
     Object.keys(remote).forEach(k=>localStorage.setItem(k,remote[k]));
+    if(_origSet)_origSet(MTIME_KEY,String(remoteTime)); // we're now in sync with remote
     _applyingRemote=false;
     // re-render everything from the new data
     if(currentUser){renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();applyContentOverrides();}
