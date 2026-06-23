@@ -52,6 +52,9 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .weather-chip .temp{font-size:18px;font-weight:700}
 .weather-chip .wlabel{font-size:10px;opacity:.8}
 .user-chip{background:rgba(255,255,255,.2);border:none;color:white;border-radius:20px;padding:6px 12px;font-family:'Assistant',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
+.hero-avatar{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:var(--primary);color:#fff;font-family:'Assistant',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero-avatar img{width:100%;height:100%;object-fit:cover}
+.hero-avatar .sync-dot{position:absolute;width:11px;height:11px;border-radius:50%;background:#34A853;border:2px solid #fff;transform:translate(14px,-14px)}
 .family-badges{display:flex;gap:6px;flex-wrap:wrap}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
 .badge-brosh{background:rgba(255,255,255,.25)}
@@ -417,8 +420,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .attr-tips{background:#fffbea;border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .attr-tips li{font-size:12px;color:#5a4000;padding:3px 0;list-style:none;line-height:1.4}
 .attr-tips li::before{content:'💡 ';font-size:11px}
-body.family-aloni .brosh-only{display:none!important}
-body.family-brosh .aloni-only{display:none!important}
+/* show all family reminders/content to everyone (family choice kept only for attribution) */
 .attr-toggle-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 12px 0;user-select:none}
 .attr-toggle-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);transition:transform .2s;padding:0;line-height:1}
 .attr-card.attr-open .attr-toggle-btn{transform:rotate(180deg)}
@@ -658,9 +660,21 @@ body.family-brosh .aloni-only{display:none!important}
 .panel-itinerary.itin-editing .day-add-event,#panel-itinerary.itin-editing .day-add-event{display:flex}
 .tl-item.tl-added .tl-dot{background:var(--accent)}
 .tl-added-tag{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-light);border-radius:999px;padding:1px 7px;margin-right:4px}
+
+/* ── GENERIC SECTION EDITOR ── */
+.sec-del-btn{display:none;margin-top:10px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer}
+.app-editing .sec-del-btn{display:inline-flex}
+.sec-add-btn{display:none!important;margin-top:12px}
+.app-editing .sec-add-btn{display:flex!important}
+.app-editing [data-eid]{outline:1px dashed rgba(120,120,120,.55);outline-offset:2px;border-radius:4px;cursor:text}
+.app-editing [data-eid]:focus{outline:2px solid var(--primary);background:#fffbe6}
+#edit-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:9000;background:var(--primary);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 12px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+#edit-banner button{background:#fff;color:var(--primary);border:none;border-radius:8px;font-weight:800;padding:4px 12px;margin-right:8px;cursor:pointer;font-family:'Assistant',sans-serif}
+body.app-editing{padding-top:38px}
 </style>
 </head>
 <body>
+<div id="edit-banner">✏️ מצב עריכה — לחץ על טקסט כדי לשנות, או הוסף/מחק פריטים <button onclick="setEditMode(false)">סיום עריכה</button></div>
 
 <!-- ═══ LOCK SCREEN ═══ -->
 <div id="lock-screen">
@@ -721,9 +735,7 @@ body.family-brosh .aloni-only{display:none!important}
 <header class="app-header">
   <div class="hero-top-bar">
     <div class="hero-chips">
-      <button class="hero-chip" id="hero-chip-brosh" onclick="selectFamily('ברוש')">ברוש</button>
-      <button class="hero-chip" id="hero-chip-aloni" onclick="selectFamily('אלוני')">אלוני</button>
-      <button class="hero-chip" id="hero-sync-chip" onclick="showUserModal()" title="חשבון וסנכרון ענן">☁️ חשבון</button>
+      <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי">👤</button>
     </div>
     <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
   </div>
@@ -1194,6 +1206,8 @@ body.family-brosh .aloni-only{display:none!important}
       </div>
     </div>
     <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <button class="btn btn-primary btn-block" id="edit-mode-btn" onclick="toggleEditMode()">✏️ ערוך תוכן</button>
+    <p style="font-size:11px;color:var(--muted);margin:8px 0 16px">עריכת טקסט, הוספה ומחיקה של פריטים בכל החלקים</p>
     <button class="btn btn-ghost btn-sm" onclick="logout()">🚪 התנתק (נקה כל הנתונים המקומיים)</button>
     <div class="action-row" style="margin-top:8px">
       <button class="btn btn-ghost" onclick="closeModal('user-modal')">סגור</button>
@@ -1462,7 +1476,16 @@ function selectFamily(name){
   applyFamilyClass(name.trim());
   document.getElementById('lock-screen').style.display='none';
   document.getElementById('user-name-display').textContent=name;
+  updateAvatar();
   initApp();
+}
+function updateAvatar(){
+  const av=document.getElementById('hero-avatar');if(!av)return;
+  const photo=window._googleUser&&window._googleUser.photo;
+  const name=((window._googleUser&&window._googleUser.name)||(currentUser&&currentUser.name)||'').trim();
+  const initial=name?name[0]:'👤';
+  if(photo){av.innerHTML='<img referrerpolicy="no-referrer" src="'+photo+'" alt="" onerror="this.parentElement.textContent=\''+initial+'\'">';}
+  else{av.textContent=initial;}
 }
 function logout(){
   if(!confirm('נקה את כל הנתונים המקומיים ויציאה?'))return;
@@ -1884,6 +1907,110 @@ function deleteTask(id){
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
+// ═══════════════ GENERIC SECTION EDITOR ═══════════════
+// Lets users edit text, add items, and delete items in the static sections.
+// (Itinerary has its own editor; attractions/packing have their own add/edit.)
+const EDIT_PANELS={
+  'panel-hotels':'.card',
+  'panel-bookings':'.ck-item',
+  'panel-flights':'.flight-card,.card',
+  'panel-tips':'.tip-card'
+};
+const EDIT_TEXT_SEL='h2,h3,h4,p,.val,.lbl,.amenity,.sec-title,.ck-text,.ck-sub,.fl-val,.fl-city,.fl-code,.fl-direction,.seat-tag';
+let _editMode=false;
+
+function getContent(){const c=JSON.parse(localStorage.getItem('austria26_content')||'{}');c.text=c.text||{};c.deleted=c.deleted||[];c.added=c.added||{};return c;}
+function saveContent(c){localStorage.setItem('austria26_content',JSON.stringify(c));}
+
+function onEditBlur(e){
+  if(!_editMode)return;
+  const el=e.target,eid=el.dataset.eid;if(!eid)return;
+  const c=getContent();c.text[eid]=el.textContent;saveContent(c);
+}
+function initEditables(){
+  Object.keys(EDIT_PANELS).forEach(pid=>{
+    const panel=document.getElementById(pid);if(!panel)return;
+    let ti=0;
+    panel.querySelectorAll(EDIT_TEXT_SEL).forEach(el=>{
+      if(el.dataset.eid)return;
+      if(el.querySelector('a,button,input,select,img,svg'))return; // don't break links/controls
+      el.dataset.eid=pid+':t'+(ti++);
+      el.addEventListener('blur',onEditBlur);
+    });
+    let ii=0;
+    panel.querySelectorAll(EDIT_PANELS[pid]).forEach(item=>{
+      if(!item.dataset.iid2)item.dataset.iid2=pid+':i'+(ii++);
+      if(!item.querySelector(':scope > .sec-del-btn')){
+        const d=document.createElement('button');
+        d.className='sec-del-btn';d.textContent='🗑️ מחק פריט';
+        d.setAttribute('onclick',`deleteSectionItem('${item.dataset.iid2}')`);
+        item.appendChild(d);
+      }
+    });
+    if(!panel.querySelector(':scope > .sec-add-btn')){
+      const a=document.createElement('button');
+      a.className='btn btn-outline btn-sm sec-add-btn';
+      a.textContent='＋ הוסף פריט';
+      a.setAttribute('onclick',`addSectionItem('${pid}')`);
+      panel.appendChild(a);
+    }
+  });
+  applyContentOverrides();
+}
+function applyContentOverrides(){
+  const c=getContent();
+  Object.entries(c.text).forEach(([eid,val])=>{
+    const el=document.querySelector('[data-eid="'+eid+'"]');
+    if(el&&el.textContent!==val)el.textContent=val;
+  });
+  c.deleted.forEach(iid=>{const el=document.querySelector('[data-iid2="'+iid+'"]');if(el)el.style.display='none';});
+  Object.keys(c.added).forEach(pid=>{(c.added[pid]||[]).forEach(it=>renderAddedSectionItem(pid,it,false));});
+}
+function deleteSectionItem(iid){
+  if(!confirm('למחוק פריט זה?'))return;
+  const c=getContent();if(!c.deleted.includes(iid))c.deleted.push(iid);saveContent(c);
+  const el=document.querySelector('[data-iid2="'+iid+'"]');if(el)el.style.display='none';
+}
+function addSectionItem(pid){
+  const c=getContent();c.added[pid]=c.added[pid]||[];
+  const it={id:'s'+Date.now(),title:'כותרת חדשה',text:'תיאור...'};
+  c.added[pid].push(it);saveContent(c);
+  renderAddedSectionItem(pid,it,true);
+}
+function renderAddedSectionItem(pid,it,focus){
+  const panel=document.getElementById(pid);if(!panel)return;
+  if(panel.querySelector('[data-aid="'+it.id+'"]'))return;
+  const c=getContent();
+  const tEid=pid+':a-'+it.id+'-title',dEid=pid+':a-'+it.id+'-text';
+  const title=(c.text[tEid]!=null)?c.text[tEid]:it.title;
+  const text=(c.text[dEid]!=null)?c.text[dEid]:it.text;
+  const card=document.createElement('div');
+  card.className='card open';card.dataset.aid=it.id;card.style.padding='14px 16px';
+  card.innerHTML='<h3 data-eid="'+tEid+'" style="margin-bottom:4px">'+escapeHtml(title)+'</h3>'+
+    '<p data-eid="'+dEid+'" style="color:var(--muted)">'+escapeHtml(text)+'</p>'+
+    '<button class="sec-del-btn" onclick="deleteAddedItem(\''+pid+'\',\''+it.id+'\')">🗑️ מחק פריט</button>';
+  const addBtn=panel.querySelector(':scope > .sec-add-btn');
+  if(addBtn)panel.insertBefore(card,addBtn);else panel.appendChild(card);
+  card.querySelectorAll('[data-eid]').forEach(el=>{el.addEventListener('blur',onEditBlur);if(_editMode)el.contentEditable='true';});
+  if(focus){const h=card.querySelector('h3');if(h){h.contentEditable='true';h.focus();}}
+}
+function deleteAddedItem(pid,id){
+  if(!confirm('למחוק פריט זה?'))return;
+  const c=getContent();
+  c.added[pid]=(c.added[pid]||[]).filter(x=>x.id!==id);
+  delete c.text[pid+':a-'+id+'-title'];delete c.text[pid+':a-'+id+'-text'];
+  saveContent(c);
+  const el=document.querySelector('[data-aid="'+id+'"]');if(el)el.remove();
+}
+function setEditMode(on){
+  _editMode=on;
+  document.body.classList.toggle('app-editing',on);
+  document.querySelectorAll('[data-eid]').forEach(el=>{el.contentEditable=on?'true':'false';});
+  const ban=document.getElementById('edit-banner');if(ban)ban.style.display=on?'block':'none';
+  const b=document.getElementById('edit-mode-btn');if(b)b.textContent=on?'✅ סיום עריכת תוכן':'✏️ ערוך תוכן';
+}
+function toggleEditMode(){closeModal('user-modal');setEditMode(!_editMode);}
+
 // ═══════════════ ADD / EDIT ITINERARY EVENT ═══════════════
 function openAddEvent(dayId){
   document.getElementById('event-modal-title').textContent='➕ הוסף אירוע ל'+(DAY_LABELS[dayId]||'');
@@ -1976,18 +2103,16 @@ function onGoogleAuthed(u){
   }
 }
 function updateSyncUI(){
-  const chip=document.getElementById('hero-sync-chip');
   const pill=document.getElementById('user-sync-status');
   const btn=document.getElementById('user-google-btn');
   if(window._googleUser){
-    if(chip)chip.textContent='☁️ מסונכרן';
     if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן · '+window._googleUser.email;}
     if(btn)btn.style.display='none';
   } else {
-    if(chip)chip.textContent='☁️ חשבון';
     if(pill){pill.className='sync-pill sync-off';pill.textContent='☁️ סנכרון ענן כבוי – התחבר עם Google';}
     if(btn)btn.style.display='flex';
   }
+  updateAvatar();
 }
 function collectState(){
   const blob={};
@@ -2023,7 +2148,7 @@ function subscribeState(){
     Object.keys(remote).forEach(k=>localStorage.setItem(k,remote[k]));
     _applyingRemote=false;
     // re-render everything from the new data
-    if(currentUser){renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();}
+    if(currentUser){renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();applyContentOverrides();}
   },e=>console.warn('sync listen failed',e));
 }
 
@@ -2236,6 +2361,7 @@ function initApp(){
   fetchWeather();
   initItinIds();
   applyItinMods();
+  initEditables();
   if(_db&&_auth&&_auth.currentUser)subscribeState();
   if(window.feather)feather.replace();
 }
@@ -2251,6 +2377,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       applyFamilyClass(currentUser.name);
       document.getElementById('lock-screen').style.display='none';
       document.getElementById('user-name-display').textContent=currentUser.name;
+      updateAvatar();
       initApp();
     }catch{localStorage.removeItem('austria26_user')}
   }
