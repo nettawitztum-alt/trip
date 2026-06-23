@@ -2087,15 +2087,17 @@ async function initFirebase(){
 function signInWithGoogle(){
   if(!_auth){alert('סנכרון הענן לא הוגדר עדיין. ראו ההוראות בקובץ.');return;}
   const provider=new firebase.auth.GoogleAuthProvider();
-  // Popup keeps the whole flow in one context — avoids Safari's redirect/ITP
-  // problem where it gets stuck on a blank firebaseapp.com page. Triggered from
-  // the user's tap, the popup is allowed on mobile too. Fall back to redirect
-  // only if the popup is actually blocked/unsupported.
+  const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // Popup keeps the flow in one context (avoids Safari's broken blank-redirect).
   _auth.signInWithPopup(provider).catch(e=>{
     if(e&&e.code==='auth/popup-closed-by-user')return; // user dismissed
-    if(e&&['auth/popup-blocked','auth/cancelled-popup-request','auth/operation-not-supported-in-this-environment'].indexOf(e.code)>=0){
-      _auth.signInWithRedirect(provider).catch(er=>alert('ההתחברות נכשלה: '+(er.message||er)));
-    } else {console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));}
+    const blocked=e&&['auth/popup-blocked','auth/cancelled-popup-request','auth/operation-not-supported-in-this-environment'].indexOf(e.code)>=0;
+    if(blocked&&isIOS){
+      alert('הדפדפן חסם את חלון ההתחברות. פִּתחו את האפליקציה ב-Chrome, או כבו "חסימת חלונות קופצים" בהגדרות → Safari, ונסו שוב.');
+      return;
+    }
+    if(blocked){_auth.signInWithRedirect(provider).catch(er=>alert('ההתחברות נכשלה: '+(er.message||er)));return;}
+    console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));
   });
 }
 function onGoogleAuthed(u){
