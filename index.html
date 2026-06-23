@@ -2081,12 +2081,23 @@ async function initFirebase(){
     const origSet=localStorage.setItem.bind(localStorage);
     localStorage.setItem=function(k,v){origSet(k,v);if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)schedulePush();};
     _auth.onAuthStateChanged(u=>{if(u)onGoogleAuthed(u);});
+    _auth.getRedirectResult().catch(e=>console.warn('redirect sign-in result',e)); // completes mobile redirect login
   }catch(e){console.warn('Firebase init failed',e);}
 }
 function signInWithGoogle(){
   if(!_auth){alert('סנכרון הענן לא הוגדר עדיין. ראו ההוראות בקובץ.');return;}
   const provider=new firebase.auth.GoogleAuthProvider();
-  _auth.signInWithPopup(provider).catch(e=>{console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));});
+  const isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(isMobile){
+    // popups are unreliable/blocked on mobile — use full-page redirect
+    _auth.signInWithRedirect(provider).catch(e=>{console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));});
+    return;
+  }
+  _auth.signInWithPopup(provider).catch(e=>{
+    if(e&&['auth/popup-blocked','auth/cancelled-popup-request','auth/popup-closed-by-user','auth/operation-not-supported-in-this-environment'].indexOf(e.code)>=0){
+      _auth.signInWithRedirect(provider).catch(er=>alert('ההתחברות נכשלה: '+(er.message||er)));
+    } else {console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));}
+  });
 }
 function onGoogleAuthed(u){
   window._googleUser={name:u.displayName||u.email,email:u.email,photo:u.photoURL};
