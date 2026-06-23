@@ -2111,17 +2111,12 @@ function onAuthed(u){
     subscribeState();updateSyncUI();
     return;
   }
-  // real Google account — also gives identity/avatar
+  // real Google account — also gives identity/avatar. Does NOT bypass the
+  // passcode: the lock screen stays in control of entry.
   window._googleUser={name:u.displayName||u.email,email:u.email,photo:u.photoURL};
   subscribeState();
   updateSyncUI();
-  if(!currentUser){
-    document.getElementById('lock-step1').style.display='none';
-    document.getElementById('lock-step2').style.display='block';
-    document.getElementById('lock-error').style.display='none';
-  } else {
-    closeModal('user-modal');
-  }
+  closeModal('user-modal'); // harmless if it wasn't open (e.g. signed in from the menu)
 }
 function updateSyncUI(){
   const pill=document.getElementById('user-sync-status');
