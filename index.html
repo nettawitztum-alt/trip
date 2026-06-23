@@ -723,6 +723,7 @@ body.family-brosh .aloni-only{display:none!important}
     <div class="hero-chips">
       <button class="hero-chip" id="hero-chip-brosh" onclick="selectFamily('ברוש')">ברוש</button>
       <button class="hero-chip" id="hero-chip-aloni" onclick="selectFamily('אלוני')">אלוני</button>
+      <button class="hero-chip" id="hero-sync-chip" onclick="showUserModal()" title="חשבון וסנכרון ענן">☁️ חשבון</button>
     </div>
     <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
   </div>
@@ -1975,16 +1976,16 @@ function onGoogleAuthed(u){
   }
 }
 function updateSyncUI(){
+  const chip=document.getElementById('hero-sync-chip');
   const pill=document.getElementById('user-sync-status');
   const btn=document.getElementById('user-google-btn');
-  if(!pill)return;
   if(window._googleUser){
-    pill.className='sync-pill sync-on';
-    pill.textContent='☁️ מסונכרן · '+window._googleUser.email;
+    if(chip)chip.textContent='☁️ מסונכרן';
+    if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן · '+window._googleUser.email;}
     if(btn)btn.style.display='none';
   } else {
-    pill.className='sync-pill sync-off';
-    pill.textContent='☁️ סנכרון ענן כבוי – התחבר עם Google';
+    if(chip)chip.textContent='☁️ חשבון';
+    if(pill){pill.className='sync-pill sync-off';pill.textContent='☁️ סנכרון ענן כבוי – התחבר עם Google';}
     if(btn)btn.style.display='flex';
   }
 }
