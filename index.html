@@ -2080,10 +2080,14 @@ async function initFirebase(){
     // wrap localStorage.setItem so any save schedules a cloud push
     const origSet=localStorage.setItem.bind(localStorage);
     localStorage.setItem=function(k,v){origSet(k,v);if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)schedulePush();};
-    _auth.onAuthStateChanged(u=>{if(u)onGoogleAuthed(u);});
-    _auth.getRedirectResult().catch(e=>console.warn('redirect sign-in result',e)); // completes mobile redirect login
+    _auth.onAuthStateChanged(u=>{
+      if(u){onAuthed(u);}
+      else if(!_anonTried){_anonTried=true;_auth.signInAnonymously().catch(e=>console.warn('anon sign-in failed',e));}
+    });
+    _auth.getRedirectResult().catch(e=>console.warn('redirect sign-in result',e));
   }catch(e){console.warn('Firebase init failed',e);}
 }
+let _anonTried=false;
 function signInWithGoogle(){
   if(!_auth){alert('סנכרון הענן לא הוגדר עדיין. ראו ההוראות בקובץ.');return;}
   const provider=new firebase.auth.GoogleAuthProvider();
@@ -2100,17 +2104,22 @@ function signInWithGoogle(){
     console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));
   });
 }
-function onGoogleAuthed(u){
+function onAuthed(u){
+  window._syncUser=true; // any signed-in user (incl. anonymous) enables cloud sync
+  if(u.isAnonymous){
+    // silent automatic sync — works on every browser incl. iOS
+    subscribeState();updateSyncUI();
+    return;
+  }
+  // real Google account — also gives identity/avatar
   window._googleUser={name:u.displayName||u.email,email:u.email,photo:u.photoURL};
   subscribeState();
   updateSyncUI();
   if(!currentUser){
-    // still on the lock screen — advance to family selection (attribution + theme)
     document.getElementById('lock-step1').style.display='none';
     document.getElementById('lock-step2').style.display='block';
     document.getElementById('lock-error').style.display='none';
   } else {
-    // already inside the app (signed in from the profile menu) — sync now active
     closeModal('user-modal');
   }
 }
@@ -2120,8 +2129,12 @@ function updateSyncUI(){
   if(window._googleUser){
     if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן · '+window._googleUser.email;}
     if(btn)btn.style.display='none';
+  } else if(window._syncUser){
+    // automatic (anonymous) sync active — still offer Google for an avatar/identity
+    if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן אוטומטית בין המכשירים';}
+    if(btn)btn.style.display='flex';
   } else {
-    if(pill){pill.className='sync-pill sync-off';pill.textContent='☁️ סנכרון ענן כבוי – התחבר עם Google';}
+    if(pill){pill.className='sync-pill sync-off';pill.textContent='☁️ מתחבר לסנכרון...';}
     if(btn)btn.style.display='flex';
   }
   updateAvatar();
