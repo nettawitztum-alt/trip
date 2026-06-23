@@ -2087,14 +2087,13 @@ async function initFirebase(){
 function signInWithGoogle(){
   if(!_auth){alert('סנכרון הענן לא הוגדר עדיין. ראו ההוראות בקובץ.');return;}
   const provider=new firebase.auth.GoogleAuthProvider();
-  const isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if(isMobile){
-    // popups are unreliable/blocked on mobile — use full-page redirect
-    _auth.signInWithRedirect(provider).catch(e=>{console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));});
-    return;
-  }
+  // Popup keeps the whole flow in one context — avoids Safari's redirect/ITP
+  // problem where it gets stuck on a blank firebaseapp.com page. Triggered from
+  // the user's tap, the popup is allowed on mobile too. Fall back to redirect
+  // only if the popup is actually blocked/unsupported.
   _auth.signInWithPopup(provider).catch(e=>{
-    if(e&&['auth/popup-blocked','auth/cancelled-popup-request','auth/popup-closed-by-user','auth/operation-not-supported-in-this-environment'].indexOf(e.code)>=0){
+    if(e&&e.code==='auth/popup-closed-by-user')return; // user dismissed
+    if(e&&['auth/popup-blocked','auth/cancelled-popup-request','auth/operation-not-supported-in-this-environment'].indexOf(e.code)>=0){
       _auth.signInWithRedirect(provider).catch(er=>alert('ההתחברות נכשלה: '+(er.message||er)));
     } else {console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));}
   });
