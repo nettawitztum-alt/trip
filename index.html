@@ -1179,6 +1179,13 @@ body.family-brosh .aloni-only{display:none!important}
     <div class="modal-handle"></div>
     <div class="modal-title">👤 פרופיל משתמש</div>
     <p style="font-size:14px;color:var(--muted);margin-bottom:16px">כרגע מחובר/ת בתור: <strong id="user-modal-name"></strong></p>
+    <div id="user-sync-section" style="display:none;margin-bottom:16px">
+      <div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון ענן כבוי</div>
+      <button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
+        <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        התחבר עם Google לסנכרון
+      </button>
+    </div>
     <div class="form-group"><label>שנה שם</label>
       <div style="display:flex;gap:8px">
         <input type="text" class="form-input" id="user-new-name" placeholder="שם משפחה...">
@@ -1464,6 +1471,8 @@ function logout(){
 function showUserModal(){
   document.getElementById('user-modal-name').textContent=currentUser?.name||'אורח';
   document.getElementById('user-new-name').value='';
+  if(typeof firebaseEnabled==='function'&&firebaseEnabled())document.getElementById('user-sync-section').style.display='block';
+  if(typeof updateSyncUI==='function')updateSyncUI();
   openModal('user-modal');
 }
 function changeUserName(){
@@ -1939,6 +1948,7 @@ async function initFirebase(){
     _auth=firebase.auth();
     _db=firebase.firestore();
     document.getElementById('google-signin-wrap').style.display='block';
+    document.getElementById('user-sync-section').style.display='block';
     // wrap localStorage.setItem so any save schedules a cloud push
     const origSet=localStorage.setItem.bind(localStorage);
     localStorage.setItem=function(k,v){origSet(k,v);if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)schedulePush();};
@@ -1951,12 +1961,32 @@ function signInWithGoogle(){
   _auth.signInWithPopup(provider).catch(e=>{console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));});
 }
 function onGoogleAuthed(u){
-  // Google verified — let the user pick which family they are (for attribution + theme)
-  document.getElementById('lock-step1').style.display='none';
-  document.getElementById('lock-step2').style.display='block';
-  document.getElementById('lock-error').style.display='none';
   window._googleUser={name:u.displayName||u.email,email:u.email,photo:u.photoURL};
   subscribeState();
+  updateSyncUI();
+  if(!currentUser){
+    // still on the lock screen — advance to family selection (attribution + theme)
+    document.getElementById('lock-step1').style.display='none';
+    document.getElementById('lock-step2').style.display='block';
+    document.getElementById('lock-error').style.display='none';
+  } else {
+    // already inside the app (signed in from the profile menu) — sync now active
+    closeModal('user-modal');
+  }
+}
+function updateSyncUI(){
+  const pill=document.getElementById('user-sync-status');
+  const btn=document.getElementById('user-google-btn');
+  if(!pill)return;
+  if(window._googleUser){
+    pill.className='sync-pill sync-on';
+    pill.textContent='☁️ מסונכרן · '+window._googleUser.email;
+    if(btn)btn.style.display='none';
+  } else {
+    pill.className='sync-pill sync-off';
+    pill.textContent='☁️ סנכרון ענן כבוי – התחבר עם Google';
+    if(btn)btn.style.display='flex';
+  }
 }
 function collectState(){
   const blob={};
