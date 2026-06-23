@@ -2075,9 +2075,12 @@ async function initFirebase(){
     _origSet=origSet;
     localStorage.setItem=function(k,v){
       origSet(k,v);
-      if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0){
-        origSet(MTIME_KEY,String(Date.now())); // stamp this local edit
-        schedulePush();
+      if(!_applyingRemote&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0){
+        // Always stamp the edit, even before sign-in finishes — otherwise an
+        // edit made in the first seconds wouldn't be marked newer than the
+        // cloud copy and would get overwritten on the next load.
+        origSet(MTIME_KEY,String(Date.now()));
+        if(_db&&_auth&&_auth.currentUser)schedulePush();
       }
     };
     // flush any pending push when leaving, so a quick close doesn't drop edits
