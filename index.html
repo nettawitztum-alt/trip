@@ -627,6 +627,37 @@ body.family-brosh .aloni-only{display:none!important}
   .btn,.att-btn,.bc-btn{min-height:44px;min-width:44px}
   .btn-sm{min-height:40px}
 }
+
+/* ── GOOGLE SIGN-IN ── */
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:#fff;color:#3c4043;font-family:'Assistant',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-google:hover{background:#f7f8fa}
+.btn-google svg{width:20px;height:20px;flex-shrink:0}
+.lock-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0}
+.lock-or::before,.lock-or::after{content:'';flex:1;height:1px;background:var(--border)}
+.sync-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px}
+.sync-on{background:#e8f5e9;color:#2e7d32}
+.sync-off{background:#f0f0f0;color:var(--muted)}
+
+/* ── TASKS ── */
+.task-add-row{display:flex;gap:8px;margin-bottom:16px}
+.task-add-row input{flex:1}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:8px;transition:opacity .2s}
+.task-item.done{opacity:.55}
+.task-item.done .task-text{text-decoration:line-through;color:var(--muted)}
+.task-circle{width:24px;height:24px;border-radius:50%;border:2px solid var(--primary);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-top:1px}
+.task-item.done .task-circle{background:var(--primary)}
+.task-text{flex:1;font-size:15px;font-weight:600;line-height:1.4;cursor:pointer}
+.task-meta{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px}
+.task-del{background:none;border:none;color:var(--danger);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;opacity:.6}
+.task-del:hover{opacity:1}
+.task-empty{font-size:14px;color:var(--muted);text-align:center;padding:32px 0}
+
+/* ── ITINERARY EDIT/ADD CONTROLS ── */
+.tl-item-edit-btn{background:#eef4ff;color:var(--primary);border:none;border-radius:8px;font-size:12px;font-weight:700;padding:5px 10px;cursor:pointer;margin-top:6px}
+.day-add-event{display:none;width:100%;margin-top:10px;border-style:dashed!important}
+.panel-itinerary.itin-editing .day-add-event,#panel-itinerary.itin-editing .day-add-event{display:flex}
+.tl-item.tl-added .tl-dot{background:var(--accent)}
+.tl-added-tag{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-light);border-radius:999px;padding:1px 7px;margin-right:4px}
 </style>
 </head>
 <body>
@@ -655,6 +686,14 @@ body.family-brosh .aloni-only{display:none!important}
         oninput="checkPasscode()" onkeydown="if(event.key==='Enter')checkPasscode(true)">
       <div class="lock-error" id="lock-error">קוד שגוי, נסה שוב</div>
       <button class="btn btn-primary btn-block" onclick="checkPasscode(true)">כניסה →</button>
+      <div id="google-signin-wrap" style="display:none">
+        <div class="lock-or">או</div>
+        <button class="btn-google" onclick="signInWithGoogle()">
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          התחבר עם Google
+        </button>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px">התחברות עם Google מסנכרנת את הנתונים בין כל המכשירים ☁️</p>
+      </div>
       <p style="font-size:11px;color:var(--muted);margin-top:12px">רק לבני המשפחות 👨‍👩‍👧‍👦</p>
     </div>
     <!-- Step 2: family selection -->
@@ -897,6 +936,20 @@ body.family-brosh .aloni-only{display:none!important}
   </div>
 </div><!-- end panel-itinerary -->
 
+<!-- ── משימות ── -->
+<div class="tab-panel" id="panel-tasks">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <h2 style="font-size:18px;font-weight:800">✅ משימות לפני הטיול</h2>
+    <span id="tasks-total" style="font-size:13px;color:var(--muted)"></span>
+  </div>
+  <div class="alert alert-success" style="margin-bottom:14px"><span class="alert-icon">📝</span>הוסיפו משימות משותפות · כולם רואים ומסמנים</div>
+  <div class="task-add-row">
+    <input type="text" class="form-input" id="task-new-text" placeholder="משימה חדשה..." onkeydown="if(event.key==='Enter')addTask()">
+    <button class="btn btn-primary" onclick="addTask()">＋ הוסף</button>
+  </div>
+  <div id="tasks-list"></div>
+</div>
+
 <!-- ── מלונות ── -->
 <div class="tab-panel" id="panel-hotels">
   <p class="sec-title">מלון 1 · 11–15 אוגוסט (4 לילות)</p>
@@ -1057,6 +1110,7 @@ body.family-brosh .aloni-only{display:none!important}
 
 <nav class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
+  <button class="tab-btn" onclick="switchTab('tasks')" id="tab-tasks"><i data-feather="check-square"></i><span class="tl">משימות</span></button>
   <button class="tab-btn" onclick="switchTab('hotels')" id="tab-hotels"><i data-feather="home"></i><span class="tl">מלונות</span></button>
   <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="map-pin"></i><span class="tl">אטרקציות</span></button>
   <button class="tab-btn" onclick="switchTab('bookings')" id="tab-bookings"><i data-feather="book-open"></i><span class="tl">הזמנות</span></button>
@@ -1139,9 +1193,41 @@ body.family-brosh .aloni-only{display:none!important}
   </div>
 </div>
 
+<!-- ═══ ADD / EDIT ITINERARY EVENT MODAL ═══ -->
+<div class="modal-overlay" id="event-modal" onclick="closeModalOnBg(event,'event-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="event-modal-title">➕ הוסף אירוע</div>
+    <input type="hidden" id="event-edit-iid">
+    <input type="hidden" id="event-day">
+    <div class="form-group"><label>שעה</label><input type="text" class="form-input" id="event-time" placeholder="לדוגמה: 16:30" style="direction:ltr"></div>
+    <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
+    <div class="form-group"><label>פרטים</label><textarea class="form-input" id="event-desc" rows="2" placeholder="מיקום, הערות..."></textarea></div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="saveEvent()">💾 שמור</button>
+      <button class="btn btn-ghost" onclick="closeModal('event-modal')">ביטול</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════ DATA ═══════════════
 const PASSCODE = 'broshaloni'; // שנה את הקוד כאן
+
+// ═══════════════ FIREBASE (cloud sync — optional) ═══════════════
+// כדי להפעיל סנכרון ענן + התחברות Google:
+// 1. צרו פרויקט חינמי ב-https://console.firebase.google.com
+// 2. הוסיפו אפליקציית Web והעתיקו לכאן את אובייקט ה-config
+// 3. ב-Authentication הפעילו ספק "Google"
+// 4. ב-Firestore Database צרו מסד נתונים
+// עד שתמלאו את זה — האפליקציה עובדת רגיל, עם שמירה מקומית בלבד.
+const FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  appId: ""
+};
+const TRIP_ID = 'austria26trip'; // מזהה הטיול המשותף ב-Firestore
 
 const BUILTIN_ATTRACTIONS = [
   {id:'a1',area:'pongau',name:'👻 Geisterberg – הר הרפאים',location:'St. Johann/Alpendorf · 20 דק\'',
@@ -1742,12 +1828,201 @@ function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 function closeModalOnBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
 
+// ═══════════════ TASKS ═══════════════
+function getTasks(){return JSON.parse(localStorage.getItem('austria26_tasks')||'[]')}
+function saveTasks(arr){localStorage.setItem('austria26_tasks',JSON.stringify(arr))}
+function renderTasks(){
+  const list=document.getElementById('tasks-list');if(!list)return;
+  const tasks=getTasks();
+  const done=tasks.filter(t=>t.done).length;
+  document.getElementById('tasks-total').textContent=tasks.length?`${done}/${tasks.length} הושלמו`:'';
+  if(!tasks.length){list.innerHTML='<div class="task-empty">אין משימות עדיין. הוסיפו את הראשונה! 👆</div>';return;}
+  list.innerHTML=tasks.map(t=>{
+    const meta=[t.addedBy?('נוסף ע"י '+t.addedBy):'',t.done&&t.doneBy?('✓ '+t.doneBy):''].filter(Boolean).join(' · ');
+    return `<div class="task-item${t.done?' done':''}">
+      <div class="task-circle" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div>
+      <div style="flex:1" onclick="toggleTask('${t.id}')">
+        <div class="task-text">${escapeHtml(t.text)}</div>
+        ${meta?`<div class="task-meta">${meta}</div>`:''}
+      </div>
+      <button class="task-del" onclick="deleteTask('${t.id}')">🗑️</button>
+    </div>`;
+  }).join('');
+}
+function addTask(){
+  const inp=document.getElementById('task-new-text');
+  const text=inp.value.trim();if(!text)return;
+  const tasks=getTasks();
+  tasks.push({id:'t'+Date.now(),text,done:false,addedBy:currentUser?.name||''});
+  saveTasks(tasks);
+  inp.value='';
+  renderTasks();
+}
+function toggleTask(id){
+  const tasks=getTasks();const t=tasks.find(x=>x.id===id);if(!t)return;
+  t.done=!t.done;
+  t.doneBy=t.done?(currentUser?.name||''):'';
+  saveTasks(tasks);
+  renderTasks();
+}
+function deleteTask(id){
+  if(!confirm('למחוק משימה זו?'))return;
+  saveTasks(getTasks().filter(x=>x.id!==id));
+  renderTasks();
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// ═══════════════ ADD / EDIT ITINERARY EVENT ═══════════════
+function openAddEvent(dayId){
+  document.getElementById('event-modal-title').textContent='➕ הוסף אירוע ל'+(DAY_LABELS[dayId]||'');
+  document.getElementById('event-edit-iid').value='';
+  document.getElementById('event-day').value=dayId;
+  document.getElementById('event-time').value='';
+  document.getElementById('event-title').value='';
+  document.getElementById('event-desc').value='';
+  openModal('event-modal');
+}
+function openEditEvent(iid){
+  const item=document.querySelector(`[data-iid="${iid}"]`);if(!item)return;
+  document.getElementById('event-modal-title').textContent='✏️ ערוך אירוע';
+  document.getElementById('event-edit-iid').value=iid;
+  document.getElementById('event-day').value='';
+  document.getElementById('event-time').value=item.querySelector('.tl-time')?.textContent.trim()||'';
+  document.getElementById('event-title').value=item.querySelector('h4')?.textContent.trim()||'';
+  const p=item.querySelector('.tl-body p');
+  document.getElementById('event-desc').value=p?p.textContent.trim():'';
+  openModal('event-modal');
+}
+function saveEvent(){
+  const title=document.getElementById('event-title').value.trim();
+  if(!title){alert('נא להזין כותרת');return;}
+  const time=document.getElementById('event-time').value.trim();
+  const desc=document.getElementById('event-desc').value.trim();
+  const iid=document.getElementById('event-edit-iid').value;
+  const m=getItinMods();
+  if(iid){
+    if(iid.startsWith('add-')){
+      const a=(m.added||[]).find(x=>('add-'+x.id)===iid);
+      if(a){a.time=time;a.title=title;a.desc=desc;}
+    } else {
+      m.edits=m.edits||{};
+      m.edits[iid]={time,title,desc};
+    }
+  } else {
+    const dayId=document.getElementById('event-day').value;
+    m.added=m.added||[];
+    m.added.push({id:'e'+Date.now(),day:dayId,time,title,desc,addedBy:currentUser?.name||''});
+  }
+  saveItinMods(m);
+  closeModal('event-modal');
+  reloadItinerary();
+}
+
+// ═══════════════ FIREBASE CLOUD SYNC (optional) ═══════════════
+let _db=null,_auth=null,_applyingRemote=false,_lastHash=null,_pushTimer=null;
+const SYNC_PREFIX='austria26_';
+const SYNC_SKIP=['austria26_user']; // per-device identity, not synced
+
+function firebaseEnabled(){return !!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey&&FIREBASE_CONFIG.projectId);}
+
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+
+async function initFirebase(){
+  if(!firebaseEnabled())return;
+  try{
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+    firebase.initializeApp(FIREBASE_CONFIG);
+    _auth=firebase.auth();
+    _db=firebase.firestore();
+    document.getElementById('google-signin-wrap').style.display='block';
+    // wrap localStorage.setItem so any save schedules a cloud push
+    const origSet=localStorage.setItem.bind(localStorage);
+    localStorage.setItem=function(k,v){origSet(k,v);if(!_applyingRemote&&_db&&_auth&&_auth.currentUser&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)schedulePush();};
+    _auth.onAuthStateChanged(u=>{if(u)onGoogleAuthed(u);});
+  }catch(e){console.warn('Firebase init failed',e);}
+}
+function signInWithGoogle(){
+  if(!_auth){alert('סנכרון הענן לא הוגדר עדיין. ראו ההוראות בקובץ.');return;}
+  const provider=new firebase.auth.GoogleAuthProvider();
+  _auth.signInWithPopup(provider).catch(e=>{console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));});
+}
+function onGoogleAuthed(u){
+  // Google verified — let the user pick which family they are (for attribution + theme)
+  document.getElementById('lock-step1').style.display='none';
+  document.getElementById('lock-step2').style.display='block';
+  document.getElementById('lock-error').style.display='none';
+  window._googleUser={name:u.displayName||u.email,email:u.email,photo:u.photoURL};
+  subscribeState();
+}
+function collectState(){
+  const blob={};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)blob[k]=localStorage.getItem(k);
+  }
+  return blob;
+}
+function hashState(blob){return JSON.stringify(Object.keys(blob).sort().map(k=>[k,blob[k]]));}
+function schedulePush(){clearTimeout(_pushTimer);_pushTimer=setTimeout(pushState,800);}
+function pushState(){
+  if(!_db||!_auth||!_auth.currentUser||_applyingRemote)return;
+  const blob=collectState();const h=hashState(blob);
+  if(h===_lastHash)return;
+  _lastHash=h;
+  _db.collection('trips').doc(TRIP_ID).set({data:blob,updatedAt:Date.now(),updatedBy:currentUser?.name||''},{merge:true})
+    .catch(e=>console.warn('sync push failed',e));
+}
+let _subscribed=false;
+function subscribeState(){
+  if(!_db||!_auth||!_auth.currentUser||_subscribed)return;
+  _subscribed=true;
+  const ref=_db.collection('trips').doc(TRIP_ID);
+  ref.get().then(doc=>{if(!doc.exists){_lastHash=hashState(collectState());pushState();}}).catch(()=>{});
+  ref.onSnapshot(doc=>{
+    if(!doc.exists)return;
+    const remote=doc.data().data||{};
+    const h=hashState(remote);
+    if(h===_lastHash)return; // matches our local state — nothing to do
+    _lastHash=h;
+    _applyingRemote=true;
+    Object.keys(remote).forEach(k=>localStorage.setItem(k,remote[k]));
+    _applyingRemote=false;
+    // re-render everything from the new data
+    if(currentUser){renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();}
+  },e=>console.warn('sync listen failed',e));
+}
+
 // ═══════════════ INIT ═══════════════
 // ═══════════════ ITINERARY EDITING ═══════════════
 const DAY_LABELS = {d1:'יום 1 (11.8)',d2:'יום 2 (12.8)',d3:'יום 3 (13.8)',d4:'יום 4 (14.8)',d5:'יום 5 (15.8)',d6:'יום 6 (16.8)',d7:'יום 7 (17.8)',d8:'יום 8 (18.8)'};
 
-function getItinMods(){return JSON.parse(localStorage.getItem('austria26_itin')||'{"deleted":[],"moved":{}}');}
+function getItinMods(){
+  const m=JSON.parse(localStorage.getItem('austria26_itin')||'{}');
+  m.deleted=m.deleted||[];m.moved=m.moved||{};m.edits=m.edits||{};m.added=m.added||[];
+  return m;
+}
 function saveItinMods(m){localStorage.setItem('austria26_itin',JSON.stringify(m));}
+
+let _itinOriginalHTML=null;
+function reloadItinerary(){
+  const panel=document.getElementById('panel-itinerary');if(!panel)return;
+  const openIds=[...panel.querySelectorAll('.card[id^="d"].open')].map(c=>c.id);
+  if(_itinOriginalHTML!==null)panel.innerHTML=_itinOriginalHTML;
+  openIds.forEach(id=>{const c=document.getElementById(id);if(c)c.classList.add('open');});
+  initItinIds();
+  applyItinMods();
+  if(itinEditMode){
+    panel.classList.add('itin-editing');
+    const btn=document.getElementById('itin-edit-btn');
+    const label=document.getElementById('itin-edit-label');
+    if(btn){btn.textContent='✅ סיום עריכה';btn.style.background='var(--primary-dark)';}
+    if(label)label.textContent='לחץ × למחיקה · השתמש בתפריט להזזה';
+  }
+  fetchWeather();
+  if(window.feather)feather.replace();
+}
 
 function initItinIds(){
   document.querySelectorAll('.card[id^="d"]').forEach(card=>{
@@ -1761,29 +2036,74 @@ function initItinIds(){
       const ctrl=document.createElement('div');
       ctrl.className='tl-edit-ctrl';
       ctrl.innerHTML=
+        `<button class="tl-item-edit-btn" onclick="openEditEvent('${iid}')">✏️ ערוך</button>`+
         `<select class="tl-move-select" onchange="moveItinItem('${iid}',this.value);this.value=''"><option value="" disabled selected>העבר ליום...</option>${opts}</select>`+
         `<button class="tl-del-btn" onclick="deleteItinItem('${iid}')">מחק</button>`;
       const body=item.querySelector('.tl-body');
       if(body)body.appendChild(ctrl);
       else item.appendChild(ctrl);
     });
+    // per-day "add event" button
+    const cardBody=card.querySelector('.card-body');
+    if(cardBody&&!cardBody.querySelector('.day-add-event')){
+      const addBtn=document.createElement('button');
+      addBtn.className='btn btn-outline btn-sm day-add-event';
+      addBtn.textContent='＋ הוסף אירוע ליום זה';
+      addBtn.setAttribute('onclick',`openAddEvent('${card.id}')`);
+      const tl=cardBody.querySelector('.timeline');
+      if(tl)tl.insertAdjacentElement('afterend',addBtn);
+      else cardBody.appendChild(addBtn);
+    }
   });
 }
 
+function buildAddedItem(a){
+  const iid='add-'+a.id;
+  const opts=Object.entries(DAY_LABELS).filter(([k])=>k!==a.day).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  const el=document.createElement('div');
+  el.className='tl-item tl-added';
+  el.dataset.iid=iid;
+  el.innerHTML=`<div class="tl-time">${escapeHtml(a.time||'')}</div><div class="tl-dot"></div>`+
+    `<div class="tl-body"><h4><span class="tl-added-tag">נוסף</span>${escapeHtml(a.title||'')}</h4>`+
+    `${a.desc?`<p>${escapeHtml(a.desc)}</p>`:'<p></p>'}`+
+    `<div class="tl-edit-ctrl">`+
+      `<button class="tl-item-edit-btn" onclick="openEditEvent('${iid}')">✏️ ערוך</button>`+
+      `<select class="tl-move-select" onchange="moveItinItem('${iid}',this.value);this.value=''"><option value="" disabled selected>העבר ליום...</option>${opts}</select>`+
+      `<button class="tl-del-btn" onclick="deleteItinItem('${iid}')">מחק</button>`+
+    `</div></div>`;
+  return el;
+}
 function applyItinMods(){
   const m=getItinMods();
-  m.deleted.forEach(iid=>{
-    const el=document.querySelector(`[data-iid="${iid}"]`);
-    if(el)el.classList.add('tl-deleted');
+  // 1. inject custom added events into their day's timeline
+  (m.added||[]).forEach(a=>{
+    if(document.querySelector(`[data-iid="add-${a.id}"]`))return;
+    const tl=document.querySelector(`#${a.day} .timeline`);
+    if(tl)tl.appendChild(buildAddedItem(a));
   });
+  // 2. apply text edits to existing items
+  Object.entries(m.edits||{}).forEach(([iid,e])=>{
+    const el=document.querySelector(`[data-iid="${iid}"]`);
+    if(!el)return;
+    const t=el.querySelector('.tl-time');if(t&&e.time!=null)t.textContent=e.time;
+    const h=el.querySelector('h4');if(h&&e.title!=null)h.textContent=e.title;
+    let p=el.querySelector('.tl-body p');
+    if(e.desc!=null){if(!p){p=document.createElement('p');el.querySelector('.tl-body').insertBefore(p,el.querySelector('.tl-edit-ctrl'));}p.textContent=e.desc;}
+  });
+  // 3. apply moves
   Object.entries(m.moved).forEach(([iid,dayId])=>{
     const el=document.querySelector(`[data-iid="${iid}"]`);
     const target=document.querySelector(`#${dayId} .timeline`);
     if(el&&target){target.appendChild(el);}
   });
+  // 4. apply deletions
+  m.deleted.forEach(iid=>{
+    const el=document.querySelector(`[data-iid="${iid}"]`);
+    if(el)el.classList.add('tl-deleted');
+  });
   // show reset button if there are any mods
-  const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0;
-  document.getElementById('itin-reset-btn').style.display=hasChanges?'':'none';
+  const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0||Object.keys(m.edits||{}).length>0||(m.added||[]).length>0;
+  const rb=document.getElementById('itin-reset-btn');if(rb)rb.style.display=hasChanges?'':'none';
 }
 
 let itinEditMode=false;
@@ -1807,17 +2127,28 @@ function toggleItinEdit(){
 
 function deleteItinItem(iid){
   const m=getItinMods();
-  if(!m.deleted.includes(iid))m.deleted.push(iid);
-  saveItinMods(m);
   const el=document.querySelector(`[data-iid="${iid}"]`);
-  if(el)el.classList.add('tl-deleted');
+  if(iid.startsWith('add-')){
+    m.added=(m.added||[]).filter(a=>('add-'+a.id)!==iid);
+    saveItinMods(m);
+    if(el)el.remove();
+  } else {
+    if(!m.deleted.includes(iid))m.deleted.push(iid);
+    saveItinMods(m);
+    if(el)el.classList.add('tl-deleted');
+  }
   document.getElementById('itin-reset-btn').style.display='';
 }
 
 function moveItinItem(iid,toDay){
   if(!toDay)return;
   const m=getItinMods();
-  m.moved[iid]=toDay;
+  if(iid.startsWith('add-')){
+    const a=(m.added||[]).find(x=>('add-'+x.id)===iid);
+    if(a)a.day=toDay;
+  } else {
+    m.moved[iid]=toDay;
+  }
   saveItinMods(m);
   const el=document.querySelector(`[data-iid="${iid}"]`);
   const target=document.querySelector(`#${toDay} .timeline`);
@@ -1862,18 +2193,23 @@ function startCountdown(){
 }
 
 function initApp(){
+  const panel=document.getElementById('panel-itinerary');
+  if(_itinOriginalHTML===null&&panel)_itinOriginalHTML=panel.innerHTML; // snapshot pristine itinerary
   initBookingChecklist();
   renderAttractions();
   renderPacking();
   renderRestaurants();
+  renderTasks();
   fetchWeather();
   initItinIds();
   applyItinMods();
+  if(_db&&_auth&&_auth.currentUser)subscribeState();
   if(window.feather)feather.replace();
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
   startCountdown();
+  initFirebase();
   // check if already logged in
   const saved=localStorage.getItem('austria26_user');
   if(saved){
