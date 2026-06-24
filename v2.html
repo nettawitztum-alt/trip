@@ -823,6 +823,26 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .tl-menu-btn:active{transform:translateY(-50%) scale(.92)}
 /* QA r4: center the per-day add (+) under the day */
 .day-add-mini{display:flex;width:38px;margin:10px auto 2px}
+/* day-focus (home hero: progress + next event) */
+#day-focus{margin-bottom:16px}
+#day-focus .df-head{display:flex;justify-content:space-between;font-size:13px;font-weight:600;align-items:baseline}
+#day-focus .dfg{color:var(--green)}
+#day-focus .df-prog{display:flex;gap:5px;align-items:center;margin:9px 0 14px}
+#day-focus .pdot{flex:1;height:6px;border-radius:999px;background:rgba(255,255,255,.14)}
+#day-focus .pdot.done{background:var(--green);opacity:.5}
+#day-focus .pdot.cur{background:var(--green);box-shadow:0 0 10px rgba(124,240,166,.6)}
+#day-focus .df-now{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.07);border:1px solid var(--glass-brd)}
+#day-focus .df-nb{padding:14px}
+#day-focus .df-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font-size:11px;font-weight:600;background:rgba(124,240,166,.16);color:var(--green)}
+#day-focus h3{font-size:18px;font-weight:700;margin-top:8px}
+#day-focus .df-sub{color:rgba(255,255,255,.62);font-size:12.5px;margin-top:3px;line-height:1.45}
+#day-focus .df-row{display:flex;gap:10px;margin-top:12px}
+#day-focus .df-b{flex:1;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:var(--gs);text-decoration:none}
+#day-focus .df-w{background:#fff;color:var(--ink)}
+#day-focus .df-gp{background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:#fff}
+#day-focus .df-after{display:flex;gap:10px;align-items:center;padding:11px 13px;margin-top:10px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd)}
+#day-focus .df-after .t{font-size:11px;font-weight:700;color:var(--green);min-width:40px}
+#day-focus .df-mut{color:rgba(255,255,255,.5);font-size:11px}
 /* QA r3: reserve a left gutter so the ⋯ menu never overlaps the text */
 .tl-body{padding-left:40px}
 .tl-menu-btn{top:2px}
@@ -964,6 +984,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
+  <div id="day-focus"></div>
   <div class="itin-edit-bar">
     <button class="btn btn-sm btn-accent" onclick="openAddEvent(null)"><i data-feather="plus"></i> הוסף אירוע</button>
     <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ איפוס</button>
@@ -2475,6 +2496,7 @@ function reloadItinerary(){
   openIds.forEach(id=>{const c=document.getElementById(id);if(c)c.classList.add('open');});
   initItinIds();
   applyItinMods();
+  renderDayFocus();
   if(itinEditMode){
     panel.classList.add('itin-editing');
     const btn=document.getElementById('itin-edit-btn');
@@ -2733,6 +2755,46 @@ function startCountdown(){
   _cdInterval=setInterval(tick,1000);
 }
 
+function _timeStr(it){const e=it.querySelector('.tl-time');return e?e.textContent.trim():'';}
+function _evTitle(it){const h=it.querySelector('h4');return h?h.textContent.replace('נוסף','').trim():'';}
+function openFocusDay(id){const c=document.getElementById(id);if(c){c.classList.add('open');c.scrollIntoView({behavior:'smooth',block:'start'});}}
+function renderDayFocus(){
+  const host=document.getElementById('day-focus');if(!host)return;
+  const days=['d1','d2','d3','d4','d5','d6','d7','d8'];
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(2026,7,11);start.setHours(0,0,0,0);
+  const idx=Math.round((today-start)/86400000);
+  const inTrip=idx>=0&&idx<=7;const fidx=idx<0?0:(idx>7?7:idx);const focus=days[fidx];
+  let dots='';for(let i=0;i<8;i++){dots+=`<span class="pdot ${i<fidx?'done':(i===fidx?'cur':'')}"></span>`;}
+  let head;
+  if(inTrip)head=`<span>יום ${fidx+1} מתוך 8</span><span class="dfg">עוד ${7-fidx} ימי טיול 🏔️</span>`;
+  else if(idx>7)head=`<span>הטיול הסתיים</span><span class="dfg">תודה! 🇦🇹</span>`;
+  else head=`<span>לקראת הטיול 🏔️</span><span class="dfg">מתחילים ביום 1</span>`;
+  const card=document.getElementById(focus);
+  const items=card?[...card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')]:[];
+  let ni=0;
+  if(inTrip){const rn=new Date();const nowS=String(rn.getHours()).padStart(2,'0')+':'+String(rn.getMinutes()).padStart(2,'0');
+    const fi=items.findIndex(it=>{const t=_timeStr(it);return t&&t>=nowS;});ni=fi>=0?fi:0;}
+  const ev=items[ni],after=items[ni+1];
+  let cardHtml='';
+  if(ev){
+    const title=_evTitle(ev),t=_timeStr(ev);
+    const desc=ev.querySelector('p')?ev.querySelector('p').textContent.trim():'';
+    const q=encodeURIComponent(title+' אוסטריה');
+    cardHtml=`<div class="df-now"><div class="df-nb">`+
+      `<span class="df-pill">${inTrip?'● הבא בתור':'מתחילים'} · יום ${fidx+1}</span>`+
+      `<h3>${escapeHtml(title)}</h3>`+
+      ((t||desc)?`<div class="df-sub">${escapeHtml([t,desc].filter(Boolean).join(' · '))}</div>`:'')+
+      `<div class="df-row"><a class="df-b df-w" target="_blank" rel="noopener" href="https://waze.com/ul?q=${q}&navigate=yes"><i data-feather="navigation"></i> Waze</a>`+
+      `<button class="df-b df-gp" onclick="openFocusDay('${focus}')"><i data-feather="calendar"></i> פתח את היום</button></div>`+
+      `</div></div>`;
+  }
+  let afterHtml='';
+  if(after)afterHtml=`<div class="df-after"><span class="t">${escapeHtml(_timeStr(after))}</span><div style="flex:1;font-weight:600;font-size:14px">${escapeHtml(_evTitle(after))}</div><span class="df-mut">אחר כך</span></div>`;
+  const cs=document.querySelector(".countdown-section");if(cs)cs.style.display=inTrip?"none":"";
+  host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div>${cardHtml}${afterHtml}`;
+  if(window.feather)feather.replace();
+}
 // Open the day that matches today's real date (focused agenda view).
 // Before the trip → day 1; during → today's day (marked ● היום); after → last day.
 function focusCurrentDay(scroll){
@@ -2763,7 +2825,8 @@ function initApp(){
   fetchWeather();
   initItinIds();
   applyItinMods();
-  focusCurrentDay(true);
+  focusCurrentDay(false);
+  renderDayFocus();
   initEditables();
   if(_db&&_auth&&_auth.currentUser)subscribeState();
   if(window.feather)feather.replace();
