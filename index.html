@@ -824,6 +824,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* QA r4: center the per-day add (+) under the day */
 .day-add-mini{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;margin:0;flex-shrink:0}
 .chevron svg.feather{width:20px;height:20px;stroke:currentColor;stroke-width:2.5}
+#add-fab{position:fixed;z-index:90;bottom:calc(76px + env(safe-area-inset-bottom,0px));left:16px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#072414;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(124,240,166,.42);cursor:pointer;transition:transform .12s}
+#add-fab:active{transform:scale(.92)}
+#add-fab svg.feather{width:26px;height:26px;stroke:currentColor;stroke-width:2.6}
+@media (min-width:1024px){#add-fab{bottom:32px;left:32px}}
 .tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
 .tl-menu-btn{touch-action:none;cursor:grab}
 /* QA r5: selected bottom-nav tab uses GREEN icon/label (not dark-on-bright) */
@@ -995,7 +999,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <div class="tab-panel active" id="panel-itinerary">
   <div id="day-focus"></div>
   <div class="itin-edit-bar">
-    <button class="btn btn-sm btn-accent" onclick="openAddEvent(null)"><i data-feather="plus"></i> הוסף אירוע</button>
     <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ איפוס</button>
   </div>
   <div id="weather-container"><div class="weather-skeleton"></div><div class="weather-skeleton" style="height:40px;margin-top:6px;opacity:.6"></div></div>
@@ -1763,6 +1766,7 @@ function switchTab(name){
   const mb=document.getElementById('more-btn');
   if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
   if(document.getElementById('more-modal'))closeModal('more-modal');
+  const fab=document.getElementById('add-fab');if(fab)fab.style.display=(name==='itinerary')?'flex':'none';
   const tc=document.querySelector('.tab-content');
   if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
 }
@@ -2886,6 +2890,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 </script>
+<button id="add-fab" onclick="openAddEvent(null)" aria-label="הוסף אירוע ולבחור יום" title="הוסף אירוע"><i data-feather="plus"></i></button>
 <div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
 <div id="itin-ctx" role="menu"></div>
 </body>
