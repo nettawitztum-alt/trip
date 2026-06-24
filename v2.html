@@ -816,6 +816,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .day-add-mini{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(124,240,166,.12);border:1.5px dashed rgba(124,240,166,.45);color:var(--accent);cursor:pointer;margin-top:10px;padding:0}
 .day-add-mini svg.feather{width:18px;height:18px;stroke:currentColor}
 .tl-loc-links{display:flex;gap:8px;margin-top:8px}
+/* QA r4: dark text on green badges (white was unreadable) */
+.day-badge{color:#072414!important}
+/* QA r4: center the ⋯ menu vertically + better contrast */
+.tl-menu-btn{top:50%!important;transform:translateY(-50%);color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.26)}
+.tl-menu-btn:active{transform:translateY(-50%) scale(.92)}
+/* QA r4: center the per-day add (+) under the day */
+.day-add-mini{display:flex;width:38px;margin:10px auto 2px}
 /* QA r3: reserve a left gutter so the ⋯ menu never overlaps the text */
 .tl-body{padding-left:40px}
 .tl-menu-btn{top:2px}
@@ -1422,6 +1429,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="modal-title" id="event-modal-title">הוסף אירוע</div>
     <input type="hidden" id="event-edit-iid">
     <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
+    <div class="form-group"><label>בחר מאטרקציה (לא חובה)</label><select class="form-select" id="event-attr" onchange="pickAttraction()"></select></div>
     <div class="form-group"><label>שעה</label><input type="text" class="form-input" id="event-time" placeholder="לדוגמה: 16:30" style="direction:ltr"></div>
     <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
     <div class="form-group"><label>מיקום</label>
@@ -2242,10 +2250,23 @@ function searchEventLocation(){
   if(!q){alert('הקלידו שם מקום קודם');return;}
   window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' אוסטריה'),'_blank');
 }
+function fillAttrOptions(){
+  const sel=document.getElementById('event-attr');if(!sel)return;
+  const all=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()];
+  sel.innerHTML='<option value="">— בחר מאטרקציה —</option>'+all.map(a=>`<option value="${a.id}">${(a.name||'').replace(/"/g,'&quot;')}</option>`).join('');
+}
+function pickAttraction(){
+  const sel=document.getElementById('event-attr');const id=sel&&sel.value;if(!id)return;
+  const a=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()].find(x=>x.id===id);if(!a)return;
+  document.getElementById('event-title').value=a.name||'';
+  if(a.location)document.getElementById('event-location').value=a.location;
+  const d=document.getElementById('event-desc');if(a.desc&&!d.value)d.value=a.desc;
+}
 function openAddEvent(dayId){
   document.getElementById('event-modal-title').textContent='הוסף אירוע';
   document.getElementById('event-edit-iid').value='';
   fillDayOptions(dayId||window.currentFocusDay||'d1');
+  fillAttrOptions();
   document.getElementById('event-time').value='';
   document.getElementById('event-title').value='';
   document.getElementById('event-location').value='';
@@ -2258,6 +2279,7 @@ function openEditEvent(iid){
   document.getElementById('event-modal-title').textContent='ערוך אירוע';
   document.getElementById('event-edit-iid').value=iid;
   fillDayOptions(dayOfItem(iid));
+  fillAttrOptions();if(document.getElementById('event-attr'))document.getElementById('event-attr').value='';
   document.getElementById('event-time').value=item.querySelector('.tl-time')?.textContent.trim()||'';
   const h=item.querySelector('h4');
   document.getElementById('event-title').value=h?h.textContent.replace('נוסף','').trim():'';
