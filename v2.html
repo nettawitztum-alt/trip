@@ -1,0 +1,2554 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f4526">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🇦🇹 אוסטריה אוגוסט 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<style>
+:root {
+  --primary:#7CF0A6;--primary-light:#a6f7c4;--primary-dark:#0f3a2c;
+  --accent:#7CF0A6;--accent-light:rgba(124,240,166,.16);
+  --lime-tint:rgba(124,240,166,.16);--lime-dark:#7CF0A6;
+  --cta:#ffffff;--gray-ui:rgba(255,255,255,.08);--gray-text:rgba(255,255,255,.55);
+  --danger:#ff8079;--warning:#ffd97a;
+  --bg:#0e2b20;--card:rgba(255,255,255,.08);--text:#ffffff;--muted:rgba(255,255,255,.6);--border:rgba(255,255,255,.14);
+  --shadow:0 8px 24px rgba(0,0,0,.28);--shadow-lg:0 16px 40px rgba(0,0,0,.42);
+  --radius:22px;--radius-sm:16px;
+  --gs:'Google Sans','Heebo','Assistant',sans-serif;
+  --glass:rgba(255,255,255,.08);--glass-brd:rgba(255,255,255,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
+body{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.app-shell{display:flex;flex-direction:column;height:100dvh;height:100vh;overflow:hidden}
+.page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
+
+/* ── LOCK SCREEN ── */
+#lock-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--primary-dark),var(--primary));display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.lock-box{background:white;border-radius:24px;padding:32px 28px;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.lock-box h2{font-size:26px;font-weight:800;margin-bottom:4px}
+.lock-box p{color:var(--muted);font-size:14px;margin-bottom:24px}
+.lock-input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:12px;font-size:16px;font-family:'Assistant',sans-serif;text-align:center;letter-spacing:4px;direction:ltr;margin-bottom:12px;outline:none;transition:border .2s}
+.lock-input:focus{border-color:var(--primary)}
+.lock-error{color:var(--danger);font-size:13px;margin-bottom:8px;display:none}
+.family-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.family-btn{padding:16px;border:2px solid var(--border);border-radius:14px;background:white;cursor:pointer;font-family:'Assistant',sans-serif;font-size:14px;font-weight:700;transition:all .2s}
+.family-btn:hover{border-color:var(--primary);background:var(--accent-light)}
+.family-btn.selected{border-color:var(--primary);background:var(--primary);color:white}
+#lock-step2{display:none}
+
+/* ── STICKY SHELL ── */
+.sticky-shell{position:sticky;top:0;z-index:100}
+
+/* ── HEADER ── */
+.app-header{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 60%,var(--primary-light) 100%);color:white;padding:12px 16px 10px;padding-top:max(12px,env(safe-area-inset-top));box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.header-title h1{font-size:20px;font-weight:800;line-height:1.2}
+.header-title p{font-size:12px;opacity:.85;margin-top:2px}
+.header-actions{display:flex;gap:8px;align-items:center}
+.weather-chip{background:rgba(255,255,255,.15);border-radius:10px;padding:6px 10px;text-align:center;cursor:pointer;min-width:60px}
+.weather-chip .temp{font-size:18px;font-weight:700}
+.weather-chip .wlabel{font-size:10px;opacity:.8}
+.user-chip{background:rgba(255,255,255,.2);border:none;color:white;border-radius:20px;padding:6px 12px;font-family:'Assistant',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
+.hero-avatar{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:var(--primary);color:#fff;font-family:'Assistant',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero-avatar img{width:100%;height:100%;object-fit:cover}
+.hero-avatar .sync-dot{position:absolute;width:11px;height:11px;border-radius:50%;background:#34A853;border:2px solid #fff;transform:translate(14px,-14px)}
+.family-badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-brosh{background:rgba(255,255,255,.25)}
+.badge-aloni{background:rgba(141,198,63,.35)}
+
+/* ── TAB NAV ── */
+.tab-nav{display:flex;background:white;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{flex:0 0 auto;padding:10px 14px;border:none;background:none;cursor:pointer;font-family:'Assistant',sans-serif;font-size:12px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:56px;justify-content:center;min-width:52px}
+.tab-btn .ti{font-size:18px}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-btn:active{background:var(--bg)}
+
+/* ── CONTENT ── */
+.tab-content{flex:1}
+.tab-panel{display:none;padding:14px;padding-bottom:max(80px,calc(60px + env(safe-area-inset-bottom,0px)));animation:fadeIn .2s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ripple{from{opacity:.6;transform:scale(.6)}to{opacity:0;transform:scale(2)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden}
+.card-header{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;min-height:64px;user-select:none}
+.card-header:active{background:var(--bg)}
+.card-emoji{font-size:24px;flex-shrink:0}
+.card-title{flex:1;min-width:0}
+.card-title h3{font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-title p{font-size:12px;color:var(--muted);margin-top:2px}
+.chevron{font-size:16px;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.card.open .chevron{transform:rotate(180deg)}
+.card-body{padding:0 14px 14px;display:none}
+.card.open .card-body{display:block}
+
+/* ── DAY CARDS ── */
+.day-header{background:transparent;padding:12px 16px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.day-name{font-size:17px;font-weight:800;color:var(--text)}
+.day-theme{font-size:12px;color:var(--gray-text);margin-top:2px}
+.day-badge{background:var(--accent);color:white;border-radius:10px;padding:4px 10px;font-size:13px;font-weight:700;text-align:center;flex-shrink:0}
+
+/* ── TIMELINE ── */
+.timeline{padding:4px 0}
+.tl-item{display:flex;gap:10px;padding:10px 0;margin-bottom:0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none;padding-bottom:4px}
+.tl-time{min-width:48px;max-width:48px;font-size:11px;font-weight:700;color:var(--primary);text-align:left;padding-top:3px;line-height:1.3}
+.tl-dot{width:12px;flex-shrink:0;display:flex;flex-direction:column;align-items:center}
+.tl-dot::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px}
+.tl-dot::after{content:'';width:2px;flex:1;background:var(--border);margin-top:4px}
+.tl-item:last-child .tl-dot::after{display:none}
+.tl-body{flex:1;min-width:0;padding-top:1px}
+.tl-body h4{font-size:14px;font-weight:700;margin-bottom:3px;line-height:1.3}
+.tl-body p{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* ── ALERTS ── */
+.alert{padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:10px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.alert-warning{background:#fff8e6;border:1px solid #ffd57e;color:#7a5500}
+.alert-danger{background:#fff0f0;border:1px solid #ffb3b3;color:#8b0000}
+.alert-info{background:#e8f4fd;border:1px solid #90cdf4;color:#1a5280}
+.alert-success{background:#f0fff4;border:1px solid #9ae6b4;color:#1a4731}
+.alert-icon{font-size:16px;flex-shrink:0}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;font-family:'Assistant',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all .15s;min-height:44px;user-select:none;white-space:nowrap}
+.btn:active{opacity:.8;transform:scale(.97)}
+.btn-primary{background:var(--cta);color:white}
+.btn-accent{background:var(--accent);color:white}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid #DDDDD8}
+.btn-danger{background:var(--danger);color:white}
+.btn-ghost{background:transparent;color:var(--gray-text);border:none}
+.btn-sm{padding:7px 12px;font-size:12px;min-height:36px}
+.btn-block{width:100%;justify-content:center}
+.btn-waze{background:transparent;color:var(--lime-dark);border:1.5px solid var(--accent);position:relative;overflow:hidden}
+.btn-waze:active::after,.tl-attr-link:active::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.35);border-radius:inherit;animation:ripple .3s ease-out;pointer-events:none}
+.tl-attr-link{position:relative;overflow:hidden}
+.weather-skeleton{height:70px;border-radius:12px;background:linear-gradient(90deg,#eef2ee 25%,#e0e8e0 50%,#eef2ee 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;margin:4px 0}
+.card-header:active{background:rgba(0,0,0,.03)}
+.attr-card:active{transform:scale(.995);transition:transform .1s}
+@media(max-width:767px){
+  .tl-attr-link{padding:6px 10px;font-size:12px;min-height:36px}
+}
+.btn-maps{background:transparent;color:var(--text);border:1.5px solid #DDDDD8}
+.btn-booking{background:var(--cta);color:white;border:none}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+
+/* ── INFO TABLE ── */
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.info-row .lbl{color:var(--muted)}
+.info-row .val{font-weight:600;text-align:left}
+
+/* ── CHECKLIST ── */
+.ck-item{display:flex;align-items:flex-start;gap:12px;padding:14px 12px;border-radius:12px;margin-bottom:8px;background:white;box-shadow:var(--shadow);cursor:pointer;transition:all .15s;min-height:56px;user-select:none}
+.ck-item:active{transform:scale(.99);opacity:.85}
+.ck-item.done{opacity:.55}
+.ck-item.done .ck-text{text-decoration:line-through;color:var(--muted)}
+.ck-circle{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:14px;margin-top:1px}
+.ck-item.done .ck-circle{background:var(--primary);border-color:var(--primary);color:white}
+.ck-text{flex:1;font-size:14px;font-weight:600;line-height:1.4;min-width:0}
+.ck-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.ck-tag{font-size:11px;padding:4px 8px;border-radius:20px;font-weight:700;flex-shrink:0;margin-top:2px}
+.tag-red{background:#fff0f0;color:var(--danger)}
+.tag-orange{background:#fff8e6;color:var(--warning)}
+.tag-green{background:#f0fff4;color:var(--primary)}
+.tag-blue{background:#e8f4fd;color:#1a5280}
+
+/* ── WEATHER ── */
+.weather-strip{background:white;border-radius:12px;box-shadow:var(--shadow);padding:12px;margin-bottom:14px}
+.weather-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.weather-row::-webkit-scrollbar{display:none}
+.wd-card{background:var(--bg);border-radius:10px;padding:10px 8px;text-align:center;flex:0 0 auto;min-width:68px}
+.wd-card.today{background:var(--accent-light);border:1px solid var(--accent)}
+.wd-name{font-size:11px;font-weight:700;color:var(--muted)}
+.wd-date{font-size:10px;color:var(--muted)}
+.wd-icon{font-size:22px;margin:4px 0}
+.wd-temp{font-size:12px;font-weight:700}
+.wd-rain{font-size:11px;color:#3b82f6}
+/* countdown typography */
+.weather-countdown{text-align:center;padding:16px 12px}
+.cdw-main{display:flex;align-items:baseline;justify-content:center;gap:4px;line-height:1}
+.cdw-num{font-size:60px;font-weight:900;color:var(--primary);line-height:1}
+.cdw-unit{font-size:18px;font-weight:700;color:var(--primary);opacity:.8}
+.cdw-sub{font-size:14px;font-weight:600;color:var(--text);margin-top:3px}
+.cdw-divider{width:40px;height:2px;background:var(--border);margin:10px auto 8px}
+.cdw-label{font-size:17px;font-weight:700;color:var(--text)}
+.cdw-note{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
+.cdw-avg-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+/* itinerary edit mode */
+/* ── ITIN EDIT BAR ── */
+.itin-edit-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 0 14px;gap:8px}
+.itin-edit-bar .edit-label{font-size:12px;color:var(--muted)}
+.itin-editing .itin-edit-bar{background:#E8F5D0;border-radius:12px;padding:10px 16px;margin-bottom:12px}
+.itin-editing .itin-edit-bar .edit-label{color:#3B6D11;font-size:13px}
+#itin-edit-btn{display:inline-flex;align-items:center;gap:6px;background:#141414;color:white;border:none;border-radius:999px;padding:8px 18px;font-size:14px;font-weight:600;font-family:'Assistant',sans-serif;cursor:pointer;height:40px;min-height:40px}
+/* ── TIMELINE EDIT CONTROLS ── */
+.tl-item{position:relative}
+.tl-item .tl-edit-ctrl{display:none}
+.itin-editing .tl-item .tl-edit-ctrl{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #EBEBEA}
+.tl-del-btn{height:36px;padding:0 16px;border:1.5px solid #FFCDD2;border-radius:999px;background:white;color:#C62828;font-size:13px;font-weight:600;font-family:'Assistant',sans-serif;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.tl-del-btn:active{background:#FFEBEE}
+.tl-move-select{flex:1;height:36px;border:1.5px solid #DDDDD8;border-radius:999px;padding:0 12px;font-size:13px;font-family:'Assistant',sans-serif;color:#5A5A5A;background:white;cursor:pointer;-webkit-appearance:none;direction:rtl}
+.tl-item.tl-deleted{display:none}
+.itin-editing .tl-item{padding:10px 12px;border-radius:12px;background:#FAFAF8;margin-bottom:4px;border:1px solid #EBEBEA}
+.itin-editing .tl-item:hover{background:#f5f5f3}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--border)}
+.sec-title:first-child{margin-top:0}
+
+/* ── HOTEL ── */
+.hotel-img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px}
+.amenity-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.amenity{display:flex;align-items:center;gap:6px;font-size:13px;padding:6px 8px;background:var(--bg);border-radius:8px}
+
+/* ── ATTRACTIONS ── */
+.attr-img-wrap{background:linear-gradient(135deg,var(--primary-dark),var(--primary-light));height:150px;overflow:hidden}
+.tl-attr-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--text);background:transparent;border:1.5px solid #DDDDD8;border-radius:999px;padding:4px 10px;cursor:pointer;margin-top:6px;text-decoration:none;vertical-align:middle;min-height:32px}
+.tl-attr-link:hover{border-color:var(--accent);color:var(--lime-dark)}
+.attr-card{background:white;border-radius:14px;box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;position:relative}
+.attr-img{width:100%;height:130px;object-fit:cover}
+.attr-body{padding:12px}
+.attr-body h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.attr-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
+.attr-desc{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.attr-edit-btns{position:absolute;top:8px;left:8px;display:none;gap:6px}
+.edit-mode .attr-edit-btns{display:flex}
+.edit-fab{position:fixed;bottom:24px;left:24px;z-index:80;display:none}
+.edit-mode .edit-fab{display:flex}
+
+/* ── PACKING ── */
+.pack-category{margin-bottom:20px}
+.pack-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.pack-header h3{font-size:15px;font-weight:700}
+.pack-progress{font-size:12px;color:var(--muted);margin-right:auto}
+.pack-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:white;box-shadow:var(--shadow);margin-bottom:6px;cursor:pointer;transition:all .15s;min-height:48px;user-select:none}
+.pack-item:active{transform:scale(.99)}
+.pack-item.done{opacity:.5}
+.pack-item.done .pack-text{text-decoration:line-through;color:var(--muted)}
+.pack-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s}
+.pack-item.done .pack-circle{background:var(--primary);border-color:var(--primary);color:white}
+.pack-text{flex:1;font-size:13px;font-weight:600;line-height:1.4}
+.pack-urgent{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
+.pack-item.custom .pack-text::after{content:' •';color:var(--accent)}
+
+/* ── FLIGHT CARD ── */
+.flight-card{background:white;border-radius:20px;box-shadow:var(--shadow);border:none;border-top:4px solid var(--accent);overflow:hidden;margin-bottom:12px;padding:14px 16px 16px}
+.fl-direction{font-size:11px;font-weight:600;color:var(--lime-dark);background:var(--lime-tint);border-radius:999px;padding:2px 10px;display:inline-block;margin-bottom:10px}
+.fl-route{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.fl-city{font-size:18px;font-weight:800;color:var(--text)}
+.fl-code{font-size:12px;color:var(--gray-text);margin-top:2px}
+.fl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fl-label{font-size:11px;color:var(--gray-text)}
+.fl-val{font-size:14px;font-weight:700;color:var(--text)}
+.seat-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.seat-tag{background:transparent;border:1.5px solid #E0E0DC;border-radius:999px;padding:4px 10px;font-size:12px;color:#5A5A5A}
+
+/* ── TIP CARD ── */
+.tip-card{background:white;border-radius:12px;box-shadow:var(--shadow);padding:14px;margin-bottom:10px;display:flex;gap:12px}
+.tip-icon{font-size:28px;flex-shrink:0}
+.tip-body h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.tip-body p{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;padding:20px}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:16px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.form-input{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Assistant',sans-serif;font-size:14px;outline:none;transition:border .2s;direction:rtl}
+.form-input:focus{border-color:var(--primary)}
+.form-select{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Assistant',sans-serif;font-size:14px;outline:none;background:white;direction:rtl}
+.form-select:focus{border-color:var(--primary)}
+
+/* ── DESKTOP (≥1024px) ── */
+@media (min-width:1024px){
+  /* app-shell: horizontal – sidebar on right (RTL start), content on left */
+  .app-shell{flex-direction:row-reverse;height:100vh;overflow:hidden}
+
+  /* page-scroll-area = main content column */
+  .page-scroll-area{
+    flex:1;height:100vh;overflow-y:auto;overflow-x:hidden;
+    padding-bottom:0;display:block;
+  }
+
+  /* Hero: same photo + gradient as mobile, fixed height */
+  .sticky-shell{
+    display:flex;
+    height:220px;min-height:0;max-height:none;overflow:hidden;
+    background-color:var(--primary-dark);
+    background-image:
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.20) 40%, rgba(0,0,0,0.72) 100%),
+      url('https://images.unsplash.com/photo-1612441804231-77a36b284856?w=1200&auto=format&fit=crop');
+    background-size:cover;background-position:center 50%;
+    flex-direction:column;justify-content:space-between;
+    padding:20px 32px 16px;
+    border-radius:0;
+  }
+  .app-header{flex:1;background:transparent;box-shadow:none;padding:0;display:flex;flex-direction:column;justify-content:space-between}
+  .hero-top-bar{position:static;z-index:1}
+  .hero-title{font-size:26px;font-weight:800;color:white;text-shadow:0 1px 6px rgba(0,0,0,.45)}
+  .hero-dates{font-size:13px;color:rgba(255,255,255,.70);font-weight:400}
+
+  /* Countdown: show below banner */
+  .countdown-section{display:flex;padding:14px 32px 0}
+  .countdown-bar{background:#141414;backdrop-filter:none;-webkit-backdrop-filter:none;border:none;border-radius:999px;margin:0;padding:10px 20px;width:fit-content}
+
+  /* tab-content: reset mobile floating-card styles */
+  .tab-content{
+    background:none;border-radius:0;margin-top:0;
+    min-height:0;padding:0;
+  }
+
+  /* tab-nav = RIGHT sidebar (RTL start) */
+  .tab-nav{
+    position:static!important;
+    width:280px;flex-shrink:0;
+    height:100vh;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:stretch;
+    border-left:1px solid var(--border);
+    border-top:none;
+    background:#fff;
+    box-shadow:-2px 0 16px rgba(0,0,0,.08);
+    padding:20px 0 8px;
+    overflow-y:auto;overflow-x:hidden;
+    scrollbar-width:none;
+    z-index:10;
+    gap:0;
+  }
+  .tab-nav::-webkit-scrollbar{display:none}
+
+  /* Tab buttons – vertical list, show labels */
+  .tab-btn{
+    flex:none;max-width:none;
+    flex-direction:row;
+    justify-content:flex-start;align-items:center;
+    gap:12px;
+    min-height:46px;height:auto;
+    padding:0 18px;
+    border-bottom:none;
+    border-left:3px solid transparent;
+    border-right:none;
+    margin-bottom:0;font-size:13px;font-weight:600;
+    width:100%;white-space:nowrap;border-radius:0;
+    background:none;color:var(--muted);
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .tab-btn .tl{display:block!important;font-size:13px;font-weight:600;color:inherit}
+  .tab-btn:not(.active) .tl{display:block!important}
+  .tab-btn:hover{background:rgba(0,0,0,.04)}
+  .tab-btn:active{background:var(--accent-light)}
+  .tab-btn.active{
+    flex-direction:row;padding:0 18px;
+    border-radius:0;max-width:none;
+    border-bottom-color:transparent;
+    border-left-color:var(--primary);
+    background:rgba(26,107,60,.06);
+    color:var(--primary);font-weight:700;
+  }
+  .tab-btn.active .tl{color:var(--primary);font-weight:700}
+  .tab-btn.active svg.feather{stroke:var(--primary)}
+
+  /* Tab panel */
+  .tab-panel{padding:32px 48px;padding-bottom:48px;max-width:none}
+
+  /* Show weather on desktop */
+  #weather-container{display:block!important}
+
+  /* Modals centered */
+  .edit-fab{bottom:32px;left:32px}
+  .modal-overlay{align-items:center}
+  .modal{border-radius:20px;margin:20px;max-height:80vh}
+  .modal-handle{display:none}
+  .weather-strip{display:grid;grid-template-columns:1fr 2fr;gap:16px;align-items:center}
+}
+@media (min-width:1280px){.tab-panel{padding:36px 64px}}
+
+/* ── RESPONSIVE ── */
+@media (min-width:480px){.tab-btn{padding:10px 18px;font-size:13px}}
+
+/* ── COUNTDOWN BAR ── */
+.countdown-bar{
+  background:#111;
+  padding:7px 16px;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  border-bottom:2px solid rgba(0,0,0,.12);
+  flex-shrink:0;
+}
+.cdb-label{color:rgba(255,255,255,.85);font-size:12px;font-weight:800;white-space:nowrap}
+.cdb-units{display:flex;align-items:flex-start;gap:2px}
+.cdb-unit{display:flex;flex-direction:column;align-items:center;min-width:34px}
+.cdb-n{font-size:22px;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-0.5px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.cdb-u{font-size:9px;font-weight:700;color:rgba(255,255,255,.8);margin-top:2px;text-transform:uppercase}
+.cdb-sep{font-size:18px;font-weight:900;color:rgba(255,255,255,.6);margin-top:1px;padding:0 1px}
+@media (min-width:1024px){
+  .countdown-bar{padding:6px 20px;gap:10px;}
+  .cdb-n{font-size:18px;}
+  .cdb-u{font-size:8px;}
+  .cdb-label{font-size:11px;}
+}
+
+/* ── LOCK SCREEN COUNTDOWN ── */
+.lock-cd{margin-bottom:18px;padding:14px 12px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:14px;}
+.lock-cd-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:6px;text-align:center}
+.lock-cd-units{display:flex;justify-content:center;align-items:flex-start;gap:4px}
+.lock-cd-unit{text-align:center;min-width:38px}
+.lock-cd-n{font-size:26px;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.lock-cd-u{font-size:9px;color:rgba(255,255,255,.7);font-weight:600;margin-top:1px}
+.lock-cd-sep{font-size:22px;font-weight:900;color:rgba(255,255,255,.4);margin-top:1px}
+
+/* ── FAMILY KIDS TAG ── */
+.family-kids{font-size:11px;font-weight:400;opacity:.7;margin-top:3px}
+
+/* ── ATTRACTION DETAILS ── */
+.attr-duration{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:#3a5e00;margin-bottom:10px}
+.attr-kids-rating{display:inline-flex;align-items:center;gap:4px;background:#f0fff4;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--primary);margin-right:6px;margin-bottom:10px}
+.attr-section-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px}
+.attr-activities{list-style:none;padding:0;margin:0 0 10px}
+.attr-activities li{font-size:13px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.4}
+.attr-activities li:last-child{border-bottom:none}
+.attr-tips{background:#fffbea;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.attr-tips li{font-size:12px;color:#5a4000;padding:3px 0;list-style:none;line-height:1.4}
+.attr-tips li::before{content:'💡 ';font-size:11px}
+/* show all family reminders/content to everyone (family choice kept only for attribution) */
+.attr-toggle-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 12px 0;user-select:none}
+.attr-toggle-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);transition:transform .2s;padding:0;line-height:1}
+.attr-card.attr-open .attr-toggle-btn{transform:rotate(180deg)}
+.attr-collapsible{max-height:0;overflow:hidden;transition:max-height .28s cubic-bezier(.4,0,.2,1)}
+.attr-card.attr-open .attr-collapsible{max-height:1000px}
+.attr-header-body{padding:10px 12px 2px}
+
+/* ══════════════════════════════════════════
+   TRAVELO REDESIGN – MOBILE HERO + BOTTOM NAV
+   ══════════════════════════════════════════ */
+
+/* ── Feather nav icons (desktop + mobile) ── */
+.tab-btn{color:var(--gray-text)}
+.tab-btn.active{color:var(--primary)}
+.tab-btn svg.feather{width:22px;height:22px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0;transition:stroke-width .15s}
+.tab-btn.active svg.feather{stroke-width:2.5}
+/* Waze inline link: outline lime */
+.tl-attr-link[href*="waze"]{background:transparent!important;color:var(--lime-dark)!important;border-color:var(--accent)!important}
+
+/* Tags pill-shaped */
+.ck-tag,.pack-urgent,.tag,.badge{border-radius:999px}
+.attr-kids-rating{border-radius:999px}
+
+/* Card radius upgrade */
+.card,.attr-card,.weather-strip,.tip-card,.ck-item,.pack-item{border-radius:20px}
+.lock-box{border-radius:28px}
+
+/* Today weather card accent */
+.wd-card.today{background:var(--accent-light);border-color:var(--accent)}
+
+@media (max-width:767px) {
+  /* ── Hero shell: Hallstatt photo, 30vh ── */
+  .sticky-shell {
+    position:relative;
+    height:30vh;
+    min-height:200px;
+    max-height:280px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    background-color:var(--primary-dark);
+    background-image:
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.20) 40%, rgba(0,0,0,0.72) 100%),
+      url('https://images.unsplash.com/photo-1612441804231-77a36b284856?w=800&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center 50%;
+    z-index:0;
+  }
+
+  /* ── Hero header: fills space, title at bottom ── */
+  .app-header {
+    flex:1;
+    background:transparent;
+    box-shadow:none;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:max(36px,env(safe-area-inset-top)) 16px 10px;
+  }
+
+  /* ── Hero top bar: family chips + weather pill ── */
+  .hero-top-bar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    position:relative;
+    z-index:1;
+  }
+  .hero-chips { display:flex; gap:6px; }
+  .hero-chip {
+    background:rgba(255,255,255,0.20);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.25);
+    color:white;
+    border-radius:999px;
+    padding:6px 14px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  .hero-weather-pill {
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.20);
+    color:rgba(255,255,255,0.92);
+    border-radius:999px;
+    padding:5px 12px;
+    font-size:12px;
+    font-weight:500;
+    white-space:nowrap;
+  }
+  /* Active family chip: lime */
+  body.family-brosh #hero-chip-brosh{background:var(--accent)!important;border-color:var(--accent)!important}
+  body.family-aloni #hero-chip-aloni{background:var(--accent)!important;border-color:var(--accent)!important}
+
+  /* ── Hero title at bottom ── */
+  .hero-title {
+    font-size:32px;
+    font-weight:800;
+    color:white;
+    text-shadow:0 1px 6px rgba(0,0,0,.45);
+    line-height:1.2;
+    position:relative;
+    z-index:1;
+  }
+  .hero-dates {
+    font-size:14px;
+    font-weight:400;
+    color:rgba(255,255,255,0.70);
+    text-shadow:0 1px 3px rgba(0,0,0,.4);
+    margin-top:3px;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ── Countdown: dark pill in white content area ── */
+  .countdown-section {
+    padding:16px 16px 4px;
+    display:flex;
+    justify-content:center;
+  }
+  .countdown-bar {
+    background:#141414;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    border:none;
+    border-radius:999px;
+    margin:0;
+    padding:12px 20px;
+    position:static;
+    z-index:auto;
+    width:fit-content;
+  }
+  .cdb-label{color:rgba(255,255,255,.75);font-size:12px}
+  .cdb-n{text-shadow:none;color:#fff}
+  .cdb-unit{gap:2px}
+  .cdb-u{font-size:10px!important;color:rgba(255,255,255,.55)}
+
+  /* ── Content floats up onto hero ── */
+  .tab-content{
+    background:var(--bg);
+    border-radius:24px 24px 0 0;
+    margin-top:-24px;
+    position:relative;
+    z-index:2;
+    min-height:60vh;
+    padding:20px 16px 88px;
+  }
+  /* hide static weather card on mobile – weather moves to hero pill */
+  #weather-container{display:none}
+
+  /* ── Bottom tab bar – flex child of app-shell, NOT position:fixed ── */
+  .tab-nav {
+    flex-shrink:0;
+    height:64px;
+    flex-direction:row;
+    justify-content:space-around;
+    align-items:center;
+    border-top:1px solid var(--border);
+    border-bottom:none;
+    background:#ffffff;
+    z-index:100;
+    padding:0 4px;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    overflow-x:visible;
+    gap:0;
+  }
+  .tab-btn {
+    flex:1;
+    flex-direction:column;
+    padding:5px 3px;
+    border-bottom:none;
+    min-height:0;
+    min-width:0;
+    max-width:60px;
+    gap:2px;
+    border-radius:14px;
+    font-size:10px;
+    transition:background .15s;
+  }
+  .tab-btn .ti{font-size:20px}
+  .tab-btn .tl{font-size:10px;font-weight:700;line-height:1}
+  /* inactive: icon only */
+  .tab-btn:not(.active) .tl{display:none}
+  /* active: lime pill with label side-by-side */
+  .tab-btn.active{
+    background:var(--accent);
+    border-bottom-color:transparent;
+    color:white;
+    border-radius:999px;
+    padding:8px 14px;
+    flex-direction:row;
+    gap:5px;
+    max-width:100px;
+    flex:0 0 auto;
+  }
+  .tab-btn.active svg.feather{stroke-width:2.5;width:20px;height:20px}
+  .tab-btn.active .tl{display:block;color:white;font-weight:700;font-size:12px;white-space:nowrap}
+
+  /* ── Tap targets ── */
+  .btn,.att-btn,.bc-btn{min-height:44px;min-width:44px}
+  .btn-sm{min-height:40px}
+}
+
+/* ── GOOGLE SIGN-IN ── */
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:#fff;color:#3c4043;font-family:'Assistant',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-google:hover{background:#f7f8fa}
+.btn-google svg{width:20px;height:20px;flex-shrink:0}
+.lock-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0}
+.lock-or::before,.lock-or::after{content:'';flex:1;height:1px;background:var(--border)}
+.sync-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px}
+.sync-on{background:#e8f5e9;color:#2e7d32}
+.sync-off{background:#f0f0f0;color:var(--muted)}
+
+/* ── TASKS ── */
+.task-add-row{display:flex;gap:8px;margin-bottom:16px}
+.task-add-row input{flex:1}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:8px;transition:opacity .2s}
+.task-item.done{opacity:.55}
+.task-item.done .task-text{text-decoration:line-through;color:var(--muted)}
+.task-circle{width:24px;height:24px;border-radius:50%;border:2px solid var(--primary);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-top:1px}
+.task-item.done .task-circle{background:var(--primary)}
+.task-text{flex:1;font-size:15px;font-weight:600;line-height:1.4;cursor:pointer}
+.task-meta{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px}
+.task-del{background:none;border:none;color:var(--danger);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;opacity:.6}
+.task-del:hover{opacity:1}
+.task-empty{font-size:14px;color:var(--muted);text-align:center;padding:32px 0}
+
+/* ── ITINERARY EDIT/ADD CONTROLS ── */
+.tl-item-edit-btn{background:#eef4ff;color:var(--primary);border:none;border-radius:8px;font-size:12px;font-weight:700;padding:5px 10px;cursor:pointer;margin-top:6px}
+.day-add-event{display:none;width:100%;margin-top:10px;border-style:dashed!important}
+.panel-itinerary.itin-editing .day-add-event,#panel-itinerary.itin-editing .day-add-event{display:flex}
+.tl-item.tl-added .tl-dot{background:var(--accent)}
+.tl-added-tag{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-light);border-radius:999px;padding:1px 7px;margin-right:4px}
+
+/* ── GENERIC SECTION EDITOR ── */
+.sec-del-btn{display:none;margin-top:10px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer}
+.app-editing .sec-del-btn{display:inline-flex}
+.sec-add-btn{display:none!important;margin-top:12px}
+.app-editing .sec-add-btn{display:flex!important}
+.app-editing [data-eid]{outline:1px dashed rgba(120,120,120,.55);outline-offset:2px;border-radius:4px;cursor:text}
+.app-editing [data-eid]:focus{outline:2px solid var(--primary);background:#fffbe6}
+#edit-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:9000;background:var(--primary);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 12px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+#edit-banner button{background:#fff;color:var(--primary);border:none;border-radius:8px;font-weight:800;padding:4px 12px;margin-right:8px;cursor:pointer;font-family:'Assistant',sans-serif}
+body.app-editing{padding-top:38px}
+
+/* ═══════════════════════════════════════════════════════
+   DARK-GLASS REDESIGN (v2) — overrides
+   ═══════════════════════════════════════════════════════ */
+*{font-family:var(--gs)}
+html,body{color:#fff;background:#081912}
+body{background:
+  radial-gradient(125% 45% at 85% -5%,rgba(91,229,132,.20),transparent 60%),
+  linear-gradient(170deg,#16382b 0%,#0e2b20 45%,#081912 100%) fixed;
+  background-attachment:fixed;}
+.app-shell{background:transparent}
+.page-scroll-area{background:transparent}
+
+/* ---- glassify all surfaces ---- */
+.card,.attr-card,.tip-card,.flight-card,.weather-strip,.ck-item,.pack-item,.task-item,.wd-card,.modal,.lock-box{
+  background:var(--glass)!important;border:1px solid var(--glass-brd)!important;color:#fff;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:var(--shadow);border-radius:var(--radius)!important;}
+.card-header:active,.ck-item:active,.pack-item:active,.attr-card:active{background:rgba(255,255,255,.04)}
+.wd-card{border-radius:16px!important}
+.wd-card.today{background:rgba(124,240,166,.16)!important;border-color:rgba(124,240,166,.4)!important}
+
+/* ---- text colors ---- */
+.card-title h3,.attr-body h3,.tip-body h4,.fl-city,.day-name,.task-text,.ck-text,.pack-text,.modal-title,
+.lock-box h2,.fl-val,.amenity,.info-row .val,.attr-activities li,.tl-body h4{color:#fff}
+.card-title p,.attr-desc,.tip-body p,.day-theme,.attr-meta,.task-meta,.ck-sub,.fl-label,.fl-code,
+.lock-box p,.info-row .lbl,.pack-progress,.tl-body p,.sec-title{color:var(--muted)}
+.sec-title{border-bottom-color:var(--border)}
+.day-header{border-bottom-color:var(--border)}
+.info-row{border-bottom-color:var(--border)}
+
+/* ---- timeline ---- */
+.tl-dot::before{background:var(--accent);box-shadow:0 0 0 4px rgba(124,240,166,.16)}
+.tl-dot::after{background:var(--border)}
+.tl-item{border-bottom-color:var(--border)}
+.tl-time{color:var(--accent)}
+
+/* ---- buttons ---- */
+.btn-primary{background:#fff;color:#0c2018;box-shadow:0 8px 18px rgba(0,0,0,.3)}
+.btn-accent{background:var(--accent);color:#072414}
+.btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
+.btn-ghost{color:var(--muted)}
+.btn-waze,.tl-attr-link{background:rgba(124,240,166,.10);color:var(--accent);border:1.5px solid rgba(124,240,166,.35)}
+.btn-maps{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
+.btn-booking{background:#fff;color:#0c2018}
+
+/* ---- chips / tags / pills ---- */
+.ck-circle,.pack-circle,.task-circle{border-color:rgba(255,255,255,.32)}
+.ck-item.done .ck-circle,.pack-item.done .pack-circle,.task-item.done .task-circle{background:var(--accent);border-color:var(--accent);color:#072414}
+.tag-green,.attr-kids-rating,.attr-duration{background:rgba(124,240,166,.16);color:var(--accent)}
+.tag-blue{background:rgba(96,165,250,.16);color:#9cc9ff}
+.tag-orange,.pack-urgent{background:rgba(255,217,122,.16);color:var(--warning)}
+.tag-red{background:rgba(255,128,121,.18);color:var(--danger)}
+.fl-direction{background:rgba(124,240,166,.16);color:var(--accent)}
+.seat-tag{background:rgba(255,255,255,.06);color:#fff;border-color:var(--glass-brd)}
+
+/* ---- alerts (translucent) ---- */
+.alert-warning{background:rgba(255,217,122,.12);border-color:rgba(255,217,122,.35);color:#ffe4a3}
+.alert-danger{background:rgba(255,128,121,.12);border-color:rgba(255,128,121,.35);color:#ffb3ae}
+.alert-info{background:rgba(96,165,250,.12);border-color:rgba(96,165,250,.35);color:#bfdcff}
+.alert-success{background:rgba(124,240,166,.12);border-color:rgba(124,240,166,.35);color:#bff5d3}
+
+/* ---- countdown card ---- */
+.countdown-bar{background:var(--glass)!important;border:1px solid var(--glass-brd)!important;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:22px!important}
+.cdb-label{color:rgba(255,255,255,.7)}
+.cdb-n{color:var(--accent)!important;text-shadow:none}
+.cdb-u{color:rgba(255,255,255,.55)!important}
+.cdb-sep{color:rgba(255,255,255,.3)}
+
+/* ---- hero / header ---- */
+.hero-chip,.hero-weather-pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff}
+.hero-avatar{border-color:rgba(255,255,255,.7)}
+.tab-content{background:var(--bg)!important}
+
+/* ---- bottom nav (mobile) ---- */
+.tab-nav{background:rgba(20,42,32,.72)!important;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-color:var(--glass-brd)}
+.tab-btn{color:rgba(255,255,255,.6)}
+.tab-btn.active{color:#072414}
+.tab-btn svg.feather{stroke:currentColor}
+
+/* ---- forms / modal ---- */
+.modal{background:linear-gradient(180deg,rgba(28,60,46,.97),rgba(12,32,24,.99))!important}
+.form-input,.form-select,.lock-input,.tl-move-select{background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:#fff}
+.form-input:focus,.form-select:focus,.lock-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:rgba(255,255,255,.4)}
+.modal-handle{background:rgba(255,255,255,.3)}
+.form-group label{color:var(--muted)}
+
+/* ---- lock screen ---- */
+#lock-screen{background:linear-gradient(170deg,#16382b,#0e2b20 50%,#081912)}
+.family-btn{background:rgba(255,255,255,.07);border:1.5px solid var(--glass-brd);color:#fff}
+.family-btn:hover,.family-btn.selected{border-color:var(--accent);background:rgba(124,240,166,.14)}
+.lock-cd{background:rgba(255,255,255,.07);border:1px solid var(--glass-brd)}
+
+/* ---- itinerary edit ---- */
+.itin-editing .itin-edit-bar{background:rgba(124,240,166,.12)}
+.itin-editing .itin-edit-bar .edit-label{color:var(--accent)}
+.itin-editing .tl-item{background:rgba(255,255,255,.05);border:1px solid var(--glass-brd)}
+.tl-item-edit-btn{background:rgba(124,240,166,.14);color:var(--accent)}
+
+/* ---- misc dark fixes ---- */
+#itin-edit-btn{background:rgba(255,255,255,.08)!important;color:#fff!important;border:1px solid var(--glass-brd)}
+#edit-banner{background:rgba(20,42,32,.95);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#edit-banner button{background:var(--accent);color:#072414}
+.weather-skeleton{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.05) 75%);background-size:200% 100%}
+.day-add-event{border-color:rgba(124,240,166,.4)!important;color:var(--accent)}
+.amenity{background:rgba(255,255,255,.06)}
+.tl-del-btn{background:rgba(255,128,121,.14);border-color:rgba(255,128,121,.4);color:#ffb3ae}
+
+/* ---- sync pill ---- */
+.sync-on{background:rgba(124,240,166,.16);color:var(--accent)}
+.sync-off{background:rgba(255,255,255,.1);color:var(--muted)}
+
+/* ---- attraction image gradient ---- */
+.attr-img-wrap{background:linear-gradient(135deg,#1f6f8b,#0f3a2c)}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes navGlow{0%,100%{box-shadow:0 0 0 0 rgba(124,240,166,0)}50%{box-shadow:0 0 20px 1px rgba(124,240,166,.4)}}
+.tab-panel.active>*{animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both}
+.tab-panel.active>*:nth-child(1){animation-delay:.02s}
+.tab-panel.active>*:nth-child(2){animation-delay:.07s}
+.tab-panel.active>*:nth-child(3){animation-delay:.12s}
+.tab-panel.active>*:nth-child(4){animation-delay:.17s}
+.tab-panel.active>*:nth-child(5){animation-delay:.22s}
+.tab-panel.active>*:nth-child(n+6){animation-delay:.26s}
+@media (max-width:767px){.tab-nav .tab-btn.active{animation:navGlow 2.8s ease-in-out infinite}}
+.btn:active,.card-header:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="edit-banner">✏️ מצב עריכה — לחץ על טקסט כדי לשנות, או הוסף/מחק פריטים <button onclick="setEditMode(false)">סיום עריכה</button></div>
+
+<!-- ═══ LOCK SCREEN ═══ -->
+<div id="lock-screen">
+  <div class="lock-box">
+    <!-- Step 1: passcode -->
+    <div id="lock-step1">
+      <div class="lock-cd">
+        <div class="lock-cd-title">🇦🇹 עוד לטיול!</div>
+        <div class="lock-cd-units">
+          <div class="lock-cd-unit"><div class="lock-cd-n" id="lc-days">--</div><div class="lock-cd-u">ימים</div></div>
+          <div class="lock-cd-sep">:</div>
+          <div class="lock-cd-unit"><div class="lock-cd-n" id="lc-hours">--</div><div class="lock-cd-u">שעות</div></div>
+          <div class="lock-cd-sep">:</div>
+          <div class="lock-cd-unit"><div class="lock-cd-n" id="lc-mins">--</div><div class="lock-cd-u">דקות</div></div>
+          <div class="lock-cd-sep">:</div>
+          <div class="lock-cd-unit"><div class="lock-cd-n" id="lc-secs">--</div><div class="lock-cd-u">שניות</div></div>
+        </div>
+      </div>
+      <div style="font-size:48px;margin-bottom:8px">🇦🇹</div>
+      <h2>אוסטריה 2026</h2>
+      <p>הזן קוד גישה כדי להמשיך</p>
+      <input type="password" class="lock-input" id="passcode-input" placeholder="••••••••" maxlength="20"
+        oninput="checkPasscode()" onkeydown="if(event.key==='Enter')checkPasscode(true)">
+      <div class="lock-error" id="lock-error">קוד שגוי, נסה שוב</div>
+      <button class="btn btn-primary btn-block" onclick="checkPasscode(true)">כניסה →</button>
+      <p style="font-size:11px;color:var(--muted);margin-top:14px">☁️ הנתונים מסתנכרנים אוטומטית בין כל המכשירים</p>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px">רק לבני המשפחות 👨‍👩‍👧‍👦</p>
+    </div>
+    <!-- Step 2: family selection -->
+    <div id="lock-step2">
+      <div style="font-size:40px;margin-bottom:8px">👋</div>
+      <h2>שלום!</h2>
+      <p>מי אתה/את? (יצוין בשינויים שתעשה)</p>
+      <div class="family-btns" id="family-btns">
+        <button class="family-btn" onclick="selectFamily('ברוש')">👨‍👩‍👧‍👦<br>משפחת ברוש<div class="family-kids">ליה (4) · רומי (1)</div></button>
+        <button class="family-btn" onclick="selectFamily('אלוני')">👨‍👩‍👦‍👦<br>משפחת אלוני<div class="family-kids">תום (4) · עמרי (2)</div></button>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <input type="text" class="form-input" id="custom-name" placeholder="שם אחר..." style="flex:1">
+        <button class="btn btn-primary btn-sm" onclick="selectFamily(document.getElementById('custom-name').value||'אורח')">כניסה</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STICKY SHELL ═══ -->
+<div class="app-shell">
+<div class="page-scroll-area">
+
+<div class="sticky-shell">
+<header class="app-header">
+  <div class="hero-top-bar">
+    <div class="hero-chips">
+      <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי">👤</button>
+    </div>
+    <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
+  </div>
+  <!-- JS compat: keep hidden -->
+  <span id="user-name-display" style="display:none"></span>
+  <span id="header-temp" style="display:none"></span>
+  <span id="header-wlabel" style="display:none"></span>
+  <button id="user-chip" style="display:none" onclick="showUserModal()"></button>
+  <div class="header-title">
+    <h1 class="hero-title">🇦🇹 אוסטריה 2026</h1>
+    <p class="hero-dates">11–18 אוגוסט · זלצבורג</p>
+  </div>
+</header>
+</div><!-- end sticky-shell -->
+
+<!-- ═══ TAB CONTENT ═══ -->
+<div class="tab-content">
+
+<div class="countdown-section">
+<div class="countdown-bar" id="countdown-bar">
+  <span class="cdb-label">עוד לטיול 🇦🇹</span>
+  <div class="cdb-units" dir="ltr">
+    <div class="cdb-unit"><span class="cdb-n" id="cd-days">--</span><span class="cdb-u">ימים</span></div>
+    <span class="cdb-sep">:</span>
+    <div class="cdb-unit"><span class="cdb-n" id="cd-hours">--</span><span class="cdb-u">שעות</span></div>
+    <span class="cdb-sep">:</span>
+    <div class="cdb-unit"><span class="cdb-n" id="cd-mins">--</span><span class="cdb-u">דקות</span></div>
+    <span class="cdb-sep">:</span>
+    <div class="cdb-unit"><span class="cdb-n" id="cd-secs">--</span><span class="cdb-u">שניות</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ── לו"ז ── -->
+<div class="tab-panel active" id="panel-itinerary">
+  <div class="itin-edit-bar">
+    <span class="edit-label" id="itin-edit-label">ניתן לערוך ימים – להזיז ולמחוק אירועים</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:#fee2e2;color:#dc2626;border:none">↺ איפוס שינויים</button>
+      <button class="btn btn-sm btn-primary" id="itin-edit-btn" onclick="toggleItinEdit()">✏️ ערוך לו"ז</button>
+    </div>
+  </div>
+  <div id="weather-container"><div class="weather-skeleton"></div><div class="weather-skeleton" style="height:40px;margin-top:6px;opacity:.6"></div></div>
+
+  <!-- Day 1 -->
+  <div class="card open" id="d1">
+    <div class="card-header" onclick="toggleCard('d1')">
+      <span class="card-emoji">✈️</span>
+      <div class="card-title"><h3>יום 1 · שלישי 11.8</h3><p>הגעה → Kesselgrub</p></div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">הגעה 🛬</div><div class="day-theme">תל אביב → זלצבורג</div></div><div class="day-badge">11.8<br>ג'</div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>שדה תעופה ת"א – טרמינל 1</h4><p>הגעה 3 שעות לפני</p></div></div>
+        <div class="tl-item"><div class="tl-time">12:00</div><div class="tl-dot"></div><div class="tl-body"><h4>המראה ✈️ 6H 243</h4><p><span class="brosh-only">ישראייר · נטע 2F, עומר 2E, ליה 2D, רומי LAP</span><span class="aloni-only">ישראייר · 6H 243</span></p></div></div>
+        <div class="tl-item"><div class="tl-time">14:35</div><div class="tl-dot"></div><div class="tl-body"><h4>נחיתה זלצבורג (SZG) 🇦🇹</h4><p>איסוף רכב – AutoEurope Res.629582 · Nissan Qashqai</p></div></div>
+        <div class="tl-item"><div class="tl-time">15:30</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה דרומה</h4><p>A10 · ~50 דקות</p></div></div>
+        <div class="tl-item"><div class="tl-time">16:30</div><div class="tl-dot"></div><div class="tl-body"><h4>צ'ק-אין 🏨 Ferienwelt Kesselgrub</h4><p>Lackengasse 86, Altenmarkt im Pongau</p></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב 🍽️</h4><p>מסעדת המלון – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="alert alert-warning brosh-only"><span class="alert-icon">⚠️</span>לאשר כיסאות ילדים עם AutoEurope! Infant seat לרומי + Toddler seat לליה</div>
+      <div class="alert alert-warning aloni-only"><span class="alert-icon">⚠️</span>לאשר כיסא בטיחות לתום ועמרי עם חברת ההשכרה!</div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לשדה</a>
+        <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze למלון</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="card" id="d2">
+    <div class="card-header" onclick="toggleCard('d2')"><span class="card-emoji">👻</span><div class="card-title"><h3>יום 2 · רביעי 12.8</h3><p>Geisterberg Adventure Mountain</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">👻 Geisterberg</div><div class="day-theme">40+ תחנות הרפתקאות</div></div><div class="day-badge">12.8<br>ד'</div></div>
+      <div class="alert alert-danger"><span class="alert-icon">🚫</span>Wagrainis Grafenberg <strong>סגור 2026</strong> – בניית גונדולה. Geisterberg הוא האלטרנטיבה!</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>בופה בוקר במלון 🥐</h4><p>כלול בחבילה</p></div></div>
+        <div class="tl-item"><div class="tl-time">10:15</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה ל-Geisterberg</h4><p>St. Johann/Alpendorf · ~20 דקות</p></div></div>
+        <div class="tl-item"><div class="tl-time">10:30</div><div class="tl-dot"></div><div class="tl-body"><h4>גונדולה + ממלכת הרפאים 👻</h4><p>40+ תחנות · גובה ~1,563מ' · עגלה ✓ · גיל 1+</p><button class="tl-attr-link" onclick="viewAttraction('a1')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🍖 צהריים בקתת ההר</h4><p>שניצל, מרק, מגשי ילדים</p><button class="tl-attr-link" onclick="viewRestaurant('r3')">↗ מסעדה</button><a href="https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>בריכה + מנוחה 🏊</h4><p>בחזרה למלון</p></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב גורמה 🍽️</h4><p>מסעדת Kesselgrub – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze</a>
+        <a href="https://www.snow-space.com/en/summer/adventure-mountain/geisterberg-alpendorf" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="card" id="d3">
+    <div class="card-header" onclick="toggleCard('d3')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 3 · חמישי 13.8</h3><p>מבצר הוהנוורפן + Therme Amadé</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">🏰 מבצר + 🌊 טרמה</div><div class="day-theme">פלקונרי + 11 בריכות</div></div><div class="day-badge">13.8<br>ה'</div></div>
+      <div class="alert alert-danger"><span class="alert-icon">🎫</span>להזמין כרטיסי מבצר מראש! עלול להימכר באוגוסט.</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר במלון</h4><p>כלול בחבילה · Kesselgrub</p></div></div>
+        <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>יציאה למבצר הוהנוורפן 🏰</h4><p>~35 דקות · Burgstraße 2, Werfen</p><button class="tl-attr-link" onclick="viewAttraction('a2')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">10:45</div><div class="tl-dot"></div><div class="tl-body"><h4>פונקולר למבצר</h4><p>כלול בכרטיס</p></div></div>
+        <div class="tl-item"><div class="tl-time">11:15</div><div class="tl-dot"></div><div class="tl-body"><h4>🦅 הצגת פלקונרי!</h4><p>25 דקות · הצגה שנייה 15:15 · עיטים ונשרים חיים!</p></div></div>
+        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 צהריים בכפר Werfen</h4><p>Gasthof Werfen – מטבח אוסטרי מסורתי</p><button class="tl-attr-link" onclick="viewRestaurant('r4')">↗ מסעדה</button><a href="https://waze.com/ul?q=Gasthof+Werfen+Austria&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>Erlebnis-Therme Amadé 🌊</h4><p>Thermenplatz 1, Altenmarkt · 11 בריכות · 3 מגלשות</p><button class="tl-attr-link" onclick="viewAttraction('a3')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">18:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב במלון 🍽️</h4><p>כלול בחבילה · Kesselgrub</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Burg+Hohenwerfen+Werfen&navigate=yes" class="btn btn-waze btn-sm">🗺️ מבצר</a>
+        <a href="https://waze.com/ul?q=Gasthof+Werfen+Austria&navigate=yes" class="btn btn-waze btn-sm">🗺️ Gasthof Werfen</a>
+        <a href="https://waze.com/ul?q=Erlebnis+Therme+Amade+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ טרמה</a>
+        <a href="https://www.getyourguide.com/werfen-l4776/werfen-hohenwerfen-castle-entrance-ticket-t329441/" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן כרטיסים</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 4 -->
+  <div class="card" id="d4">
+    <div class="card-header" onclick="toggleCard('d4')"><span class="card-emoji">😴</span><div class="card-title"><h3>יום 4 · שישי 14.8</h3><p>מנוחה – בריכה, פוני, אגם</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">😴 יום מנוחה</div><div class="day-theme">ניצול המלון + אגם הרים</div></div><div class="day-badge">14.8<br>ו'</div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר במלון</h4><p>כלול בחבילה · Kesselgrub</p></div></div>
+        <div class="tl-item"><div class="tl-time">כל הבוקר</div><div class="tl-dot"></div><div class="tl-body"><h4>בריכה + פוני + גן חיות קטן 🐴</h4><p>כלול ב-Kesselgrub · קלוב ילדים 70ש'/שבוע</p></div></div>
+        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 פיקניק ליד האגם</h4><p>Zauchensee · 10 דקות מהמלון · שחייה חינם</p></div></div>
+        <div class="tl-item"><div class="tl-time">אחה"צ</div><div class="tl-dot"></div><div class="tl-body"><h4>אגם Zauchensee 🏔️</h4><p>10 דקות מהמלון · חינם · שחייה · פיקניק</p><button class="tl-attr-link" onclick="viewAttraction('a4')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב גורמה 🍽️</h4><p>מסעדת Kesselgrub – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="action-row"><a href="https://waze.com/ul?q=Zauchensee+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לאגם</a></div>
+    </div>
+  </div>
+
+  <!-- Day 5 -->
+  <div class="card" id="d5">
+    <div class="card-header" onclick="toggleCard('d5')"><span class="card-emoji">🚗</span><div class="card-title"><h3>יום 5 · שבת 15.8</h3><p>מעבר מלונות → Grünauerhof</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">🚗 מעבר מלונות</div><div class="day-theme">~70 ק"מ · A10 צפונה · ~1 שעה</div></div><div class="day-badge">15.8<br>ש'</div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">08:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר + צ'ק-אאוט עד 11:00 🧳</h4><p>Kesselgrub – פרידה!</p></div></div>
+        <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div><div class="tl-body"><h4>אגם Zauchensee – עצירה אחרונה 🏔️</h4><p>שחייה + פיקניק · פרידה מהאגם</p><button class="tl-attr-link" onclick="viewAttraction('a4')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">12:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥙 צהריים קלים בדרך</h4><p>עצירה בכפר · סנדוויצ'ים + קפה</p></div></div>
+        <div class="tl-item"><div class="tl-time">13:30</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה ל-Grünauerhof</h4><p>A10 צפונה · ~70 ק"מ</p></div></div>
+        <div class="tl-item"><div class="tl-time">14:30</div><div class="tl-dot"></div><div class="tl-body"><h4>צ'ק-אין 🏨 Hotel Grünauerhof</h4><p>Grünauerstraße 90 · 7 ק"מ מזלצבורג</p></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב בגן הקסטן 🌳</h4><p>מסעדת המלון</p><button class="tl-attr-link" onclick="viewRestaurant('r7')">↗ מסעדה</button><a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?from=Ferienwelt+Kesselgrub+Altenmarkt&to=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לנסיעה</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 6 -->
+  <div class="card" id="d6">
+    <div class="card-header" onclick="toggleCard('d6')"><span class="card-emoji">🦁</span><div class="card-title"><h3>יום 6 · ראשון 16.8</h3><p>גן חיות + ארמון הלבורן + מירבל</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">🦁 הלבורן</div><div class="day-theme">חיות + מזרקות + גנים</div></div><div class="day-badge">16.8<br>א'</div></div>
+      <div class="alert alert-info"><span class="alert-icon">💡</span>הצג כרטיס גן חיות בארמון = <strong>Hellbrunn Bonus</strong> (הנחה)!</div>
+      <div class="alert alert-warning brosh-only"><span class="alert-icon">💧</span>להביא חולצה יבשה לליה – המזרקות מרטיבות מאוד!</div>
+      <div class="alert alert-warning aloni-only"><span class="alert-icon">💧</span>להביא חולצה יבשה לתום – המזרקות מרטיבות מאוד!</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 ארוחת בוקר במלון</h4><p>כלול בחבילה · Grünauerhof</p></div></div>
+        <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גן חיות הלבורן 🦁</h4><p>Hellbrunner Str. 60, Anif · עגלות בהשאלה חינם · מתחת ל-4 חינם!</p><button class="tl-attr-link" onclick="viewAttraction('a5')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארמון הלבורן ⛲</h4><p>Fürstenweg 37 · סיור מזרקות 50 דק' · ~€16.50 מבוגר</p><button class="tl-attr-link" onclick="viewAttraction('a6')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">13:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 צהריים ב-Anif</h4><p>מסעדה מקומית · ליד הארמון</p><button class="tl-attr-link" onclick="viewRestaurant('r5')">↗ מסעדה</button><a href="https://waze.com/ul?q=restaurant+Anif+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>מנוחה במלון 😴</h4><p><span class="brosh-only">שינה לרומי</span><span class="aloni-only">שינה לעמרי</span></p></div></div>
+        <div class="tl-item"><div class="tl-time">17:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גני מירבל 🌸</h4><p>חינם · מגרש ילדים ענק + מבצר עץ</p><button class="tl-attr-link" onclick="viewAttraction('a8')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">19:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב במלון 🍽️</h4><p>כלול בחבילה · Grünauerhof</p><button class="tl-attr-link" onclick="viewRestaurant('r7')">↗ מסעדה</button><a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Salzburg+Zoo+Hellbrunn&navigate=yes" class="btn btn-waze btn-sm">🗺️ גן חיות</a>
+        <a href="https://waze.com/ul?q=Schloss+Hellbrunn+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ ארמון</a>
+        <a href="https://waze.com/ul?q=restaurant+Anif+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ מסעדה Anif</a>
+        <a href="https://waze.com/ul?q=Mirabell+Gardens+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ מירבל</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 7 -->
+  <div class="card" id="d7">
+    <div class="card-header" onclick="toggleCard('d7')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 7 · שני 17.8</h3><p>זלצבורג – מבצר + עיר עתיקה</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">🏰 זלצבורג</div><div class="day-theme">עיר עתיקה + מבצר + בירה</div></div><div class="day-badge">17.8<br>ב'</div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 ארוחת בוקר במלון</h4><p>כלול בחבילה · Grünauerhof</p></div></div>
+        <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>מבצר הוהנזלצבורג 🏰</h4><p>Mönchsberg 34 · רכבל מ-Festungsgasse</p><button class="tl-attr-link" onclick="viewAttraction('a7')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">12:00</div><div class="tl-dot"></div><div class="tl-body"><h4>☕ Café Tomaselli + עיר עתיקה</h4><p>Alter Markt 9 · שטרודל + קפה אוסטרי (מ-1705) · צהריים!</p><button class="tl-attr-link" onclick="viewAttraction('a9')">↗ פרטים</button><button class="tl-attr-link" onclick="viewRestaurant('r1')">↗ מסעדה</button><a href="https://waze.com/ul?q=Café+Tomaselli+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">14:30</div><div class="tl-dot"></div><div class="tl-body"><h4>גני מירבל 🌸</h4><p>חינם לחלוטין</p></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>Augustinerbräu 🍺</h4><p>Augustinergasse 4 · מנזר בירה מ-1621 · לשתי המשפחות!</p><button class="tl-attr-link" onclick="viewAttraction('a10')">↗ פרטים</button><button class="tl-attr-link" onclick="viewRestaurant('r2')">↗ מסעדה</button><a href="https://waze.com/ul?q=Augustinerbräu+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Festung+Hohensalzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ מבצר</a>
+        <a href="https://waze.com/ul?q=Café+Tomaselli+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ Tomaselli</a>
+        <a href="https://waze.com/ul?q=Mirabell+Gardens+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ מירבל</a>
+        <a href="https://waze.com/ul?q=Augustinerbräu+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ Augustinerbräu</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 8 -->
+  <div class="card" id="d8">
+    <div class="card-header" onclick="toggleCard('d8')"><span class="card-emoji">✈️</span><div class="card-title"><h3>יום 8 · שלישי 18.8</h3><p>עזיבה → תל אביב</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <div class="day-header"><div><div class="day-name">✈️ טסים הביתה</div><div class="day-theme">זלצבורג → תל אביב</div></div><div class="day-badge">18.8<br>ג'</div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">08:00</div><div class="tl-dot"></div><div class="tl-body"><h4>בופה + אריזות 🧳</h4><p>המלון 10 דקות משדה התעופה</p></div></div>
+        <div class="tl-item"><div class="tl-time">09:10</div><div class="tl-dot"></div><div class="tl-body"><h4>החזרת הרכב + שדה תעופה</h4><p>Res.629582 · AutoEurope · SZG</p></div></div>
+        <div class="tl-item"><div class="tl-time">12:10</div><div class="tl-dot"></div><div class="tl-body"><h4>המראה ✈️ 6H 248</h4><p><span class="brosh-only">ישראייר · נטע 2F, עומר 2E, ליה 2D</span><span class="aloni-only">ישראייר · 6H 248</span></p></div></div>
+        <div class="tl-item"><div class="tl-time">16:45</div><div class="tl-dot"></div><div class="tl-body"><h4>נחיתה תל אביב 🏠</h4><p>ברוכים השבים!</p></div></div>
+      </div>
+      <div class="action-row"><a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לשדה</a></div>
+    </div>
+  </div>
+</div><!-- end panel-itinerary -->
+
+<!-- ── משימות ── -->
+<div class="tab-panel" id="panel-tasks">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <h2 style="font-size:18px;font-weight:800">✅ משימות לפני הטיול</h2>
+    <span id="tasks-total" style="font-size:13px;color:var(--muted)"></span>
+  </div>
+  <div class="alert alert-success" style="margin-bottom:14px"><span class="alert-icon">📝</span>הוסיפו משימות משותפות · כולם רואים ומסמנים</div>
+  <div class="task-add-row">
+    <input type="text" class="form-input" id="task-new-text" placeholder="משימה חדשה..." onkeydown="if(event.key==='Enter')addTask()">
+    <button class="btn btn-primary" onclick="addTask()">＋ הוסף</button>
+  </div>
+  <div id="tasks-list"></div>
+</div>
+
+<!-- ── מלונות ── -->
+<div class="tab-panel" id="panel-hotels">
+  <p class="sec-title">מלון 1 · 11–15 אוגוסט (4 לילות)</p>
+  <div class="card open" id="h1">
+    <div class="card-header" onclick="toggleCard('h1')"><span class="card-emoji">🌿</span><div class="card-title"><h3>Ferienwelt Kesselgrub</h3><p>Altenmarkt im Pongau · ★★★★</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <img src="https://picsum.photos/seed/kess1/800/300" class="hotel-img" alt="">
+      <div class="info-row"><span class="lbl">כתובת</span><span class="val">Lackengasse 86, 5541 Altenmarkt</span></div>
+      <div class="info-row"><span class="lbl">טלפון</span><span class="val"><a href="tel:+43645252323">+43 6452-5232</a></span></div>
+      <div class="info-row"><span class="lbl">צ'ק-אין / אאוט</span><span class="val">11.8 / 15.8 (עד 11:00)</span></div>
+      <div class="info-row"><span class="lbl">חדר</span><span class="val">סוויטת סטנדרט</span></div>
+      <p class="sec-title">כלול בחבילה 🎁</p>
+      <div class="amenity-grid">
+        <div class="amenity">🥐 בופה בוקר</div><div class="amenity">🥗 צהריים קלים</div>
+        <div class="amenity">🍰 תה + עוגה + גלידה</div><div class="amenity">🍽️ ערב גורמה</div>
+        <div class="amenity">👶 בופה HIPP תינוקות</div><div class="amenity">🏊 בריכה טבעית</div>
+        <div class="amenity">🧖 ספא + סאונה</div><div class="amenity">🎠 קלוב ילדים 70ש'/שבוע</div>
+        <div class="amenity">🐴 פוני + גן חיות קטן</div><div class="amenity">🤸 טרמפולינה</div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze</a>
+        <a href="https://www.kesselgrub.at/en/" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>
+        <a href="https://www.booking.com/hotel/at/aktiv-und-wohlfuhlhotel-kesselgrub.he.html" class="btn btn-booking btn-sm" target="_blank">Booking</a>
+      </div>
+    </div>
+  </div>
+  <p class="sec-title">מלון 2 · 15–18 אוגוסט (3 לילות)</p>
+  <div class="card" id="h2">
+    <div class="card-header" onclick="toggleCard('h2')"><span class="card-emoji">🏙️</span><div class="card-title"><h3>Hotel Grünauerhof</h3><p>Wals bei Salzburg · ★★★★</p></div><span class="chevron">▼</span></div>
+    <div class="card-body">
+      <img src="https://picsum.photos/seed/gruen1/800/300" class="hotel-img" alt="">
+      <div class="info-row"><span class="lbl">כתובת</span><span class="val">Grünauerstraße 90, 5071 Wals</span></div>
+      <div class="info-row"><span class="lbl">טלפון</span><span class="val"><a href="tel:+43662850464">+43 662 850464</a></span></div>
+      <div class="info-row"><span class="lbl">אימייל</span><span class="val"><a href="mailto:info@gruenauerhof.at">info@gruenauerhof.at</a></span></div>
+      <div class="info-row"><span class="lbl">צ'ק-אין / אאוט</span><span class="val">15.8 / 18.8</span></div>
+      <div class="info-row"><span class="lbl">חדר</span><span class="val">סוויטה (2 חדרי שינה)</span></div>
+      <div class="amenity-grid">
+        <div class="amenity">🏊 בריכה פנימית + חיצונית</div><div class="amenity">🧖 ספא + סאונה + אדים</div>
+        <div class="amenity">🍽️ מסעדה + גן קסטן</div><div class="amenity">🎠 מגרש ילדים</div>
+        <div class="amenity">🚗 חניה חינם</div><div class="amenity">📍 10 דק' משדה התעופה</div>
+      </div>
+      <div class="action-row">
+        <a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze</a>
+        <a href="https://www.gruenauerhof.at/en.html" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>
+        <a href="https://www.booking.com/hotel/at/grunauerhof.he.html" class="btn btn-booking btn-sm" target="_blank">Booking</a>
+      </div>
+    </div>
+  </div>
+  <div class="card"><div class="card-header" style="cursor:default"><span class="card-emoji">🚗</span><div class="card-title"><h3>נסיעה בין המלונות · 15.8</h3><p>~70 ק"מ · ~1 שעה · A10 צפונה</p></div></div>
+    <div class="card-body" style="display:block"><div class="action-row"><a href="https://waze.com/ul?from=Ferienwelt+Kesselgrub+Altenmarkt&to=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze">🗺️ Waze לנסיעה המלאה</a></div></div>
+  </div>
+</div><!-- end hotels -->
+
+<!-- ── אטרקציות ── -->
+<div class="tab-panel" id="panel-attractions">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <h2 style="font-size:18px;font-weight:800">אטרקציות</h2>
+    <button class="btn btn-accent btn-sm" onclick="openAddAttrModal()">＋ הוסף אטרקציה</button>
+  </div>
+  <p class="sec-title">🏔️ אזור פונגאו (ימים 1–5)</p>
+  <div id="attractions-pongau"></div>
+  <p class="sec-title">🏙️ אזור זלצבורג (ימים 6–8)</p>
+  <div id="attractions-salzburg"></div>
+  <p class="sec-title">⭐ נוסף על ידי המשפחות</p>
+  <div id="attractions-custom"><p style="font-size:13px;color:var(--muted);padding:8px 0">אין אטרקציות מותאמות אישית עדיין. לחץ ＋ כדי להוסיף!</p></div>
+</div>
+
+<!-- ── הזמנות ── -->
+<div class="tab-panel" id="panel-bookings">
+  <div class="alert alert-success"><span class="alert-icon">✅</span>לחצו לסימון · נשמר אוטומטית</div>
+  <p class="sec-title">✅ שולם – ברוש</p>
+  <div class="ck-item done" data-id="ck_flights" onclick="toggleCheck(this)"><div class="ck-circle">✓</div><div style="flex:1"><div class="ck-text">טיסות ישראייר הלוך-חזור</div><div class="ck-sub">Docket 4440455 · 6H 243 + 6H 248</div></div><span class="ck-tag tag-green">שולם ✓</span></div>
+  <div class="ck-item done" data-id="ck_car" onclick="toggleCheck(this)"><div class="ck-circle">✓</div><div style="flex:1"><div class="ck-text">Nissan Qashqai – AutoEurope</div><div class="ck-sub">Res.629582 · €446.14 · 11–18.8</div></div><span class="ck-tag tag-green">שולם ✓</span></div>
+  <div class="ck-item done" data-id="ck_h1" onclick="toggleCheck(this)"><div class="ck-circle">✓</div><div style="flex:1"><div class="ck-text">Ferienwelt Kesselgrub</div><div class="ck-sub">11–15.8 · 4 לילות · סוויטת סטנדרט</div></div><span class="ck-tag tag-green">שולם ✓</span></div>
+  <div class="ck-item done" data-id="ck_h2" onclick="toggleCheck(this)"><div class="ck-circle">✓</div><div style="flex:1"><div class="ck-text">Hotel Grünauerhof</div><div class="ck-sub">15–18.8 · 3 לילות · סוויטה</div></div><span class="ck-tag tag-green">שולם ✓</span></div>
+  <p class="sec-title">🔴 חובה מראש</p>
+  <div class="ck-item" data-id="ck_castle" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">מבצר הוהנוורפן – כרטיסים 13.8</div><div class="ck-sub">לשתי המשפחות · עלול להימכר!</div><div class="action-row" style="margin-top:6px"><a href="https://www.getyourguide.com/werfen-l4776/werfen-hohenwerfen-castle-entrance-ticket-t329441/" class="btn btn-accent btn-sm" target="_blank" onclick="event.stopPropagation()">🎫 GetYourGuide</a></div></div><span class="ck-tag tag-red">חובה!</span></div>
+  <div class="ck-item" data-id="ck_hellbrunn" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">ארמון הלבורן – כרטיסים 16.8</div><div class="ck-sub">~€16.50 מבוגר · ~€6.50 ילד</div><div class="action-row" style="margin-top:6px"><a href="https://www.hellbrunn.at/en/" class="btn btn-accent btn-sm" target="_blank" onclick="event.stopPropagation()">🎫 להזמין</a></div></div><span class="ck-tag tag-red">חובה!</span></div>
+  <div class="ck-item" data-id="ck_zoo" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">גן חיות הלבורן – כרטיסים 16.8</div><div class="ck-sub">~€12.50 מבוגר · מתחת ל-4 חינם!</div></div><span class="ck-tag tag-red">חובה!</span></div>
+  <p class="sec-title">⚠️ משימות דחופות</p>
+  <div class="ck-item brosh-only" data-id="ck_carseat" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">אשר כיסאות ילדים – AutoEurope</div><div class="ck-sub">Infant לרומי + Toddler לליה · טל: 03-5244244</div></div><span class="ck-tag tag-red">דחוף!</span></div>
+  <div class="ck-item brosh-only" data-id="ck_infant" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">לברר כלל lap infant לרומי – ישראייר</div></div><span class="ck-tag tag-red">דחוף!</span></div>
+  <div class="ck-item aloni-only" data-id="ck_carseat_aloni" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">אשר כיסאות ילדים לתום ועמרי – חברת ההשכרה</div></div><span class="ck-tag tag-red">דחוף!</span></div>
+  <div class="ck-item" data-id="ck_aloni_hotel" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">לוודא הזמנת מלון – משפחת אלוני</div></div><span class="ck-tag tag-red">דחוף!</span></div>
+  <div class="ck-item" data-id="ck_aloni_car" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">רכב – משפחת אלוני (שדה זלצבורג)</div><div class="action-row" style="margin-top:6px"><a href="https://www.salzburg-airport.com/en/arriving-and-departing/rental-cars" class="btn btn-outline btn-sm" target="_blank" onclick="event.stopPropagation()">🚗 השכרות בשדה</a></div></div><span class="ck-tag tag-red">דחוף!</span></div>
+  <p class="sec-title">🟡 לשקול</p>
+  <div class="ck-item" data-id="ck_salzburgcard" onclick="toggleCheck(this)"><div class="ck-circle"></div><div style="flex:1"><div class="ck-text">Salzburg Card</div><div class="ck-sub">48/72ש' · ילדים עד 6 חינם! · 90+ אטרקציות</div><div class="action-row" style="margin-top:6px"><a href="https://www.salzburg.info/en/travel-info/salzburg-card" class="btn btn-outline btn-sm" target="_blank" onclick="event.stopPropagation()">ℹ️ פרטים</a></div></div><span class="ck-tag tag-orange">לשקול</span></div>
+</div>
+
+<!-- ── טיסות ── -->
+<div class="tab-panel" id="panel-flights">
+  <div class="flight-card">
+    <div class="fl-direction">✈️ הלוך · שלישי 11.8.2026</div>
+    <div class="fl-route"><div><div class="fl-city">תל אביב</div><div class="fl-code">TLV · T1 · 12:00</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 14:35</div></div></div>
+    <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 243</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
+    <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span><span class="seat-tag">רומי LAP</span></div>
+  </div>
+  <div class="flight-card">
+    <div class="fl-direction">✈️ חזור · שלישי 18.8.2026</div>
+    <div class="fl-route"><div><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 12:10</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">תל אביב</div><div class="fl-code">TLV · 16:45</div></div></div>
+    <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 248</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
+    <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span></div>
+  </div>
+  <div class="card"><div class="card-header" style="cursor:default"><span class="card-emoji">🚗</span><div class="card-title"><h3>רכב השכרה – AutoEurope</h3><p>Res.629582 · Nissan Qashqai</p></div></div>
+    <div class="card-body" style="display:block">
+      <div class="info-row"><span class="lbl">איסוף</span><span class="val">11.8 · Salzburg Airport</span></div>
+      <div class="info-row"><span class="lbl">החזרה</span><span class="val">18.8 · Salzburg Airport</span></div>
+      <div class="info-row"><span class="lbl">עלות</span><span class="val">€446.14 ✅ שולם</span></div>
+      <div class="alert alert-danger" style="margin-top:10px"><span class="alert-icon">⚠️</span>לאשר כיסאות ילדים! Tel: <a href="tel:035244244">03-5244244</a></div>
+    </div>
+  </div>
+  <div class="alert alert-warning"><span class="alert-icon">⏰</span>להגיע לשדה T1 עד <strong>09:00</strong> (3 שעות לפני)</div>
+</div>
+
+<!-- ── ציוד ── -->
+<div class="tab-panel" id="panel-packing">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <h2 style="font-size:18px;font-weight:800">🎒 רשימת ציוד</h2>
+    <span id="packing-total" style="font-size:13px;color:var(--muted)"></span>
+  </div>
+  <div class="alert alert-warning" style="margin-bottom:14px"><span class="alert-icon">⚠️</span>פריטים עם ⭐ הם קריטיים – אסור לשכוח!</div>
+  <div id="packing-list"></div>
+  <div style="margin-top:16px">
+    <button class="btn btn-outline btn-block" onclick="openAddPackModal()">＋ הוסף פריט לרשימה</button>
+  </div>
+</div>
+
+<!-- ── מסעדות ── -->
+<div class="tab-panel" id="panel-restaurants">
+  <p class="sec-title">🏨 מסעדות המלון <span style="font-size:11px;font-weight:400;color:var(--muted)">(כלול בחבילה)</span></p>
+  <div id="restaurants-hotel"></div>
+  <p class="sec-title" style="margin-top:20px">🍽️ מסעדות ואוכל בדרך</p>
+  <div id="restaurants-day"></div>
+</div>
+
+<!-- ── טיפים ── -->
+<div class="tab-panel" id="panel-tips">
+  <p class="sec-title">👶 ילדים ותינוקות</p>
+  <div class="tip-card brosh-only"><div class="tip-icon">🍼</div><div class="tip-body"><h4>רומי (13 חודשים)</h4><p>Kesselgrub מציע בופה HIPP לתינוקות כלול בחבילה. להביא מזון לטיסה. לסנסק בשמש חזקה.</p></div></div>
+  <div class="tip-card brosh-only"><div class="tip-icon">🧒</div><div class="tip-body"><h4>ליה (4 שנים)</h4><p>להביא חולצה יבשה לסיור ארמון הלבורן – המזרקות מרטיבות מאוד! קלוב ילדים ב-Kesselgrub 70ש'/שבוע.</p></div></div>
+  <div class="tip-card aloni-only"><div class="tip-icon">👶</div><div class="tip-body"><h4>עמרי (2 שנים)</h4><p>Kesselgrub מציע מגרש משחקים ובריכה לפעוטות. להביא חטיפים לטיסה. לסנסק בשמש חזקה.</p></div></div>
+  <div class="tip-card aloni-only"><div class="tip-icon">👦</div><div class="tip-body"><h4>תום (4 שנים)</h4><p>להביא חולצה יבשה לסיור ארמון הלבורן – המזרקות מרטיבות מאוד! קלוב ילדים ב-Kesselgrub 70ש'/שבוע.</p></div></div>
+  <div class="tip-card"><div class="tip-icon">🛺</div><div class="tip-body"><h4>עגלות</h4><p>Geisterberg: עגלה עולה בגונדולה ✓. גן חיות הלבורן: עגלות בהשאלה חינם. גני מירבל: נגיש לחלוטין.</p></div></div>
+  <p class="sec-title">🌤️ מזג אוויר</p>
+  <div class="tip-card"><div class="tip-icon">🌡️</div><div class="tip-body"><h4>ממוצעים אוגוסט</h4><p>עמק: מקס' 25°C, מינ' 15°C · ~12 ימי גשם בחודש. הרים (~1,500מ'): 15–18°C.</p></div></div>
+  <div class="tip-card"><div class="tip-icon">☂️</div><div class="tip-body"><h4>להביא</h4><p>מעיל גשם לכולם · שכבות להרים · קרם שמש SPF 50+ · כובע · סנדלים + נעלי טיול</p></div></div>
+  <p class="sec-title">💰 חיסכון</p>
+  <div class="tip-card"><div class="tip-icon">🎴</div><div class="tip-body"><h4>Salzburg Card</h4><p>48/72ש' כולל 90+ אטרקציות + תחבורה. ילדים עד 6 חינם! מומלץ לימים 16–18.</p></div></div>
+  <div class="tip-card"><div class="tip-icon">💡</div><div class="tip-body"><h4>Hellbrunn Bonus</h4><p>הצגת כרטיס גן חיות בארמון = הנחה. לשמור את הכרטיס!</p></div></div>
+  <p class="sec-title">🔌 מידע מעשי</p>
+  <div class="tip-card"><div class="tip-icon">🔌</div><div class="tip-body"><h4>שקעים</h4><p>אוסטריה = Type F (שני עגולים). להביא מתאם ו/או מפצל USB-C.</p></div></div>
+  <div class="tip-card"><div class="tip-icon">💶</div><div class="tip-body"><h4>כסף</h4><p>מטבע: יורו (€). להביא ~€200 מזומן. כרטיסי אשראי מתקבלים כמעט בכל מקום.</p></div></div>
+</div>
+
+</div><!-- end tab-content -->
+
+</div><!-- end page-scroll-area -->
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
+  <button class="tab-btn" onclick="switchTab('tasks')" id="tab-tasks"><i data-feather="check-square"></i><span class="tl">משימות</span></button>
+  <button class="tab-btn" onclick="switchTab('hotels')" id="tab-hotels"><i data-feather="home"></i><span class="tl">מלונות</span></button>
+  <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="map-pin"></i><span class="tl">אטרקציות</span></button>
+  <button class="tab-btn" onclick="switchTab('bookings')" id="tab-bookings"><i data-feather="book-open"></i><span class="tl">הזמנות</span></button>
+  <button class="tab-btn" onclick="switchTab('flights')" id="tab-flights"><i data-feather="send"></i><span class="tl">טיסות</span></button>
+  <button class="tab-btn" onclick="switchTab('packing')" id="tab-packing"><i data-feather="package"></i><span class="tl">ציוד</span></button>
+  <button class="tab-btn" onclick="switchTab('restaurants')" id="tab-restaurants"><i data-feather="coffee"></i><span class="tl">מסעדות</span></button>
+  <button class="tab-btn" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
+</nav>
+
+</div><!-- end app-shell -->
+
+<!-- ═══ ADD ATTRACTION MODAL ═══ -->
+<div class="modal-overlay" id="add-attr-modal" onclick="closeModalOnBg(event,'add-attr-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="add-attr-title">➕ הוסף אטרקציה</div>
+    <input type="hidden" id="edit-attr-id">
+    <div class="form-group"><label>שם האטרקציה *</label><input type="text" class="form-input" id="attr-name" placeholder="שם האטרקציה"></div>
+    <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
+    <div class="form-group"><label>מיקום / כתובת</label><input type="text" class="form-input" id="attr-location" placeholder="עיר, כתובת..."></div>
+    <div class="form-group"><label>אזור</label>
+      <select class="form-select" id="attr-area">
+        <option value="pongau">🏔️ פונגאו (Altenmarkt, ימים 1–5)</option>
+        <option value="salzburg">🏙️ זלצבורג (ימים 6–8)</option>
+        <option value="custom">⭐ מומלץ על ידי המשפחות</option>
+      </select>
+    </div>
+    <div class="form-group"><label>קישור Waze (אופציונלי)</label><input type="url" class="form-input" id="attr-waze" placeholder="https://waze.com/ul?q=..." style="direction:ltr"></div>
+    <div class="form-group"><label>אתר / קישור (אופציונלי)</label><input type="url" class="form-input" id="attr-website" placeholder="https://..." style="direction:ltr"></div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="saveAttraction()">💾 שמור</button>
+      <button class="btn btn-ghost" onclick="closeModal('add-attr-modal')">ביטול</button>
+      <button class="btn btn-danger btn-sm" id="delete-attr-btn" style="display:none;margin-right:auto" onclick="deleteAttraction()">🗑️ מחק</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD PACKING ITEM MODAL ═══ -->
+<div class="modal-overlay" id="add-pack-modal" onclick="closeModalOnBg(event,'add-pack-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">➕ הוסף פריט לרשימה</div>
+    <div class="form-group"><label>שם הפריט *</label><input type="text" class="form-input" id="pack-item-text" placeholder="מה להביא..."></div>
+    <div class="form-group"><label>קטגוריה</label>
+      <select class="form-select" id="pack-item-category">
+        <option value="romi">🍼 רומי (תינוקת)</option>
+        <option value="lia">👧 ליה (4 שנים)</option>
+        <option value="all">👨‍👩‍👧‍👦 כולם</option>
+        <option value="apps">📱 אפליקציות</option>
+      </select>
+    </div>
+    <div class="form-group" style="display:flex;align-items:center;gap:10px">
+      <input type="checkbox" id="pack-urgent" style="width:18px;height:18px">
+      <label for="pack-urgent" style="margin:0;cursor:pointer">⭐ פריט קריטי (אסור לשכוח!)</label>
+    </div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="savePackItem()">💾 שמור</button>
+      <button class="btn btn-ghost" onclick="closeModal('add-pack-modal')">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ USER MODAL ═══ -->
+<div class="modal-overlay" id="user-modal" onclick="closeModalOnBg(event,'user-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👤 פרופיל משתמש</div>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:16px">כרגע מחובר/ת בתור: <strong id="user-modal-name"></strong></p>
+    <div id="user-sync-section" style="display:none;margin-bottom:16px">
+      <div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון ענן כבוי</div>
+      <button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
+        <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        התחבר עם Google לסנכרון
+      </button>
+    </div>
+    <div class="form-group"><label>שנה שם</label>
+      <div style="display:flex;gap:8px">
+        <input type="text" class="form-input" id="user-new-name" placeholder="שם משפחה...">
+        <button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <button class="btn btn-primary btn-block" id="edit-mode-btn" onclick="toggleEditMode()">✏️ ערוך תוכן</button>
+    <p style="font-size:11px;color:var(--muted);margin:8px 0 16px">עריכת טקסט, הוספה ומחיקה של פריטים בכל החלקים</p>
+    <button class="btn btn-ghost btn-sm" onclick="logout()">🚪 התנתק (נקה כל הנתונים המקומיים)</button>
+    <div class="action-row" style="margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('user-modal')">סגור</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD / EDIT ITINERARY EVENT MODAL ═══ -->
+<div class="modal-overlay" id="event-modal" onclick="closeModalOnBg(event,'event-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="event-modal-title">➕ הוסף אירוע</div>
+    <input type="hidden" id="event-edit-iid">
+    <input type="hidden" id="event-day">
+    <div class="form-group"><label>שעה</label><input type="text" class="form-input" id="event-time" placeholder="לדוגמה: 16:30" style="direction:ltr"></div>
+    <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
+    <div class="form-group"><label>פרטים</label><textarea class="form-input" id="event-desc" rows="2" placeholder="מיקום, הערות..."></textarea></div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="saveEvent()">💾 שמור</button>
+      <button class="btn btn-ghost" onclick="closeModal('event-modal')">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════ DATA ═══════════════
+const PASSCODE = 'broshaloni'; // שנה את הקוד כאן
+
+// ═══════════════ FIREBASE (cloud sync — optional) ═══════════════
+// כדי להפעיל סנכרון ענן + התחברות Google:
+// 1. צרו פרויקט חינמי ב-https://console.firebase.google.com
+// 2. הוסיפו אפליקציית Web והעתיקו לכאן את אובייקט ה-config
+// 3. ב-Authentication הפעילו ספק "Google"
+// 4. ב-Firestore Database צרו מסד נתונים
+// עד שתמלאו את זה — האפליקציה עובדת רגיל, עם שמירה מקומית בלבד.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBQHyccjWVX0LggY0kyp4XliaxpQbqVMHQ",
+  authDomain: "austria-trip-85959.firebaseapp.com",
+  projectId: "austria-trip-85959",
+  storageBucket: "austria-trip-85959.firebasestorage.app",
+  messagingSenderId: "186679628811",
+  appId: "1:186679628811:web:273fe3a6c95ac5ff6fa30e"
+};
+const TRIP_ID = 'austria26trip'; // מזהה הטיול המשותף ב-Firestore
+
+const BUILTIN_ATTRACTIONS = [
+  {id:'a1',area:'pongau',name:'👻 Geisterberg – הר הרפאים',location:'St. Johann/Alpendorf · 20 דק\'',
+   desc:'40+ תחנות הרפתקאות · "ממלכת הרוחות" · גובה 1,563מ\' · עגלה ✓ · גיל 1+ · מחליף את Wagrainis שסגור 2026!',
+   duration:'2–3 שעות',
+   activities:['🚡 עלייה בגונדולה עם נוף להרים (כ-10 דקות)', '👻 שביל הרפאים עם 40+ תחנות אינטראקטיביות', '🏔️ פסגה בגובה 1,563מ\' – נוף מדהים על עמק הפונגאו', '🎯 תחנות ירי, מיזלבות, פסלי רוחות ענקיים', '🧺 פיקניק בפסגה – יש ספסלים ומזחלות דשא'],
+   tips:['עגלה נכנסת לגונדולה ולכל השביל ✓', 'ממומלץ בבוקר – פחות עמוס, ויש צל', 'הביאו מעיל קל – בפסגה 6-8 מעלות פחות מהעמק', 'כרטיס גונדולה כולל את כל השביל – ~€19 מבוגר, ילדים עד 6 חינם'],
+   forKids:'★★★★★',
+   waze:'https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes',website:'https://www.snow-space.com/en/summer/adventure-mountain/geisterberg-alpendorf',urgent:true,wikiTitle:'Snow_Space_Salzburg'},
+  {id:'a2',area:'pongau',name:'🏰 מבצר הוהנוורפן',location:'Werfen · 35 דק\'',
+   desc:'פונקולר + כל תערוכות + מוזיאון פלקונרי · הצגת פלקונרי 13.8 ב-11:15 + 15:15 · ~€15 מבוגר',
+   duration:'2.5–3 שעות',
+   activities:['🚠 עלייה בפונקולר מהחניה למבצר (כלול)', '🦅 הצגת פלקונרי חיה – נשרים ובז\'ים עפים מעל הראש!', '⚔️ חדרי מגורים מימי הביניים שנשמרו במלואם', '🏰 מגדל תצפית – נוף על עמק זלץ', '🗡️ מוזיאון כלי נשק וחיי מבצר'],
+   tips:['הצגת הפלקונרי היא ה-highlight – לוודא הגעה 10 דק\' לפני', 'עגלות NOT מותרות בתוך המבצר – להשאיר בכניסה', 'נעלי טיול – הדרך למבצר סלעית', 'חובה להזמין מראש – עלול להימכר באוגוסט!'],
+   forKids:'★★★★☆',
+   waze:'https://waze.com/ul?q=Burg+Hohenwerfen+Werfen&navigate=yes',website:'https://www.burg-hohenwerfen.at/en/your-visit/tickets',booking:'https://www.getyourguide.com/werfen-l4776/werfen-hohenwerfen-castle-entrance-ticket-t329441/',urgent:true,wikiTitle:'Hohenwerfen_Castle'},
+  {id:'a3',area:'pongau',name:'🌊 Erlebnis-Therme Amadé',location:'Thermenplatz 1, Altenmarkt · 5 דק\'',
+   desc:'11 בריכות · 3 מגלשות ענקיות · ספא · בריכה רדודה לתינוקות · מומלץ אחה"צ (פחות עמוס)',
+   duration:'3–4 שעות',
+   activities:['🌊 11 בריכות – חיצוניות ופנימיות, חמות וקרות', '🎢 3 מגלשות ענקיות (כולל אחת בחשכה!)', '👶 בריכה רדודה לתינוקות עד 30 ס"מ', '♨️ אזור ספא ואינפרא-רד (לגדולים)', '🍽️ מסעדה פנימית עם תפריט ילדים'],
+   tips:['אחרי 14:00 – הכי פחות עמוס', 'נעלי מים מומלצות (רצפות חלקות)', 'ארונות ננעלים עם מטבע – להביא €1 (מוחזר)', 'השכרת מגבת אפשרית – ~€3'],
+   forKids:'★★★★★',
+   waze:'https://waze.com/ul?q=Erlebnis+Therme+Amade+Altenmarkt&navigate=yes',website:'https://www.thermewelt.at/de/erlebnis-therme-amade/',wikiTitle:'Altenmarkt_im_Pongau'},
+  {id:'a4',area:'pongau',name:'🏔️ אגם Zauchensee',location:'10 דק\' מ-Kesselgrub · חינם',
+   desc:'אגם הרים קסום · שחייה חופשית · דשא לפיקניק · בריכת ילדים קטנה',
+   duration:'1.5–2 שעות',
+   activities:['🏊 שחייה חופשית – מים צלולים ונקיים', '🧺 פיקניק על הדשא עם נוף להרים', '👶 אזור רדוד לילדים קטנים', '🚶 הליכה בסיבוב האגם (~30 דקות)', '📸 אחד המקומות הציוריים ביותר באזור'],
+   tips:['מים קרים! (אגם הרים ~18°C) – לאחר שהייה קצרה מתרגלים', 'חניה חינם, כניסה חינם', 'כדאי להביא ספסלי שרפרף / שמיכת פיקניק', 'הכי יפה בבוקר – שיקוף ההרים'],
+   forKids:'★★★★★',
+   waze:'https://waze.com/ul?q=Zauchensee+Altenmarkt&navigate=yes',wikiTitle:'Zauchensee'},
+  {id:'a5',area:'salzburg',name:'🦁 גן חיות הלבורן',location:'Hellbrunner Str. 60, Anif · 9:00–18:00',
+   desc:'מתחת ל-4: חינם! · עגלות בהשאלה חינם · לשמור כרטיס להנחה בארמון · ~€12.50 מבוגר',
+   duration:'2–2.5 שעות',
+   activities:['🦁 1,500 חיות מ-200 מינים שונים', '🐘 בית האפריקה – פילים, ג\'ירפות, קרנפים', '🐐 אזור ליטוף בעלי חיים', '🎠 מגרש משחקים ענק לילדים', '🚜 קרון אוכל מסורתי ומסעדה'],
+   tips:['עגלות בהשאלה חינם ✓ – לאסוף בכניסה', 'ילדים מתחת ל-4 חינם לגמרי!', 'לשמור את הכרטיס – מקנה הנחה בארמון הלבורן (Hellbrunn Bonus)', 'כדאי לבוא בבוקר – החיות יותר פעילות'],
+   forKids:'★★★★★',
+   waze:'https://waze.com/ul?q=Salzburg+Zoo+Hellbrunn&navigate=yes',website:'https://www.salzburg-zoo.at/en/visit/entrance-fees',wikiTitle:'Salzburg_Zoo'},
+  {id:'a6',area:'salzburg',name:'⛲ ארמון הלבורן',location:'Fürstenweg 37, Salzburg',
+   desc:'סיור מזרקות 50 דק\' (מרטיב!) + תערוכת ארמון + מוזיאון פולקלור · ~€16.50 מבוגר · להביא חולצה יבשה!',
+   duration:'1.5–2 שעות',
+   activities:['💦 סיור מזרקות "טריק" מ-1612 – המדריך פותח מזרקות נסתרות ומרטיב אורחים!', '🏰 סיור בחדרי הארמון המרוהטים', '🎭 מוזיאון פולקלור אוסטרי', '🌿 גנים מטופחים עם נוף לרכס ההרים', '🗿 פסלי אבן ייחודיים בכל הגן'],
+   tips:['⚠️ מרטיב מאוד! להביא חולצה יבשה – במיוחד לילדים', 'הסיור רק עם מדריך – בגרמנית/אנגלית, 50 דק\'', 'הציגו כרטיס גן חיות = Hellbrunn Bonus (הנחה)', 'לא מומלץ לתינוקות – הרטיבות עלולה לאבד עגלות'],
+   forKids:'★★★★☆',
+   waze:'https://waze.com/ul?q=Schloss+Hellbrunn+Salzburg&navigate=yes',website:'https://www.hellbrunn.at/en/',urgent:true,wikiTitle:'Hellbrunn_Palace'},
+  {id:'a7',area:'salzburg',name:'🏰 מבצר הוהנזלצבורג',location:'Mönchsberg 34, Salzburg',
+   desc:'אחד המבצרים השלמים ביותר באירופה – עומד מ-1077 · רכבל כלול · נוף פנורמי על זלצבורג',
+   duration:'2–3 שעות',
+   activities:['🚡 עלייה ב-Festungsbahn (רכבל כלול בכרטיס)', '⚔️ חדרי הנסיכים המשומרים לחלוטין מ-1500', '🗺️ מוזיאון מבצר עם כלי נשק, עינויים ועוד', '🌄 מרפסת תצפית – הנוף הטוב ביותר על זלצבורג', '🎵 בית עגול שמוזת עם כלי נגינה עתיקים'],
+   tips:['לקנות כרטיס "Fortress Card" הכולל רכבל + כל המוזיאונים', 'הגיעו בבוקר – פחות תורים ברכבל', 'הליכה ברגל אפשרית (20 דק\') אם רוצים לחסוך', 'מגרש ילדים קטן ליד הכניסה'],
+   forKids:'★★★☆☆',
+   waze:'https://waze.com/ul?q=Festung+Hohensalzburg&navigate=yes',website:'https://www.salzburg.info/en/sights/top10/fortress-hohensalzburg',wikiTitle:'Hohensalzburg_Fortress'},
+  {id:'a8',area:'salzburg',name:'🌸 גני מירבל',location:'Mirabellplatz 4, Salzburg · חינם',
+   desc:'גנים בארוקיים מהמאה ה-17 · מגרש ילדים ענק עם מבצר עץ · אתר צילומי Sound of Music',
+   duration:'1–1.5 שעות',
+   activities:['🌹 גנים בארוקיים מפוארים עם פרחים עונתיים', '🏰 מגרש ילדים ענק עם מבצר עץ ענק – ילדים משתגעים', '⛲ מזרקות, פסלי שיש ואגמים קטנים', '🎵 מקום צילומי The Sound of Music (1965)', '🏛️ ארמון מירבל – ניתן לראות מבחוץ בחינם'],
+   tips:['כניסה חינם לגמרי – כולל המגרש', 'מגרש הילדים הטוב ביותר במרכז זלצבורג', 'יפה במיוחד בשעת הזהב (שקיעה)', 'קרוב לרוב האטרקציות – נוח לשלב עם מסלול יום בעיר'],
+   forKids:'★★★★★',
+   waze:'https://waze.com/ul?q=Mirabell+Gardens+Salzburg&navigate=yes',wikiTitle:'Mirabell_Palace'},
+  {id:'a9',area:'salzburg',name:'☕ Café Tomaselli',location:'Alter Markt 9, Salzburg · מ-1705',
+   desc:'הקפה הוותיק ביותר בזלצבורג – פתוח מ-1705 · Apfelstrudel אגדי · קפה וינאי קלאסי',
+   duration:'45–60 דקות',
+   activities:['☕ קפה וינאי קלאסי – Melange, Einspänner, Kapuziner', '🍎 Apfelstrudel (שטרודל תפוחים) – הטוב ביותר בזלצבורג', '🎂 ויטרינת עוגות עצמית – לקחת ולשלם בטמבורה', '🌞 ישיבה בחוץ ב-Schanigarten עם נוף לרחובות', '📸 עיצוב וינאי מקורי מהמאה ה-18'],
+   tips:['בקיץ יש תור – כדאי להגיע לפני 11:00 או אחרי 15:00', 'לבקש מקום בחוץ (Schanigarten) – חווייה יפה יותר', 'הגרסה האמיתית של Apfelstrudel – לא לפספס', 'ילדים מקבלים Hot Chocolate נפלא'],
+   forKids:'★★★★☆',
+   waze:'https://waze.com/ul?q=Café+Tomaselli+Salzburg&navigate=yes',menu:'https://www.cafetomaselli.at/speisekarte/',wikiTitle:'Café_Tomaselli'},
+  {id:'a10',area:'salzburg',name:'🍺 Augustinerbräu',location:'Augustinergasse 4, Salzburg · מ-1621',
+   desc:'מנזר בירה פרנציסקנית עתיק מ-1621 · גן ענק לאלפי בני אדם · אוכל מהשוק הפנימי · מושלם לשתי המשפחות',
+   duration:'1.5–2 שעות',
+   activities:['🍺 בירת ה-Märzen המנזרית – מוזגים מחביות עץ ענקיות', '🥨 שוק אוכל פנימי – נקניקים, פרצלים, גבינות, מרינדות', '🏡 גן חיצוני ענק – אלפי כיסאות מתחת לעצים', '🎶 לעתים יש מוזיקה חיה אוסטרית', '👨‍👩‍👧‍👦 מושלם למשפחות – ילדים מוזמנים בברכה'],
+   tips:['לקחת כוס ברזל/עץ בכניסה, לשטוף בברז המיוחד, למלא מהחבית', 'תשלום במזומן בחלק מהדוכנים – כדאי להביא €20', 'ילדים שותים מיץ/Radler – מרוצים לגמרי', 'המגרשים הטובים בסביבה – ילדים רצים חופשי'],
+   forKids:'★★★★☆',
+   waze:'https://waze.com/ul?q=Augustinerbräu+Salzburg&navigate=yes',menu:'https://www.augustinerbier.at/speisen/',wikiTitle:'Augustiner_Bräustübl,_Mülln'}
+];
+
+const BUILTIN_RESTAURANTS = [
+  {id:'r6',hotel:true,name:'🏨 מסעדת Kesselgrub',location:'Lackengasse 86, Altenmarkt im Pongau',
+   desc:'בופה בוקר עשיר + ארוחת ערב גורמה · כלול בחבילה לשתי המשפחות',
+   days:'ימים 1–5 · 11–15.8',
+   tips:['בופה HIPP לתינוקות זמין','ארוחת ערב בין 18:30–20:30','מגוון עשיר – אוסטרי + בינ\'ל'],
+   waze:'https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes',
+   website:'https://www.ferienwelt-kesselgrub.at/'},
+  {id:'r7',hotel:true,name:'🌳 מסעדת Grünauerhof',location:'Grünauerstraße 90, Wals bei Salzburg',
+   desc:'גן קסטן ענק לאכילה בחוץ · בופה בוקר + ארוחת ערב · כלול בחבילה',
+   days:'ימים 5–8 · 15–18.8',
+   tips:['גן קסטן יפה בחוץ – לבקש שולחן גן','10 דקות משדה התעופה'],
+   waze:'https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes',
+   website:'https://www.gruenauerhof.at/'},
+  {id:'r3',name:'🏔️ קתת ההר – Geisterberg',location:'St. Johann/Alpendorf · גובה 1,563מ\'',
+   desc:'מסעדת הפסגה · שניצל, מרק גולאש, מגשי ילדים · נוף מדהים לעמק הפונגאו',
+   days:'יום 2 · 13:00',
+   tips:['לאכול בחוץ עם נוף לעמק','מחירים סבירים לגובה'],
+   waze:'https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes'},
+  {id:'r4',name:'🏰 Gasthof Werfen',location:'Werfen · ליד מבצר הוהנוורפן',
+   desc:'מסעדה כפרית אוסטרית מסורתית · שניצל, Tafelspitz, מרקים · אווירה כפרית קסומה',
+   days:'יום 3 · 13:00',
+   tips:['מקום אוטנטי – לא תיירותי','כדאי לנסות Tafelspitz'],
+   waze:'https://waze.com/ul?q=Gasthof+Werfen+Austria&navigate=yes'},
+  {id:'r5',name:'🌿 מסעדה ב-Anif',location:'Anif · ליד ארמון הלבורן',
+   desc:'מסעדה מקומית · צהריים קלים · 5 דקות מהארמון',
+   days:'יום 6 · 13:30',
+   waze:'https://waze.com/ul?q=restaurant+Anif+Salzburg&navigate=yes'},
+  {id:'r1',name:'☕ Café Tomaselli',location:'Alter Markt 9, Salzburg',
+   desc:'הקפה הוותיק ביותר באוסטריה מ-1705 · Apfelstrudel אגדי · קפה וינאי קלאסי · ישיבה בחוץ',
+   days:'יום 7 · 12:00',
+   tips:['להגיע לפני 11:00 או אחרי 15:00 – פחות תור','לבקש מקום בחוץ (Schanigarten)','ילדים מקבלים Hot Chocolate נפלא'],
+   waze:'https://waze.com/ul?q=Café+Tomaselli+Salzburg&navigate=yes',
+   website:'https://www.cafetomaselli.at/',
+   menu:'https://www.cafetomaselli.at/speisekarte/'},
+  {id:'r2',name:'🍺 Augustinerbräu',location:'Augustinergasse 4, Salzburg',
+   desc:'מנזר בירה פרנציסקנית מ-1621 · גן ענק לאלפי איש · שוק אוכל פנימי · מושלם למשפחות',
+   days:'יום 7 · 19:00',
+   tips:['לקחת כוס בכניסה, לשטוף בברז ולמלא מהחבית','תשלום מזומן בחלק מהדוכנים','ילדים שותים Radler – מרוצים'],
+   waze:'https://waze.com/ul?q=Augustinerbräu+Salzburg&navigate=yes',
+   website:'https://www.augustinerbier.at/',
+   menu:'https://www.augustinerbier.at/speisen/'},
+];
+
+const BUILTIN_PACKING = [
+  // רומי – ברוש
+  {id:'p1',cat:'romi',text:'⭐ כיסא בטיחות Infant לרכב (לאשר AutoEurope!)',urgent:true,family:'ברוש'},
+  {id:'p2',cat:'romi',text:'עגלה קלה / stroller מתקפלת',urgent:false,family:'ברוש'},
+  {id:'p3',cat:'romi',text:'חיתולים (x30 לפחות)',urgent:false,family:'ברוש'},
+  {id:'p4',cat:'romi',text:'מגבוני לחים (x4 חבילות)',urgent:false,family:'ברוש'},
+  {id:'p5',cat:'romi',text:'מזון לתינוק לטיסה + 2 ימים ראשונים',urgent:false,family:'ברוש'},
+  {id:'p6',cat:'romi',text:'⭐ מוצץ x3 (אחד אבוד תמיד...)',urgent:true,family:'ברוש'},
+  {id:'p7',cat:'romi',text:'בקבוק שתייה / sippy cup',urgent:false,family:'ברוש'},
+  {id:'p8',cat:'romi',text:'בגדים x10 (כולל שכבות לקור ההרים 15°C)',urgent:false,family:'ברוש'},
+  {id:'p9',cat:'romi',text:'פיג\'מות x4',urgent:false,family:'ברוש'},
+  {id:'p10',cat:'romi',text:'כובע שמש + כיסוי לעגלה',urgent:false,family:'ברוש'},
+  {id:'p11',cat:'romi',text:'קרם שמש לתינוקות SPF 50+',urgent:false,family:'ברוש'},
+  {id:'p12',cat:'romi',text:'אמבטיה מתנפחת / ספוג רחצה',urgent:false,family:'ברוש'},
+  {id:'p13',cat:'romi',text:'שמיכה מוכרת לשינה + בובה מוכרת',urgent:false,family:'ברוש'},
+  {id:'p14',cat:'romi',text:'⭐ תרופות: חום (אקמול טיפות), כאב שיניים (תנקה), אנטיהיסטמין',urgent:true,family:'ברוש'},
+  {id:'p15',cat:'romi',text:'⭐ אישור ישראייר ל-lap infant לרומי (נולדה 09/07/2025)',urgent:true,family:'ברוש'},
+  // ליה – ברוש
+  {id:'p20',cat:'lia',text:'⭐ כיסא בטיחות Toddler לרכב (לאשר AutoEurope!)',urgent:true,family:'ברוש'},
+  {id:'p21',cat:'lia',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true,family:'ברוש'},
+  {id:'p22',cat:'lia',text:'בגדים x8 (כולל מכנסיים ארוכים)',urgent:false,family:'ברוש'},
+  {id:'p23',cat:'lia',text:'נעלי טיול נוחות',urgent:false,family:'ברוש'},
+  {id:'p24',cat:'lia',text:'כובע שמש',urgent:false,family:'ברוש'},
+  {id:'p25',cat:'lia',text:'משחקים / ספרים לטיסה (2–3 שעות)',urgent:false,family:'ברוש'},
+  {id:'p26',cat:'lia',text:'אוזניות לילדים + iPad',urgent:false,family:'ברוש'},
+  {id:'p27',cat:'lia',text:'חטיפים מועדפים לטיסה',urgent:false,family:'ברוש'},
+  // עמרי – אלוני (2 שנים)
+  {id:'pa1',cat:'omri',text:'⭐ כיסא בטיחות Toddler לרכב',urgent:true,family:'אלוני'},
+  {id:'pa2',cat:'omri',text:'עגלה קלה / stroller מתקפלת',family:'אלוני'},
+  {id:'pa3',cat:'omri',text:'חיתולים (x20)',family:'אלוני'},
+  {id:'pa4',cat:'omri',text:'מגבוני לחים (x3 חבילות)',family:'אלוני'},
+  {id:'pa5',cat:'omri',text:'כוס שתייה עם קשית',family:'אלוני'},
+  {id:'pa6',cat:'omri',text:'בגדים x8 (כולל שכבות לקור ההרים)',family:'אלוני'},
+  {id:'pa7',cat:'omri',text:'כובע שמש',family:'אלוני'},
+  {id:'pa8',cat:'omri',text:'קרם שמש לפעוטות SPF 50+',family:'אלוני'},
+  {id:'pa9',cat:'omri',text:'שמיכה מוכרת לשינה + בובה מוכרת',family:'אלוני'},
+  {id:'pa10',cat:'omri',text:'⭐ תרופות: חום (אקמול), אנטיהיסטמין',urgent:true,family:'אלוני'},
+  // תום – אלוני (4 שנים)
+  {id:'pb1',cat:'tom',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true,family:'אלוני'},
+  {id:'pb2',cat:'tom',text:'בגדים x8 (כולל מכנסיים ארוכים)',family:'אלוני'},
+  {id:'pb3',cat:'tom',text:'נעלי טיול נוחות',family:'אלוני'},
+  {id:'pb4',cat:'tom',text:'כובע שמש',family:'אלוני'},
+  {id:'pb5',cat:'tom',text:'משחקים / ספרים לטיסה',family:'אלוני'},
+  {id:'pb6',cat:'tom',text:'אוזניות לילדים + iPad / טאבלט',family:'אלוני'},
+  {id:'pb7',cat:'tom',text:'חטיפים מועדפים לטיסה',family:'אלוני'},
+  // כולם
+  {id:'p30',cat:'all',text:'⭐ דרכונים (תוקף עד לפחות אפריל 2027!)',urgent:true},
+  {id:'p31',cat:'all',text:'⭐ כרטיסי ביטוח רפואי',urgent:true},
+  {id:'p32',cat:'all',text:'⭐ ביטוח נסיעות (לוודא שמכסה תינוקת)',urgent:true},
+  {id:'p33',cat:'all',text:'מתאמי שקע Type F (אוסטריה!) + מפצל USB-C',urgent:false},
+  {id:'p34',cat:'all',text:'מטען נייד / Power bank',urgent:false},
+  {id:'p35',cat:'all',text:'מעיל גשם לכולם',urgent:false},
+  {id:'p36',cat:'all',text:'שכבות ביניים לקור ההרים (15–18°C בגובה)',urgent:false},
+  {id:'p37',cat:'all',text:'בגדי ים x2 לכל אחד',urgent:false},
+  {id:'p38',cat:'all',text:'קרם שמש SPF 50+ לכולם',urgent:false},
+  {id:'p39',cat:'all',text:'~€200 יורו מזומן',urgent:false},
+  {id:'p40',cat:'all',text:'ביגוד לסעודת ערב (Kesselgrub – מסעדה גורמה)',urgent:false},
+  {id:'p41',cat:'all',text:'מצלמה + מטען',urgent:false},
+  {id:'p42',cat:'all',text:'ערכת עזרה ראשונה',urgent:false},
+  // apps
+  {id:'p50',cat:'apps',text:'⭐ Waze מותקן ומעודכן',urgent:true},
+  {id:'p51',cat:'apps',text:'Google Maps – הוריד אזור זלצבורג לאופליין',urgent:false},
+  {id:'p52',cat:'apps',text:'Google Translate – הוריד גרמנית לאופליין',urgent:false},
+  {id:'p53',cat:'apps',text:'ישראייר app',urgent:false}
+];
+
+const CAT_LABELS = {romi:'🍼 רומי (תינוקת)',lia:'👧 ליה (4 שנים)',tom:'👦 תום (4 שנים)',omri:'👶 עמרי (2 שנים)',all:'👨‍👩‍👧‍👦 כולם',apps:'📱 אפליקציות להתקין'};
+const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
+
+// ═══════════════ STATE ═══════════════
+let currentUser = null;
+let editingAttrId = null;
+
+function getCustomAttractions(){return JSON.parse(localStorage.getItem('austria26_attrs')||'[]')}
+function saveCustomAttractions(arr){localStorage.setItem('austria26_attrs',JSON.stringify(arr))}
+function packKey(){return 'austria26_pack_'+(currentUser?.name||'guest')}
+function packCustomKey(){return 'austria26_pack_custom_'+(currentUser?.name||'guest')}
+function getPackingChecked(){return JSON.parse(localStorage.getItem(packKey())||'{}')}
+function savePackingChecked(obj){localStorage.setItem(packKey(),JSON.stringify(obj))}
+function getCustomPackItems(){return JSON.parse(localStorage.getItem(packCustomKey())||'[]')}
+function saveCustomPackItems(arr){localStorage.setItem(packCustomKey(),JSON.stringify(arr))}
+function getBookingChecked(){return JSON.parse(localStorage.getItem('austria26_book')||'{}')}
+function saveBookingChecked(obj){localStorage.setItem('austria26_book',JSON.stringify(obj))}
+
+// ═══════════════ LOCK / AUTH ═══════════════
+function checkPasscode(force){
+  const val=document.getElementById('passcode-input').value.trim();
+  if(val===PASSCODE){
+    document.getElementById('lock-step1').style.display='none';
+    document.getElementById('lock-step2').style.display='block';
+    document.getElementById('lock-error').style.display='none';
+  } else if(force){
+    document.getElementById('lock-error').style.display='block';
+  }
+}
+function applyFamilyClass(name){
+  document.body.classList.remove('family-brosh','family-aloni');
+  if(name==='ברוש')document.body.classList.add('family-brosh');
+  else if(name==='אלוני')document.body.classList.add('family-aloni');
+}
+function selectFamily(name){
+  if(!name.trim())return;
+  currentUser={name:name.trim()};
+  localStorage.setItem('austria26_user',JSON.stringify(currentUser));
+  applyFamilyClass(name.trim());
+  document.getElementById('lock-screen').style.display='none';
+  document.getElementById('user-name-display').textContent=name;
+  updateAvatar();
+  initApp();
+}
+function updateAvatar(){
+  const av=document.getElementById('hero-avatar');if(!av)return;
+  const photo=window._googleUser&&window._googleUser.photo;
+  const name=((window._googleUser&&window._googleUser.name)||(currentUser&&currentUser.name)||'').trim();
+  const initial=name?name[0]:'👤';
+  if(photo){av.innerHTML='<img referrerpolicy="no-referrer" src="'+photo+'" alt="" onerror="this.parentElement.textContent=\''+initial+'\'">';}
+  else{av.textContent=initial;}
+}
+function logout(){
+  if(!confirm('נקה את כל הנתונים המקומיים ויציאה?'))return;
+  localStorage.clear();
+  location.reload();
+}
+function showUserModal(){
+  document.getElementById('user-modal-name').textContent=currentUser?.name||'אורח';
+  document.getElementById('user-new-name').value='';
+  if(typeof firebaseEnabled==='function'&&firebaseEnabled())document.getElementById('user-sync-section').style.display='block';
+  if(typeof updateSyncUI==='function')updateSyncUI();
+  openModal('user-modal');
+}
+function changeUserName(){
+  const n=document.getElementById('user-new-name').value.trim();
+  if(!n)return;
+  currentUser.name=n;
+  localStorage.setItem('austria26_user',JSON.stringify(currentUser));
+  document.getElementById('user-name-display').textContent=n;
+  document.getElementById('user-modal-name').textContent=n;
+}
+
+// ═══════════════ TAB + CARD ═══════════════
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  const tc=document.querySelector('.tab-content');
+  if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
+}
+function toggleCard(id){const c=document.getElementById(id);if(c)c.classList.toggle('open')}
+
+// ═══════════════ CHECKLIST ═══════════════
+function initBookingChecklist(){
+  const saved=getBookingChecked();
+  document.querySelectorAll('#panel-bookings .ck-item[data-id]').forEach(el=>{
+    const id=el.getAttribute('data-id');
+    if(saved[id]==='done')el.classList.add('done');
+    updateCkCircle(el);
+  });
+}
+function toggleCheck(el){
+  const id=el.getAttribute('data-id');if(!id)return;
+  el.classList.toggle('done');
+  const saved=getBookingChecked();
+  saved[id]=el.classList.contains('done')?'done':'open';
+  saveBookingChecked(saved);
+  updateCkCircle(el);
+}
+function updateCkCircle(el){
+  const c=el.querySelector('.ck-circle');if(c)c.textContent=el.classList.contains('done')?'✓':'';
+}
+
+// ═══════════════ ATTRACTIONS ═══════════════
+function renderAttractions(){
+  const custom=getCustomAttractions();
+  renderAttrGroup('attractions-pongau',BUILTIN_ATTRACTIONS.filter(a=>a.area==='pongau'),false);
+  renderAttrGroup('attractions-salzburg',BUILTIN_ATTRACTIONS.filter(a=>a.area==='salzburg'),false);
+  const customItems=custom.filter(a=>a.area==='custom'||!['pongau','salzburg'].includes(a.area));
+  const el=document.getElementById('attractions-custom');
+  if(customItems.length===0){el.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">אין אטרקציות מותאמות עדיין. לחץ ＋ כדי להוסיף!</p>';}
+  else{renderAttrGroup('attractions-custom',customItems,true);}
+  loadAttrImages();
+}
+function renderAttrGroup(containerId,items,isCustom){
+  const el=document.getElementById(containerId);if(!el)return;
+  if(!items.length){el.innerHTML='';return;}
+  el.innerHTML=items.map(a=>attrCardHTML(a,isCustom)).join('');
+}
+function attrCardHTML(a,isCustom){
+  const imgSrc=a.img||'';
+  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}" src="${imgSrc}" class="attr-img" alt="${a.name}" style="${imgSrc?'':'display:none'}" onload="this.style.display='block'" onerror="document.getElementById('attr-img-wrap-${a.id}').style.display='none'"></div>`;
+  const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank">🗺️ Waze</a>`:'';
+  const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>`:'';
+  const bookBtn=a.booking?`<a href="${a.booking}" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן</a>`:'';
+  const menuBtn=a.menu?`<a href="${a.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
+  const editBtn=isCustom?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+    <button class="btn btn-outline btn-sm" onclick="openEditAttrModal('${a.id}')">✏️ ערוך</button>
+    <button class="btn btn-danger btn-sm" onclick="deleteAttrById('${a.id}')">🗑️ מחק</button>
+    ${a.addedBy?`<span style="font-size:11px;color:var(--muted);align-self:center">נוסף ע"י: ${a.addedBy}</span>`:''}
+  </div>`:'';
+  const urgentBadge=a.urgent?'<span style="background:#fff0f0;color:var(--danger);font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700">חובה להזמין!</span>':'';
+  const durationBadge=a.duration?`<span class="attr-duration">⏱️ ${a.duration}</span>`:'';
+  const kidsBadge=a.forKids?`<span class="attr-kids-rating">👶 ילדים ${a.forKids}</span>`:'';
+  const activitiesHTML=a.activities?.length?`
+    <div class="attr-section-title">מה עושים שם?</div>
+    <ul class="attr-activities">${a.activities.map(act=>`<li>${act}</li>`).join('')}</ul>`:'';
+  const tipsHTML=a.tips?.length?`
+    <div class="attr-section-title">כדאי לדעת</div>
+    <ul class="attr-tips">${a.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`:'';
+  return `<div class="attr-card" id="attr-card-${a.id}">
+    ${imgEl}
+    <div class="attr-header-body" onclick="toggleAttr('${a.id}')" style="cursor:pointer">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div style="flex:1">
+          <h3 style="margin-bottom:4px">${a.name}</h3>
+          <div class="attr-meta"><span>📍 ${a.location||''}</span>${urgentBadge}</div>
+          <div>${kidsBadge}${durationBadge}</div>
+        </div>
+        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${a.id}')">▼</button>
+      </div>
+    </div>
+    <div class="attr-collapsible" id="attr-body-${a.id}">
+      <div class="attr-body" style="padding-top:6px">
+        <p class="attr-desc">${a.desc||''}</p>
+        ${activitiesHTML}
+        ${tipsHTML}
+        <div class="action-row">${wazeBtn}${webBtn}${bookBtn}${menuBtn}</div>
+        ${editBtn}
+      </div>
+    </div>
+  </div>`;
+}
+function toggleAttr(id){
+  const card=document.getElementById('attr-card-'+id);
+  if(!card)return;
+  card.classList.toggle('attr-open');
+}
+
+function restCardHTML(r){
+  const includedBadge=r.hotel?'<span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700;margin-right:4px">✓ כלול</span>':'';
+  const dayBadge=r.days?`<span class="attr-duration" style="font-size:11px;padding:2px 8px">📅 ${r.days}</span>`:'';
+  const wazeBtn=r.waze?`<a href="${r.waze}" class="btn btn-waze btn-sm" target="_blank">🗺️ Waze</a>`:'';
+  const webBtn=r.website?`<a href="${r.website}" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>`:'';
+  const menuBtn=r.menu?`<a href="${r.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
+  const tipsHTML=r.tips?.length?`<div class="attr-section-title">כדאי לדעת</div><ul class="attr-tips">${r.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`:'';
+  return `<div class="attr-card" id="attr-card-${r.id}">
+    <div class="attr-header-body" onclick="toggleAttr('${r.id}')" style="cursor:pointer">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div style="flex:1">
+          <h3 style="margin-bottom:4px">${r.name}</h3>
+          <div class="attr-meta"><span>📍 ${r.location}</span></div>
+          <div>${includedBadge}${dayBadge}</div>
+        </div>
+        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${r.id}')">▼</button>
+      </div>
+    </div>
+    <div class="attr-collapsible" id="attr-body-${r.id}">
+      <div class="attr-body" style="padding-top:6px">
+        <p class="attr-desc">${r.desc||''}</p>
+        ${tipsHTML}
+        <div class="action-row">${wazeBtn}${webBtn}${menuBtn}</div>
+      </div>
+    </div>
+  </div>`;
+}
+function renderRestaurants(){
+  const hotel=document.getElementById('restaurants-hotel');
+  const day=document.getElementById('restaurants-day');
+  if(hotel)hotel.innerHTML=BUILTIN_RESTAURANTS.filter(r=>r.hotel).map(r=>restCardHTML(r)).join('');
+  if(day)day.innerHTML=BUILTIN_RESTAURANTS.filter(r=>!r.hotel).map(r=>restCardHTML(r)).join('');
+}
+function viewRestaurant(id){
+  switchTab('restaurants');
+  setTimeout(()=>{
+    const el=document.getElementById('attr-card-'+id);
+    if(!el)return;
+    el.classList.add('attr-open');
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.style.outline='3px solid var(--primary)';
+    el.style.outlineOffset='3px';
+    setTimeout(()=>{el.style.outline='';el.style.outlineOffset='';},2000);
+  },150);
+}
+
+async function loadAttrImages(){
+  const all=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()];
+  for(const a of all){
+    if(!a.wikiTitle)continue;
+    try{
+      const ckey='wimg_'+a.id;
+      let src=sessionStorage.getItem(ckey);
+      if(!src){
+        const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(a.wikiTitle)}`);
+        if(!r.ok)continue;
+        const d=await r.json();
+        src=d.thumbnail?.source;
+        if(src)sessionStorage.setItem(ckey,src);
+      }
+      if(src){
+        const el=document.getElementById('attr-img-'+a.id);
+        if(el){el.src=src;el.style.display='block';}
+      }
+    }catch(e){}
+  }
+}
+
+function viewAttraction(attrId){
+  switchTab('attractions');
+  setTimeout(()=>{
+    const el=document.getElementById('attr-card-'+attrId);
+    if(!el)return;
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.style.outline='3px solid var(--primary)';
+    el.style.outlineOffset='3px';
+    setTimeout(()=>{el.style.outline='';el.style.outlineOffset='';},2000);
+  },150);
+}
+function openAddAttrModal(){
+  editingAttrId=null;
+  document.getElementById('add-attr-title').textContent='➕ הוסף אטרקציה';
+  document.getElementById('edit-attr-id').value='';
+  document.getElementById('attr-name').value='';
+  document.getElementById('attr-desc').value='';
+  document.getElementById('attr-location').value='';
+  document.getElementById('attr-area').value='custom';
+  document.getElementById('attr-waze').value='';
+  document.getElementById('attr-website').value='';
+  document.getElementById('delete-attr-btn').style.display='none';
+  openModal('add-attr-modal');
+}
+function openEditAttrModal(id){
+  const custom=getCustomAttractions();
+  const a=custom.find(x=>x.id===id);if(!a)return;
+  editingAttrId=id;
+  document.getElementById('add-attr-title').textContent='✏️ ערוך אטרקציה';
+  document.getElementById('edit-attr-id').value=id;
+  document.getElementById('attr-name').value=a.name||'';
+  document.getElementById('attr-desc').value=a.desc||'';
+  document.getElementById('attr-location').value=a.location||'';
+  document.getElementById('attr-area').value=a.area||'custom';
+  document.getElementById('attr-waze').value=a.waze||'';
+  document.getElementById('attr-website').value=a.website||'';
+  document.getElementById('delete-attr-btn').style.display='inline-flex';
+  openModal('add-attr-modal');
+}
+function saveAttraction(){
+  const name=document.getElementById('attr-name').value.trim();
+  if(!name){alert('נא להזין שם אטרקציה');return;}
+  const custom=getCustomAttractions();
+  const obj={
+    id:editingAttrId||('c'+Date.now()),
+    name,desc:document.getElementById('attr-desc').value.trim(),
+    location:document.getElementById('attr-location').value.trim(),
+    area:document.getElementById('attr-area').value,
+    waze:document.getElementById('attr-waze').value.trim(),
+    website:document.getElementById('attr-website').value.trim(),
+    addedBy:currentUser?.name||'',
+    addedAt:new Date().toLocaleDateString('he-IL')
+  };
+  if(editingAttrId){
+    const idx=custom.findIndex(x=>x.id===editingAttrId);
+    if(idx>=0)custom[idx]=obj;
+  } else {
+    custom.push(obj);
+  }
+  saveCustomAttractions(custom);
+  closeModal('add-attr-modal');
+  renderAttractions();
+}
+function deleteAttrById(id){
+  if(!confirm('למחוק אטרקציה זו?'))return;
+  const custom=getCustomAttractions().filter(x=>x.id!==id);
+  saveCustomAttractions(custom);
+  renderAttractions();
+}
+function deleteAttraction(){
+  if(!editingAttrId)return;
+  deleteAttrById(editingAttrId);
+  closeModal('add-attr-modal');
+}
+
+// ═══════════════ PACKING ═══════════════
+function renderPacking(){
+  const checked=getPackingChecked();
+  const customItems=getCustomPackItems();
+  const fam=currentUser?.name||'';
+  const allItems=[
+    ...BUILTIN_PACKING.filter(i=>!i.family||i.family===fam),
+    ...customItems.map(i=>({...i,custom:true}))
+  ];
+  const cats=Object.keys(CAT_LABELS);
+  let html='';let total=0;let done=0;
+  cats.forEach(cat=>{
+    const items=allItems.filter(i=>i.cat===cat);
+    if(!items.length)return;
+    const catDone=items.filter(i=>checked[i.id]).length;
+    total+=items.length;done+=catDone;
+    html+=`<div class="pack-category">
+      <div class="pack-header">
+        <h3>${CAT_LABELS[cat]}</h3>
+        <span class="pack-progress">${catDone}/${items.length}</span>
+      </div>
+      ${items.map(item=>{
+        const isDone=!!checked[item.id];
+        const urgentBadge=item.urgent?'<span class="pack-urgent tag-red">⭐ חובה</span>':'';
+        const customDot=item.custom?'<span style="font-size:10px;color:var(--accent);margin-right:4px">עצמי</span>':'';
+        return `<div class="pack-item${isDone?' done':''}${item.custom?' custom':''}" onclick="togglePackItem(this,'${item.id}')">
+          <div class="pack-circle">${isDone?'✓':''}</div>
+          <div class="pack-text">${item.text}${customDot}</div>
+          ${urgentBadge}
+        </div>`;
+      }).join('')}
+    </div>`;
+  });
+  document.getElementById('packing-list').innerHTML=html;
+  document.getElementById('packing-total').textContent=`${done}/${total} פריטים`;
+}
+function togglePackItem(el,id){
+  const checked=getPackingChecked();
+  const isDone=el.classList.toggle('done');
+  checked[id]=isDone?true:undefined;
+  if(!isDone)delete checked[id];
+  savePackingChecked(checked);
+  const circle=el.querySelector('.pack-circle');
+  if(circle)circle.textContent=isDone?'✓':'';
+  // update total
+  const items=document.querySelectorAll('.pack-item');
+  const doneCount=[...items].filter(i=>i.classList.contains('done')).length;
+  document.getElementById('packing-total').textContent=`${doneCount}/${items.length} פריטים`;
+}
+function openAddPackModal(){openModal('add-pack-modal')}
+function savePackItem(){
+  const text=document.getElementById('pack-item-text').value.trim();
+  if(!text){alert('נא להזין שם פריט');return;}
+  const custom=getCustomPackItems();
+  custom.push({id:'cp'+Date.now(),cat:document.getElementById('pack-item-category').value,text,urgent:document.getElementById('pack-urgent').checked,custom:true,addedBy:currentUser?.name||''});
+  saveCustomPackItems(custom);
+  closeModal('add-pack-modal');
+  document.getElementById('pack-item-text').value='';
+  document.getElementById('pack-urgent').checked=false;
+  renderPacking();
+}
+
+// ═══════════════ WEATHER ═══════════════
+async function fetchWeather(){
+  const tripStart=new Date('2026-08-11');
+  const today=new Date();
+  const days=Math.ceil((tripStart-today)/(1000*60*60*24));
+  if(days>14){
+    document.getElementById('weather-container').innerHTML=`
+      <div class="weather-strip">
+        <div>
+          <div class="cdw-avg-title">ממוצע אוגוסט · זלצבורג</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <span style="background:var(--accent-light);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">☀️ מקס' ~25°C</span>
+            <span style="background:#e8f4fd;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">🌙 מינ' ~15°C</span>
+            <span style="background:#f0f0ff;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">🌧️ ~12 ימי גשם</span>
+            <span style="background:#f0fff4;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">⛰️ הרים: 15–18°C</span>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:10px">תחזית חיה תופיע 2 שב' לפני הטיסה</p>
+        </div>
+      </div>`;
+    document.getElementById('header-temp').textContent='☀️';
+    document.getElementById('header-wlabel').textContent='11.8';
+    const p=document.getElementById('hero-weather-pill');if(p)p.textContent='☀️ ~25° · זלצבורג';
+    return;
+  }
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.55&longitude=13.1&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Europe%2FVienna&start_date=2026-08-11&end_date=2026-08-18');
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    if(!d.daily?.time?.length)throw new Error();
+    const dd=d.daily;
+    document.getElementById('header-temp').textContent=(WMO[dd.weathercode[0]]||'🌡️')+Math.round(dd.temperature_2m_max[0])+'°';
+    const _p=document.getElementById('hero-weather-pill');if(_p)_p.textContent=(WMO[dd.weathercode[0]]||'🌡️')+' '+Math.round(dd.temperature_2m_max[0])+'° · זלצבורג';
+    const names=['יום 1','יום 2','יום 3','יום 4','יום 5','יום 6','יום 7','יום 8'];
+    const dates=['11.8','12.8','13.8','14.8','15.8','16.8','17.8','18.8'];
+    let cards=dd.time.map((t,i)=>`<div class="wd-card${i===0?' today':''}">
+      <div class="wd-name">${names[i]||''}</div>
+      <div class="wd-date">${dates[i]||''}</div>
+      <div class="wd-icon">${WMO[dd.weathercode[i]]||'🌡️'}</div>
+      <div class="wd-temp">${Math.round(dd.temperature_2m_max[i])}°/${Math.round(dd.temperature_2m_min[i])}°</div>
+      <div class="wd-rain">💧${dd.precipitation_probability_max[i]}%</div>
+    </div>`).join('');
+    document.getElementById('weather-container').innerHTML=`<div class="weather-strip"><div class="weather-row">${cards}</div></div>`;
+  }catch{
+    document.getElementById('weather-container').innerHTML='<div class="alert alert-warning"><span class="alert-icon">⚠️</span>לא ניתן לטעון תחזית. בדוק חיבור.</div>';
+  }
+}
+
+// ═══════════════ MODALS ═══════════════
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function closeModalOnBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
+
+// ═══════════════ TASKS ═══════════════
+function getTasks(){return JSON.parse(localStorage.getItem('austria26_tasks')||'[]')}
+function saveTasks(arr){localStorage.setItem('austria26_tasks',JSON.stringify(arr))}
+function renderTasks(){
+  const list=document.getElementById('tasks-list');if(!list)return;
+  const tasks=getTasks();
+  const done=tasks.filter(t=>t.done).length;
+  document.getElementById('tasks-total').textContent=tasks.length?`${done}/${tasks.length} הושלמו`:'';
+  if(!tasks.length){list.innerHTML='<div class="task-empty">אין משימות עדיין. הוסיפו את הראשונה! 👆</div>';return;}
+  list.innerHTML=tasks.map(t=>{
+    const meta=[t.addedBy?('נוסף ע"י '+t.addedBy):'',t.done&&t.doneBy?('✓ '+t.doneBy):''].filter(Boolean).join(' · ');
+    return `<div class="task-item${t.done?' done':''}">
+      <div class="task-circle" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div>
+      <div style="flex:1" onclick="toggleTask('${t.id}')">
+        <div class="task-text">${escapeHtml(t.text)}</div>
+        ${meta?`<div class="task-meta">${meta}</div>`:''}
+      </div>
+      <button class="task-del" onclick="deleteTask('${t.id}')">🗑️</button>
+    </div>`;
+  }).join('');
+}
+function addTask(){
+  const inp=document.getElementById('task-new-text');
+  const text=inp.value.trim();if(!text)return;
+  const tasks=getTasks();
+  tasks.push({id:'t'+Date.now(),text,done:false,addedBy:currentUser?.name||''});
+  saveTasks(tasks);
+  inp.value='';
+  renderTasks();
+}
+function toggleTask(id){
+  const tasks=getTasks();const t=tasks.find(x=>x.id===id);if(!t)return;
+  t.done=!t.done;
+  t.doneBy=t.done?(currentUser?.name||''):'';
+  saveTasks(tasks);
+  renderTasks();
+}
+function deleteTask(id){
+  if(!confirm('למחוק משימה זו?'))return;
+  saveTasks(getTasks().filter(x=>x.id!==id));
+  renderTasks();
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// ═══════════════ GENERIC SECTION EDITOR ═══════════════
+// Lets users edit text, add items, and delete items in the static sections.
+// (Itinerary has its own editor; attractions/packing have their own add/edit.)
+const EDIT_PANELS={
+  'panel-hotels':'.card',
+  'panel-bookings':'.ck-item',
+  'panel-flights':'.flight-card,.card',
+  'panel-tips':'.tip-card'
+};
+const EDIT_TEXT_SEL='h2,h3,h4,p,.val,.lbl,.amenity,.sec-title,.ck-text,.ck-sub,.fl-val,.fl-city,.fl-code,.fl-direction,.seat-tag';
+let _editMode=false;
+
+function getContent(){const c=JSON.parse(localStorage.getItem('austria26_content')||'{}');c.text=c.text||{};c.deleted=c.deleted||[];c.added=c.added||{};return c;}
+function saveContent(c){localStorage.setItem('austria26_content',JSON.stringify(c));}
+
+function onEditBlur(e){
+  if(!_editMode)return;
+  const el=e.target,eid=el.dataset.eid;if(!eid)return;
+  const c=getContent();c.text[eid]=el.textContent;saveContent(c);
+}
+function initEditables(){
+  Object.keys(EDIT_PANELS).forEach(pid=>{
+    const panel=document.getElementById(pid);if(!panel)return;
+    let ti=0;
+    panel.querySelectorAll(EDIT_TEXT_SEL).forEach(el=>{
+      if(el.dataset.eid)return;
+      if(el.querySelector('a,button,input,select,img,svg'))return; // don't break links/controls
+      el.dataset.eid=pid+':t'+(ti++);
+      el.addEventListener('blur',onEditBlur);
+    });
+    let ii=0;
+    panel.querySelectorAll(EDIT_PANELS[pid]).forEach(item=>{
+      if(!item.dataset.iid2)item.dataset.iid2=pid+':i'+(ii++);
+      if(!item.querySelector(':scope > .sec-del-btn')){
+        const d=document.createElement('button');
+        d.className='sec-del-btn';d.textContent='🗑️ מחק פריט';
+        d.setAttribute('onclick',`deleteSectionItem('${item.dataset.iid2}')`);
+        item.appendChild(d);
+      }
+    });
+    if(!panel.querySelector(':scope > .sec-add-btn')){
+      const a=document.createElement('button');
+      a.className='btn btn-outline btn-sm sec-add-btn';
+      a.textContent='＋ הוסף פריט';
+      a.setAttribute('onclick',`addSectionItem('${pid}')`);
+      panel.appendChild(a);
+    }
+  });
+  applyContentOverrides();
+}
+function applyContentOverrides(){
+  const c=getContent();
+  Object.entries(c.text).forEach(([eid,val])=>{
+    const el=document.querySelector('[data-eid="'+eid+'"]');
+    if(el&&el.textContent!==val)el.textContent=val;
+  });
+  c.deleted.forEach(iid=>{const el=document.querySelector('[data-iid2="'+iid+'"]');if(el)el.style.display='none';});
+  Object.keys(c.added).forEach(pid=>{(c.added[pid]||[]).forEach(it=>renderAddedSectionItem(pid,it,false));});
+}
+function deleteSectionItem(iid){
+  if(!confirm('למחוק פריט זה?'))return;
+  const c=getContent();if(!c.deleted.includes(iid))c.deleted.push(iid);saveContent(c);
+  const el=document.querySelector('[data-iid2="'+iid+'"]');if(el)el.style.display='none';
+}
+function addSectionItem(pid){
+  const c=getContent();c.added[pid]=c.added[pid]||[];
+  const it={id:'s'+Date.now(),title:'כותרת חדשה',text:'תיאור...'};
+  c.added[pid].push(it);saveContent(c);
+  renderAddedSectionItem(pid,it,true);
+}
+function renderAddedSectionItem(pid,it,focus){
+  const panel=document.getElementById(pid);if(!panel)return;
+  if(panel.querySelector('[data-aid="'+it.id+'"]'))return;
+  const c=getContent();
+  const tEid=pid+':a-'+it.id+'-title',dEid=pid+':a-'+it.id+'-text';
+  const title=(c.text[tEid]!=null)?c.text[tEid]:it.title;
+  const text=(c.text[dEid]!=null)?c.text[dEid]:it.text;
+  const card=document.createElement('div');
+  card.className='card open';card.dataset.aid=it.id;card.style.padding='14px 16px';
+  card.innerHTML='<h3 data-eid="'+tEid+'" style="margin-bottom:4px">'+escapeHtml(title)+'</h3>'+
+    '<p data-eid="'+dEid+'" style="color:var(--muted)">'+escapeHtml(text)+'</p>'+
+    '<button class="sec-del-btn" onclick="deleteAddedItem(\''+pid+'\',\''+it.id+'\')">🗑️ מחק פריט</button>';
+  const addBtn=panel.querySelector(':scope > .sec-add-btn');
+  if(addBtn)panel.insertBefore(card,addBtn);else panel.appendChild(card);
+  card.querySelectorAll('[data-eid]').forEach(el=>{el.addEventListener('blur',onEditBlur);if(_editMode)el.contentEditable='true';});
+  if(focus){const h=card.querySelector('h3');if(h){h.contentEditable='true';h.focus();}}
+}
+function deleteAddedItem(pid,id){
+  if(!confirm('למחוק פריט זה?'))return;
+  const c=getContent();
+  c.added[pid]=(c.added[pid]||[]).filter(x=>x.id!==id);
+  delete c.text[pid+':a-'+id+'-title'];delete c.text[pid+':a-'+id+'-text'];
+  saveContent(c);
+  const el=document.querySelector('[data-aid="'+id+'"]');if(el)el.remove();
+}
+function setEditMode(on){
+  _editMode=on;
+  document.body.classList.toggle('app-editing',on);
+  document.querySelectorAll('[data-eid]').forEach(el=>{el.contentEditable=on?'true':'false';});
+  const ban=document.getElementById('edit-banner');if(ban)ban.style.display=on?'block':'none';
+  const b=document.getElementById('edit-mode-btn');if(b)b.textContent=on?'✅ סיום עריכת תוכן':'✏️ ערוך תוכן';
+}
+function toggleEditMode(){closeModal('user-modal');setEditMode(!_editMode);}
+
+// ═══════════════ ADD / EDIT ITINERARY EVENT ═══════════════
+function openAddEvent(dayId){
+  document.getElementById('event-modal-title').textContent='➕ הוסף אירוע ל'+(DAY_LABELS[dayId]||'');
+  document.getElementById('event-edit-iid').value='';
+  document.getElementById('event-day').value=dayId;
+  document.getElementById('event-time').value='';
+  document.getElementById('event-title').value='';
+  document.getElementById('event-desc').value='';
+  openModal('event-modal');
+}
+function openEditEvent(iid){
+  const item=document.querySelector(`[data-iid="${iid}"]`);if(!item)return;
+  document.getElementById('event-modal-title').textContent='✏️ ערוך אירוע';
+  document.getElementById('event-edit-iid').value=iid;
+  document.getElementById('event-day').value='';
+  document.getElementById('event-time').value=item.querySelector('.tl-time')?.textContent.trim()||'';
+  document.getElementById('event-title').value=item.querySelector('h4')?.textContent.trim()||'';
+  const p=item.querySelector('.tl-body p');
+  document.getElementById('event-desc').value=p?p.textContent.trim():'';
+  openModal('event-modal');
+}
+function saveEvent(){
+  const title=document.getElementById('event-title').value.trim();
+  if(!title){alert('נא להזין כותרת');return;}
+  const time=document.getElementById('event-time').value.trim();
+  const desc=document.getElementById('event-desc').value.trim();
+  const iid=document.getElementById('event-edit-iid').value;
+  const m=getItinMods();
+  if(iid){
+    if(iid.startsWith('add-')){
+      const a=(m.added||[]).find(x=>('add-'+x.id)===iid);
+      if(a){a.time=time;a.title=title;a.desc=desc;}
+    } else {
+      m.edits=m.edits||{};
+      m.edits[iid]={time,title,desc};
+    }
+  } else {
+    const dayId=document.getElementById('event-day').value;
+    m.added=m.added||[];
+    m.added.push({id:'e'+Date.now(),day:dayId,time,title,desc,addedBy:currentUser?.name||''});
+  }
+  saveItinMods(m);
+  closeModal('event-modal');
+  reloadItinerary();
+}
+
+// ═══════════════ FIREBASE CLOUD SYNC (optional) ═══════════════
+let _db=null,_auth=null,_applyingRemote=false,_lastHash=null,_pushTimer=null;
+const SYNC_PREFIX='austria26_';
+const MTIME_KEY='austria26_synctime'; // local last-modified stamp (not synced)
+const SYNC_SKIP=['austria26_user',MTIME_KEY]; // per-device, not synced
+
+function firebaseEnabled(){return !!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey&&FIREBASE_CONFIG.projectId);}
+
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+
+async function initFirebase(){
+  if(!firebaseEnabled())return;
+  try{
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+    await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+    firebase.initializeApp(FIREBASE_CONFIG);
+    _auth=firebase.auth();
+    _db=firebase.firestore();
+    document.getElementById('user-sync-section').style.display='block';
+    // wrap localStorage.setItem so any save schedules a cloud push
+    const origSet=localStorage.setItem.bind(localStorage);
+    _origSet=origSet;
+    localStorage.setItem=function(k,v){
+      origSet(k,v);
+      if(!_applyingRemote&&k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0){
+        // Always stamp the edit, even before sign-in finishes — otherwise an
+        // edit made in the first seconds wouldn't be marked newer than the
+        // cloud copy and would get overwritten on the next load.
+        origSet(MTIME_KEY,String(Date.now()));
+        if(_db&&_auth&&_auth.currentUser)schedulePush();
+      }
+    };
+    // flush any pending push when leaving, so a quick close doesn't drop edits
+    window.addEventListener('pagehide',flushPush);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushPush();});
+    _auth.onAuthStateChanged(u=>{
+      if(u){onAuthed(u);}
+      else if(!_anonTried){_anonTried=true;_auth.signInAnonymously().catch(e=>console.warn('anon sign-in failed',e));}
+    });
+    _auth.getRedirectResult().catch(e=>console.warn('redirect sign-in result',e));
+  }catch(e){console.warn('Firebase init failed',e);}
+}
+let _anonTried=false;
+function signInWithGoogle(){
+  if(!_auth){alert('סנכרון הענן לא הוגדר עדיין. ראו ההוראות בקובץ.');return;}
+  const provider=new firebase.auth.GoogleAuthProvider();
+  const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // Popup keeps the flow in one context (avoids Safari's broken blank-redirect).
+  _auth.signInWithPopup(provider).catch(e=>{
+    if(e&&e.code==='auth/popup-closed-by-user')return; // user dismissed
+    const blocked=e&&['auth/popup-blocked','auth/cancelled-popup-request','auth/operation-not-supported-in-this-environment'].indexOf(e.code)>=0;
+    if(blocked&&isIOS){
+      alert('הדפדפן חסם את חלון ההתחברות. פִּתחו את האפליקציה ב-Chrome, או כבו "חסימת חלונות קופצים" בהגדרות → Safari, ונסו שוב.');
+      return;
+    }
+    if(blocked){_auth.signInWithRedirect(provider).catch(er=>alert('ההתחברות נכשלה: '+(er.message||er)));return;}
+    console.warn(e);alert('ההתחברות נכשלה: '+(e.message||e));
+  });
+}
+function onAuthed(u){
+  window._syncUser=true; // any signed-in user (incl. anonymous) enables cloud sync
+  if(u.isAnonymous){
+    // silent automatic sync — works on every browser incl. iOS
+    subscribeState();updateSyncUI();
+    return;
+  }
+  // real Google account — also gives identity/avatar. Does NOT bypass the
+  // passcode: the lock screen stays in control of entry.
+  window._googleUser={name:u.displayName||u.email,email:u.email,photo:u.photoURL};
+  subscribeState();
+  updateSyncUI();
+  closeModal('user-modal'); // harmless if it wasn't open (e.g. signed in from the menu)
+}
+function updateSyncUI(){
+  const pill=document.getElementById('user-sync-status');
+  const btn=document.getElementById('user-google-btn');
+  if(window._googleUser){
+    if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן · '+window._googleUser.email;}
+    if(btn)btn.style.display='none';
+  } else if(window._syncUser){
+    // automatic (anonymous) sync active — still offer Google for an avatar/identity
+    if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן אוטומטית בין המכשירים';}
+    if(btn)btn.style.display='flex';
+  } else {
+    if(pill){pill.className='sync-pill sync-off';pill.textContent='☁️ מתחבר לסנכרון...';}
+    if(btn)btn.style.display='flex';
+  }
+  updateAvatar();
+}
+function collectState(){
+  const blob={};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k.indexOf(SYNC_PREFIX)===0&&SYNC_SKIP.indexOf(k)<0)blob[k]=localStorage.getItem(k);
+  }
+  return blob;
+}
+function hashState(blob){return JSON.stringify(Object.keys(blob).sort().map(k=>[k,blob[k]]));}
+let _origSet=null;
+function schedulePush(){clearTimeout(_pushTimer);_pushTimer=setTimeout(pushState,800);}
+function flushPush(){if(_pushTimer){clearTimeout(_pushTimer);_pushTimer=null;pushState();}}
+function pushState(){
+  if(!_db||!_auth||!_auth.currentUser||_applyingRemote)return;
+  const blob=collectState();const h=hashState(blob);
+  if(h===_lastHash)return;
+  _lastHash=h;
+  _db.collection('trips').doc(TRIP_ID).set({data:blob,updatedAt:Date.now(),updatedBy:currentUser?.name||''},{merge:true})
+    .catch(e=>console.warn('sync push failed',e));
+}
+let _subscribed=false;
+function subscribeState(){
+  if(!_db||!_auth||!_auth.currentUser||_subscribed)return;
+  _subscribed=true;
+  const ref=_db.collection('trips').doc(TRIP_ID);
+  ref.get().then(doc=>{if(!doc.exists){_lastHash=hashState(collectState());pushState();}}).catch(()=>{});
+  ref.onSnapshot(doc=>{
+    if(!doc.exists)return;
+    const remote=doc.data().data||{};
+    const remoteTime=doc.data().updatedAt||0;
+    const h=hashState(remote);
+    if(h===_lastHash)return; // matches our local state — nothing to do
+    // last-write-wins: if this device has local edits newer than the remote
+    // copy (e.g. added something then closed before the push ran), keep ours
+    // and push it instead of letting the older cloud copy overwrite it.
+    const localTime=Number(localStorage.getItem(MTIME_KEY)||0);
+    if(localTime>remoteTime){pushState();return;}
+    _lastHash=h;
+    _applyingRemote=true;
+    Object.keys(remote).forEach(k=>localStorage.setItem(k,remote[k]));
+    if(_origSet)_origSet(MTIME_KEY,String(remoteTime)); // we're now in sync with remote
+    _applyingRemote=false;
+    // re-render everything from the new data
+    if(currentUser){renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();applyContentOverrides();}
+  },e=>console.warn('sync listen failed',e));
+}
+
+// ═══════════════ INIT ═══════════════
+// ═══════════════ ITINERARY EDITING ═══════════════
+const DAY_LABELS = {d1:'יום 1 (11.8)',d2:'יום 2 (12.8)',d3:'יום 3 (13.8)',d4:'יום 4 (14.8)',d5:'יום 5 (15.8)',d6:'יום 6 (16.8)',d7:'יום 7 (17.8)',d8:'יום 8 (18.8)'};
+
+function getItinMods(){
+  const m=JSON.parse(localStorage.getItem('austria26_itin')||'{}');
+  m.deleted=m.deleted||[];m.moved=m.moved||{};m.edits=m.edits||{};m.added=m.added||[];
+  return m;
+}
+function saveItinMods(m){localStorage.setItem('austria26_itin',JSON.stringify(m));}
+
+let _itinOriginalHTML=null;
+function reloadItinerary(){
+  const panel=document.getElementById('panel-itinerary');if(!panel)return;
+  const openIds=[...panel.querySelectorAll('.card[id^="d"].open')].map(c=>c.id);
+  if(_itinOriginalHTML!==null)panel.innerHTML=_itinOriginalHTML;
+  openIds.forEach(id=>{const c=document.getElementById(id);if(c)c.classList.add('open');});
+  initItinIds();
+  applyItinMods();
+  if(itinEditMode){
+    panel.classList.add('itin-editing');
+    const btn=document.getElementById('itin-edit-btn');
+    const label=document.getElementById('itin-edit-label');
+    if(btn){btn.textContent='✅ סיום עריכה';btn.style.background='var(--primary-dark)';}
+    if(label)label.textContent='לחץ × למחיקה · השתמש בתפריט להזזה';
+  }
+  fetchWeather();
+  if(window.feather)feather.replace();
+}
+
+function initItinIds(){
+  document.querySelectorAll('.card[id^="d"]').forEach(card=>{
+    card.querySelectorAll('.tl-item').forEach((item,i)=>{
+      if(item.querySelector('.tl-edit-ctrl'))return; // already initialized
+      const iid=card.id+'-'+i;
+      item.dataset.iid=iid;
+      // inject control bar
+      const title=item.querySelector('h4')?.textContent||'';
+      const opts=Object.entries(DAY_LABELS).filter(([k])=>k!==card.id).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+      const ctrl=document.createElement('div');
+      ctrl.className='tl-edit-ctrl';
+      ctrl.innerHTML=
+        `<button class="tl-item-edit-btn" onclick="openEditEvent('${iid}')">✏️ ערוך</button>`+
+        `<select class="tl-move-select" onchange="moveItinItem('${iid}',this.value);this.value=''"><option value="" disabled selected>העבר ליום...</option>${opts}</select>`+
+        `<button class="tl-del-btn" onclick="deleteItinItem('${iid}')">מחק</button>`;
+      const body=item.querySelector('.tl-body');
+      if(body)body.appendChild(ctrl);
+      else item.appendChild(ctrl);
+    });
+    // per-day "add event" button
+    const cardBody=card.querySelector('.card-body');
+    if(cardBody&&!cardBody.querySelector('.day-add-event')){
+      const addBtn=document.createElement('button');
+      addBtn.className='btn btn-outline btn-sm day-add-event';
+      addBtn.textContent='＋ הוסף אירוע ליום זה';
+      addBtn.setAttribute('onclick',`openAddEvent('${card.id}')`);
+      const tl=cardBody.querySelector('.timeline');
+      if(tl)tl.insertAdjacentElement('afterend',addBtn);
+      else cardBody.appendChild(addBtn);
+    }
+  });
+}
+
+function buildAddedItem(a){
+  const iid='add-'+a.id;
+  const opts=Object.entries(DAY_LABELS).filter(([k])=>k!==a.day).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  const el=document.createElement('div');
+  el.className='tl-item tl-added';
+  el.dataset.iid=iid;
+  el.innerHTML=`<div class="tl-time">${escapeHtml(a.time||'')}</div><div class="tl-dot"></div>`+
+    `<div class="tl-body"><h4><span class="tl-added-tag">נוסף</span>${escapeHtml(a.title||'')}</h4>`+
+    `${a.desc?`<p>${escapeHtml(a.desc)}</p>`:'<p></p>'}`+
+    `<div class="tl-edit-ctrl">`+
+      `<button class="tl-item-edit-btn" onclick="openEditEvent('${iid}')">✏️ ערוך</button>`+
+      `<select class="tl-move-select" onchange="moveItinItem('${iid}',this.value);this.value=''"><option value="" disabled selected>העבר ליום...</option>${opts}</select>`+
+      `<button class="tl-del-btn" onclick="deleteItinItem('${iid}')">מחק</button>`+
+    `</div></div>`;
+  return el;
+}
+function applyItinMods(){
+  const m=getItinMods();
+  // 1. inject custom added events into their day's timeline
+  (m.added||[]).forEach(a=>{
+    if(document.querySelector(`[data-iid="add-${a.id}"]`))return;
+    const tl=document.querySelector(`#${a.day} .timeline`);
+    if(tl)tl.appendChild(buildAddedItem(a));
+  });
+  // 2. apply text edits to existing items
+  Object.entries(m.edits||{}).forEach(([iid,e])=>{
+    const el=document.querySelector(`[data-iid="${iid}"]`);
+    if(!el)return;
+    const t=el.querySelector('.tl-time');if(t&&e.time!=null)t.textContent=e.time;
+    const h=el.querySelector('h4');if(h&&e.title!=null)h.textContent=e.title;
+    let p=el.querySelector('.tl-body p');
+    if(e.desc!=null){if(!p){p=document.createElement('p');el.querySelector('.tl-body').insertBefore(p,el.querySelector('.tl-edit-ctrl'));}p.textContent=e.desc;}
+  });
+  // 3. apply moves
+  Object.entries(m.moved).forEach(([iid,dayId])=>{
+    const el=document.querySelector(`[data-iid="${iid}"]`);
+    const target=document.querySelector(`#${dayId} .timeline`);
+    if(el&&target){target.appendChild(el);}
+  });
+  // 4. apply deletions
+  m.deleted.forEach(iid=>{
+    const el=document.querySelector(`[data-iid="${iid}"]`);
+    if(el)el.classList.add('tl-deleted');
+  });
+  // show reset button if there are any mods
+  const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0||Object.keys(m.edits||{}).length>0||(m.added||[]).length>0;
+  const rb=document.getElementById('itin-reset-btn');if(rb)rb.style.display=hasChanges?'':'none';
+}
+
+let itinEditMode=false;
+function toggleItinEdit(){
+  itinEditMode=!itinEditMode;
+  const panel=document.getElementById('panel-itinerary');
+  const btn=document.getElementById('itin-edit-btn');
+  const label=document.getElementById('itin-edit-label');
+  if(itinEditMode){
+    panel.classList.add('itin-editing');
+    btn.textContent='✅ סיום עריכה';
+    btn.style.background='var(--primary-dark)';
+    label.textContent='לחץ × למחיקה · השתמש בתפריט להזזה';
+  } else {
+    panel.classList.remove('itin-editing');
+    btn.textContent='✏️ ערוך לו"ז';
+    btn.style.background='';
+    label.textContent='ניתן לערוך ימים – להזיז ולמחוק אירועים';
+  }
+}
+
+function deleteItinItem(iid){
+  const m=getItinMods();
+  const el=document.querySelector(`[data-iid="${iid}"]`);
+  if(iid.startsWith('add-')){
+    m.added=(m.added||[]).filter(a=>('add-'+a.id)!==iid);
+    saveItinMods(m);
+    if(el)el.remove();
+  } else {
+    if(!m.deleted.includes(iid))m.deleted.push(iid);
+    saveItinMods(m);
+    if(el)el.classList.add('tl-deleted');
+  }
+  document.getElementById('itin-reset-btn').style.display='';
+}
+
+function moveItinItem(iid,toDay){
+  if(!toDay)return;
+  const m=getItinMods();
+  if(iid.startsWith('add-')){
+    const a=(m.added||[]).find(x=>('add-'+x.id)===iid);
+    if(a)a.day=toDay;
+  } else {
+    m.moved[iid]=toDay;
+  }
+  saveItinMods(m);
+  const el=document.querySelector(`[data-iid="${iid}"]`);
+  const target=document.querySelector(`#${toDay} .timeline`);
+  if(el&&target){
+    target.appendChild(el);
+    // open the target day card
+    const card=document.getElementById(toDay);
+    if(card&&!card.classList.contains('open'))card.classList.add('open');
+  }
+  document.getElementById('itin-reset-btn').style.display='';
+}
+
+function resetItinMods(){
+  if(!confirm('לאפס את כל השינויים בלו"ז? הפעולה תטעין מחדש את הדף.'))return;
+  localStorage.removeItem('austria26_itin');
+  location.reload();
+}
+
+// ═══════════════ COUNTDOWN ═══════════════
+let _cdInterval=null;
+function startCountdown(){
+  const target=new Date('2026-08-11T00:00:00');
+  function pad(n){return String(n).padStart(2,'0')}
+  function tick(){
+    const diff=target-new Date();
+    if(diff<=0){
+      ['cd-days','cd-hours','cd-mins','cd-secs','lc-days','lc-hours','lc-mins','lc-secs'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='00'});
+      return;
+    }
+    const d=Math.floor(diff/86400000);
+    const h=Math.floor((diff%86400000)/3600000);
+    const m=Math.floor((diff%3600000)/60000);
+    const s=Math.floor((diff%60000)/1000);
+    [['cd-days','lc-days',d],['cd-hours','lc-hours',h],['cd-mins','lc-mins',m],['cd-secs','lc-secs',s]].forEach(([a,b,v])=>{
+      const va=document.getElementById(a),vb=document.getElementById(b);
+      if(va)va.textContent=pad(v); if(vb)vb.textContent=pad(v);
+    });
+  }
+  tick();
+  if(_cdInterval)clearInterval(_cdInterval);
+  _cdInterval=setInterval(tick,1000);
+}
+
+function initApp(){
+  const panel=document.getElementById('panel-itinerary');
+  if(_itinOriginalHTML===null&&panel)_itinOriginalHTML=panel.innerHTML; // snapshot pristine itinerary
+  initBookingChecklist();
+  renderAttractions();
+  renderPacking();
+  renderRestaurants();
+  renderTasks();
+  fetchWeather();
+  initItinIds();
+  applyItinMods();
+  initEditables();
+  if(_db&&_auth&&_auth.currentUser)subscribeState();
+  if(window.feather)feather.replace();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  startCountdown();
+  initFirebase();
+  // check if already logged in
+  const saved=localStorage.getItem('austria26_user');
+  if(saved){
+    try{
+      currentUser=JSON.parse(saved);
+      applyFamilyClass(currentUser.name);
+      document.getElementById('lock-screen').style.display='none';
+      document.getElementById('user-name-display').textContent=currentUser.name;
+      updateAvatar();
+      initApp();
+    }catch{localStorage.removeItem('austria26_user')}
+  }
+});
+</script>
+</body>
+</html>
