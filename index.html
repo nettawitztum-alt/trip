@@ -811,6 +811,17 @@ body{background:
 /* ---- accessibility: focus rings, contrast, tap targets ---- */
 :root{--muted:rgba(255,255,255,.68)}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tab-btn:focus-visible,.more-tile:focus-visible,.card-header:focus-visible,.tl-menu-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+.btn svg.feather,.tl-attr-link svg.feather,a svg.feather,.day-add-event svg.feather{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;vertical-align:-2px;flex-shrink:0}
+.wx-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:#fff;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:600}
+.day-add-mini{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(124,240,166,.12);border:1.5px dashed rgba(124,240,166,.45);color:var(--accent);cursor:pointer;margin-top:10px;padding:0}
+.day-add-mini svg.feather{width:18px;height:18px;stroke:currentColor}
+.tl-loc-links{display:flex;gap:8px;margin-top:8px}
+.attr-tips{background:rgba(255,217,122,.10)!important;border:1px solid rgba(255,217,122,.26)!important;padding:12px 14px!important;margin:10px 0!important;border-radius:14px!important}
+.attr-tips li{color:#ffe4a3!important;padding:4px 0!important}
+.action-row{gap:10px;margin-top:14px}
+.alert{margin-bottom:10px;line-height:1.55}
+.attr-body{padding:14px}
+.tl-attr-link{margin-top:8px}
 
 /* ---- bottom nav grouping: 4 core + עוד (mobile/tablet), full sidebar (desktop) ---- */
 .nav-more{display:none}
@@ -940,7 +951,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
   <div class="itin-edit-bar">
-    <span class="edit-label" id="itin-edit-label">לחיצה ארוכה על אירוע ⋯ לעריכה · ＋ הוסף אירוע בכל יום</span>
+    <button class="btn btn-sm btn-accent" onclick="openAddEvent(null)"><i data-feather="plus"></i> הוסף אירוע</button>
     <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ איפוס</button>
   </div>
   <div id="weather-container"><div class="weather-skeleton"></div><div class="weather-skeleton" style="height:40px;margin-top:6px;opacity:.6"></div></div>
@@ -960,13 +971,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <div class="tl-item"><div class="tl-time">14:35</div><div class="tl-dot"></div><div class="tl-body"><h4>נחיתה זלצבורג (SZG) 🇦🇹</h4><p>איסוף רכב – AutoEurope Res.629582 · Nissan Qashqai</p></div></div>
         <div class="tl-item"><div class="tl-time">15:30</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה דרומה</h4><p>A10 · ~50 דקות</p></div></div>
         <div class="tl-item"><div class="tl-time">16:30</div><div class="tl-dot"></div><div class="tl-body"><h4>צ'ק-אין 🏨 Ferienwelt Kesselgrub</h4><p>Lackengasse 86, Altenmarkt im Pongau</p></div></div>
-        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב 🍽️</h4><p>מסעדת המלון – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב 🍽️</h4><p>מסעדת המלון – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
       <div class="alert alert-warning brosh-only"><span class="alert-icon">⚠️</span>לאשר כיסאות ילדים עם AutoEurope! Infant seat לרומי + Toddler seat לליה</div>
       <div class="alert alert-warning aloni-only"><span class="alert-icon">⚠️</span>לאשר כיסא בטיחות לתום ועמרי עם חברת ההשכרה!</div>
       <div class="action-row">
-        <a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לשדה</a>
-        <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze למלון</a>
+        <a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze לשדה</a>
+        <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze למלון</a>
       </div>
     </div>
   </div>
@@ -980,14 +991,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>בופה בוקר במלון 🥐</h4><p>כלול בחבילה</p></div></div>
         <div class="tl-item"><div class="tl-time">10:15</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה ל-Geisterberg</h4><p>St. Johann/Alpendorf · ~20 דקות</p></div></div>
-        <div class="tl-item"><div class="tl-time">10:30</div><div class="tl-dot"></div><div class="tl-body"><h4>גונדולה + ממלכת הרפאים 👻</h4><p>40+ תחנות · גובה ~1,563מ' · עגלה ✓ · גיל 1+</p><button class="tl-attr-link" onclick="viewAttraction('a1')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🍖 צהריים בקתת ההר</h4><p>שניצל, מרק, מגשי ילדים</p><button class="tl-attr-link" onclick="viewRestaurant('r3')">↗ מסעדה</button><a href="https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">10:30</div><div class="tl-dot"></div><div class="tl-body"><h4>גונדולה + ממלכת הרפאים 👻</h4><p>40+ תחנות · גובה ~1,563מ' · עגלה ✓ · גיל 1+</p><button class="tl-attr-link" onclick="viewAttraction('a1')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🍖 צהריים בקתת ההר</h4><p>שניצל, מרק, מגשי ילדים</p><button class="tl-attr-link" onclick="viewRestaurant('r3')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
         <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>בריכה + מנוחה 🏊</h4><p>בחזרה למלון</p></div></div>
-        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב גורמה 🍽️</h4><p>מסעדת Kesselgrub – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב גורמה 🍽️</h4><p>מסעדת Kesselgrub – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
       <div class="action-row">
-        <a href="https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze</a>
-        <a href="https://www.snow-space.com/en/summer/adventure-mountain/geisterberg-alpendorf" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>
+        <a href="https://waze.com/ul?q=Geisterberg+St+Johann+Alpendorf&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze</a>
+        <a href="https://www.snow-space.com/en/summer/adventure-mountain/geisterberg-alpendorf" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>
       </div>
     </div>
   </div>
@@ -1000,12 +1011,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="alert alert-danger"><span class="alert-icon">🎫</span>להזמין כרטיסי מבצר מראש! עלול להימכר באוגוסט.</div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר במלון</h4><p>כלול בחבילה · Kesselgrub</p></div></div>
-        <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>יציאה למבצר הוהנוורפן 🏰</h4><p>~35 דקות · Burgstraße 2, Werfen</p><button class="tl-attr-link" onclick="viewAttraction('a2')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>יציאה למבצר הוהנוורפן 🏰</h4><p>~35 דקות · Burgstraße 2, Werfen</p><button class="tl-attr-link" onclick="viewAttraction('a2')"><i data-feather="external-link"></i> פרטים</button></div></div>
         <div class="tl-item"><div class="tl-time">10:45</div><div class="tl-dot"></div><div class="tl-body"><h4>פונקולר למבצר</h4><p>כלול בכרטיס</p></div></div>
         <div class="tl-item"><div class="tl-time">11:15</div><div class="tl-dot"></div><div class="tl-body"><h4>🦅 הצגת פלקונרי!</h4><p>25 דקות · הצגה שנייה 15:15 · עיטים ונשרים חיים!</p></div></div>
-        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 צהריים בכפר Werfen</h4><p>Gasthof Werfen – מטבח אוסטרי מסורתי</p><button class="tl-attr-link" onclick="viewRestaurant('r4')">↗ מסעדה</button><a href="https://waze.com/ul?q=Gasthof+Werfen+Austria&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
-        <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>Erlebnis-Therme Amadé 🌊</h4><p>Thermenplatz 1, Altenmarkt · 11 בריכות · 3 מגלשות</p><button class="tl-attr-link" onclick="viewAttraction('a3')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">18:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב במלון 🍽️</h4><p>כלול בחבילה · Kesselgrub</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 צהריים בכפר Werfen</h4><p>Gasthof Werfen – מטבח אוסטרי מסורתי</p><button class="tl-attr-link" onclick="viewRestaurant('r4')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Gasthof+Werfen+Austria&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>Erlebnis-Therme Amadé 🌊</h4><p>Thermenplatz 1, Altenmarkt · 11 בריכות · 3 מגלשות</p><button class="tl-attr-link" onclick="viewAttraction('a3')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">18:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב במלון 🍽️</h4><p>כלול בחבילה · Kesselgrub</p><button class="tl-attr-link" onclick="viewRestaurant('r6')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
       <div class="action-row">
         <a href="https://waze.com/ul?q=Burg+Hohenwerfen+Werfen&navigate=yes" class="btn btn-waze btn-sm">🗺️ מבצר</a>
@@ -1025,10 +1036,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר במלון</h4><p>כלול בחבילה · Kesselgrub</p></div></div>
         <div class="tl-item"><div class="tl-time">כל הבוקר</div><div class="tl-dot"></div><div class="tl-body"><h4>בריכה + פוני + גן חיות קטן 🐴</h4><p>כלול ב-Kesselgrub · קלוב ילדים 70ש'/שבוע</p></div></div>
         <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 פיקניק ליד האגם</h4><p>Zauchensee · 10 דקות מהמלון · שחייה חינם</p></div></div>
-        <div class="tl-item"><div class="tl-time">אחה"צ</div><div class="tl-dot"></div><div class="tl-body"><h4>אגם Zauchensee 🏔️</h4><p>10 דקות מהמלון · חינם · שחייה · פיקניק</p><button class="tl-attr-link" onclick="viewAttraction('a4')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב גורמה 🍽️</h4><p>מסעדת Kesselgrub – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')">↗ מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">אחה"צ</div><div class="tl-dot"></div><div class="tl-body"><h4>אגם Zauchensee 🏔️</h4><p>10 דקות מהמלון · חינם · שחייה · פיקניק</p><button class="tl-attr-link" onclick="viewAttraction('a4')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב גורמה 🍽️</h4><p>מסעדת Kesselgrub – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
-      <div class="action-row"><a href="https://waze.com/ul?q=Zauchensee+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לאגם</a></div>
+      <div class="action-row"><a href="https://waze.com/ul?q=Zauchensee+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze לאגם</a></div>
     </div>
   </div>
 
@@ -1039,14 +1050,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="day-header"><div><div class="day-name">🚗 מעבר מלונות</div><div class="day-theme">~70 ק"מ · A10 צפונה · ~1 שעה</div></div><div class="day-badge">15.8<br>ש'</div></div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">08:00</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר + צ'ק-אאוט עד 11:00 🧳</h4><p>Kesselgrub – פרידה!</p></div></div>
-        <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div><div class="tl-body"><h4>אגם Zauchensee – עצירה אחרונה 🏔️</h4><p>שחייה + פיקניק · פרידה מהאגם</p><button class="tl-attr-link" onclick="viewAttraction('a4')">↗ פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div><div class="tl-body"><h4>אגם Zauchensee – עצירה אחרונה 🏔️</h4><p>שחייה + פיקניק · פרידה מהאגם</p><button class="tl-attr-link" onclick="viewAttraction('a4')"><i data-feather="external-link"></i> פרטים</button></div></div>
         <div class="tl-item"><div class="tl-time">12:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥙 צהריים קלים בדרך</h4><p>עצירה בכפר · סנדוויצ'ים + קפה</p></div></div>
         <div class="tl-item"><div class="tl-time">13:30</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה ל-Grünauerhof</h4><p>A10 צפונה · ~70 ק"מ</p></div></div>
         <div class="tl-item"><div class="tl-time">14:30</div><div class="tl-dot"></div><div class="tl-body"><h4>צ'ק-אין 🏨 Hotel Grünauerhof</h4><p>Grünauerstraße 90 · 7 ק"מ מזלצבורג</p></div></div>
-        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב בגן הקסטן 🌳</h4><p>מסעדת המלון</p><button class="tl-attr-link" onclick="viewRestaurant('r7')">↗ מסעדה</button><a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב בגן הקסטן 🌳</h4><p>מסעדת המלון</p><button class="tl-attr-link" onclick="viewRestaurant('r7')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
       <div class="action-row">
-        <a href="https://waze.com/ul?from=Ferienwelt+Kesselgrub+Altenmarkt&to=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לנסיעה</a>
+        <a href="https://waze.com/ul?from=Ferienwelt+Kesselgrub+Altenmarkt&to=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze לנסיעה</a>
       </div>
     </div>
   </div>
@@ -1061,12 +1072,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="alert alert-warning aloni-only"><span class="alert-icon">💧</span>להביא חולצה יבשה לתום – המזרקות מרטיבות מאוד!</div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 ארוחת בוקר במלון</h4><p>כלול בחבילה · Grünauerhof</p></div></div>
-        <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גן חיות הלבורן 🦁</h4><p>Hellbrunner Str. 60, Anif · עגלות בהשאלה חינם · מתחת ל-4 חינם!</p><button class="tl-attr-link" onclick="viewAttraction('a5')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארמון הלבורן ⛲</h4><p>Fürstenweg 37 · סיור מזרקות 50 דק' · ~€16.50 מבוגר</p><button class="tl-attr-link" onclick="viewAttraction('a6')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">13:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 צהריים ב-Anif</h4><p>מסעדה מקומית · ליד הארמון</p><button class="tl-attr-link" onclick="viewRestaurant('r5')">↗ מסעדה</button><a href="https://waze.com/ul?q=restaurant+Anif+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גן חיות הלבורן 🦁</h4><p>Hellbrunner Str. 60, Anif · עגלות בהשאלה חינם · מתחת ל-4 חינם!</p><button class="tl-attr-link" onclick="viewAttraction('a5')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארמון הלבורן ⛲</h4><p>Fürstenweg 37 · סיור מזרקות 50 דק' · ~€16.50 מבוגר</p><button class="tl-attr-link" onclick="viewAttraction('a6')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">13:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥗 צהריים ב-Anif</h4><p>מסעדה מקומית · ליד הארמון</p><button class="tl-attr-link" onclick="viewRestaurant('r5')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=restaurant+Anif+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
         <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-body"><h4>מנוחה במלון 😴</h4><p><span class="brosh-only">שינה לרומי</span><span class="aloni-only">שינה לעמרי</span></p></div></div>
-        <div class="tl-item"><div class="tl-time">17:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גני מירבל 🌸</h4><p>חינם · מגרש ילדים ענק + מבצר עץ</p><button class="tl-attr-link" onclick="viewAttraction('a8')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">19:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב במלון 🍽️</h4><p>כלול בחבילה · Grünauerhof</p><button class="tl-attr-link" onclick="viewRestaurant('r7')">↗ מסעדה</button><a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">17:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גני מירבל 🌸</h4><p>חינם · מגרש ילדים ענק + מבצר עץ</p><button class="tl-attr-link" onclick="viewAttraction('a8')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">19:30</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב במלון 🍽️</h4><p>כלול בחבילה · Grünauerhof</p><button class="tl-attr-link" onclick="viewRestaurant('r7')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
       <div class="action-row">
         <a href="https://waze.com/ul?q=Salzburg+Zoo+Hellbrunn&navigate=yes" class="btn btn-waze btn-sm">🗺️ גן חיות</a>
@@ -1084,10 +1095,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="day-header"><div><div class="day-name">🏰 זלצבורג</div><div class="day-theme">עיר עתיקה + מבצר + בירה</div></div><div class="day-badge">17.8<br>ב'</div></div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 ארוחת בוקר במלון</h4><p>כלול בחבילה · Grünauerhof</p></div></div>
-        <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>מבצר הוהנזלצבורג 🏰</h4><p>Mönchsberg 34 · רכבל מ-Festungsgasse</p><button class="tl-attr-link" onclick="viewAttraction('a7')">↗ פרטים</button></div></div>
-        <div class="tl-item"><div class="tl-time">12:00</div><div class="tl-dot"></div><div class="tl-body"><h4>☕ Café Tomaselli + עיר עתיקה</h4><p>Alter Markt 9 · שטרודל + קפה אוסטרי (מ-1705) · צהריים!</p><button class="tl-attr-link" onclick="viewAttraction('a9')">↗ פרטים</button><button class="tl-attr-link" onclick="viewRestaurant('r1')">↗ מסעדה</button><a href="https://waze.com/ul?q=Café+Tomaselli+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>מבצר הוהנזלצבורג 🏰</h4><p>Mönchsberg 34 · רכבל מ-Festungsgasse</p><button class="tl-attr-link" onclick="viewAttraction('a7')"><i data-feather="external-link"></i> פרטים</button></div></div>
+        <div class="tl-item"><div class="tl-time">12:00</div><div class="tl-dot"></div><div class="tl-body"><h4>☕ Café Tomaselli + עיר עתיקה</h4><p>Alter Markt 9 · שטרודל + קפה אוסטרי (מ-1705) · צהריים!</p><button class="tl-attr-link" onclick="viewAttraction('a9')"><i data-feather="external-link"></i> פרטים</button><button class="tl-attr-link" onclick="viewRestaurant('r1')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Café+Tomaselli+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
         <div class="tl-item"><div class="tl-time">14:30</div><div class="tl-dot"></div><div class="tl-body"><h4>גני מירבל 🌸</h4><p>חינם לחלוטין</p></div></div>
-        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>Augustinerbräu 🍺</h4><p>Augustinergasse 4 · מנזר בירה מ-1621 · לשתי המשפחות!</p><button class="tl-attr-link" onclick="viewAttraction('a10')">↗ פרטים</button><button class="tl-attr-link" onclick="viewRestaurant('r2')">↗ מסעדה</button><a href="https://waze.com/ul?q=Augustinerbräu+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank">🗺️ Waze</a></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>Augustinerbräu 🍺</h4><p>Augustinergasse 4 · מנזר בירה מ-1621 · לשתי המשפחות!</p><button class="tl-attr-link" onclick="viewAttraction('a10')"><i data-feather="external-link"></i> פרטים</button><button class="tl-attr-link" onclick="viewRestaurant('r2')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Augustinerbräu+Salzburg&navigate=yes" class="tl-attr-link" style="background:#07c9eb;color:white" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
       <div class="action-row">
         <a href="https://waze.com/ul?q=Festung+Hohensalzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ מבצר</a>
@@ -1109,7 +1120,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <div class="tl-item"><div class="tl-time">12:10</div><div class="tl-dot"></div><div class="tl-body"><h4>המראה ✈️ 6H 248</h4><p><span class="brosh-only">ישראייר · נטע 2F, עומר 2E, ליה 2D</span><span class="aloni-only">ישראייר · 6H 248</span></p></div></div>
         <div class="tl-item"><div class="tl-time">16:45</div><div class="tl-dot"></div><div class="tl-body"><h4>נחיתה תל אביב 🏠</h4><p>ברוכים השבים!</p></div></div>
       </div>
-      <div class="action-row"><a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze לשדה</a></div>
+      <div class="action-row"><a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze לשדה</a></div>
     </div>
   </div>
 </div><!-- end panel-itinerary -->
@@ -1135,7 +1146,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="card-header" onclick="toggleCard('h1')"><span class="card-emoji">🌿</span><div class="card-title"><h3>Ferienwelt Kesselgrub</h3><p>Altenmarkt im Pongau · ★★★★</p></div><span class="chevron">▼</span></div>
     <div class="card-body">
       <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1000&q=80&auto=format&fit=crop" class="hotel-img" alt="Ferienwelt Kesselgrub" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-      <a href="https://www.booking.com/searchresults.html?ss=Ferienwelt+Kesselgrub+Altenmarkt" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px">🏨 צפייה ב-Booking</a>
+      <a href="https://www.booking.com/searchresults.html?ss=Ferienwelt+Kesselgrub+Altenmarkt" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px"><i data-feather="external-link"></i> צפייה ב-Booking</a>
       <div class="info-row"><span class="lbl">כתובת</span><span class="val">Lackengasse 86, 5541 Altenmarkt</span></div>
       <div class="info-row"><span class="lbl">טלפון</span><span class="val"><a href="tel:+43645252323">+43 6452-5232</a></span></div>
       <div class="info-row"><span class="lbl">צ'ק-אין / אאוט</span><span class="val">11.8 / 15.8 (עד 11:00)</span></div>
@@ -1149,8 +1160,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <div class="amenity">🐴 פוני + גן חיות קטן</div><div class="amenity">🤸 טרמפולינה</div>
       </div>
       <div class="action-row">
-        <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze</a>
-        <a href="https://www.kesselgrub.at/en/" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>
+        <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze</a>
+        <a href="https://www.kesselgrub.at/en/" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>
         <a href="https://www.booking.com/hotel/at/aktiv-und-wohlfuhlhotel-kesselgrub.he.html" class="btn btn-booking btn-sm" target="_blank">Booking</a>
       </div>
     </div>
@@ -1160,7 +1171,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="card-header" onclick="toggleCard('h2')"><span class="card-emoji">🏙️</span><div class="card-title"><h3>Hotel Grünauerhof</h3><p>Wals bei Salzburg · ★★★★</p></div><span class="chevron">▼</span></div>
     <div class="card-body">
       <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1000&q=80&auto=format&fit=crop" class="hotel-img" alt="Hotel Grünauerhof" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-      <a href="https://www.booking.com/searchresults.html?ss=Hotel+Gr%C3%BCnauerhof+Wals" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px">🏨 צפייה ב-Booking</a>
+      <a href="https://www.booking.com/searchresults.html?ss=Hotel+Gr%C3%BCnauerhof+Wals" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px"><i data-feather="external-link"></i> צפייה ב-Booking</a>
       <div class="info-row"><span class="lbl">כתובת</span><span class="val">Grünauerstraße 90, 5071 Wals</span></div>
       <div class="info-row"><span class="lbl">טלפון</span><span class="val"><a href="tel:+43662850464">+43 662 850464</a></span></div>
       <div class="info-row"><span class="lbl">אימייל</span><span class="val"><a href="mailto:info@gruenauerhof.at">info@gruenauerhof.at</a></span></div>
@@ -1172,14 +1183,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <div class="amenity">🚗 חניה חינם</div><div class="amenity">📍 10 דק' משדה התעופה</div>
       </div>
       <div class="action-row">
-        <a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze btn-sm">🗺️ Waze</a>
-        <a href="https://www.gruenauerhof.at/en.html" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>
+        <a href="https://waze.com/ul?q=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze</a>
+        <a href="https://www.gruenauerhof.at/en.html" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>
         <a href="https://www.booking.com/hotel/at/grunauerhof.he.html" class="btn btn-booking btn-sm" target="_blank">Booking</a>
       </div>
     </div>
   </div>
   <div class="card"><div class="card-header" style="cursor:default"><span class="card-emoji">🚗</span><div class="card-title"><h3>נסיעה בין המלונות · 15.8</h3><p>~70 ק"מ · ~1 שעה · A10 צפונה</p></div></div>
-    <div class="card-body" style="display:block"><div class="action-row"><a href="https://waze.com/ul?from=Ferienwelt+Kesselgrub+Altenmarkt&to=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze">🗺️ Waze לנסיעה המלאה</a></div></div>
+    <div class="card-body" style="display:block"><div class="action-row"><a href="https://waze.com/ul?from=Ferienwelt+Kesselgrub+Altenmarkt&to=Hotel+Grunauerhof+Wals+Salzburg&navigate=yes" class="btn btn-waze"><i data-feather="navigation"></i> Waze לנסיעה המלאה</a></div></div>
   </div>
 </div><!-- end hotels -->
 
@@ -1401,14 +1412,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <div class="modal-overlay" id="event-modal" onclick="closeModalOnBg(event,'event-modal')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="event-modal-title">➕ הוסף אירוע</div>
+    <div class="modal-title" id="event-modal-title">הוסף אירוע</div>
     <input type="hidden" id="event-edit-iid">
-    <input type="hidden" id="event-day">
+    <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
     <div class="form-group"><label>שעה</label><input type="text" class="form-input" id="event-time" placeholder="לדוגמה: 16:30" style="direction:ltr"></div>
     <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
-    <div class="form-group"><label>פרטים</label><textarea class="form-input" id="event-desc" rows="2" placeholder="מיקום, הערות..."></textarea></div>
+    <div class="form-group"><label>מיקום</label>
+      <div style="display:flex;gap:8px">
+        <input type="text" class="form-input" id="event-location" placeholder="שם מקום / כתובת..." style="flex:1">
+        <button class="btn btn-outline btn-sm" type="button" onclick="searchEventLocation()" aria-label="חפש במפות" title="חפש במפות"><i data-feather="search"></i></button>
+      </div>
+    </div>
+    <div class="form-group"><label>הערות</label><textarea class="form-input" id="event-desc" rows="2" placeholder="הערות..."></textarea></div>
     <div class="action-row">
-      <button class="btn btn-primary" onclick="saveEvent()">💾 שמור</button>
+      <button class="btn btn-primary" onclick="saveEvent()"><i data-feather="save"></i> שמור</button>
       <button class="btn btn-ghost" onclick="closeModal('event-modal')">ביטול</button>
     </div>
   </div>
@@ -1746,8 +1763,8 @@ function renderAttrGroup(containerId,items,isCustom){
 function attrCardHTML(a,isCustom){
   const imgSrc=a.img||'';
   const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}" src="${imgSrc}" class="attr-img" alt="${a.name}" style="${imgSrc?'':'display:none'}" onload="this.style.display='block'" onerror="document.getElementById('attr-img-wrap-${a.id}').style.display='none'"></div>`;
-  const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank">🗺️ Waze</a>`:'';
-  const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>`:'';
+  const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
+  const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
   const bookBtn=a.booking?`<a href="${a.booking}" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן</a>`:'';
   const menuBtn=a.menu?`<a href="${a.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
   const editBtn=isCustom?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
@@ -1796,8 +1813,8 @@ function toggleAttr(id){
 function restCardHTML(r){
   const includedBadge=r.hotel?'<span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700;margin-right:4px">✓ כלול</span>':'';
   const dayBadge=r.days?`<span class="attr-duration" style="font-size:11px;padding:2px 8px">📅 ${r.days}</span>`:'';
-  const wazeBtn=r.waze?`<a href="${r.waze}" class="btn btn-waze btn-sm" target="_blank">🗺️ Waze</a>`:'';
-  const webBtn=r.website?`<a href="${r.website}" class="btn btn-outline btn-sm" target="_blank">🌐 אתר</a>`:'';
+  const wazeBtn=r.waze?`<a href="${r.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
+  const webBtn=r.website?`<a href="${r.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
   const menuBtn=r.menu?`<a href="${r.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
   const tipsHTML=r.tips?.length?`<div class="attr-section-title">כדאי לדעת</div><ul class="attr-tips">${r.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`:'';
   return `<div class="attr-card" id="attr-card-${r.id}">
@@ -2009,10 +2026,10 @@ async function fetchWeather(){
         <div>
           <div class="cdw-avg-title">ממוצע אוגוסט · זלצבורג</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-            <span style="background:var(--accent-light);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">☀️ מקס' ~25°C</span>
-            <span style="background:#e8f4fd;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">🌙 מינ' ~15°C</span>
-            <span style="background:#f0f0ff;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">🌧️ ~12 ימי גשם</span>
-            <span style="background:#f0fff4;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600">⛰️ הרים: 15–18°C</span>
+            <span class="wx-chip">☀️ מקס' ~25°C</span>
+            <span class="wx-chip">🌙 מינ' ~15°C</span>
+            <span class="wx-chip">🌧️ ~12 ימי גשם</span>
+            <span class="wx-chip">⛰️ הרים: 15–18°C</span>
           </div>
           <p style="font-size:11px;color:var(--muted);margin-top:10px">תחזית חיה תופיע 2 שב' לפני הטיסה</p>
         </div>
@@ -2199,45 +2216,74 @@ function setEditMode(on){
 function toggleEditMode(){closeModal('user-modal');setEditMode(!_editMode);}
 
 // ═══════════════ ADD / EDIT ITINERARY EVENT ═══════════════
+function fillDayOptions(sel){
+  const s=document.getElementById('event-day');if(!s)return;
+  s.innerHTML=Object.entries(DAY_LABELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  if(sel)s.value=sel;
+}
+function dayOfItem(iid){const el=document.querySelector(`[data-iid="${iid}"]`);const c=el&&el.closest('.card[id^="d"]');return c?c.id:'';}
+function locButtons(loc){
+  if(!loc)return '';
+  const q=encodeURIComponent(loc+' אוסטריה');
+  return `<div class="tl-loc-links">`+
+    `<a class="tl-attr-link" target="_blank" rel="noopener" href="https://waze.com/ul?q=${q}&navigate=yes"><i data-feather="navigation"></i> Waze</a>`+
+    `<a class="tl-attr-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}"><i data-feather="map-pin"></i> מפה</a>`+
+  `</div>`;
+}
+function searchEventLocation(){
+  const q=(document.getElementById('event-location').value.trim()||document.getElementById('event-title').value.trim());
+  if(!q){alert('הקלידו שם מקום קודם');return;}
+  window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' אוסטריה'),'_blank');
+}
 function openAddEvent(dayId){
-  document.getElementById('event-modal-title').textContent='➕ הוסף אירוע ל'+(DAY_LABELS[dayId]||'');
+  document.getElementById('event-modal-title').textContent='הוסף אירוע';
   document.getElementById('event-edit-iid').value='';
-  document.getElementById('event-day').value=dayId;
+  fillDayOptions(dayId||window.currentFocusDay||'d1');
   document.getElementById('event-time').value='';
   document.getElementById('event-title').value='';
+  document.getElementById('event-location').value='';
   document.getElementById('event-desc').value='';
   openModal('event-modal');
+  if(window.feather)feather.replace();
 }
 function openEditEvent(iid){
   const item=document.querySelector(`[data-iid="${iid}"]`);if(!item)return;
-  document.getElementById('event-modal-title').textContent='✏️ ערוך אירוע';
+  document.getElementById('event-modal-title').textContent='ערוך אירוע';
   document.getElementById('event-edit-iid').value=iid;
-  document.getElementById('event-day').value='';
+  fillDayOptions(dayOfItem(iid));
   document.getElementById('event-time').value=item.querySelector('.tl-time')?.textContent.trim()||'';
-  document.getElementById('event-title').value=item.querySelector('h4')?.textContent.trim()||'';
+  const h=item.querySelector('h4');
+  document.getElementById('event-title').value=h?h.textContent.replace('נוסף','').trim():'';
+  const m=getItinMods();let loc='';
+  if(iid.indexOf('add-')===0){const a=(m.added||[]).find(x=>('add-'+x.id)===iid);loc=(a&&a.location)||'';}
+  else {loc=(m.edits[iid]&&m.edits[iid].location)||'';}
+  document.getElementById('event-location').value=loc;
   const p=item.querySelector('.tl-body p');
   document.getElementById('event-desc').value=p?p.textContent.trim():'';
   openModal('event-modal');
+  if(window.feather)feather.replace();
 }
 function saveEvent(){
   const title=document.getElementById('event-title').value.trim();
   if(!title){alert('נא להזין כותרת');return;}
   const time=document.getElementById('event-time').value.trim();
   const desc=document.getElementById('event-desc').value.trim();
+  const location=document.getElementById('event-location').value.trim();
+  const day=document.getElementById('event-day').value;
   const iid=document.getElementById('event-edit-iid').value;
   const m=getItinMods();
   if(iid){
-    if(iid.startsWith('add-')){
+    if(iid.indexOf('add-')===0){
       const a=(m.added||[]).find(x=>('add-'+x.id)===iid);
-      if(a){a.time=time;a.title=title;a.desc=desc;}
+      if(a){a.time=time;a.title=title;a.desc=desc;a.location=location;a.day=day;}
     } else {
       m.edits=m.edits||{};
-      m.edits[iid]={time,title,desc};
+      m.edits[iid]={time,title,desc,location};
+      if(day&&day!==dayOfItem(iid))m.moved[iid]=day;
     }
   } else {
-    const dayId=document.getElementById('event-day').value;
     m.added=m.added||[];
-    m.added.push({id:'e'+Date.now(),day:dayId,time,title,desc,addedBy:currentUser?.name||''});
+    m.added.push({id:'e'+Date.now(),day,time,title,desc,location,addedBy:currentUser?.name||''});
   }
   saveItinMods(m);
   closeModal('event-modal');
@@ -2424,8 +2470,10 @@ function initItinIds(){
     const cardBody=card.querySelector('.card-body');
     if(cardBody&&!cardBody.querySelector('.day-add-event')){
       const addBtn=document.createElement('button');
-      addBtn.className='btn btn-outline btn-sm day-add-event';
-      addBtn.textContent='＋ הוסף אירוע ליום זה';
+      addBtn.className='day-add-mini';
+      addBtn.innerHTML='<i data-feather="plus"></i>';
+      addBtn.setAttribute('aria-label','הוסף אירוע ליום זה');
+      addBtn.setAttribute('title','הוסף אירוע ליום זה');
       addBtn.setAttribute('onclick',`openAddEvent('${card.id}')`);
       const tl=cardBody.querySelector('.timeline');
       if(tl)tl.insertAdjacentElement('afterend',addBtn);
@@ -2435,7 +2483,7 @@ function initItinIds(){
 }
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
 function addEventMenuBtn(item,iid){
-  if(item.classList.contains('tl-nap')||item.querySelector('.tl-menu-btn'))return;
+  if(item.querySelector('.tl-menu-btn'))return;
   const btn=document.createElement('button');
   btn.className='tl-menu-btn';btn.setAttribute('aria-label','אפשרויות אירוע');
   btn.innerHTML='<i data-feather="more-horizontal"></i>';
@@ -2446,11 +2494,13 @@ function addEventMenuBtn(item,iid){
 function ensureNapEvent(card){
   const tl=card.querySelector('.timeline');if(!tl)return;
   if(tl.querySelector('.tl-nap'))return;
+  if(getItinMods().deleted.indexOf('nap-'+card.id)>=0)return;
   const nap=document.createElement('div');
   nap.className='tl-item tl-nap';
   nap.dataset.iid='nap-'+card.id;
   nap.innerHTML='<div class="tl-time">13:30</div><div class="tl-dot"></div>'+
-    '<div class="tl-body"><h4>😴 מנוחה ושנת צהריים</h4><p>הפסקת מנוחה לילדים — חובה 🧸</p></div>';
+    '<div class="tl-body"><h4>😴 מנוחה ושנת צהריים</h4><p>הפסקת מנוחה לילדים 🧸</p></div>';
+  addEventMenuBtn(nap,nap.dataset.iid);
   // insert before the first event at/after 13:00, else append
   const items=[...tl.querySelectorAll('.tl-item')];
   let anchor=null;
@@ -2467,6 +2517,7 @@ function buildAddedItem(a){
   el.innerHTML=`<div class="tl-time">${escapeHtml(a.time||'')}</div><div class="tl-dot"></div>`+
     `<div class="tl-body"><h4><span class="tl-added-tag">נוסף</span>${escapeHtml(a.title||'')}</h4>`+
     `${a.desc?`<p>${escapeHtml(a.desc)}</p>`:'<p></p>'}`+
+    locButtons(a.location)+
     `<button class="tl-menu-btn" aria-label="אפשרויות אירוע" onclick="event.stopPropagation();openEventMenu('${iid}',this)"><i data-feather="more-horizontal"></i></button>`+
     `</div>`;
   return el;
@@ -2486,7 +2537,8 @@ function applyItinMods(){
     const t=el.querySelector('.tl-time');if(t&&e.time!=null)t.textContent=e.time;
     const h=el.querySelector('h4');if(h&&e.title!=null)h.textContent=e.title;
     let p=el.querySelector('.tl-body p');
-    if(e.desc!=null){if(!p){p=document.createElement('p');el.querySelector('.tl-body').insertBefore(p,el.querySelector('.tl-edit-ctrl'));}p.textContent=e.desc;}
+    if(e.desc!=null){if(!p){p=document.createElement('p');el.querySelector('.tl-body').appendChild(p);}p.textContent=e.desc;}
+    if(e.location){const html=locButtons(e.location);let lk=el.querySelector('.tl-loc-links');if(lk)lk.outerHTML=html;else el.querySelector('.tl-body').insertAdjacentHTML('beforeend',html);}
   });
   // 3. apply moves
   Object.entries(m.moved).forEach(([iid,dayId])=>{
@@ -2581,7 +2633,7 @@ function openEventMenu(iid,anchor){
     `<button class="ci" onclick="closeEventMenu();openEditEvent('${iid}')">ערוך<i data-feather="edit-2"></i></button>`+
     `<button class="ci" onclick="reorderItinItem('${iid}',-1)">הזז למעלה<i data-feather="arrow-up"></i></button>`+
     `<button class="ci" onclick="reorderItinItem('${iid}',1)">הזז למטה<i data-feather="arrow-down"></i></button>`+
-    `<div class="ctx-lbl">העבר ליום</div><div class="ctx-days">${days}</div>`+
+    (iid.indexOf('nap-')===0?'':`<div class="ctx-lbl">העבר ליום</div><div class="ctx-days">${days}</div>`)+
     `<button class="ci del" onclick="deleteItinItem('${iid}');closeEventMenu()">מחק<i data-feather="trash-2"></i></button>`;
   if(window.feather)feather.replace();
   document.getElementById('itin-ctx-backdrop').classList.add('open');
@@ -2620,7 +2672,7 @@ function persistItinOrder(dayId){
   let t,target;
   document.addEventListener('touchstart',e=>{
     const it=e.target.closest('#panel-itinerary .tl-item');
-    if(!it||it.classList.contains('tl-nap')||!it.dataset.iid)return;
+    if(!it||!it.dataset.iid)return;
     target=it;t=setTimeout(()=>{if(target)openEventMenu(target.dataset.iid,target);},480);
   },{passive:true});
   document.addEventListener('touchmove',()=>clearTimeout(t),{passive:true});
@@ -2660,7 +2712,7 @@ function focusCurrentDay(scroll){
   const start=new Date(2026,7,11);start.setHours(0,0,0,0); // 11 Aug 2026
   const idx=Math.round((today-start)/86400000);
   const inTrip=idx>=0&&idx<=7;
-  const focus=idx<0?'d1':(idx>7?'d8':days[idx]);
+  const focus=idx<0?'d1':(idx>7?'d8':days[idx]);window.currentFocusDay=focus;
   document.querySelectorAll('.card[id^="d"]').forEach(c=>c.classList.remove('open'));
   document.querySelectorAll('.day-today-badge').forEach(b=>b.remove());
   const fc=document.getElementById(focus);if(!fc)return;
