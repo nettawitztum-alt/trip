@@ -779,9 +779,36 @@ body{background:
 #edit-banner{background:rgba(20,42,32,.95);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #edit-banner button{background:var(--accent);color:#072414}
 .weather-skeleton{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.05) 75%);background-size:200% 100%}
-.day-add-event{border-color:rgba(124,240,166,.4)!important;color:var(--accent)}
+.day-add-event{display:flex!important;border-color:rgba(124,240,166,.4)!important;color:var(--accent)}
 .amenity{background:rgba(255,255,255,.06)}
 .tl-del-btn{background:rgba(255,128,121,.14);border-color:rgba(255,128,121,.4);color:#ffb3ae}
+
+/* ---- itinerary: always-on editing via ⋯ context menu (no edit mode) ---- */
+.tl-edit-ctrl{display:none!important}
+.tl-item{position:relative}
+.tl-menu-btn{position:absolute;top:6px;left:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.tl-menu-btn:active{background:rgba(255,255,255,.14)}
+.tl-menu-btn svg.feather{width:16px;height:16px;stroke:currentColor}
+#itin-ctx-backdrop{position:fixed;inset:0;z-index:300;display:none}
+#itin-ctx-backdrop.open{display:block}
+#itin-ctx{position:fixed;z-index:301;display:none;min-width:210px;border-radius:16px;overflow:hidden;background:rgba(28,52,42,.99);border:1px solid var(--glass-brd);box-shadow:0 20px 44px rgba(0,0,0,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+#itin-ctx.open{display:block;animation:fadeUp .15s ease}
+#itin-ctx .ci{display:flex;align-items:center;gap:10px;padding:13px 15px;font-size:14.5px;font-weight:500;color:#fff;cursor:pointer;width:100%;background:none;border:none;font-family:var(--gs);text-align:right}
+#itin-ctx .ci+.ci,#itin-ctx .ctx-lbl{border-top:1px solid rgba(255,255,255,.08)}
+#itin-ctx .ci.del{color:#ff9d94}
+#itin-ctx .ci:active{background:rgba(255,255,255,.06)}
+#itin-ctx .ci svg.feather{width:17px;height:17px;margin-right:auto;stroke:currentColor}
+#itin-ctx .ctx-lbl{font-size:11px;color:var(--muted);padding:9px 14px 4px}
+#itin-ctx .ctx-days{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 12px}
+#itin-ctx .dchip{font-size:12px;font-weight:600;padding:7px 11px;border-radius:999px;background:rgba(124,240,166,.14);color:var(--accent);border:none;cursor:pointer;font-family:var(--gs)}
+/* mandatory midday nap row */
+.tl-nap .tl-dot::before{background:#ffd97a;box-shadow:0 0 0 4px rgba(255,217,122,.16)}
+.tl-nap .tl-body h4{color:#ffe4a3}
+.tl-nap{background:rgba(255,217,122,.06);border-radius:14px;padding:6px 8px}
+
+/* ---- accessibility: focus rings, contrast, tap targets ---- */
+:root{--muted:rgba(255,255,255,.68)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tab-btn:focus-visible,.more-tile:focus-visible,.card-header:focus-visible,.tl-menu-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
 
 /* ---- bottom nav grouping: 4 core + עוד (mobile/tablet), full sidebar (desktop) ---- */
 .nav-more{display:none}
@@ -874,7 +901,7 @@ body{background:
 <header class="app-header">
   <div class="hero-top-bar">
     <div class="hero-chips">
-      <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי">👤</button>
+      <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי" aria-label="פרופיל והגדרות">👤</button>
     </div>
     <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
   </div>
@@ -911,11 +938,8 @@ body{background:
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
   <div class="itin-edit-bar">
-    <span class="edit-label" id="itin-edit-label">ניתן לערוך ימים – להזיז ולמחוק אירועים</span>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:#fee2e2;color:#dc2626;border:none">↺ איפוס שינויים</button>
-      <button class="btn btn-sm btn-primary" id="itin-edit-btn" onclick="toggleItinEdit()">✏️ ערוך לו"ז</button>
-    </div>
+    <span class="edit-label" id="itin-edit-label">לחיצה ארוכה על אירוע ⋯ לעריכה · ＋ הוסף אירוע בכל יום</span>
+    <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ איפוס</button>
   </div>
   <div id="weather-container"><div class="weather-skeleton"></div><div class="weather-skeleton" style="height:40px;margin-top:6px;opacity:.6"></div></div>
 
@@ -1272,7 +1296,7 @@ body{background:
   <button class="tab-btn nav-extra" onclick="switchTab('flights')" id="tab-flights"><i data-feather="send"></i><span class="tl">טיסות</span></button>
   <button class="tab-btn nav-extra" onclick="switchTab('restaurants')" id="tab-restaurants"><i data-feather="coffee"></i><span class="tl">מסעדות</span></button>
   <button class="tab-btn nav-extra" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
-  <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')"><i data-feather="grid"></i><span class="tl">עוד</span></button>
+  <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')" aria-label="תפריט מלא"><i data-feather="grid"></i><span class="tl">עוד</span></button>
 </nav>
 
 <!-- ═══ MORE MENU SHEET ═══ -->
@@ -2361,7 +2385,7 @@ const DAY_LABELS = {d1:'יום 1 (11.8)',d2:'יום 2 (12.8)',d3:'יום 3 (13.8
 
 function getItinMods(){
   const m=JSON.parse(localStorage.getItem('austria26_itin')||'{}');
-  m.deleted=m.deleted||[];m.moved=m.moved||{};m.edits=m.edits||{};m.added=m.added||[];
+  m.deleted=m.deleted||[];m.moved=m.moved||{};m.edits=m.edits||{};m.added=m.added||[];m.order=m.order||{};
   return m;
 }
 function saveItinMods(m){localStorage.setItem('austria26_itin',JSON.stringify(m));}
@@ -2388,23 +2412,13 @@ function reloadItinerary(){
 function initItinIds(){
   document.querySelectorAll('.card[id^="d"]').forEach(card=>{
     card.querySelectorAll('.tl-item').forEach((item,i)=>{
-      if(item.querySelector('.tl-edit-ctrl'))return; // already initialized
+      if(item.dataset.iid)return; // already initialized
       const iid=card.id+'-'+i;
       item.dataset.iid=iid;
-      // inject control bar
-      const title=item.querySelector('h4')?.textContent||'';
-      const opts=Object.entries(DAY_LABELS).filter(([k])=>k!==card.id).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-      const ctrl=document.createElement('div');
-      ctrl.className='tl-edit-ctrl';
-      ctrl.innerHTML=
-        `<button class="tl-item-edit-btn" onclick="openEditEvent('${iid}')">✏️ ערוך</button>`+
-        `<select class="tl-move-select" onchange="moveItinItem('${iid}',this.value);this.value=''"><option value="" disabled selected>העבר ליום...</option>${opts}</select>`+
-        `<button class="tl-del-btn" onclick="deleteItinItem('${iid}')">מחק</button>`;
-      const body=item.querySelector('.tl-body');
-      if(body)body.appendChild(ctrl);
-      else item.appendChild(ctrl);
+      addEventMenuBtn(item,iid);
     });
-    // per-day "add event" button
+    ensureNapEvent(card);
+    // per-day "add event" button (always visible — no edit mode)
     const cardBody=card.querySelector('.card-body');
     if(cardBody&&!cardBody.querySelector('.day-add-event')){
       const addBtn=document.createElement('button');
@@ -2417,6 +2431,30 @@ function initItinIds(){
     }
   });
 }
+// inject the ⋯ menu button on an event row (skips the fixed nap row)
+function addEventMenuBtn(item,iid){
+  if(item.classList.contains('tl-nap')||item.querySelector('.tl-menu-btn'))return;
+  const btn=document.createElement('button');
+  btn.className='tl-menu-btn';btn.setAttribute('aria-label','אפשרויות אירוע');
+  btn.innerHTML='<i data-feather="more-horizontal"></i>';
+  btn.onclick=function(e){e.stopPropagation();openEventMenu(iid,btn);};
+  (item.querySelector('.tl-body')||item).appendChild(btn);
+}
+// mandatory midday rest / nap on every day
+function ensureNapEvent(card){
+  const tl=card.querySelector('.timeline');if(!tl)return;
+  if(tl.querySelector('.tl-nap'))return;
+  const nap=document.createElement('div');
+  nap.className='tl-item tl-nap';
+  nap.dataset.iid='nap-'+card.id;
+  nap.innerHTML='<div class="tl-time">13:30</div><div class="tl-dot"></div>'+
+    '<div class="tl-body"><h4>😴 מנוחה ושנת צהריים</h4><p>הפסקת מנוחה לילדים — חובה 🧸</p></div>';
+  // insert before the first event at/after 13:00, else append
+  const items=[...tl.querySelectorAll('.tl-item')];
+  let anchor=null;
+  for(const it of items){const t=(it.querySelector('.tl-time')?.textContent||'').trim();if(t&&t>='13:00'){anchor=it;break;}}
+  if(anchor)tl.insertBefore(nap,anchor);else tl.appendChild(nap);
+}
 
 function buildAddedItem(a){
   const iid='add-'+a.id;
@@ -2427,11 +2465,8 @@ function buildAddedItem(a){
   el.innerHTML=`<div class="tl-time">${escapeHtml(a.time||'')}</div><div class="tl-dot"></div>`+
     `<div class="tl-body"><h4><span class="tl-added-tag">נוסף</span>${escapeHtml(a.title||'')}</h4>`+
     `${a.desc?`<p>${escapeHtml(a.desc)}</p>`:'<p></p>'}`+
-    `<div class="tl-edit-ctrl">`+
-      `<button class="tl-item-edit-btn" onclick="openEditEvent('${iid}')">✏️ ערוך</button>`+
-      `<select class="tl-move-select" onchange="moveItinItem('${iid}',this.value);this.value=''"><option value="" disabled selected>העבר ליום...</option>${opts}</select>`+
-      `<button class="tl-del-btn" onclick="deleteItinItem('${iid}')">מחק</button>`+
-    `</div></div>`;
+    `<button class="tl-menu-btn" aria-label="אפשרויות אירוע" onclick="event.stopPropagation();openEventMenu('${iid}',this)"><i data-feather="more-horizontal"></i></button>`+
+    `</div>`;
   return el;
 }
 function applyItinMods(){
@@ -2462,8 +2497,13 @@ function applyItinMods(){
     const el=document.querySelector(`[data-iid="${iid}"]`);
     if(el)el.classList.add('tl-deleted');
   });
+  // 5. apply custom ordering (reorder within a day)
+  Object.entries(m.order||{}).forEach(([dayId,ids])=>{
+    const tl=document.querySelector(`#${dayId} .timeline`);if(!tl)return;
+    ids.forEach(id=>{const el=tl.querySelector(`[data-iid="${id}"]`);if(el)tl.appendChild(el);});
+  });
   // show reset button if there are any mods
-  const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0||Object.keys(m.edits||{}).length>0||(m.added||[]).length>0;
+  const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0||Object.keys(m.edits||{}).length>0||(m.added||[]).length>0||Object.keys(m.order||{}).length>0;
   const rb=document.getElementById('itin-reset-btn');if(rb)rb.style.display=hasChanges?'':'none';
 }
 
@@ -2528,6 +2568,63 @@ function resetItinMods(){
   location.reload();
 }
 
+// ── itinerary event context menu (always available, no edit mode) ──
+function openEventMenu(iid,anchor){
+  const item=document.querySelector(`[data-iid="${iid}"]`);if(!item)return;
+  const card=item.closest('.card[id^="d"]');const curDay=card?card.id:'';
+  const ctx=document.getElementById('itin-ctx');if(!ctx)return;
+  const days=Object.entries(DAY_LABELS).filter(([k])=>k!==curDay)
+    .map(([k,v])=>`<button class="dchip" onclick="moveItinItem('${iid}','${k}');closeEventMenu()">${v.split(' (')[0]}</button>`).join('');
+  ctx.innerHTML=
+    `<button class="ci" onclick="closeEventMenu();openEditEvent('${iid}')">ערוך<i data-feather="edit-2"></i></button>`+
+    `<button class="ci" onclick="reorderItinItem('${iid}',-1)">הזז למעלה<i data-feather="arrow-up"></i></button>`+
+    `<button class="ci" onclick="reorderItinItem('${iid}',1)">הזז למטה<i data-feather="arrow-down"></i></button>`+
+    `<div class="ctx-lbl">העבר ליום</div><div class="ctx-days">${days}</div>`+
+    `<button class="ci del" onclick="deleteItinItem('${iid}');closeEventMenu()">מחק<i data-feather="trash-2"></i></button>`;
+  if(window.feather)feather.replace();
+  document.getElementById('itin-ctx-backdrop').classList.add('open');
+  ctx.classList.add('open');ctx.style.visibility='hidden';
+  const r=(anchor||item).getBoundingClientRect();
+  requestAnimationFrame(()=>{
+    const cw=ctx.offsetWidth,ch=ctx.offsetHeight;
+    let top=r.bottom+6,left=r.left;
+    if(left+cw>window.innerWidth-8)left=window.innerWidth-cw-8;
+    if(left<8)left=8;
+    if(top+ch>window.innerHeight-8)top=Math.max(8,r.top-ch-6);
+    ctx.style.top=top+'px';ctx.style.left=left+'px';ctx.style.visibility='visible';
+  });
+}
+function closeEventMenu(){
+  const ctx=document.getElementById('itin-ctx');if(ctx)ctx.classList.remove('open');
+  const bd=document.getElementById('itin-ctx-backdrop');if(bd)bd.classList.remove('open');
+}
+function reorderItinItem(iid,dir){
+  const el=document.querySelector(`[data-iid="${iid}"]`);if(!el){closeEventMenu();return;}
+  let sib=el;
+  do{sib=dir<0?sib.previousElementSibling:sib.nextElementSibling;}
+  while(sib&&(!sib.classList.contains('tl-item')||sib.classList.contains('tl-deleted')));
+  if(sib){if(dir<0)el.parentNode.insertBefore(el,sib);else el.parentNode.insertBefore(sib,el);
+    const card=el.closest('.card[id^="d"]');if(card)persistItinOrder(card.id);}
+  closeEventMenu();
+}
+function persistItinOrder(dayId){
+  const tl=document.querySelector(`#${dayId} .timeline`);if(!tl)return;
+  const ids=[...tl.querySelectorAll('.tl-item')].map(x=>x.dataset.iid).filter(Boolean);
+  const m=getItinMods();m.order[dayId]=ids;saveItinMods(m);
+  const rb=document.getElementById('itin-reset-btn');if(rb)rb.style.display='';
+}
+// long-press anywhere on an event row opens the same menu
+(function(){
+  let t,target;
+  document.addEventListener('touchstart',e=>{
+    const it=e.target.closest('#panel-itinerary .tl-item');
+    if(!it||it.classList.contains('tl-nap')||!it.dataset.iid)return;
+    target=it;t=setTimeout(()=>{if(target)openEventMenu(target.dataset.iid,target);},480);
+  },{passive:true});
+  document.addEventListener('touchmove',()=>clearTimeout(t),{passive:true});
+  document.addEventListener('touchend',()=>clearTimeout(t),{passive:true});
+})();
+
 // ═══════════════ COUNTDOWN ═══════════════
 let _cdInterval=null;
 function startCountdown(){
@@ -2586,5 +2683,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 </script>
+<div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
+<div id="itin-ctx" role="menu"></div>
 </body>
 </html>
