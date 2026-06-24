@@ -783,6 +783,20 @@ body{background:
 .amenity{background:rgba(255,255,255,.06)}
 .tl-del-btn{background:rgba(255,128,121,.14);border-color:rgba(255,128,121,.4);color:#ffb3ae}
 
+/* ---- bottom nav grouping: 4 core + עוד (mobile/tablet), full sidebar (desktop) ---- */
+.nav-more{display:none}
+@media (max-width:1023px){
+  .tab-nav .nav-extra{display:none!important}
+  .tab-nav .nav-more{display:flex!important}
+}
+/* More menu sheet */
+.more-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px}
+.more-tile{display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px 8px;border-radius:16px;
+  background:var(--glass);border:1px solid var(--glass-brd);color:#fff;font-size:13px;font-weight:600;font-family:var(--gs);cursor:pointer;transition:transform .12s}
+.more-tile:active{transform:scale(.95)}
+.more-tile .mt-ic{width:46px;height:46px;border-radius:14px;background:rgba(124,240,166,.16);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.more-tile svg.feather{width:22px;height:22px;stroke:currentColor}
+
 /* ---- sync pill ---- */
 .sync-on{background:rgba(124,240,166,.16);color:var(--accent)}
 .sync-off{background:rgba(255,255,255,.1);color:var(--muted)}
@@ -1094,7 +1108,8 @@ body{background:
   <div class="card open" id="h1">
     <div class="card-header" onclick="toggleCard('h1')"><span class="card-emoji">🌿</span><div class="card-title"><h3>Ferienwelt Kesselgrub</h3><p>Altenmarkt im Pongau · ★★★★</p></div><span class="chevron">▼</span></div>
     <div class="card-body">
-      <img src="https://picsum.photos/seed/kess1/800/300" class="hotel-img" alt="">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1000&q=80&auto=format&fit=crop" class="hotel-img" alt="Ferienwelt Kesselgrub" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+      <a href="https://www.booking.com/searchresults.html?ss=Ferienwelt+Kesselgrub+Altenmarkt" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px">🏨 צפייה ב-Booking</a>
       <div class="info-row"><span class="lbl">כתובת</span><span class="val">Lackengasse 86, 5541 Altenmarkt</span></div>
       <div class="info-row"><span class="lbl">טלפון</span><span class="val"><a href="tel:+43645252323">+43 6452-5232</a></span></div>
       <div class="info-row"><span class="lbl">צ'ק-אין / אאוט</span><span class="val">11.8 / 15.8 (עד 11:00)</span></div>
@@ -1118,7 +1133,8 @@ body{background:
   <div class="card" id="h2">
     <div class="card-header" onclick="toggleCard('h2')"><span class="card-emoji">🏙️</span><div class="card-title"><h3>Hotel Grünauerhof</h3><p>Wals bei Salzburg · ★★★★</p></div><span class="chevron">▼</span></div>
     <div class="card-body">
-      <img src="https://picsum.photos/seed/gruen1/800/300" class="hotel-img" alt="">
+      <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1000&q=80&auto=format&fit=crop" class="hotel-img" alt="Hotel Grünauerhof" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+      <a href="https://www.booking.com/searchresults.html?ss=Hotel+Gr%C3%BCnauerhof+Wals" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px">🏨 צפייה ב-Booking</a>
       <div class="info-row"><span class="lbl">כתובת</span><span class="val">Grünauerstraße 90, 5071 Wals</span></div>
       <div class="info-row"><span class="lbl">טלפון</span><span class="val"><a href="tel:+43662850464">+43 662 850464</a></span></div>
       <div class="info-row"><span class="lbl">אימייל</span><span class="val"><a href="mailto:info@gruenauerhof.at">info@gruenauerhof.at</a></span></div>
@@ -1248,15 +1264,32 @@ body{background:
 
 <nav class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
-  <button class="tab-btn" onclick="switchTab('tasks')" id="tab-tasks"><i data-feather="check-square"></i><span class="tl">משימות</span></button>
-  <button class="tab-btn" onclick="switchTab('hotels')" id="tab-hotels"><i data-feather="home"></i><span class="tl">מלונות</span></button>
   <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="map-pin"></i><span class="tl">אטרקציות</span></button>
-  <button class="tab-btn" onclick="switchTab('bookings')" id="tab-bookings"><i data-feather="book-open"></i><span class="tl">הזמנות</span></button>
-  <button class="tab-btn" onclick="switchTab('flights')" id="tab-flights"><i data-feather="send"></i><span class="tl">טיסות</span></button>
   <button class="tab-btn" onclick="switchTab('packing')" id="tab-packing"><i data-feather="package"></i><span class="tl">ציוד</span></button>
-  <button class="tab-btn" onclick="switchTab('restaurants')" id="tab-restaurants"><i data-feather="coffee"></i><span class="tl">מסעדות</span></button>
-  <button class="tab-btn" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
+  <button class="tab-btn" onclick="switchTab('bookings')" id="tab-bookings"><i data-feather="clipboard"></i><span class="tl">הזמנות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('tasks')" id="tab-tasks"><i data-feather="check-square"></i><span class="tl">משימות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('hotels')" id="tab-hotels"><i data-feather="home"></i><span class="tl">מלונות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('flights')" id="tab-flights"><i data-feather="send"></i><span class="tl">טיסות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('restaurants')" id="tab-restaurants"><i data-feather="coffee"></i><span class="tl">מסעדות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
+  <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')"><i data-feather="grid"></i><span class="tl">עוד</span></button>
 </nav>
+
+<!-- ═══ MORE MENU SHEET ═══ -->
+<div class="modal-overlay" id="more-modal" onclick="closeModalOnBg(event,'more-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">תפריט</div>
+    <div class="more-grid">
+      <button class="more-tile" onclick="switchTab('tasks')"><span class="mt-ic"><i data-feather="check-square"></i></span><span>משימות</span></button>
+      <button class="more-tile" onclick="switchTab('hotels')"><span class="mt-ic"><i data-feather="home"></i></span><span>מלונות</span></button>
+      <button class="more-tile" onclick="switchTab('flights')"><span class="mt-ic"><i data-feather="send"></i></span><span>טיסות</span></button>
+      <button class="more-tile" onclick="switchTab('restaurants')"><span class="mt-ic"><i data-feather="coffee"></i></span><span>מסעדות</span></button>
+      <button class="more-tile" onclick="switchTab('tips')"><span class="mt-ic"><i data-feather="info"></i></span><span>טיפים</span></button>
+      <button class="more-tile" onclick="closeModal('more-modal');showUserModal()"><span class="mt-ic"><i data-feather="settings"></i></span><span>הגדרות</span></button>
+    </div>
+  </div>
+</div>
 
 </div><!-- end app-shell -->
 
@@ -1331,8 +1364,6 @@ body{background:
       </div>
     </div>
     <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
-    <button class="btn btn-primary btn-block" id="edit-mode-btn" onclick="toggleEditMode()">✏️ ערוך תוכן</button>
-    <p style="font-size:11px;color:var(--muted);margin:8px 0 16px">עריכת טקסט, הוספה ומחיקה של פריטים בכל החלקים</p>
     <button class="btn btn-ghost btn-sm" onclick="logout()">🚪 התנתק (נקה כל הנתונים המקומיים)</button>
     <div class="action-row" style="margin-top:8px">
       <button class="btn btn-ghost" onclick="closeModal('user-modal')">סגור</button>
@@ -1634,11 +1665,16 @@ function changeUserName(){
 }
 
 // ═══════════════ TAB + CARD ═══════════════
+const NAV_CORE=['itinerary','attractions','packing','bookings'];
 function switchTab(name){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  const t=document.getElementById('tab-'+name);if(t)t.classList.add('active');
   document.getElementById('panel-'+name).classList.add('active');
+  // highlight the "עוד" button when a non-core section is open
+  const mb=document.getElementById('more-btn');
+  if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
+  if(document.getElementById('more-modal'))closeModal('more-modal');
   const tc=document.querySelector('.tab-content');
   if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
 }
@@ -2260,7 +2296,7 @@ function updateSyncUI(){
   const pill=document.getElementById('user-sync-status');
   const btn=document.getElementById('user-google-btn');
   if(window._googleUser){
-    if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן · '+window._googleUser.email;}
+    if(pill){pill.className='sync-pill sync-on';pill.textContent='☁️ מסונכרן · '+(window._googleUser.email||window._googleUser.name||'מחובר');}
     if(btn)btn.style.display='none';
   } else if(window._syncUser){
     // automatic (anonymous) sync active — still offer Google for an avatar/identity
