@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>🇦🇹 אוסטריה אוגוסט 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 <style>
 :root {
@@ -427,6 +427,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .attr-toggle-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 12px 0;user-select:none}
 .attr-toggle-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);transition:transform .2s;padding:0;line-height:1}
 .attr-card.attr-open .attr-toggle-btn{transform:rotate(180deg)}
+.attr-toggle-btn svg.feather{width:18px;height:18px;stroke:currentColor;stroke-width:2.5}
 .attr-collapsible{max-height:0;overflow:hidden;transition:max-height .28s cubic-bezier(.4,0,.2,1)}
 .attr-card.attr-open .attr-collapsible{max-height:1000px}
 .attr-header-body{padding:10px 12px 2px}
@@ -824,10 +825,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* QA r4: center the per-day add (+) under the day */
 .day-add-mini{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;margin:0;flex-shrink:0}
 .chevron svg.feather{width:20px;height:20px;stroke:currentColor;stroke-width:2.5}
-#add-fab{position:fixed;z-index:90;bottom:calc(76px + env(safe-area-inset-bottom,0px));left:16px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#072414;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(124,240,166,.42);cursor:pointer;transition:transform .12s}
+#add-fab{position:fixed;z-index:90;bottom:calc(84px + env(safe-area-inset-bottom,0px));left:16px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#072414;border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(124,240,166,.42);cursor:pointer;transition:transform .12s}
 #add-fab:active{transform:scale(.92)}
 #add-fab svg.feather{width:26px;height:26px;stroke:currentColor;stroke-width:2.6}
 @media (min-width:1024px){#add-fab{bottom:32px;left:32px}}
+/* hero A: editorial "Salzburg 2026" fused into the photo */
+.hero-title{font-family:'Space Mono',var(--gs)!important;font-weight:700!important;font-size:clamp(42px,15vw,64px)!important;line-height:.9!important;letter-spacing:-1px!important;color:rgba(255,255,255,.95)!important;direction:ltr;text-align:right;text-shadow:0 3px 26px rgba(0,0,0,.5)!important}
+.hero-year{display:block;font-family:'Space Mono',monospace;font-weight:700;font-size:.42em;color:var(--green);letter-spacing:5px;margin-top:8px;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+@media (max-width:767px){.sticky-shell{height:42vh!important;min-height:300px!important;max-height:430px!important}}
+input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65)}
 .tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
 .tl-menu-btn{touch-action:none;cursor:grab}
 /* QA r5: selected bottom-nav tab uses GREEN icon/label (not dark-on-bright) */
@@ -971,8 +977,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <span id="header-wlabel" style="display:none"></span>
   <button id="user-chip" style="display:none" onclick="showUserModal()"></button>
   <div class="header-title">
-    <h1 class="hero-title">🇦🇹 אוסטריה 2026</h1>
-    <p class="hero-dates">11–18 אוגוסט · זלצבורג</p>
+    <h1 class="hero-title">Salzburg<span class="hero-year">2026</span></h1>
+    <p class="hero-dates">חופשת הקיץ של ברוש ואלוני · 11–18.8 🏔️</p>
   </div>
 </header>
 </div><!-- end sticky-shell -->
@@ -1463,7 +1469,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <input type="hidden" id="event-edit-iid">
     <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
     <div class="form-group"><label>בחר מאטרקציה (לא חובה)</label><select class="form-select" id="event-attr" onchange="pickAttraction()"></select></div>
-    <div class="form-group"><label>שעה</label><input type="text" class="form-input" id="event-time" placeholder="לדוגמה: 16:30" style="direction:ltr"></div>
+    <div class="form-group"><label>שעה</label><input type="time" class="form-input" id="event-time" style="direction:ltr"></div>
     <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
     <div class="form-group"><label>מיקום</label>
       <div style="display:flex;gap:8px">
@@ -1839,7 +1845,7 @@ function attrCardHTML(a,isCustom){
           <div class="attr-meta"><span>📍 ${a.location||''}</span>${urgentBadge}</div>
           <div>${kidsBadge}${durationBadge}</div>
         </div>
-        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${a.id}')">▼</button>
+        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${a.id}')"><i data-feather="chevron-down"></i></button>
       </div>
     </div>
     <div class="attr-collapsible" id="attr-body-${a.id}">
@@ -1874,7 +1880,7 @@ function restCardHTML(r){
           <div class="attr-meta"><span>📍 ${r.location}</span></div>
           <div>${includedBadge}${dayBadge}</div>
         </div>
-        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${r.id}')">▼</button>
+        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${r.id}')"><i data-feather="chevron-down"></i></button>
       </div>
     </div>
     <div class="attr-collapsible" id="attr-body-${r.id}">
@@ -2531,17 +2537,7 @@ function initItinIds(){
     });
     ensureNapEvent(card);
     // per-day "add event" button (always visible — no edit mode)
-    const header=card.querySelector('.card-header');
-    if(header&&!header.querySelector('.day-add-mini')){
-      const addBtn=document.createElement('button');
-      addBtn.className='day-add-mini';
-      addBtn.innerHTML='<i data-feather="plus"></i>';
-      addBtn.setAttribute('aria-label','הוסף אירוע ליום זה');
-      addBtn.setAttribute('title','הוסף אירוע');
-      addBtn.setAttribute('onclick',`event.stopPropagation();openAddEvent('${card.id}')`);
-      const chev=header.querySelector('.chevron');
-      if(chev)header.insertBefore(addBtn,chev);else header.appendChild(addBtn);
-    }
+    // single add entry point = the sticky FAB (no per-day +)
   });
 }
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
