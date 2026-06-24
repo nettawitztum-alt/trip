@@ -801,6 +801,8 @@ body{background:
 #itin-ctx .ctx-lbl{font-size:11px;color:var(--muted);padding:9px 14px 4px}
 #itin-ctx .ctx-days{display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 12px}
 #itin-ctx .dchip{font-size:12px;font-weight:600;padding:7px 11px;border-radius:999px;background:rgba(124,240,166,.14);color:var(--accent);border:none;cursor:pointer;font-family:var(--gs)}
+/* "today" badge on the focused day */
+.day-today-badge{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:#072414;background:var(--accent);border-radius:999px;padding:2px 9px;vertical-align:middle}
 /* mandatory midday nap row */
 .tl-nap .tl-dot::before{background:#ffd97a;box-shadow:0 0 0 4px rgba(255,217,122,.16)}
 .tl-nap .tl-body h4{color:#ffe4a3}
@@ -2650,6 +2652,25 @@ function startCountdown(){
   _cdInterval=setInterval(tick,1000);
 }
 
+// Open the day that matches today's real date (focused agenda view).
+// Before the trip → day 1; during → today's day (marked ● היום); after → last day.
+function focusCurrentDay(scroll){
+  const days=['d1','d2','d3','d4','d5','d6','d7','d8'];
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(2026,7,11);start.setHours(0,0,0,0); // 11 Aug 2026
+  const idx=Math.round((today-start)/86400000);
+  const inTrip=idx>=0&&idx<=7;
+  const focus=idx<0?'d1':(idx>7?'d8':days[idx]);
+  document.querySelectorAll('.card[id^="d"]').forEach(c=>c.classList.remove('open'));
+  document.querySelectorAll('.day-today-badge').forEach(b=>b.remove());
+  const fc=document.getElementById(focus);if(!fc)return;
+  fc.classList.add('open');
+  if(inTrip){
+    const sub=fc.querySelector('.card-title p');
+    if(sub){const b=document.createElement('span');b.className='day-today-badge';b.textContent='● היום';sub.prepend(b);}
+  }
+  if(scroll)setTimeout(()=>{try{fc.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}},180);
+}
 function initApp(){
   const panel=document.getElementById('panel-itinerary');
   if(_itinOriginalHTML===null&&panel)_itinOriginalHTML=panel.innerHTML; // snapshot pristine itinerary
@@ -2661,6 +2682,7 @@ function initApp(){
   fetchWeather();
   initItinIds();
   applyItinMods();
+  focusCurrentDay(true);
   initEditables();
   if(_db&&_auth&&_auth.currentUser)subscribeState();
   if(window.feather)feather.replace();
