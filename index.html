@@ -835,7 +835,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media (max-width:767px){.sticky-shell{height:42vh!important;min-height:300px!important;max-height:430px!important}}
 input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65)}
 .tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
-.tl-menu-btn{touch-action:none;cursor:grab}
+.tl-menu-btn{cursor:pointer}
+.tl-grip{position:absolute;top:50%;transform:translateY(-50%);left:40px;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);background:none;border:none;padding:0;cursor:grab;touch-action:none}
+.tl-grip svg.feather{width:18px;height:18px;stroke:currentColor}
 /* QA r5: selected bottom-nav tab uses GREEN icon/label (not dark-on-bright) */
 @media (max-width:1023px){
   .tab-nav .tab-btn.active{background:rgba(124,240,166,.16)!important;color:var(--green)!important;border:1px solid rgba(124,240,166,.40)}
@@ -863,7 +865,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 #day-focus .df-after .t{font-size:11px;font-weight:700;color:var(--green);min-width:40px}
 #day-focus .df-mut{color:rgba(255,255,255,.5);font-size:11px}
 /* QA r3: reserve a left gutter so the ⋯ menu never overlaps the text */
-.tl-body{padding-left:40px}
+.tl-body{padding-left:80px}
 .tl-menu-btn{top:2px}
 /* QA r3: slightly tighter page padding */
 @media (max-width:767px){.tab-content{padding:16px 12px 88px}}
@@ -2543,11 +2545,16 @@ function initItinIds(){
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
 function addEventMenuBtn(item,iid){
   if(item.querySelector('.tl-menu-btn'))return;
+  const body=item.querySelector('.tl-body')||item;
+  const grip=document.createElement('button');
+  grip.className='tl-grip';grip.setAttribute('aria-label','גרירה לשינוי סדר');grip.setAttribute('title','גרור לשינוי הסדר');
+  grip.innerHTML='<i data-feather="menu"></i>';
+  body.appendChild(grip);
   const btn=document.createElement('button');
   btn.className='tl-menu-btn';btn.setAttribute('aria-label','אפשרויות אירוע');
   btn.innerHTML='<i data-feather="more-horizontal"></i>';
   btn.onclick=function(e){e.stopPropagation();openEventMenu(iid,btn);};
-  (item.querySelector('.tl-body')||item).appendChild(btn);
+  body.appendChild(btn);
 }
 // mandatory midday rest / nap on every day
 function ensureNapEvent(card){
@@ -2577,6 +2584,7 @@ function buildAddedItem(a){
     `<div class="tl-body"><h4><span class="tl-added-tag">נוסף</span>${escapeHtml(a.title||'')}</h4>`+
     `${a.desc?`<p>${escapeHtml(a.desc)}</p>`:'<p></p>'}`+
     locButtons(a.location)+
+    `<button class="tl-grip" aria-label="גרירה לשינוי סדר" title="גרור לשינוי הסדר"><i data-feather="menu"></i></button>`+
     `<button class="tl-menu-btn" aria-label="אפשרויות אירוע" onclick="event.stopPropagation();openEventMenu('${iid}',this)"><i data-feather="more-horizontal"></i></button>`+
     `</div>`;
   return el;
@@ -2730,7 +2738,7 @@ function persistItinOrder(dayId){
 (function(){
   let t,target;
   document.addEventListener('touchstart',e=>{
-    if(e.target.closest('.tl-menu-btn'))return;
+    if(e.target.closest('.tl-menu-btn')||e.target.closest('.tl-grip'))return;
     const it=e.target.closest('#panel-itinerary .tl-item');
     if(!it||!it.dataset.iid)return;
     target=it;t=setTimeout(()=>{if(target)openEventMenu(target.dataset.iid,target);},480);
@@ -2738,33 +2746,32 @@ function persistItinOrder(dayId){
   document.addEventListener('touchmove',()=>clearTimeout(t),{passive:true});
   document.addEventListener('touchend',()=>clearTimeout(t),{passive:true});
 })();
-// drag-to-reorder within a day (handle = the ⋯ button; a plain tap still opens the menu)
+// drag-to-reorder within a day via the grip handle (touch + mouse)
 (function(){
-  let drag=null;
+  let d=null;
   document.addEventListener('pointerdown',e=>{
-    const h=e.target.closest('.tl-menu-btn'); if(!h)return;
+    const h=e.target.closest('.tl-grip'); if(!h)return;
     const item=h.closest('.tl-item'); const tl=item&&item.closest('.timeline'); if(!tl)return;
-    drag={item,tl,y:e.clientY,moved:false};
-  },true);
-  document.addEventListener('pointermove',e=>{
-    if(!drag)return;
-    if(!drag.moved){ if(Math.abs(e.clientY-drag.y)<6)return; drag.moved=true; drag.item.classList.add('tl-dragging'); document.body.style.userSelect='none'; }
     e.preventDefault();
-    const sibs=[...drag.tl.querySelectorAll('.tl-item:not(.tl-dragging):not(.tl-deleted)')];
-    let placed=false;
-    for(const sib of sibs){ const r=sib.getBoundingClientRect(); if(e.clientY<r.top+r.height/2){ drag.tl.insertBefore(drag.item,sib); placed=true; break; } }
-    if(!placed)drag.tl.appendChild(drag.item);
+    d={item,tl}; try{h.setPointerCapture(e.pointerId);}catch(_){}
+    item.classList.add('tl-dragging'); document.body.style.userSelect='none';
   },{passive:false});
-  document.addEventListener('pointerup',e=>{
-    if(!drag)return; const d=drag; drag=null; document.body.style.userSelect='';
-    if(d.moved){
-      d.item.classList.remove('tl-dragging');
-      const card=d.item.closest('.card[id^="d"]'); if(card&&typeof persistItinOrder==='function')persistItinOrder(card.id);
-      const swallow=ev=>{ev.stopPropagation();ev.preventDefault();document.removeEventListener('click',swallow,true);};
-      document.addEventListener('click',swallow,true);
-      setTimeout(()=>document.removeEventListener('click',swallow,true),350);
-    }
-  });
+  document.addEventListener('pointermove',e=>{
+    if(!d)return; e.preventDefault();
+    const y=e.clientY;
+    const sibs=[...d.tl.querySelectorAll('.tl-item:not(.tl-dragging):not(.tl-deleted)')];
+    let placed=false;
+    for(const sib of sibs){ const r=sib.getBoundingClientRect(); if(y<r.top+r.height/2){ d.tl.insertBefore(d.item,sib); placed=true; break; } }
+    if(!placed)d.tl.appendChild(d.item);
+    const m=90; if(y<m)window.scrollBy(0,-12); else if(y>window.innerHeight-m)window.scrollBy(0,12);
+  },{passive:false});
+  function end(){
+    if(!d)return; const dd=d; d=null; document.body.style.userSelect='';
+    dd.item.classList.remove('tl-dragging');
+    const card=dd.item.closest('.card[id^="d"]'); if(card&&typeof persistItinOrder==='function')persistItinOrder(card.id);
+  }
+  document.addEventListener('pointerup',end);
+  document.addEventListener('pointercancel',end);
 })();
 
 // ═══════════════ COUNTDOWN ═══════════════
