@@ -12,7 +12,7 @@
 <style>
 :root {
   --primary:#7CF0A6;--primary-light:#a6f7c4;--primary-dark:#0f3a2c;
-  --accent:#7CF0A6;--accent-light:rgba(124,240,166,.16);
+  --accent:#7CF0A6;--green:#7CF0A6;--accent-light:rgba(124,240,166,.16);
   --lime-tint:rgba(124,240,166,.16);--lime-dark:#7CF0A6;
   --cta:#ffffff;--gray-ui:rgba(255,255,255,.08);--gray-text:rgba(255,255,255,.55);
   --danger:#ff8079;--warning:#ffd97a;
@@ -711,13 +711,13 @@ body{background:
 .tl-time{color:var(--accent)}
 
 /* ---- buttons ---- */
-.btn-primary{background:#fff;color:#0c2018;box-shadow:0 8px 18px rgba(0,0,0,.3)}
+.btn-primary{background:var(--accent);color:#072414;box-shadow:0 8px 18px rgba(124,240,166,.32)}
 .btn-accent{background:var(--accent);color:#072414}
 .btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
 .btn-ghost{color:var(--muted)}
 .btn-waze,.tl-attr-link{background:rgba(124,240,166,.10);color:var(--accent);border:1.5px solid rgba(124,240,166,.35)}
 .btn-maps{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
-.btn-booking{background:#fff;color:#0c2018}
+.btn-booking{background:var(--accent);color:#072414}
 
 /* ---- chips / tags / pills ---- */
 .ck-circle,.pack-circle,.task-circle{border-color:rgba(255,255,255,.32)}
@@ -817,12 +817,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .day-add-mini svg.feather{width:18px;height:18px;stroke:currentColor}
 .tl-loc-links{display:flex;gap:8px;margin-top:8px}
 /* QA r4: dark text on green badges (white was unreadable) */
-.day-badge{color:#072414!important}
+.day-badge{display:none!important}
 /* QA r4: center the ⋯ menu vertically + better contrast */
 .tl-menu-btn{top:50%!important;transform:translateY(-50%);color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.26)}
 .tl-menu-btn:active{transform:translateY(-50%) scale(.92)}
 /* QA r4: center the per-day add (+) under the day */
-.day-add-mini{display:flex;width:38px;margin:10px auto 2px}
+.day-add-mini{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;margin:0;flex-shrink:0}
+.chevron svg.feather{width:20px;height:20px;stroke:currentColor;stroke-width:2.5}
+.tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
+.tl-menu-btn{touch-action:none;cursor:grab}
+/* QA r5: selected bottom-nav tab uses GREEN icon/label (not dark-on-bright) */
+@media (max-width:1023px){
+  .tab-nav .tab-btn.active{background:rgba(124,240,166,.16)!important;color:var(--green)!important;border:1px solid rgba(124,240,166,.40)}
+  .tab-nav .tab-btn.active svg.feather{stroke:var(--green)!important}
+  .tab-nav .tab-btn.active .tl{color:var(--green)!important}
+}
 /* day-focus (home hero: progress + next event) */
 #day-focus{margin-bottom:16px}
 #day-focus .df-head{display:flex;justify-content:space-between;font-size:13px;font-weight:600;align-items:baseline}
@@ -838,7 +847,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 #day-focus .df-sub{color:rgba(255,255,255,.62);font-size:12.5px;margin-top:3px;line-height:1.45}
 #day-focus .df-row{display:flex;gap:10px;margin-top:12px}
 #day-focus .df-b{flex:1;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:var(--gs);text-decoration:none}
-#day-focus .df-w{background:#fff;color:var(--ink)}
+#day-focus .df-w{background:var(--accent);color:#072414}
 #day-focus .df-gp{background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:#fff}
 #day-focus .df-after{display:flex;gap:10px;align-items:center;padding:11px 13px;margin-top:10px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd)}
 #day-focus .df-after .t{font-size:11px;font-weight:700;color:var(--green);min-width:40px}
@@ -996,7 +1005,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="card-header" onclick="toggleCard('d1')">
       <span class="card-emoji">✈️</span>
       <div class="card-title"><h3>יום 1 · שלישי 11.8</h3><p>הגעה → Kesselgrub</p></div>
-      <span class="chevron">▼</span>
+      <span class="chevron"><i data-feather="chevron-down"></i></span>
     </div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">הגעה 🛬</div><div class="day-theme">תל אביב → זלצבורג</div></div><div class="day-badge">11.8<br>ג'</div></div>
@@ -1019,7 +1028,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 2 -->
   <div class="card" id="d2">
-    <div class="card-header" onclick="toggleCard('d2')"><span class="card-emoji">👻</span><div class="card-title"><h3>יום 2 · רביעי 12.8</h3><p>Geisterberg Adventure Mountain</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d2')"><span class="card-emoji">👻</span><div class="card-title"><h3>יום 2 · רביעי 12.8</h3><p>Geisterberg Adventure Mountain</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">👻 Geisterberg</div><div class="day-theme">40+ תחנות הרפתקאות</div></div><div class="day-badge">12.8<br>ד'</div></div>
       <div class="alert alert-danger"><span class="alert-icon">🚫</span>Wagrainis Grafenberg <strong>סגור 2026</strong> – בניית גונדולה. Geisterberg הוא האלטרנטיבה!</div>
@@ -1040,7 +1049,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 3 -->
   <div class="card" id="d3">
-    <div class="card-header" onclick="toggleCard('d3')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 3 · חמישי 13.8</h3><p>מבצר הוהנוורפן + Therme Amadé</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d3')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 3 · חמישי 13.8</h3><p>מבצר הוהנוורפן + Therme Amadé</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">🏰 מבצר + 🌊 טרמה</div><div class="day-theme">פלקונרי + 11 בריכות</div></div><div class="day-badge">13.8<br>ה'</div></div>
       <div class="alert alert-danger"><span class="alert-icon">🎫</span>להזמין כרטיסי מבצר מראש! עלול להימכר באוגוסט.</div>
@@ -1064,7 +1073,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 4 -->
   <div class="card" id="d4">
-    <div class="card-header" onclick="toggleCard('d4')"><span class="card-emoji">😴</span><div class="card-title"><h3>יום 4 · שישי 14.8</h3><p>מנוחה – בריכה, פוני, אגם</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d4')"><span class="card-emoji">😴</span><div class="card-title"><h3>יום 4 · שישי 14.8</h3><p>מנוחה – בריכה, פוני, אגם</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">😴 יום מנוחה</div><div class="day-theme">ניצול המלון + אגם הרים</div></div><div class="day-badge">14.8<br>ו'</div></div>
       <div class="timeline">
@@ -1080,7 +1089,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 5 -->
   <div class="card" id="d5">
-    <div class="card-header" onclick="toggleCard('d5')"><span class="card-emoji">🚗</span><div class="card-title"><h3>יום 5 · שבת 15.8</h3><p>מעבר מלונות → Grünauerhof</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d5')"><span class="card-emoji">🚗</span><div class="card-title"><h3>יום 5 · שבת 15.8</h3><p>מעבר מלונות → Grünauerhof</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">🚗 מעבר מלונות</div><div class="day-theme">~70 ק"מ · A10 צפונה · ~1 שעה</div></div><div class="day-badge">15.8<br>ש'</div></div>
       <div class="timeline">
@@ -1099,7 +1108,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 6 -->
   <div class="card" id="d6">
-    <div class="card-header" onclick="toggleCard('d6')"><span class="card-emoji">🦁</span><div class="card-title"><h3>יום 6 · ראשון 16.8</h3><p>גן חיות + ארמון הלבורן + מירבל</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d6')"><span class="card-emoji">🦁</span><div class="card-title"><h3>יום 6 · ראשון 16.8</h3><p>גן חיות + ארמון הלבורן + מירבל</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">🦁 הלבורן</div><div class="day-theme">חיות + מזרקות + גנים</div></div><div class="day-badge">16.8<br>א'</div></div>
       <div class="alert alert-info"><span class="alert-icon">💡</span>הצג כרטיס גן חיות בארמון = <strong>Hellbrunn Bonus</strong> (הנחה)!</div>
@@ -1125,7 +1134,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 7 -->
   <div class="card" id="d7">
-    <div class="card-header" onclick="toggleCard('d7')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 7 · שני 17.8</h3><p>זלצבורג – מבצר + עיר עתיקה</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d7')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 7 · שני 17.8</h3><p>זלצבורג – מבצר + עיר עתיקה</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">🏰 זלצבורג</div><div class="day-theme">עיר עתיקה + מבצר + בירה</div></div><div class="day-badge">17.8<br>ב'</div></div>
       <div class="timeline">
@@ -1146,7 +1155,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
   <!-- Day 8 -->
   <div class="card" id="d8">
-    <div class="card-header" onclick="toggleCard('d8')"><span class="card-emoji">✈️</span><div class="card-title"><h3>יום 8 · שלישי 18.8</h3><p>עזיבה → תל אביב</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('d8')"><span class="card-emoji">✈️</span><div class="card-title"><h3>יום 8 · שלישי 18.8</h3><p>עזיבה → תל אביב</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">✈️ טסים הביתה</div><div class="day-theme">זלצבורג → תל אביב</div></div><div class="day-badge">18.8<br>ג'</div></div>
       <div class="timeline">
@@ -1178,7 +1187,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <div class="tab-panel" id="panel-hotels">
   <p class="sec-title">מלון 1 · 11–15 אוגוסט (4 לילות)</p>
   <div class="card open" id="h1">
-    <div class="card-header" onclick="toggleCard('h1')"><span class="card-emoji">🌿</span><div class="card-title"><h3>Ferienwelt Kesselgrub</h3><p>Altenmarkt im Pongau · ★★★★</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('h1')"><span class="card-emoji">🌿</span><div class="card-title"><h3>Ferienwelt Kesselgrub</h3><p>Altenmarkt im Pongau · ★★★★</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1000&q=80&auto=format&fit=crop" class="hotel-img" alt="Ferienwelt Kesselgrub" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
       <a href="https://www.booking.com/searchresults.html?ss=Ferienwelt+Kesselgrub+Altenmarkt" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px"><i data-feather="external-link"></i> צפייה ב-Booking</a>
@@ -1203,7 +1212,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   </div>
   <p class="sec-title">מלון 2 · 15–18 אוגוסט (3 לילות)</p>
   <div class="card" id="h2">
-    <div class="card-header" onclick="toggleCard('h2')"><span class="card-emoji">🏙️</span><div class="card-title"><h3>Hotel Grünauerhof</h3><p>Wals bei Salzburg · ★★★★</p></div><span class="chevron">▼</span></div>
+    <div class="card-header" onclick="toggleCard('h2')"><span class="card-emoji">🏙️</span><div class="card-title"><h3>Hotel Grünauerhof</h3><p>Wals bei Salzburg · ★★★★</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1000&q=80&auto=format&fit=crop" class="hotel-img" alt="Hotel Grünauerhof" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
       <a href="https://www.booking.com/searchresults.html?ss=Hotel+Gr%C3%BCnauerhof+Wals" target="_blank" class="btn btn-outline btn-sm btn-block" style="margin-bottom:12px"><i data-feather="external-link"></i> צפייה ב-Booking</a>
@@ -2518,17 +2527,16 @@ function initItinIds(){
     });
     ensureNapEvent(card);
     // per-day "add event" button (always visible — no edit mode)
-    const cardBody=card.querySelector('.card-body');
-    if(cardBody&&!cardBody.querySelector('.day-add-event')){
+    const header=card.querySelector('.card-header');
+    if(header&&!header.querySelector('.day-add-mini')){
       const addBtn=document.createElement('button');
       addBtn.className='day-add-mini';
       addBtn.innerHTML='<i data-feather="plus"></i>';
       addBtn.setAttribute('aria-label','הוסף אירוע ליום זה');
-      addBtn.setAttribute('title','הוסף אירוע ליום זה');
-      addBtn.setAttribute('onclick',`openAddEvent('${card.id}')`);
-      const tl=cardBody.querySelector('.timeline');
-      if(tl)tl.insertAdjacentElement('afterend',addBtn);
-      else cardBody.appendChild(addBtn);
+      addBtn.setAttribute('title','הוסף אירוע');
+      addBtn.setAttribute('onclick',`event.stopPropagation();openAddEvent('${card.id}')`);
+      const chev=header.querySelector('.chevron');
+      if(chev)header.insertBefore(addBtn,chev);else header.appendChild(addBtn);
     }
   });
 }
@@ -2722,12 +2730,41 @@ function persistItinOrder(dayId){
 (function(){
   let t,target;
   document.addEventListener('touchstart',e=>{
+    if(e.target.closest('.tl-menu-btn'))return;
     const it=e.target.closest('#panel-itinerary .tl-item');
     if(!it||!it.dataset.iid)return;
     target=it;t=setTimeout(()=>{if(target)openEventMenu(target.dataset.iid,target);},480);
   },{passive:true});
   document.addEventListener('touchmove',()=>clearTimeout(t),{passive:true});
   document.addEventListener('touchend',()=>clearTimeout(t),{passive:true});
+})();
+// drag-to-reorder within a day (handle = the ⋯ button; a plain tap still opens the menu)
+(function(){
+  let drag=null;
+  document.addEventListener('pointerdown',e=>{
+    const h=e.target.closest('.tl-menu-btn'); if(!h)return;
+    const item=h.closest('.tl-item'); const tl=item&&item.closest('.timeline'); if(!tl)return;
+    drag={item,tl,y:e.clientY,moved:false};
+  },true);
+  document.addEventListener('pointermove',e=>{
+    if(!drag)return;
+    if(!drag.moved){ if(Math.abs(e.clientY-drag.y)<6)return; drag.moved=true; drag.item.classList.add('tl-dragging'); document.body.style.userSelect='none'; }
+    e.preventDefault();
+    const sibs=[...drag.tl.querySelectorAll('.tl-item:not(.tl-dragging):not(.tl-deleted)')];
+    let placed=false;
+    for(const sib of sibs){ const r=sib.getBoundingClientRect(); if(e.clientY<r.top+r.height/2){ drag.tl.insertBefore(drag.item,sib); placed=true; break; } }
+    if(!placed)drag.tl.appendChild(drag.item);
+  },{passive:false});
+  document.addEventListener('pointerup',e=>{
+    if(!drag)return; const d=drag; drag=null; document.body.style.userSelect='';
+    if(d.moved){
+      d.item.classList.remove('tl-dragging');
+      const card=d.item.closest('.card[id^="d"]'); if(card&&typeof persistItinOrder==='function')persistItinOrder(card.id);
+      const swallow=ev=>{ev.stopPropagation();ev.preventDefault();document.removeEventListener('click',swallow,true);};
+      document.addEventListener('click',swallow,true);
+      setTimeout(()=>document.removeEventListener('click',swallow,true),350);
+    }
+  });
 })();
 
 // ═══════════════ COUNTDOWN ═══════════════
