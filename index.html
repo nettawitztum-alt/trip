@@ -816,6 +816,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .day-add-mini{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(124,240,166,.12);border:1.5px dashed rgba(124,240,166,.45);color:var(--accent);cursor:pointer;margin-top:10px;padding:0}
 .day-add-mini svg.feather{width:18px;height:18px;stroke:currentColor}
 .tl-loc-links{display:flex;gap:8px;margin-top:8px}
+/* QA r3: reserve a left gutter so the ⋯ menu never overlaps the text */
+.tl-body{padding-left:40px}
+.tl-menu-btn{top:2px}
+/* QA r3: slightly tighter page padding */
+@media (max-width:767px){.tab-content{padding:16px 12px 88px}}
+.card-body{padding:0 12px 12px}
+.tab-panel{padding:12px}
 .attr-tips{background:rgba(255,217,122,.10)!important;border:1px solid rgba(255,217,122,.26)!important;padding:12px 14px!important;margin:10px 0!important;border-radius:14px!important}
 .attr-tips li{color:#ffe4a3!important;padding:4px 0!important}
 .action-row{gap:10px;margin-top:14px}
