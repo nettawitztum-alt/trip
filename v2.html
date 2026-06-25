@@ -3199,28 +3199,30 @@ function openNav(app){
 }
 // convert verbose Waze/map links on timeline items into one compact "navigate" icon
 function decorateNavIcons(){
+  // drop duplicated day-level "navigate to place" rows — nav lives on each item
+  document.querySelectorAll('.card[id^="d"] .action-row').forEach(function(r){
+    if(r.querySelector('.btn-waze'))r.remove();
+  });
   document.querySelectorAll('.card[id^="d"] .tl-item').forEach(function(item){
     if(item.querySelector('.tl-nav'))return;
     var body=item.querySelector('.tl-body');if(!body)return;
     var wz=item.querySelector('a[href*="waze.com"]');
-    var q=null;
-    if(wz){
-      var m=wz.getAttribute('href').match(/[?&]q=([^&]*)/);
-      if(m)q=decodeURIComponent(m[1].replace(/\+/g,' '));
+    var q=null,geo=null;
+    if(wz){var m=wz.getAttribute('href').match(/[?&]q=([^&]*)/);if(m)q=decodeURIComponent(m[1].replace(/\+/g,' '));}
+    if(!q){
+      var m2=(item.innerHTML||'').match(/view(?:Attraction|Restaurant)\(['"](\w+)['"]\)/);
+      if(m2&&PLACE_GEO[m2[1]])geo=PLACE_GEO[m2[1]];
     }
-    // only convert curated items that already carry a Waze location
-    if(!q)return;
-    // remove the verbose waze pill and any sibling google-maps "מפה" link wrapper
+    if(!q&&!geo)return;                       // not a navigable place — skip
     var loc=item.querySelector('.tl-loc-links');
-    if(loc)loc.remove();
-    else if(wz)wz.remove();
+    if(loc)loc.remove();else if(wz)wz.remove();
     var h=item.querySelector('h4');
     var name=h?h.textContent.trim():'ניווט';
     var btn=document.createElement('button');
     btn.className='tl-nav';btn.setAttribute('aria-label','נווט לכאן');btn.setAttribute('title','קח אותי לשם');
-    btn.dataset.q=q;
     btn.innerHTML='<i data-feather="navigation"></i>';
-    btn.onclick=function(e){e.stopPropagation();navChooseQ(this.dataset.q,name);};
+    if(q){btn.dataset.q=q;btn.onclick=function(e){e.stopPropagation();navChooseQ(this.dataset.q,name);};}
+    else{btn.dataset.lat=geo[0];btn.dataset.lng=geo[1];btn.onclick=function(e){e.stopPropagation();navChoose(parseFloat(this.dataset.lat),parseFloat(this.dataset.lng),name);};}
     body.appendChild(btn);
   });
   if(window.feather)feather.replace();
