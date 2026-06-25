@@ -1615,6 +1615,8 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
 .attr-view-toggle button.on{background:var(--green);color:#072414}
 .attr-view-toggle button svg.feather{width:15px;height:15px;stroke:currentColor}
 #attr-map-canvas{display:none;height:62vh;min-height:380px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid var(--glass-brd)}
+body.attr-map-view .sticky-shell{display:none}
+body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px;border-radius:0;border-left:0;border-right:0;margin:0 -16px 0}
 .tl-nav{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:rgba(124,240,166,.12);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;cursor:pointer;margin-top:8px;flex-shrink:0;padding:0;-webkit-tap-highlight-color:transparent}
 .tl-nav:active{background:rgba(124,240,166,.28);transform:scale(.92)}
 .tl-nav svg.feather{width:16px;height:16px;stroke:currentColor;margin:0}
@@ -2051,9 +2053,6 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
 
 <!-- ── אטרקציות ── -->
 <div class="tab-panel" id="panel-attractions">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-    <h2 style="font-size:18px;font-weight:800">אטרקציות</h2>
-  </div>
   <div id="attr-stickyhead" style="text-align:center">
   <div class="attr-view-toggle">
     <button id="av-list" class="on" onclick="attrView('list')"><i data-feather="list"></i> רשימה</button>
@@ -3433,6 +3432,7 @@ function attrView(mode){
   const listView=document.getElementById('attr-list-view'),mapEl=document.getElementById('attr-map-canvas');
   const isMap=mode==='map';
   _attrMapActive=isMap;
+  document.body.classList.toggle('attr-map-view',isMap);
   listBtn.classList.toggle('on',!isMap);mapBtn.classList.toggle('on',isMap);
   listView.style.display=isMap?'none':'';
   mapEl.style.display=isMap?'block':'none';
