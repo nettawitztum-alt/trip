@@ -801,7 +801,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .alert-icon{font-size:16px;flex-shrink:0}
 
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;font-family:'Assistant',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all .15s;min-height:44px;user-select:none;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;font-family:'Assistant',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;background:transparent;text-decoration:none;transition:all .15s;min-height:44px;user-select:none;white-space:nowrap}
 .btn:active{opacity:.8;transform:scale(.97)}
 .btn-danger{background:var(--danger);color:white}
 .btn-sm{padding:8px 12px;font-size:12px;min-height:40px}
@@ -1410,7 +1410,7 @@ body{background:
 .btn-primary{background:var(--accent);color:#072414;box-shadow:0 8px 18px rgba(124,240,166,.32)}
 .btn-accent{background:var(--accent);color:#072414}
 .btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
-.btn-ghost{color:var(--muted)}
+.btn-ghost{color:var(--muted);background:transparent;border:1px solid var(--glass-brd)}
 .btn-waze,.tl-attr-link{background:rgba(124,240,166,.10);color:var(--accent);border:1.5px solid rgba(124,240,166,.35)}
 .btn-maps{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
 .btn-booking{background:var(--accent);color:#072414}
@@ -1630,6 +1630,21 @@ body.trip-active #day-capacity{display:none}
 .cur-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .cur-row label{width:64px;font-size:13px;font-weight:700;color:var(--muted)}
 .cur-row input{flex:1;direction:ltr;text-align:left}
+.form-glabel{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:9px}
+.type-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.type-chip{border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:#fff;border-radius:999px;padding:9px 13px;font-family:var(--gs);font-size:13px;font-weight:700;cursor:pointer;transition:transform .12s,background .2s,border-color .2s,box-shadow .2s}
+.type-chip:active{transform:scale(.94)}
+.type-chip.on{background:linear-gradient(135deg,#7CF0A6,#5fc892);color:#06231a;border-color:transparent;box-shadow:0 3px 12px rgba(124,240,166,.25)}
+.form-row2{display:flex;gap:10px}
+.form-row2 .form-group{flex:1}
+.loc-wrap{position:relative}
+.loc-suggest{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:30;background:#143124;border:1px solid var(--glass-brd);border-radius:12px;overflow:hidden;max-height:230px;overflow-y:auto;box-shadow:0 12px 32px rgba(0,0,0,.55)}
+.loc-suggest.on{display:block}
+.loc-opt{display:block;width:100%;text-align:right;background:none;border:none;border-bottom:1px solid var(--glass-brd);color:#fff;padding:10px 13px;cursor:pointer;font-family:var(--gs)}
+.loc-opt:last-child{border-bottom:none}
+.loc-opt:active,.loc-opt:hover{background:rgba(124,240,166,.12)}
+.loc-opt b{font-size:14px;font-weight:700;display:block}
+.loc-opt span{font-size:11px;color:var(--muted)}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
@@ -2378,21 +2393,29 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title" id="event-modal-title">הוסף אירוע</div>
     <input type="hidden" id="event-edit-iid">
-    <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
-    <div class="form-group"><label>בחר מאטרקציה (לא חובה)</label><select class="form-select" id="event-attr" onchange="pickAttraction()"></select></div>
-    <div class="form-group"><label>שעה</label><input type="time" class="form-input" id="event-time" style="direction:ltr"></div>
+    <input type="hidden" id="event-type" value="other">
+    <label class="form-glabel">מה מוסיפים?</label>
+    <div class="type-chips" id="event-type-chips">
+      <button type="button" class="type-chip" data-type="restaurant" data-emoji="🍽️" onclick="pickEventType(this)">🍽️ מסעדה</button>
+      <button type="button" class="type-chip" data-type="attraction" data-emoji="⭐" onclick="pickEventType(this)">⭐ אטרקציה</button>
+      <button type="button" class="type-chip" data-type="rest" data-emoji="😴" onclick="pickEventType(this)">😴 מנוחה</button>
+      <button type="button" class="type-chip" data-type="drive" data-emoji="🚗" onclick="pickEventType(this)">🚗 נסיעה</button>
+      <button type="button" class="type-chip" data-type="other" data-emoji="✨" onclick="pickEventType(this)">✨ אחר</button>
+    </div>
+    <div class="form-row2">
+      <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
+      <div class="form-group"><label>שעה</label><input type="time" class="form-input" id="event-time" style="direction:ltr"></div>
+    </div>
+    <div class="form-group" id="event-attr-group" style="display:none"><label>בחר מהרשימה (לא חובה)</label><select class="form-select" id="event-attr" onchange="pickAttraction()"></select></div>
     <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
     <div class="form-group"><label>מיקום</label>
-      <div style="display:flex;gap:8px">
-        <input type="text" class="form-input" id="event-location" placeholder="שם מקום / כתובת..." style="flex:1">
-        <button class="btn btn-outline btn-sm" type="button" onclick="searchEventLocation()" aria-label="חפש במפות" title="חפש במפות"><i data-feather="search"></i></button>
+      <div class="loc-wrap">
+        <input type="text" class="form-input" id="event-location" placeholder="התחילו להקליד מקום..." autocomplete="off" oninput="eventLocAutocomplete()">
+        <div class="loc-suggest" id="event-loc-suggest"></div>
       </div>
     </div>
     <div class="form-group"><label>הערות</label><textarea class="form-input" id="event-desc" rows="2" placeholder="הערות..."></textarea></div>
-    <div class="action-row">
-      <button class="btn btn-primary" onclick="saveEvent()"><i data-feather="save"></i> שמור</button>
-      <button class="btn btn-ghost" onclick="closeModal('event-modal')">ביטול</button>
-    </div>
+    <button class="btn btn-primary btn-block" onclick="saveEvent()"><i data-feather="save"></i> שמור אירוע</button>
   </div>
 </div>
 
@@ -3776,6 +3799,10 @@ function openAddEvent(dayId){
   document.getElementById('event-title').value='';
   document.getElementById('event-location').value='';
   document.getElementById('event-desc').value='';
+  document.querySelectorAll('#event-type-chips .type-chip').forEach(function(c){c.classList.remove('on');});
+  var _tv=document.getElementById('event-type');if(_tv)_tv.value='other';
+  var _ag=document.getElementById('event-attr-group');if(_ag)_ag.style.display='none';
+  var _box=document.getElementById('event-loc-suggest');if(_box){_box.innerHTML='';_box.classList.remove('on');}
   openModal('event-modal');
   if(window.feather)feather.replace();
 }
@@ -3796,6 +3823,44 @@ function openEditEvent(iid){
   document.getElementById('event-desc').value=p?p.textContent.trim():'';
   openModal('event-modal');
   if(window.feather)feather.replace();
+}
+function pickEventType(btn){
+  document.querySelectorAll('#event-type-chips .type-chip').forEach(function(c){c.classList.remove('on');});
+  btn.classList.add('on');
+  var t=btn.dataset.type,em=btn.dataset.emoji||'';
+  var tv=document.getElementById('event-type');if(tv)tv.value=t;
+  var ti=document.getElementById('event-title');
+  if((t==='rest'||t==='drive')&&ti&&!ti.value.trim())ti.value=em+' '+(t==='rest'?'מנוחה':'נסיעה');
+  var ag=document.getElementById('event-attr-group');
+  if(ag)ag.style.display=(t==='restaurant'||t==='attraction')?'block':'none';
+}
+var _evLocTimer=null;
+function eventLocAutocomplete(){
+  clearTimeout(_evLocTimer);
+  var inp=document.getElementById('event-location'),box=document.getElementById('event-loc-suggest');
+  if(!inp||!box)return;
+  var q=(inp.value||'').trim();
+  if(q.length<2){box.innerHTML='';box.classList.remove('on');return;}
+  _evLocTimer=setTimeout(function(){
+    fetch('https://photon.komoot.io/api/?limit=6&lat=47.8&lon=13.04&q='+encodeURIComponent(q))
+      .then(function(r){return r.ok?r.json():null;}).then(function(d){
+        if(!d||!d.features||!d.features.length){box.innerHTML='';box.classList.remove('on');return;}
+        box.innerHTML=d.features.map(function(f){
+          var p=f.properties||{},g=(f.geometry&&f.geometry.coordinates)||[];
+          var name=p.name||p.street||p.city||q;
+          var loc=[p.street&&p.name?p.street:'',p.city,p.country].filter(Boolean).join(', ');
+          return '<button type="button" class="loc-opt" onclick="pickEventLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-lat="'+(g[1]||'')+'" data-lon="'+(g[0]||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
+        }).join('');
+        box.classList.add('on');
+      }).catch(function(){box.innerHTML='';box.classList.remove('on');});
+  },300);
+}
+function pickEventLoc(btn){
+  var name=btn.dataset.name,lat=parseFloat(btn.dataset.lat),lon=parseFloat(btn.dataset.lon);
+  var li=document.getElementById('event-location');if(li)li.value=name;
+  var ti=document.getElementById('event-title');if(ti&&!ti.value.trim())ti.value=name;
+  if(!isNaN(lat)&&!isNaN(lon)){try{var c=_geoCache();c[name]=[lat,lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}}
+  var box=document.getElementById('event-loc-suggest');if(box){box.innerHTML='';box.classList.remove('on');}
 }
 function saveEvent(){
   const title=document.getElementById('event-title').value.trim();
