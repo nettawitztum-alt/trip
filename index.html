@@ -1537,6 +1537,9 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .attr-view-toggle button.on{background:var(--green);color:#072414}
 .attr-view-toggle button svg.feather{width:15px;height:15px;stroke:currentColor}
 #attr-map-canvas{display:none;height:62vh;min-height:380px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid var(--glass-brd)}
+.tl-nav{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:rgba(124,240,166,.12);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-top:8px;flex-shrink:0;padding:0;-webkit-tap-highlight-color:transparent}
+.tl-nav:active{background:rgba(124,240,166,.28);transform:scale(.92)}
+.tl-nav svg.feather{width:16px;height:16px;stroke:currentColor;margin:0}
 .modal-x{position:absolute;top:14px;left:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:6;padding:0}
 .modal-x svg.feather{width:18px;height:18px;stroke:currentColor}
 .sortable-fallback{opacity:1!important;background:#1b3a2c!important;border:1px solid var(--glass-brd)!important;border-radius:14px;box-shadow:0 16px 38px rgba(0,0,0,.55)}
@@ -3086,11 +3089,45 @@ function _cleanQ(loc){return (loc||'').split('·')[0].replace(/[֐-׿]/g,'').rep
 function _geoCache(){try{return JSON.parse(localStorage.getItem('austria26_geo')||'{}')}catch(e){return {}}}
 function placeGeo(id,loc){if(PLACE_GEO[id])return PLACE_GEO[id];const q=_cleanQ(loc);return _geoCache()[q]||null;}
 function navChoose(lat,lng,name){_navTarget={lat,lng,name};document.getElementById('nav-title').textContent='ניווט · '+name;openModal('nav-modal');if(window.feather)feather.replace();}
+function navChooseQ(query,name){_navTarget={q:query,name:name};document.getElementById('nav-title').textContent='ניווט · '+(name||query);openModal('nav-modal');if(window.feather)feather.replace();}
 function openNav(app){
-  if(!_navTarget)return;const t=_navTarget;
-  const url= app==='waze' ? ('https://waze.com/ul?ll='+t.lat+','+t.lng+'&navigate=yes')
-                          : ('https://www.google.com/maps/search/?api=1&query='+t.lat+','+t.lng);
+  if(!_navTarget)return;const t=_navTarget;var url;
+  if(t.q){
+    url= app==='waze' ? ('https://waze.com/ul?q='+encodeURIComponent(t.q)+'&navigate=yes')
+                      : ('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(t.q));
+  }else{
+    url= app==='waze' ? ('https://waze.com/ul?ll='+t.lat+','+t.lng+'&navigate=yes')
+                      : ('https://www.google.com/maps/search/?api=1&query='+t.lat+','+t.lng);
+  }
   window.open(url,'_blank');closeModal('nav-modal');
+}
+// convert verbose Waze/map links on timeline items into one compact "navigate" icon
+function decorateNavIcons(){
+  document.querySelectorAll('.card[id^="d"] .tl-item').forEach(function(item){
+    if(item.querySelector('.tl-nav'))return;
+    var body=item.querySelector('.tl-body');if(!body)return;
+    var wz=item.querySelector('a[href*="waze.com"]');
+    var q=null;
+    if(wz){
+      var m=wz.getAttribute('href').match(/[?&]q=([^&]*)/);
+      if(m)q=decodeURIComponent(m[1].replace(/\+/g,' '));
+    }
+    // only convert curated items that already carry a Waze location
+    if(!q)return;
+    // remove the verbose waze pill and any sibling google-maps "מפה" link wrapper
+    var loc=item.querySelector('.tl-loc-links');
+    if(loc)loc.remove();
+    else if(wz)wz.remove();
+    var h=item.querySelector('h4');
+    var name=h?h.textContent.trim():'ניווט';
+    var btn=document.createElement('button');
+    btn.className='tl-nav';btn.setAttribute('aria-label','נווט לכאן');btn.setAttribute('title','קח אותי לשם');
+    btn.dataset.q=q;
+    btn.innerHTML='<i data-feather="navigation"></i>';
+    btn.onclick=function(e){e.stopPropagation();navChooseQ(this.dataset.q,name);};
+    body.appendChild(btn);
+  });
+  if(window.feather)feather.replace();
 }
 function openMap(mode){
   if(!window.L){alert('המפה עדיין נטענת — נסו שוב בעוד רגע');return;}
@@ -3478,6 +3515,7 @@ function initItinIds(){
     // per-day "add event" button (always visible — no edit mode)
     // single add entry point = the sticky FAB (no per-day +)
   });
+  decorateNavIcons();
 }
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
 function addEventMenuBtn(item,iid){
