@@ -907,6 +907,8 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .pack-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .pack-header h3{font-size:15px;font-weight:700}
 .pack-progress{font-size:12px;color:var(--muted);margin-right:auto}
+.sec-bar{height:7px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;margin:8px 0 16px}
+.sec-bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7CF0A6,#38D9A9);border-radius:999px;transition:width .5s ease}
 .pack-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:white;box-shadow:var(--shadow);margin-bottom:6px;cursor:pointer;transition:all .15s;min-height:48px;user-select:none}
 .pack-item:active{transform:scale(.99)}
 .pack-item.done{opacity:.5}
@@ -1060,11 +1062,11 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .countdown-bar{
   background:#111;
   padding:7px 16px;
-  display:flex;align-items:center;justify-content:center;gap:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   border-bottom:2px solid rgba(0,0,0,.12);
   flex-shrink:0;
 }
-.cdb-label{color:rgba(255,255,255,.85);font-size:12px;font-weight:800;white-space:nowrap}
+.cdb-label{color:rgba(255,255,255,.85);font-size:12px;font-weight:800;white-space:normal;text-align:center}
 .cdb-units{display:flex;align-items:flex-start;gap:2px}
 .cdb-unit{display:flex;flex-direction:column;align-items:center;min-width:34px}
 .cdb-n{font-size:22px;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-0.5px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
@@ -1710,7 +1712,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 
 <div class="countdown-section">
 <div class="countdown-bar" id="countdown-bar">
-  <span class="cdb-label">עוד לטיול 🇦🇹</span>
+  <span class="cdb-label">✨ עוד כמה זמן נשאר לחופשה המושלמת</span>
   <div class="cdb-units" dir="ltr">
     <div class="cdb-unit"><span class="cdb-n" id="cd-days">--</span><span class="cdb-u">ימים</span></div>
     <span class="cdb-sep">:</span>
@@ -1912,6 +1914,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
     <h2 style="font-size:18px;font-weight:800">✅ משימות לפני הטיול</h2>
     <span id="tasks-total" style="font-size:13px;color:var(--muted)"></span>
   </div>
+  <div class="sec-bar"><i id="tasks-bar"></i></div>
   <div class="alert alert-success" style="margin-bottom:14px"><span class="alert-icon">📝</span>הוסיפו משימות משותפות · כולם רואים ומסמנים</div>
   <div class="task-add-row">
     <input type="text" class="form-input" id="task-new-text" placeholder="משימה חדשה..." onkeydown="if(event.key==='Enter')addTask()">
@@ -1998,6 +2001,11 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 
 <!-- ── הזמנות ── -->
 <div class="tab-panel" id="panel-bookings">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <h2 style="font-size:18px;font-weight:800">📋 הזמנות וצ׳קליסט</h2>
+    <span id="bookings-total" style="font-size:13px;color:var(--muted)"></span>
+  </div>
+  <div class="sec-bar"><i id="bookings-bar"></i></div>
   <div class="alert alert-success"><span class="alert-icon">✅</span>לחצו לסימון · נשמר אוטומטית</div>
   <p class="sec-title">✅ שולם – ברוש</p>
   <div class="ck-item done" data-id="ck_flights" onclick="toggleCheck(this)"><div class="ck-circle">✓</div><div style="flex:1"><div class="ck-text">טיסות ישראייר הלוך-חזור</div><div class="ck-sub">Docket 4440455 · 6H 243 + 6H 248</div></div><span class="ck-tag tag-green">שולם ✓</span></div>
@@ -2049,6 +2057,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
     <h2 style="font-size:18px;font-weight:800">🎒 רשימת ציוד</h2>
     <span id="packing-total" style="font-size:13px;color:var(--muted)"></span>
   </div>
+  <div class="sec-bar"><i id="packing-bar"></i></div>
   <div class="alert alert-warning" style="margin-bottom:14px"><span class="alert-icon">⚠️</span>פריטים עם ⭐ הם קריטיים – אסור לשכוח!</div>
   <div id="packing-list"></div>
   <div style="margin-top:16px">
@@ -2537,6 +2546,7 @@ function initBookingChecklist(){
     if(saved[id]==='done')el.classList.add('done');
     updateCkCircle(el);
   });
+  updateBookingProgress();
 }
 function toggleCheck(el){
   const id=el.getAttribute('data-id');if(!id)return;
@@ -2545,9 +2555,17 @@ function toggleCheck(el){
   saved[id]=el.classList.contains('done')?'done':'open';
   saveBookingChecked(saved);
   updateCkCircle(el);
+  updateBookingProgress();
 }
 function updateCkCircle(el){
   const c=el.querySelector('.ck-circle');if(c)c.textContent=el.classList.contains('done')?'✓':'';
+}
+function updateBookingProgress(){
+  const items=document.querySelectorAll('#panel-bookings .ck-item[data-id]');
+  const total=items.length;const done=[...items].filter(e=>e.classList.contains('done')).length;
+  const pct=total?Math.round(done/total*100):0;
+  const t=document.getElementById('bookings-total');if(t)t.textContent=total?`${pct}% · ${done}/${total}`:'';
+  const bar=document.getElementById('bookings-bar');if(bar)bar.style.width=pct+'%';
 }
 
 // ═══════════════ ATTRACTIONS ═══════════════
@@ -2818,7 +2836,9 @@ function renderPacking(){
     </div>`;
   });
   document.getElementById('packing-list').innerHTML=html;
-  document.getElementById('packing-total').textContent=`${done}/${total} פריטים`;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('packing-total').textContent=total?`${pct}% · ${done}/${total}`:'';
+  var pb=document.getElementById('packing-bar');if(pb)pb.style.width=pct+'%';
 }
 function togglePackItem(el,id){
   const checked=getPackingChecked();
@@ -2905,7 +2925,9 @@ function renderTasks(){
   const list=document.getElementById('tasks-list');if(!list)return;
   const tasks=getTasks();
   const done=tasks.filter(t=>t.done).length;
-  document.getElementById('tasks-total').textContent=tasks.length?`${done}/${tasks.length} הושלמו`:'';
+  const tpct=tasks.length?Math.round(done/tasks.length*100):0;
+  document.getElementById('tasks-total').textContent=tasks.length?`${tpct}% · ${done}/${tasks.length}`:'';
+  var tb=document.getElementById('tasks-bar');if(tb)tb.style.width=tpct+'%';
   if(!tasks.length){list.innerHTML='<div class="task-empty">אין משימות עדיין. הוסיפו את הראשונה! 👆</div>';return;}
   list.innerHTML=tasks.map(t=>{
     const meta=[t.addedBy?('נוסף ע"י '+t.addedBy):'',t.done&&t.doneBy?('✓ '+t.doneBy):''].filter(Boolean).join(' · ');

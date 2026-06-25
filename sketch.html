@@ -99,6 +99,22 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
 .erow .et{font-size:12px;color:var(--accent);font-weight:700;min-width:44px}
 .erow .ei{flex:1;font-size:13.5px;font-weight:600}
 .erow .ei small{display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:2px}
+/* sticky stacked variant + new banner text */
+.sticky.scol{flex-direction:column;gap:2px;padding:8px 14px}
+.sticky.scol .stxt{font-size:12.5px;font-weight:700}
+/* F: E + A combined (date strip + rich expandable cards) */
+.fcard{background:var(--card);border:1px solid var(--brd);border-radius:18px;padding:13px;margin-bottom:11px}
+.fcard.open{border-color:rgba(124,240,166,.42);background:rgba(124,240,166,.06)}
+.fhead{display:flex;gap:12px;align-items:center}
+.fhead .date{flex:0 0 auto;text-align:center;background:rgba(124,240,166,.12);border:1px solid rgba(124,240,166,.3);border-radius:12px;padding:7px 10px;min-width:52px}
+.fhead .date .d{font-size:18px;font-weight:900;color:var(--accent);line-height:1}
+.fhead .date .m{font-size:10px;color:var(--muted);margin-top:2px}
+.fhead .info{flex:1}
+.fhead .info .day{font-size:11px;color:var(--accent);font-weight:700}
+.fhead .info h3{font-size:15px;font-weight:700;margin-top:2px}
+.fhead .info .pk{font-size:11.5px;color:var(--muted);margin-top:3px}
+.fhead .chev{color:var(--accent);font-size:18px}
+.fbody{margin-top:11px;border-top:1px solid rgba(255,255,255,.09);padding-top:5px}
 </style>
 </head>
 <body>
@@ -238,6 +254,45 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
         <div class="erow"><div class="et">16:30</div><div class="ei">צ׳ק-אין Kesselgrub 🏨<small>Altenmarkt im Pongau</small></div></div>
         <div class="erow"><div class="et">19:00</div><div class="ei">ארוחת ערב 🍽️<small>מסעדת המלון</small></div></div>
       </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===== OPTION F: E + A combined ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b" style="background:#FFD479">F</span><h2>⭐ השילוב שלך: E + A</h2></div>
+  <div class="opt-desc">רצועת תאריכים לקפיצה מהירה (E) + כרטיסי יום עשירים שנפתחים (A). היום הנבחר פתוח עם השעות; שאר הימים מקופלים. לוחצים תאריך → היום נפתח.</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky scol"><div class="stxt">✨ עוד כמה זמן נשאר לחופשה המושלמת</div><div class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></div></div>
+    <div class="hero">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice"><rect width="360" height="230" fill="url(#sa)"/><circle cx="280" cy="55" r="34" fill="#ffe9b0" opacity=".5"/><polygon points="0,230 0,120 70,55 150,140 220,80 290,135 360,95 360,230" fill="#123f31"/><polygon points="0,230 90,130 180,200 250,150 360,190 360,230" fill="#0c2c22"/><polygon points="70,55 86,86 54,86" fill="#dff5e6"/><polygon points="220,80 234,106 206,106" fill="#eafff0"/></svg>
+      <div class="dates"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="title"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="estrip">
+        <div class="edate on"><div class="w">ג׳</div><div class="d">11</div></div>
+        <div class="edate"><div class="w">ד׳</div><div class="d">12</div></div>
+        <div class="edate"><div class="w">ה׳</div><div class="d">13</div></div>
+        <div class="edate"><div class="w">ו׳</div><div class="d">14</div></div>
+        <div class="edate"><div class="w">ש׳</div><div class="d">15</div></div>
+        <div class="edate"><div class="w">א׳</div><div class="d">16</div></div>
+        <div class="edate"><div class="w">ב׳</div><div class="d">17</div></div>
+        <div class="edate"><div class="w">ג׳</div><div class="d">18</div></div>
+      </div>
+      <!-- selected day: open rich card -->
+      <div class="fcard open">
+        <div class="fhead"><div class="date"><div class="d">11.8</div><div class="m">ג׳</div></div><div class="info"><div class="day">יום 1</div><h3>נחיתה והגעה למלון ✈️</h3></div><span class="chev">⌄</span></div>
+        <div class="fbody">
+          <div class="erow"><div class="et">09:00</div><div class="ei">שדה תעופה ת״א<small>טיסה 6H 243</small></div></div>
+          <div class="erow"><div class="et">14:35</div><div class="ei">נחיתה בזלצבורג 🇦🇹<small>איסוף רכב</small></div></div>
+          <div class="erow"><div class="et">16:30</div><div class="ei">צ׳ק-אין Kesselgrub 🏨<small>Altenmarkt im Pongau</small></div></div>
+        </div>
+      </div>
+      <!-- other days: collapsed rich cards -->
+      <div class="fcard"><div class="fhead"><div class="date"><div class="d">12.8</div><div class="m">ד׳</div></div><div class="info"><div class="day">יום 2</div><h3>ממלכת הרפאים 👻</h3><div class="pk">Geisterberg · בקתת הר 🍖</div></div><span class="chev">›</span></div></div>
+      <div class="fcard"><div class="fhead"><div class="date"><div class="d">13.8</div><div class="m">ה׳</div></div><div class="info"><div class="day">יום 3</div><h3>הוהנוורפן + תרמה 🏰</h3><div class="pk">מבצר · Amadé 🌊</div></div><span class="chev">›</span></div></div>
     </div>
   </div></div>
 </div>
