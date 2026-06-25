@@ -1610,6 +1610,10 @@ body.trip-active #day-capacity{display:none}
 .day-actions button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:999px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:var(--muted);font-family:var(--gs);font-size:12px;font-weight:700;cursor:pointer}
 .day-actions button svg.feather{width:15px;height:15px;stroke:currentColor}
 .day-actions button:active{transform:scale(.97)}
+.ds-wx{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.82);margin-top:3px;white-space:nowrap}
+.ds-chip.on .ds-wx{color:#0a2a1c}
+.card-wx{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.09);border:1px solid var(--glass-brd);border-radius:999px;padding:3px 10px;white-space:nowrap;align-self:center;flex:0 0 auto;margin-inline-start:6px}
+.card-wx small{font-weight:600;opacity:.6}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
@@ -2568,6 +2572,16 @@ const BUILTIN_PACKING = [
 ];
 
 const CAT_LABELS = {romi:'🍼 רומי (תינוקת)',lia:'👧 ליה (4 שנים)',tom:'👦 תום (4 שנים)',omri:'👶 עמרי (2 שנים)',all:'👨‍👩‍👧‍👦 כולם',apps:'📱 אפליקציות להתקין'};
+var WX={};
+function _applyDayWeather(){
+  document.querySelectorAll('.card[id^="d"]').forEach(function(card){
+    var w=WX[card.id];if(!w)return;
+    var head=card.querySelector('.card-header');if(!head)return;
+    var chip=head.querySelector('.card-wx');
+    if(!chip){chip=document.createElement('span');chip.className='card-wx';var th=head.querySelector('.day-thumb');head.insertBefore(chip,th||null);}
+    chip.innerHTML=w.ic+' '+w.mx+'\u00b0<small>/'+w.mn+'\u00b0</small>'+(w.rain>=30?' \ud83d\udca7'+w.rain+'%':'');
+  });
+}
 const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
 
 // ═══════════════ STATE ═══════════════
@@ -3096,6 +3110,9 @@ async function fetchWeather(){
       <div class="wd-rain">💧${dd.precipitation_probability_max[i]}%</div>
     </div>`).join('');
     document.getElementById('weather-container').innerHTML=`<div class="weather-strip"><div class="weather-row">${cards}</div></div>`;
+    dd.time.forEach(function(t,i){var id='d'+(i+1);WX[id]={ic:WMO[dd.weathercode[i]]||'🌡️',mx:Math.round(dd.temperature_2m_max[i]),mn:Math.round(dd.temperature_2m_min[i]),rain:dd.precipitation_probability_max[i]};});
+    if(typeof buildDateStrip==='function')buildDateStrip();
+    _applyDayWeather();
   }catch{
     document.getElementById('weather-container').innerHTML='<div class="alert alert-warning"><span class="alert-icon">⚠️</span>לא ניתן לטעון תחזית. בדוק חיבור.</div>';
   }
@@ -3402,7 +3419,7 @@ function _meterHTML(dayId){
   return '<div class="ds-meter">'+s+'</div>';
 }
 function buildDateStrip(){
-  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span>'+_meterHTML(x.id)+'</button>';}).join('');
+  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span>'+(WX[x.id]?'<span class="ds-wx">'+WX[x.id].ic+WX[x.id].mx+'°</span>':'')+_meterHTML(x.id)+'</button>';}).join('');
   [].forEach.call(document.querySelectorAll('.js-datestrip'),function(host){host.innerHTML=html;var on=host.querySelector('.ds-chip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});});
 }
 function renderDayCapacity(dayId){
