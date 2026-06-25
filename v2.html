@@ -1576,10 +1576,10 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .map-search-btn{flex:0 0 auto;width:46px;border-radius:12px;border:none;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .map-search-btn svg.feather{width:18px;height:18px;stroke:currentColor}
 .map-search-pin{font-size:28px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
-.map-stepper{position:absolute;left:10px;right:10px;bottom:12px;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(14,43,32,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--glass-brd);border-radius:16px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.map-stepper{position:absolute;left:78px;right:10px;bottom:14px;z-index:500;direction:ltr;display:flex;align-items:center;gap:8px;background:rgba(14,43,32,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--glass-brd);border-radius:16px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .step-arrow{width:36px;height:36px;flex:0 0 auto;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(255,255,255,.06);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .step-arrow:disabled{opacity:.3}
-.step-body{flex:1;min-width:0;text-align:center}
+.step-body{flex:1;min-width:0;text-align:center;direction:rtl}
 .step-meta{font-size:10px;color:var(--accent);font-weight:700}
 .step-title{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .step-desc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -3432,11 +3432,11 @@ function renderStepper(){
   if(_stepIdx<0)_stepIdx=0;if(_stepIdx>_dayStops.length-1)_stepIdx=_dayStops.length-1;
   var s=_dayStops[_stepIdx];
   host.innerHTML=
-    '<button class="step-arrow" onclick="stepPrev()" '+(_stepIdx===0?'disabled':'')+'>›</button>'+
+    '<button class="step-arrow" onclick="stepPrev()" '+(_stepIdx===0?'disabled':'')+'>‹</button>'+
     '<div class="step-body"><div class="step-meta">תחנה '+s.num+' מתוך '+_dayStops.length+'</div>'+
     '<div class="step-title">'+s.title+'</div>'+(s.desc?'<div class="step-desc">'+s.desc+'</div>':'')+'</div>'+
     '<button class="step-nav" onclick="stepNav()" aria-label="ניווט"><i data-feather="navigation"></i></button>'+
-    '<button class="step-arrow" onclick="stepNext()" '+(_stepIdx===_dayStops.length-1?'disabled':'')+'>‹</button>';
+    '<button class="step-arrow" onclick="stepNext()" '+(_stepIdx===_dayStops.length-1?'disabled':'')+'>›</button>';
   if(window.feather)feather.replace();
 }
 function stepTo(i){
