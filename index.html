@@ -1571,6 +1571,11 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .cdb-sep{font-size:12px!important;margin-top:0!important;color:rgba(255,255,255,.35)!important}
 #itin-map-host{position:relative}
 #itin-map-host #map-canvas{position:relative;inset:auto;height:64vh;min-height:420px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd)}
+.map-search{display:flex;gap:8px;margin-bottom:10px}
+.map-search-input{flex:1;background:#fff;border:none;border-radius:12px;padding:11px 14px;font-size:14px;font-family:var(--gs);direction:rtl;color:#222;outline:none}
+.map-search-btn{flex:0 0 auto;width:46px;border-radius:12px;border:none;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.map-search-btn svg.feather{width:18px;height:18px;stroke:currentColor}
+.map-search-pin{font-size:28px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
 .map-stepper{position:absolute;left:10px;right:10px;bottom:12px;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(14,43,32,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--glass-brd);border-radius:16px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .step-arrow{width:36px;height:36px;flex:0 0 auto;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(255,255,255,.06);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .step-arrow:disabled{opacity:.3}
@@ -1785,6 +1790,10 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
   <div id="day-capacity"></div>
   <div id="itin-map-host" style="display:none">
     <div id="map-days" class="js-datestrip date-strip"></div>
+    <div class="map-search">
+      <input id="map-search-input" class="map-search-input" placeholder="חפש מקום להוסיף…" onkeydown="if(event.key==='Enter'){mapSearch();return false;}">
+      <button class="map-search-btn" onclick="mapSearch()" aria-label="חפש"><i data-feather="search"></i></button>
+    </div>
     <div id="map-canvas"></div>
     <div id="map-stepper" class="map-stepper" style="display:none"></div>
     <div id="map-empty" class="map-empty" style="display:none"></div>
@@ -3367,6 +3376,35 @@ function _knownGeo(item){
   for(var i=0;i<KNOWN_GEO.length;i++)if(KNOWN_GEO[i].re.test(t))return KNOWN_GEO[i].g;
   return null;
 }
+var _searchResult=null,_searchMk=null;
+async function mapSearch(){
+  var inp=document.getElementById('map-search-input');var q=(inp&&inp.value||'').trim();if(!q)return;
+  try{
+    var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q+', Austria'));
+    var j=await r.json();
+    if(!j||!j[0]){alert('לא נמצא מקום בשם זה');return;}
+    var geo=[parseFloat(j[0].lat),parseFloat(j[0].lon)];
+    var label=(j[0].display_name||'').split(',').slice(0,2).join(',');
+    _searchResult={name:q,label:label,geo:geo};
+    if(_searchMk){try{_map.removeLayer(_searchMk);}catch(e){}}
+    var icon=L.divIcon({className:'',html:'<div class="map-search-pin">📍</div>',iconSize:[34,34],iconAnchor:[17,30],popupAnchor:[0,-28]});
+    _searchMk=L.marker(geo,{icon:icon,zIndexOffset:1000}).addTo(_map);
+    var pop=document.createElement('div');
+    pop.innerHTML='<b>'+q+'</b>'+(label?'<div style="font-size:12px;opacity:.7;margin-top:3px">'+label+'</div>':'');
+    var btn=document.createElement('button');btn.className='map-pop-btn';btn.textContent='＋ הוסף ליום';
+    btn.onclick=addSearchedPlace;
+    var br=document.createElement('div');br.appendChild(btn);pop.appendChild(br);
+    _searchMk.bindPopup(pop).openPopup();
+    try{_map.panTo(geo,{animate:true});}catch(e){}
+  }catch(e){alert('שגיאת חיפוש — נסו שוב');}
+}
+function addSearchedPlace(){
+  if(!_searchResult)return;
+  try{var c=_geoCache();c[_searchResult.name]=_searchResult.geo;c[_searchResult.name+' אוסטריה']=_searchResult.geo;localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+  openAddEvent(_selDay);
+  var ti=document.getElementById('event-title');if(ti)ti.value=_searchResult.name;
+  var lo=document.getElementById('event-location');if(lo)lo.value=_searchResult.name;
+}
 function _eventGeo(item){
   var k=_knownGeo(item);if(k)return k;
   var m=(item.innerHTML||'').match(/view(?:Attraction|Restaurant)\(['"](\w+)['"]\)/);
@@ -3411,6 +3449,7 @@ function stepPrev(){stepTo(_stepIdx-1);}
 function stepNav(){if(!_dayStops.length)return;var s=_dayStops[_stepIdx];navChoose(s.geo[0],s.geo[1],_placeName(s.title));}
 function renderDayMap(dayId){
   if(!_mapGroup)return;_mapGroup.clearLayers();
+  if(_searchMk){try{_map.removeLayer(_searchMk);}catch(e){}_searchMk=null;}
   var empty=document.getElementById('map-empty');empty.style.display='none';
   var card=document.getElementById(dayId);
   var items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted):not(.tl-nap)')):[];
