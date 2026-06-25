@@ -3236,31 +3236,40 @@ var FLIGHT_DAYS=['d1','d8'];
 function _dayCap(dayId){
   var card=document.getElementById(dayId);
   var items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')):[];
-  var hasB=false,hasL=false,hasD=false,brk=false,attr=0,mealsOther=0;
+  var hasB=false,hasL=false,hasD=false,brk=false,attr=0,mealsOther=0,logH=0;
   items.forEach(function(it){
     var h=it.querySelector('h4'),p=it.querySelector('p');
     var t=((h?h.textContent:'')+' '+(p?p.textContent:''));
     var html=it.innerHTML||'';
     if(it.classList.contains('tl-nap')||/מנוחה|שנת צהר|הפסק|נמנ|😴/.test(t)){brk=true;return;}
-    if(/טיס|המרא|נחית|נסיע|איסוף רכב|צ'?ק.?אין|check.?in|עזיב|מעבר מלונ|🚗|✈️/.test(t))return;
+    if(/מעבר מלונ|העברת מלון/.test(t)){logH+=3;return;}                 // hotel transfer
+    if(/טיס|המרא|נחית|עזיב|✈️/.test(t)){logH+=2;return;}                 // flight ground time
+    if(/נסיע|🚗/.test(t)){var mm=t.match(/(\d+)\s*דק/);logH+=mm?Math.max(0.5,parseInt(mm[1],10)/60):1;return;}
+    if(/איסוף רכב|צ'?ק.?אין|check.?in/.test(t)){logH+=1;return;}
     if(/בוקר|בופה|🥐|🍳/.test(t)){hasB=true;return;}
     if(/צהר|לאנץ|🥗|🍖/.test(t)){hasL=true;return;}
     if(/ארוחת ערב|דינר|גורמה|🌙/.test(t)){hasD=true;return;}
     if(/viewRestaurant/.test(html)){mealsOther++;return;}
     attr++;
   });
+  var cardText=card?card.textContent:'';
+  if(/מעבר מלונ|העברת מלון/.test(cardText))logH=Math.max(logH,3.5);     // ensure transfer days count
   var bF=hasB,lF=hasL,dF=hasD,extra=mealsOther;
   if(!bF&&extra>0){bF=true;extra--;}
   if(!lF&&extra>0){lF=true;extra--;}
   if(!dF&&extra>0){dF=true;extra--;}
   var meals=(bF?1:0)+(lF?1:0)+(dF?1:0);
-  var filled=meals+(brk?1:0)+Math.min(2,attr);
-  return {hasB:bF,hasL:lF,hasD:dF,brk:brk,attr:attr,filled:Math.min(6,filled),busy:attr>2};
+  // time-based: ~12 active hours; attractions only for genuinely free time
+  var freeH=Math.max(0,12-logH-meals-(brk?1.5:0));
+  var reqAttr=Math.max(0,Math.min(2,Math.round(freeH/3)));
+  var total=4+reqAttr;
+  var filled=meals+(brk?1:0)+Math.min(reqAttr,attr);
+  return {hasB:bF,hasL:lF,hasD:dF,brk:brk,attr:attr,reqAttr:reqAttr,total:total,filled:Math.min(total,filled),busy:attr>reqAttr};
 }
 function _meterHTML(dayId){
   if(FLIGHT_DAYS.indexOf(dayId)>=0)return '<div class="ds-meter ds-flight">✈️</div>';
   var c=_dayCap(dayId),s='';
-  for(var i=0;i<6;i++)s+='<i class="'+(i<c.filled?(c.busy?'a':'g'):'')+'"></i>';
+  for(var i=0;i<c.total;i++)s+='<i class="'+(i<c.filled?(c.busy?'a':'g'):'')+'"></i>';
   return '<div class="ds-meter">'+s+'</div>';
 }
 function buildDateStrip(){
@@ -3272,16 +3281,15 @@ function renderDayCapacity(dayId){
   if(FLIGHT_DAYS.indexOf(dayId)>=0){host.innerHTML='<div class="cap-bar flight"><span class="cap-status">✈️ יום טיסה — אין דרישת קיבולת</span></div>';return;}
   var c=_dayCap(dayId),miss=[];
   if(!c.hasB)miss.push('🍳 בוקר');
-  if(c.attr<1)miss.push('⭐ אטרקציה');
   if(!c.hasL)miss.push('🍽️ צהריים');
-  if(!c.brk)miss.push('😴 הפסקה');
-  if(c.attr<2)miss.push('⭐ אטרקציה');
   if(!c.hasD)miss.push('🌙 ערב');
+  if(!c.brk)miss.push('😴 הפסקה');
+  for(var ai=c.attr;ai<c.reqAttr;ai++)miss.push('⭐ אטרקציה');
   var cls,status;
   if(c.busy){cls='busy';status='יום עמוס · '+c.attr+' אטרקציות';}
   else if(miss.length===0){cls='full';status='יום מושלם ✓';}
-  else{cls='room';status='להשלמת היום המושלם: חסר '+miss.length;}
-  var s='';for(var i=0;i<6;i++)s+='<i class="'+(i<c.filled?(c.busy?'a':'g'):'')+'"></i>';
+  else{cls='room';status='להשלמת היום: חסר '+miss.length;}
+  var s='';for(var i=0;i<c.total;i++)s+='<i class="'+(i<c.filled?(c.busy?'a':'g'):'')+'"></i>';
   var chips=miss.map(function(m){return '<button class="cap-add" onclick="openAddEvent(\''+dayId+'\')">'+m+' ＋</button>';}).join('');
   host.innerHTML='<div class="cap-bar '+cls+'"><div class="ds-meter">'+s+'</div><span class="cap-status">'+status+'</span></div>'+(chips?'<div class="cap-missing">'+chips+'</div>':'');
 }
