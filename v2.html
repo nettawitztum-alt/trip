@@ -799,12 +799,8 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 /* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;font-family:'Assistant',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all .15s;min-height:44px;user-select:none;white-space:nowrap}
 .btn:active{opacity:.8;transform:scale(.97)}
-.btn-primary{background:var(--cta);color:white}
-.btn-accent{background:var(--accent);color:white}
-.btn-outline{background:transparent;color:var(--text);border:1.5px solid #DDDDD8}
 .btn-danger{background:var(--danger);color:white}
-.btn-ghost{background:transparent;color:var(--gray-text);border:none}
-.btn-sm{padding:7px 12px;font-size:12px;min-height:36px}
+.btn-sm{padding:8px 12px;font-size:12px;min-height:40px}
 .btn-block{width:100%;justify-content:center}
 .btn-waze{background:transparent;color:var(--lime-dark);border:1.5px solid var(--accent);position:relative;overflow:hidden}
 .btn-waze:active::after,.tl-attr-link:active::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.35);border-radius:inherit;animation:ripple .3s ease-out;pointer-events:none}
@@ -942,6 +938,8 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
 body.modal-open{overflow:hidden}
+.modal-x{position:absolute;top:12px;left:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.10);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6}
+.modal-x:active{transform:scale(.92)}
 body.modal-open .page-scroll-area{overflow:hidden}
 #attr-map-empty{position:fixed;top:50%;bottom:auto;left:16px;right:16px;transform:translateY(-50%)}
 .modal{background:white;border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;padding:20px}
@@ -1324,7 +1322,7 @@ body.modal-open .page-scroll-area{overflow:hidden}
 
   /* ── Tap targets ── */
   .btn,.att-btn,.bc-btn{min-height:44px;min-width:44px}
-  .btn-sm{min-height:40px}
+  .btn-sm{min-height:44px}
 }
 
 /* ── GOOGLE SIGN-IN ── */
@@ -1574,7 +1572,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
   #itin-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
 body.map-view #itin-stickyhead{top:var(--bnr-h,40px)}
   #itin-stickyhead .date-strip{margin-bottom:2px}
-  #attr-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:12px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
+  #attr-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
 body.attr-map-view #attr-stickyhead{top:var(--bnr-h,40px)}
 body.map-view .page-scroll-area,body.attr-map-view .page-scroll-area{padding-bottom:0}
 }
@@ -2065,12 +2063,13 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 
 <!-- ── אטרקציות ── -->
 <div class="tab-panel" id="panel-attractions">
-  <div id="attr-stickyhead" style="text-align:center">
+  <div id="attr-stickyhead">
   <div class="attr-view-toggle">
     <button id="av-list" class="on" onclick="attrView('list')"><i data-feather="list"></i> רשימה</button>
     <button id="av-map" onclick="attrView('map')"><i data-feather="map"></i> מפה</button>
   </div>
   </div>
+  <div class="map-search" id="attr-search-row" style="display:none"><input id="attr-search-input" class="map-search-input" placeholder="חפש מקום להוסיף כאטרקציה…" onkeydown="if(event.key==='Enter'){attrMapSearch();return false;}"><button class="map-search-btn" onclick="attrMapSearch()" aria-label="חפש"><i data-feather="search"></i></button></div>
   <div id="attr-map-canvas"></div>
   <div id="attr-map-empty" class="map-empty" style="display:none"></div>
   <div id="attr-list-view">
@@ -2196,7 +2195,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <!-- ═══ MORE MENU SHEET ═══ -->
 <div class="modal-overlay" id="more-modal" onclick="closeModalOnBg(event,'more-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title">תפריט</div>
     <div class="more-grid">
       <button class="more-tile" onclick="switchTab('tasks')"><span class="mt-ic"><i data-feather="check-square"></i></span><span>משימות</span></button>
@@ -2214,7 +2213,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <!-- ═══ ADD ATTRACTION MODAL ═══ -->
 <div class="modal-overlay" id="add-attr-modal" onclick="closeModalOnBg(event,'add-attr-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title" id="add-attr-title">➕ הוסף אטרקציה</div>
     <div id="attr-suggest" class="attr-suggest"></div>
     <input type="hidden" id="edit-attr-id">
@@ -2241,7 +2240,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <!-- ═══ ADD PACKING ITEM MODAL ═══ -->
 <div class="modal-overlay" id="add-pack-modal" onclick="closeModalOnBg(event,'add-pack-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title">➕ הוסף פריט לרשימה</div>
     <div class="form-group"><label>שם הפריט *</label><input type="text" class="form-input" id="pack-item-text" placeholder="מה להביא..."></div>
     <div class="form-group"><label>קטגוריה</label>
@@ -2265,7 +2264,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 
 <div class="modal-overlay" id="add-rest-modal" onclick="closeModalOnBg(event,'add-rest-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title">הוסף מסעדה</div>
     <div class="form-group"><label>שם המסעדה *</label><input type="text" class="form-input" id="rest-name" placeholder="שם..."></div>
     <div class="form-group"><label>מיקום</label><div style="display:flex;gap:8px"><input type="text" class="form-input" id="rest-location" placeholder="כתובת / עיר..." style="flex:1"><button class="btn btn-outline btn-sm" type="button" onclick="searchRestLocation()" aria-label="חפש במפות"><i data-feather="search"></i></button></div></div>
@@ -2281,7 +2280,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <!-- ═══ USER MODAL ═══ -->
 <div class="modal-overlay" id="user-modal" onclick="closeModalOnBg(event,'user-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title">👤 פרופיל משתמש</div>
     <p style="font-size:14px;color:var(--muted);margin-bottom:16px">כרגע מחובר/ת בתור: <strong id="user-modal-name"></strong></p>
     <div id="user-sync-section" style="display:none;margin-bottom:16px">
@@ -2309,7 +2308,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <!-- ═══ ADD / EDIT ITINERARY EVENT MODAL ═══ -->
 <div class="modal-overlay" id="event-modal" onclick="closeModalOnBg(event,'event-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title" id="event-modal-title">הוסף אירוע</div>
     <input type="hidden" id="event-edit-iid">
     <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
@@ -2779,8 +2778,9 @@ function renderRestaurants(){
   const hotel=document.getElementById('restaurants-hotel');
   const day=document.getElementById('restaurants-day');
   const all=[...BUILTIN_RESTAURANTS,...getCustomRest()];
-  if(hotel)hotel.innerHTML=all.filter(r=>r.hotel).map(r=>restCardHTML(r)).join('');
-  if(day)day.innerHTML=all.filter(r=>!r.hotel).map(r=>restCardHTML(r)).join('');
+  var _rh=all.filter(r=>r.hotel),_rd=all.filter(r=>!r.hotel);
+  if(hotel)hotel.innerHTML=_rh.length?_rh.map(r=>restCardHTML(r)).join(''):'<p style="font-size:13px;color:var(--muted);padding:8px 0">אין מסעדות מלון להצגה.</p>';
+  if(day)day.innerHTML=_rd.length?_rd.map(r=>restCardHTML(r)).join(''):'<p style="font-size:13px;color:var(--muted);padding:8px 0">אין המלצות מסעדות עדיין. לחצו ＋ כדי להוסיף!</p>';
   if(window.feather)feather.replace();
 }
 function openAddRestModal(){
@@ -3504,6 +3504,7 @@ function attrView(mode){
   listBtn.classList.toggle('on',!isMap);mapBtn.classList.toggle('on',isMap);
   listView.style.display=isMap?'none':'';
   mapEl.style.display=isMap?'block':'none';
+  var _srow=document.getElementById('attr-search-row');if(_srow)_srow.style.display=isMap?'flex':'none';
   if(isMap){
     if(!window.L){alert('המפה עדיין נטענת — נסו שוב בעוד רגע');attrView('list');return;}
     _ensureAttrMap();
@@ -3564,6 +3565,32 @@ function addSearchedPlace(){
   openAddEvent(_selDay);
   var ti=document.getElementById('event-title');if(ti)ti.value=_searchResult.name;
   var lo=document.getElementById('event-location');if(lo)lo.value=_searchResult.name;
+}
+var _attrSearchMk=null;
+async function attrMapSearch(){
+  var inp=document.getElementById('attr-search-input');var q=(inp&&inp.value||'').trim();if(!q)return;
+  try{
+    var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q+', Austria'));
+    var j=await r.json();
+    if(!j||!j[0]){alert('לא נמצא מקום בשם זה');return;}
+    var geo=[parseFloat(j[0].lat),parseFloat(j[0].lon)];
+    var label=(j[0].display_name||'').split(',').slice(0,2).join(',');
+    if(_attrSearchMk){try{_amap.removeLayer(_attrSearchMk);}catch(e){}}
+    var icon=L.divIcon({className:'',html:'<div class="map-search-pin">📍</div>',iconSize:[34,34],iconAnchor:[17,30],popupAnchor:[0,-28]});
+    _attrSearchMk=L.marker(geo,{icon:icon,zIndexOffset:1000}).addTo(_amap);
+    var pop=document.createElement('div');
+    pop.innerHTML='<b>'+q+'</b>'+(label?'<div style="font-size:12px;opacity:.7;margin-top:3px">'+label+'</div>':'');
+    var btn=document.createElement('button');btn.className='map-pop-btn';btn.textContent='＋ הוסף כאטרקציה';
+    btn.onclick=function(){
+      try{var c=_geoCache();c[q]=geo;localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+      openAddAttrModal();
+      var n=document.getElementById('attr-name');if(n)n.value=q;
+      var l=document.getElementById('attr-location');if(l)l.value=q;
+    };
+    var br=document.createElement('div');br.appendChild(btn);pop.appendChild(br);
+    _attrSearchMk.bindPopup(pop).openPopup();
+    try{_amap.panTo(geo,{animate:true});}catch(e){}
+  }catch(e){alert('שגיאת חיפוש — נסו שוב');}
 }
 function _eventGeo(item){
   var k=_knownGeo(item);if(k)return k;
@@ -4290,8 +4317,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 <div class="modal-overlay" id="nav-modal" onclick="closeModalOnBg(event,'nav-modal')">
-  <div class="modal" style="text-align:right">
-    <div class="modal-handle"></div>
+  <div class="modal">
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title" id="nav-title">ניווט</div>
     <p style="color:var(--muted);font-size:13px;margin-bottom:14px">לאן לפתוח את הניווט?</p>
     <div style="display:flex;gap:12px">
@@ -4302,7 +4329,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 </div>
 <div class="modal-overlay" id="add-task-modal" onclick="closeModalOnBg(event,'add-task-modal')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title">➕ משימה חדשה</div>
     <div class="form-group"><label>המשימה</label><input type="text" class="form-input" id="task-new-text" placeholder="מה צריך לעשות לפני הטיול?" onkeydown="if(event.key==='Enter')addTask()"></div>
     <button class="btn btn-primary btn-block" onclick="addTask()">＋ הוסף משימה</button>
