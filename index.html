@@ -1645,6 +1645,14 @@ body.trip-active #day-capacity{display:none}
 .loc-opt:active,.loc-opt:hover{background:rgba(124,240,166,.12)}
 .loc-opt b{font-size:14px;font-weight:700;display:block}
 .loc-opt span{font-size:11px;color:var(--muted)}
+.nrest-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.nrest{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:14px;padding:10px 12px}
+.nrest-info b{font-size:13.5px;font-weight:700;display:block}
+.nrest-info span{font-size:11px;color:var(--muted)}
+.nrest-act{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.nrest-ta{font-size:12px;font-weight:700;color:#bff5d3;text-decoration:none;white-space:nowrap}
+.nrest-add{width:32px;height:32px;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(124,240,166,.16);color:var(--accent);font-size:18px;line-height:1;cursor:pointer}
+.nrest-add:active{transform:scale(.92)}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
@@ -2232,6 +2240,8 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   <div id="restaurants-hotel"></div>
   <p class="sec-title" style="margin-top:20px">🍽️ מסעדות ואוכל בדרך</p>
   <div id="restaurants-day"></div>
+  <p class="sec-title" style="margin-top:20px">⭐ מומלצות בקרבת המלון</p>
+  <div id="rest-nearby" class="attr-suggest"></div>
 </div>
 
 <!-- ── טיפים ── -->
@@ -2842,6 +2852,7 @@ function restCardHTML(r){
   const dayBadge=r.days?`<span class="attr-duration" style="font-size:11px;padding:2px 8px">📅 ${r.days}</span>`:'';
   const wazeBtn=r.waze?`<a href="${r.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
   const webBtn=r.website?`<a href="${r.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
+  const taBtn=`<a href="https://www.tripadvisor.com/Search?q=${encodeURIComponent((r.name||'')+' '+(r.location||'')+' Salzburg')}" class="btn btn-outline btn-sm" target="_blank" rel="noopener">★ TripAdvisor</a>`;
   const menuBtn=r.menu?`<a href="${r.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
   const tipsHTML=r.tips?.length?`<div class="attr-section-title">כדאי לדעת</div><ul class="attr-tips">${r.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`:'';
   return `<div class="attr-card" id="attr-card-${r.id}">
@@ -2859,7 +2870,7 @@ function restCardHTML(r){
       <div class="attr-body" style="padding-top:6px">
         <p class="attr-desc">${r.desc||''}</p>
         ${tipsHTML}
-        <div class="action-row">${wazeBtn}${webBtn}${menuBtn}</div>
+        <div class="action-row">${wazeBtn}${webBtn}${menuBtn}${taBtn}</div>
       </div>
     </div>
   </div>`;
@@ -2873,7 +2884,49 @@ function renderRestaurants(){
   var _rh=all.filter(r=>r.hotel),_rd=all.filter(r=>!r.hotel);
   if(hotel)hotel.innerHTML=_rh.length?_rh.map(r=>restCardHTML(r)).join(''):'<p style="font-size:13px;color:var(--muted);padding:8px 0">אין מסעדות מלון להצגה.</p>';
   if(day)day.innerHTML=_rd.length?_rd.map(r=>restCardHTML(r)).join(''):'<p style="font-size:13px;color:var(--muted);padding:8px 0">אין המלצות מסעדות עדיין. לחצו ＋ כדי להוסיף!</p>';
+  loadNearbyRestaurants();
   if(window.feather)feather.replace();
+}
+function _restEmoji(a){return {restaurant:'🍽️',cafe:'☕',fast_food:'🍔',bar:'🍺',pub:'🍺',biergarten:'🍺'}[a]||'🍽️';}
+async function loadNearbyRestaurants(){
+  var host=document.getElementById('rest-nearby');if(!host||host.dataset.loaded)return;
+  host.innerHTML='<div class="suggest-loading">מחפש מסעדות מומלצות ליד המלונות…</div>';
+  try{
+    var ck='nearby_rest';var cached=sessionStorage.getItem(ck);var list;
+    if(cached){list=JSON.parse(cached);}
+    else{
+      var q='[out:json][timeout:25];(node["amenity"~"^(restaurant|cafe|fast_food)$"]["name"](around:3000,47.390,13.415);node["amenity"~"^(restaurant|cafe|fast_food)$"]["name"](around:3000,47.785,12.985););out body 60;';
+      var r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)});
+      var d=await r.json();var seen={};list=[];
+      (d.elements||[]).forEach(function(e){
+        var nm=e.tags&&(e.tags['name:en']||e.tags.name);if(!nm)return;
+        var key=nm.toLowerCase();if(seen[key])return;seen[key]=1;
+        list.push({name:nm,lat:e.lat,lon:e.lon,cuisine:(e.tags.cuisine||''),amenity:(e.tags.amenity||'restaurant')});
+      });
+      list=list.slice(0,12);
+      sessionStorage.setItem(ck,JSON.stringify(list));
+    }
+    host.dataset.loaded='1';window._nearbyRest=list;
+    if(!list.length){host.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">לא נמצאו מסעדות בקרבת מקום כרגע.</p>';return;}
+    host.innerHTML='<div class="suggest-title">🍽️ ב-3 ק״מ מהמלונות — ביקורות בטריפאדוויזר והוספה</div><div class="nrest-list">'+
+      list.map(function(a,i){
+        var ta='https://www.tripadvisor.com/Search?q='+encodeURIComponent(a.name+' Salzburg');
+        var cuisine=a.cuisine?a.cuisine.replace(/_/g,' ').replace(/;/g,', '):'';
+        return '<div class="nrest"><div class="nrest-info"><b>'+_restEmoji(a.amenity)+' '+escapeHtml(a.name)+'</b>'+(cuisine?'<span>'+escapeHtml(cuisine)+'</span>':'')+'</div>'+
+          '<div class="nrest-act"><a href="'+ta+'" target="_blank" rel="noopener" class="nrest-ta">★ ביקורות</a>'+
+          '<button type="button" onclick="addNearbyRest('+i+')" class="nrest-add" aria-label="הוסף">＋</button></div></div>';
+      }).join('')+'</div>';
+  }catch(e){host.innerHTML='';host.dataset.loaded='';}
+}
+function addNearbyRest(i){
+  var a=(window._nearbyRest||[])[i];if(!a)return;
+  var arr=getCustomRest();
+  arr.push({id:'cr'+Date.now(),hotel:false,name:a.name,location:(a.cuisine?a.cuisine.replace(/_/g,' '):'מסעדה'),desc:'',
+    waze:'https://waze.com/ul?ll='+a.lat+','+a.lon+'&navigate=yes',
+    website:'https://www.tripadvisor.com/Search?q='+encodeURIComponent(a.name+' Salzburg'),custom:true});
+  saveCustomRest(arr);
+  try{var c=_geoCache();c[a.name]=[a.lat,a.lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+  renderRestaurants();
 }
 function openAddRestModal(){
   ['rest-name','rest-location','rest-desc'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
