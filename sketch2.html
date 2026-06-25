@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>קיבולת יום + הוספה במפה</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Heebo:wght@400;500;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gs:'Google Sans','Heebo','Assistant',sans-serif;--accent:#7CF0A6;--bg:#0e2b20;--card:rgba(255,255,255,.06);--brd:rgba(255,255,255,.12);--muted:rgba(255,255,255,.66);--amber:#FFD479;--red:#FF9b9b}
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--gs)}
+body{background:#0a1812;color:#fff;padding:26px 16px 80px}
+.intro{max-width:430px;margin:0 auto 22px;text-align:center}
+.intro h1{font-size:20px;font-weight:800;margin-bottom:6px}
+.intro p{font-size:13px;color:var(--muted);line-height:1.6}
+.opt{max-width:430px;margin:0 auto 40px}
+.opt-tag{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.opt-tag .b{background:var(--accent);color:#072414;font-weight:800;font-size:13px;border-radius:999px;padding:4px 12px}
+.opt-tag h2{font-size:16px;font-weight:700}
+.opt-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.phone{background:var(--bg);border-radius:30px;border:9px solid #05100b;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative}
+.scr{position:relative;padding:16px 14px 20px}
+.topbanner{margin:-16px -14px 14px;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(90deg,rgba(124,240,166,.14),rgba(124,240,166,.05));border-bottom:1px solid rgba(124,240,166,.3);padding:10px 14px;font-size:12px;font-weight:700;position:sticky;top:0;z-index:9}
+.topbanner .cd{color:var(--accent);font-weight:900;direction:ltr;font-variant-numeric:tabular-nums}
+/* date strip */
+.estrip{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.estrip::-webkit-scrollbar{display:none}
+.edate{flex:0 0 auto;width:52px;text-align:center;background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:7px 0 6px}
+.edate .w{font-size:10px;color:var(--muted)}
+.edate .d{font-size:17px;font-weight:800;margin-top:1px}
+.edate.on{background:var(--accent);border-color:var(--accent)}
+.edate.on .w,.edate.on .d{color:#072414}
+/* meter under date (B) */
+.mtr{display:flex;gap:2px;justify-content:center;margin-top:5px}
+.mtr i{width:4px;height:4px;border-radius:1px;background:rgba(255,255,255,.22)}
+.mtr i.g{background:var(--accent)}
+.mtr i.a{background:var(--amber)}
+.edate.on .mtr i{background:rgba(7,36,20,.3)}
+.edate.on .mtr i.g{background:#072414}
+.edate.on .mtr i.a{background:#7a5b00}
+/* day card */
+.dcard{background:var(--card);border:1px solid var(--brd);border-radius:18px;padding:13px;margin-bottom:11px}
+.dhead{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dhead .day{font-size:11px;color:var(--accent);font-weight:700}
+.dhead h3{font-size:15.5px;font-weight:700;margin-top:2px}
+.cap{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;flex:0 0 auto}
+.cap.full{background:rgba(124,240,166,.18);color:var(--accent)}
+.cap.room{background:rgba(255,210,90,.16);color:var(--amber)}
+.cap.low{background:rgba(255,138,138,.16);color:var(--red)}
+/* slots (A) */
+.slots{display:flex;gap:5px;flex-wrap:wrap;margin-top:11px}
+.slot{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:5px 9px;border-radius:9px}
+.slot.have{background:rgba(124,240,166,.13);color:var(--accent);border:1px solid rgba(124,240,166,.3)}
+.slot.miss{color:var(--muted);border:1px dashed rgba(255,255,255,.28)}
+/* breakdown (B) */
+.bd{margin-top:12px;border-top:1px solid rgba(255,255,255,.09);padding-top:11px}
+.bdrow{display:flex;align-items:center;gap:9px;font-size:13px;padding:6px 0}
+.bdrow .ic{width:24px;text-align:center}
+.bdrow .lbl{flex:1}
+.bdrow .st{font-size:12px;font-weight:700}
+.bdrow .st.ok{color:var(--accent)}
+.bdrow .st.no{color:var(--amber)}
+.addmini{margin-right:auto;background:rgba(124,240,166,.14);color:var(--accent);border:none;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;font-family:var(--gs)}
+/* map */
+.toggle{display:inline-flex;background:rgba(255,255,255,.06);border:1px solid var(--brd);border-radius:999px;padding:4px;gap:2px;margin-bottom:12px}
+.toggle b{font-weight:600;font-size:12.5px;padding:7px 15px;border-radius:999px;color:var(--muted)}
+.toggle b.on{background:var(--accent);color:#072414}
+.searchbar{display:flex;align-items:center;gap:8px;background:#fff;border-radius:13px;padding:10px 14px;margin-bottom:12px;color:#445}
+.searchbar .q{flex:1;font-size:13.5px;color:#667}
+.mapbox{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--brd);height:360px}
+.mapbox svg{width:100%;height:100%;display:block}
+.result{position:absolute;left:12px;right:12px;bottom:12px;background:#15331f;border:1px solid var(--brd);border-radius:16px;padding:12px;display:flex;align-items:center;gap:11px;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.result .th{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,#7Fd6c0,#38D9A9);flex-shrink:0}
+.result h4{font-size:14px;font-weight:700}
+.result p{font-size:11.5px;color:var(--muted);margin-top:1px}
+.result .add{background:var(--accent);color:#072414;border:none;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;font-family:var(--gs);white-space:nowrap}
+.fab{position:absolute;left:16px;bottom:16px;width:54px;height:54px;border-radius:50%;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:300;box-shadow:0 8px 20px rgba(124,240,166,.4);z-index:5}
+.daypick{position:absolute;left:16px;bottom:80px;background:#15331f;border:1px solid var(--brd);border-radius:14px;padding:8px;z-index:6;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.daypick .t{font-size:11px;color:var(--muted);padding:3px 8px 7px}
+.daypick .row{display:flex;gap:5px;flex-wrap:wrap;max-width:200px}
+.daypick .c{background:rgba(255,255,255,.06);border:1px solid var(--brd);border-radius:9px;padding:6px 9px;font-size:12px;font-weight:700}
+.daypick .c.full{opacity:.45}
+.note{font-size:11.5px;color:var(--muted);text-align:center;margin-top:10px;font-style:italic}
+.legend{display:flex;gap:14px;justify-content:center;margin-top:10px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:9px;height:9px;border-radius:50%}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>קיבולת היום + הוספה במפה</h1>
+  <p>כל יום (חוץ מימי טיסה) צריך: הפסקה · 3 ארוחות · 2 אטרקציות = 6 משבצות. שתי דרכים להראות אם היום מלא או שיש מקום 👇</p>
+</div>
+
+<!-- ===== A: slot chips on each day ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">A</span><h2>משבצות על כל יום</h2></div>
+  <div class="opt-desc">כל יום מציג שורת משבצות: מה כבר יש (ירוק) ומה חסר (מקווקו). תג מצב למעלה: "יום מלא" / "יש מקום ל-1" / "חסרים 2".</div>
+  <div class="phone"><div class="scr">
+    <div class="topbanner"><span>✨ עוד כמה זמן נשאר לחופשה המושלמת</span><span class="cd">46:14:59</span></div>
+    <div class="estrip">
+      <div class="edate"><div class="w">ב׳</div><div class="d">17</div></div>
+      <div class="edate"><div class="w">א׳</div><div class="d">16</div></div>
+      <div class="edate"><div class="w">ש׳</div><div class="d">15</div></div>
+      <div class="edate"><div class="w">ו׳</div><div class="d">14</div></div>
+      <div class="edate on"><div class="w">ה׳</div><div class="d">13</div></div>
+      <div class="edate"><div class="w">ד׳</div><div class="d">12</div></div>
+      <div class="edate"><div class="w">ג׳</div><div class="d">11</div></div>
+    </div>
+    <div class="dcard">
+      <div class="dhead"><div><div class="day">יום 3 · ה׳ 13.8</div><h3>הוהנוורפן + תרמה 🏰</h3></div><span class="cap full">יום מלא ✓</span></div>
+      <div class="slots">
+        <span class="slot have">😴 הפסקה</span><span class="slot have">🍳 בוקר</span><span class="slot have">🍽️ צהריים</span><span class="slot have">🌙 ערב</span><span class="slot have">⭐ מבצר</span><span class="slot have">⭐ תרמה</span>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dhead"><div><div class="day">יום 4 · ו׳ 14.8</div><h3>יום מנוחה 😴</h3></div><span class="cap room">יש מקום ל-1 ⭐</span></div>
+      <div class="slots">
+        <span class="slot have">😴 הפסקה</span><span class="slot have">🍳 בוקר</span><span class="slot have">🍽️ צהריים</span><span class="slot have">🌙 ערב</span><span class="slot have">⭐ אגם</span><span class="slot miss">➕ אטרקציה</span>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dhead"><div><div class="day">יום 6 · א׳ 16.8</div><h3>זלצבורג 🦁</h3></div><span class="cap low">חסרים 2</span></div>
+      <div class="slots">
+        <span class="slot have">😴 הפסקה</span><span class="slot miss">➕ בוקר</span><span class="slot have">🍽️ צהריים</span><span class="slot have">🌙 ערב</span><span class="slot have">⭐ גן חיות</span><span class="slot miss">➕ אטרקציה</span>
+      </div>
+    </div>
+  </div></div>
+  <div class="legend"><span><i class="dot" style="background:var(--accent)"></i> מלא</span><span><i class="dot" style="background:var(--amber)"></i> יש מקום</span><span><i class="dot" style="background:var(--red)"></i> חסר הרבה</span></div>
+</div>
+
+<!-- ===== B: meter on date strip + breakdown ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">B</span><h2>מד-קיבולת על רצועת התאריכים</h2></div>
+  <div class="opt-desc">מתחת לכל תאריך — מד קטן של 6 משבצות (ירוק=מלא, צהוב=חלקי). רואים את כל המסע בסקירה אחת. ביום הנבחר — פירוט מה יש ומה חסר עם כפתור הוספה.</div>
+  <div class="phone"><div class="scr">
+    <div class="topbanner"><span>✨ עוד כמה זמן נשאר לחופשה המושלמת</span><span class="cd">46:14:59</span></div>
+    <div class="estrip">
+      <div class="edate"><div class="w">ב׳</div><div class="d">17</div><div class="mtr"><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i></div></div>
+      <div class="edate"><div class="w">א׳</div><div class="d">16</div><div class="mtr"><i class="g"></i><i></i><i class="g"></i><i class="g"></i><i class="g"></i><i></i></div></div>
+      <div class="edate"><div class="w">ש׳</div><div class="d">15</div><div class="mtr"><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i></div></div>
+      <div class="edate"><div class="w">ו׳</div><div class="d">14</div><div class="mtr"><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="a"></i><i></i></div></div>
+      <div class="edate on"><div class="w">ה׳</div><div class="d">13</div><div class="mtr"><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i></div></div>
+      <div class="edate"><div class="w">ד׳</div><div class="d">12</div><div class="mtr"><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i></div></div>
+      <div class="edate"><div class="w">ג׳</div><div class="d">11</div><div class="mtr"><i class="g"></i><i></i><i class="g"></i><i class="g"></i><i></i><i></i></div></div>
+    </div>
+    <div class="dcard">
+      <div class="dhead"><div><div class="day">יום 4 · ו׳ 14.8</div><h3>יום מנוחה 😴</h3></div><span class="cap room">5/6 · יש מקום</span></div>
+      <div class="bd">
+        <div class="bdrow"><span class="ic">😴</span><span class="lbl">הפסקת צהריים</span><span class="st ok">✓</span></div>
+        <div class="bdrow"><span class="ic">🍳</span><span class="lbl">ארוחת בוקר</span><span class="st ok">✓</span></div>
+        <div class="bdrow"><span class="ic">🍽️</span><span class="lbl">ארוחת צהריים</span><span class="st ok">✓</span></div>
+        <div class="bdrow"><span class="ic">🌙</span><span class="lbl">ארוחת ערב</span><span class="st ok">✓</span></div>
+        <div class="bdrow"><span class="ic">⭐</span><span class="lbl">אטרקציה 1 · אגם Zauchensee</span><span class="st ok">✓</span></div>
+        <div class="bdrow"><span class="ic">⭐</span><span class="lbl">אטרקציה 2</span><span class="st no">חסר</span><button class="addmini">＋ הוסף</button></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===== C: add on map (FAB + search) ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">C</span><h2>הוספה מתוך המפה</h2></div>
+  <div class="opt-desc">חיפוש מקום על המפה ⟵ "הוסף ליום". בנוסף כפתור ＋ דביק (כמו בשאר הטאבים) להוספה מהירה ליום הנבחר. בבורר הימים — ימים מלאים מסומנים.</div>
+  <div class="phone"><div class="scr">
+    <div class="topbanner"><span>✨ עוד כמה זמן נשאר לחופשה המושלמת</span><span class="cd">46:14:59</span></div>
+    <div class="toggle"><b>רשימה</b><b class="on">מפה</b></div>
+    <div class="searchbar">🔍 <span class="q">חפש מקום להוסיף… (Hangar-7)</span></div>
+    <div class="mapbox">
+      <svg viewBox="0 0 360 360" preserveAspectRatio="xMidYMid slice">
+        <rect width="360" height="360" fill="#e7ece6"/>
+        <ellipse cx="80" cy="300" rx="74" ry="46" fill="#bcd6e6"/>
+        <path d="M-10 130 Q120 105 200 165 T370 185" stroke="#fff" stroke-width="7" fill="none"/>
+        <path d="M55 -10 L92 200 L150 380" stroke="#fff" stroke-width="6" fill="none"/>
+        <path d="M70 95 L235 150 L160 280" stroke="#1a73e8" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <g><circle cx="70" cy="95" r="14" fill="#7CF0A6" stroke="#fff" stroke-width="2.5"/><text x="70" y="100" text-anchor="middle" font-size="13" font-weight="800" fill="#072414">1</text></g>
+        <g><circle cx="235" cy="150" r="14" fill="#7CF0A6" stroke="#fff" stroke-width="2.5"/><text x="235" y="155" text-anchor="middle" font-size="13" font-weight="800" fill="#072414">2</text></g>
+        <g><circle cx="195" cy="235" r="16" fill="#1a73e8" stroke="#fff" stroke-width="3"/><text x="195" y="240" text-anchor="middle" font-size="15" fill="#fff">📍</text></g>
+      </svg>
+      <div class="daypick">
+        <div class="t">הוסף ל…</div>
+        <div class="row"><span class="c">1</span><span class="c">2</span><span class="c full">3</span><span class="c">4</span><span class="c">5</span><span class="c">6</span><span class="c full">7</span></div>
+      </div>
+      <div class="result">
+        <div class="th"></div>
+        <div style="flex:1"><h4>Hangar-7 🛩️</h4><p>Salzburg · מוזיאון מטוסים</p></div>
+        <button class="add">＋ הוסף ליום</button>
+      </div>
+      <div class="fab">＋</div>
+    </div>
+    <div class="note">📍 הסמן הכחול = תוצאת חיפוש · ＋ הדביק מוסיף ליום הנבחר ברצועה</div>
+  </div></div>
+</div>
+
+</body>
+</html>
