@@ -1108,6 +1108,11 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .attr-toggle-btn svg.feather{width:18px;height:18px;stroke:currentColor;stroke-width:2.5}
 .attr-collapsible{max-height:0;overflow:hidden;transition:max-height .28s cubic-bezier(.4,0,.2,1)}
 .attr-gallery{display:none;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.attr-suggest{margin-bottom:14px}
+.suggest-title{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.suggest-loading{font-size:12px;color:var(--muted);padding:6px 0}
+.suggest-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:132px;overflow-y:auto}
+.suggest-chip{background:rgba(124,240,166,.12);color:var(--accent);border:1px solid rgba(124,240,166,.3);border-radius:10px;padding:6px 10px;font-size:12px;font-weight:600;font-family:var(--gs);cursor:pointer}
 .attr-gallery.on{display:grid}
 .attr-gallery img{width:100%;height:88px;object-fit:cover;border-radius:10px;background:rgba(255,255,255,.06)}
 .attr-card.attr-open .attr-collapsible{max-height:1000px}
@@ -2203,6 +2208,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="add-attr-title">➕ הוסף אטרקציה</div>
+    <div id="attr-suggest" class="attr-suggest"></div>
     <input type="hidden" id="edit-attr-id">
     <div class="form-group"><label>שם האטרקציה *</label><input type="text" class="form-input" id="attr-name" placeholder="שם האטרקציה"></div>
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
@@ -2847,7 +2853,40 @@ function openAddAttrModal(){
   document.getElementById('attr-waze').value='';
   document.getElementById('attr-website').value='';
   document.getElementById('delete-attr-btn').style.display='none';
+  var sg=document.getElementById('attr-suggest');if(sg)sg.dataset.loaded='';
   openModal('add-attr-modal');
+  loadNearbyAttractions();
+}
+function _attrEmoji(t){return {zoo:'🦁',museum:'🏛️',viewpoint:'🏔️',theme_park:'🎢',gallery:'🖼️',aquarium:'🐠',artwork:'🗿'}[t]||'⭐';}
+function pickNearbyAttr(a){
+  var n=document.getElementById('attr-name'),l=document.getElementById('attr-location');
+  if(n)n.value=a.name;if(l)l.value=a.name;
+  try{var c=_geoCache();c[a.name]=[a.lat,a.lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+}
+async function loadNearbyAttractions(){
+  var host=document.getElementById('attr-suggest');if(!host||host.dataset.loaded)return;
+  host.innerHTML='<div class="suggest-loading">מחפש אטרקציות ליד המלונות…</div>';
+  try{
+    var ck='nearby_attr';var cached=sessionStorage.getItem(ck);var list;
+    if(cached){list=JSON.parse(cached);}
+    else{
+      var q='[out:json][timeout:25];(node["tourism"~"^(attraction|museum|viewpoint|theme_park|zoo|gallery|aquarium|artwork)$"]["name"](around:20000,47.39,13.415);node["tourism"~"^(attraction|museum|viewpoint|theme_park|zoo|gallery|aquarium|artwork)$"]["name"](around:20000,47.785,12.985););out body 80;';
+      var r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)});
+      var d=await r.json();var seen={};list=[];
+      (d.elements||[]).forEach(function(e){
+        var nm=e.tags&&(e.tags['name:en']||e.tags.name);if(!nm)return;
+        var key=nm.toLowerCase();if(seen[key])return;seen[key]=1;
+        list.push({name:nm,lat:e.lat,lon:e.lon,type:(e.tags.tourism||'')});
+      });
+      list=list.slice(0,10);
+      sessionStorage.setItem(ck,JSON.stringify(list));
+    }
+    host.dataset.loaded='1';
+    if(!list.length){host.innerHTML='';return;}
+    host.innerHTML='<div class="suggest-title">💡 מומלצים ב-20 ק״מ מהמלון — לחצו להוספה</div><div class="suggest-chips">'+
+      list.map(function(a,i){return '<button type="button" class="suggest-chip" data-i="'+i+'">'+_attrEmoji(a.type)+' '+a.name+'</button>';}).join('')+'</div>';
+    [].forEach.call(host.querySelectorAll('.suggest-chip'),function(btn){btn.onclick=function(){pickNearbyAttr(list[+btn.dataset.i]);};});
+  }catch(e){host.innerHTML='';host.dataset.loaded='';}
 }
 function openEditAttrModal(id){
   const custom=getCustomAttractions();
