@@ -2577,15 +2577,7 @@ const BUILTIN_PACKING = [
 
 const CAT_LABELS = {romi:'🍼 רומי (תינוקת)',lia:'👧 ליה (4 שנים)',tom:'👦 תום (4 שנים)',omri:'👶 עמרי (2 שנים)',all:'👨‍👩‍👧‍👦 כולם',apps:'📱 אפליקציות להתקין'};
 var WX={};
-function _applyDayWeather(){
-  document.querySelectorAll('.card[id^="d"]').forEach(function(card){
-    var w=WX[card.id];if(!w)return;
-    var head=card.querySelector('.card-header');if(!head)return;
-    var chip=head.querySelector('.card-wx');
-    if(!chip){chip=document.createElement('span');chip.className='card-wx';var th=head.querySelector('.day-thumb');head.insertBefore(chip,th||null);}
-    chip.innerHTML=w.ic+' '+w.mx+'\u00b0<small>/'+w.mn+'\u00b0</small>'+(w.rain>=30?' \ud83d\udca7'+w.rain+'%':'');
-  });
-}
+function _applyDayWeather(){/* weather shown on the date strip only — no per-card duplicate */}
 const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
 
 // ═══════════════ STATE ═══════════════
@@ -4281,9 +4273,6 @@ function _humanDelta(mins){
 }
 function _focusBodyHTML(st){
   var idx=st.idx,inTrip=st.inTrip,fidx=st.fidx,focus=st.days[fidx];
-  var dots='';for(var i=0;i<8;i++){dots+='<span class="pdot '+(i<fidx?'done':(i===fidx?'cur':''))+'"></span>';}
-  var head=inTrip?('<span>יום '+(fidx+1)+' מתוך 8</span><span class="dfg">עוד '+(7-fidx)+' ימי טיול 🏔️</span>')
-                 :'<span>הטיול הסתיים</span><span class="dfg">תודה! 🇦🇹</span>';
   var greet='<div class="df-greet"><span>'+escapeHtml(_greeting())+'</span>'+
     (inTrip?'<button class="df-share" onclick="shareDay(\''+focus+'\')" aria-label="שתף את היום"><i data-feather="share-2"></i></button>':'')+'</div>';
   var cardHtml='';
@@ -4308,8 +4297,7 @@ function _focusBodyHTML(st){
         '<div class="df-pillrow">'+ring+'<span class="df-pill">⏭️ הבא · '+escapeHtml(delta)+'</span></div>'+
         '<h3>'+escapeHtml(title)+'</h3>'+
         ((t||desc)?('<div class="df-sub">'+escapeHtml([t,desc].filter(Boolean).join(' · '))+'</div>'):'')+
-        '<div class="df-row"><a class="df-b df-w" target="_blank" rel="noopener" href="https://waze.com/ul?q='+q+'&navigate=yes"><i data-feather="navigation"></i> Waze</a>'+
-        '<button class="df-b df-gp" onclick="openFocusDay(\''+focus+'\')"><i data-feather="calendar"></i> פתח את היום</button></div>'+
+        '<div class="df-row"><a class="df-b df-w" target="_blank" rel="noopener" href="https://waze.com/ul?q='+q+'&navigate=yes"><i data-feather="navigation"></i> Waze</a></div>'+
         '</div></div>';
       var after=items[nextIdx+1];
       if(after)cardHtml+='<div class="df-after"><span class="t">'+escapeHtml(_timeStr(after))+'</span><div style="flex:1;font-weight:600;font-size:14px">'+escapeHtml(_evTitle(after))+'</div><span class="df-mut">אחר כך</span></div>';
@@ -4319,12 +4307,13 @@ function _focusBodyHTML(st){
         '<span class="df-pill">✓ סיימתם להיום</span>'+
         '<h3>יום נהדר! 🎉</h3>'+
         (fidx<7?('<div class="df-sub">נתראה מחר ליום '+(fidx+2)+'</div>'):'<div class="df-sub">היום האחרון — טיסה הביתה ✈️</div>')+
-        '<div class="df-row"><button class="df-b df-w" onclick="shareDay(\''+focus+'\')"><i data-feather="share-2"></i> שתף את היום</button>'+
-        '<button class="df-b df-gp" onclick="openFocusDay(\''+focus+'\')"><i data-feather="calendar"></i> פתח את היום</button></div>'+
+        '<div class="df-row"><button class="df-b df-w" onclick="shareDay(\''+focus+'\')"><i data-feather="share-2"></i> שתף את היום</button></div>'+
         '</div></div>';
     }
+  } else {
+    cardHtml='<div class="df-now"><div class="df-nb"><span class="df-pill">✓ הטיול הסתיים</span><h3>תודה! 🇦🇹</h3></div></div>';
   }
-  return '<div class="df-head">'+head+'</div>'+greet+'<div class="df-prog">'+dots+'</div>'+cardHtml;
+  return greet+cardHtml;
 }
 var _celebratedDay=null;
 function _greeting(){
