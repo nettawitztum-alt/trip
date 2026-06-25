@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0e2b20">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="אוסטריה 2026">
 <title>🇦🇹 אוסטריה אוגוסט 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1599,6 +1603,24 @@ body.trip-active #day-capacity{display:none}
 .empty-state .es-ic{font-size:40px;margin-bottom:6px}
 .empty-state .es-t{font-size:15px;font-weight:800;color:#fff}
 .empty-state .es-s{font-size:12.5px;color:var(--muted);margin:4px 0 14px}
+#day-focus .df-greet{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;margin:2px 0 9px}
+#day-focus .df-share{width:34px;height:34px;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(255,255,255,.06);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#day-focus .df-share svg.feather{width:16px;height:16px;stroke:currentColor}
+#day-focus .df-pillrow{display:flex;align-items:center;gap:10px;margin-bottom:2px}
+#day-focus .df-ring{width:38px;height:38px;flex:0 0 auto;transform:rotate(-90deg)}
+#day-focus .df-ring .bg{fill:none;stroke:rgba(255,255,255,.12);stroke-width:3}
+#day-focus .df-ring .fg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.day-actions{display:flex;gap:8px;padding:0 14px 8px;margin-top:-2px}
+.day-actions button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:999px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:var(--muted);font-family:var(--gs);font-size:12px;font-weight:700;cursor:pointer}
+.day-actions button svg.feather{width:15px;height:15px;stroke:currentColor}
+.day-actions button:active{transform:scale(.97)}
+.ds-wx{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.82);margin-top:3px;white-space:nowrap}
+.ds-chip.on .ds-wx{color:#0a2a1c}
+.card-wx{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.09);border:1px solid var(--glass-brd);border-radius:999px;padding:3px 10px;white-space:nowrap;align-self:center;flex:0 0 auto;margin-inline-start:6px}
+.card-wx small{font-weight:600;opacity:.6}
+.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
+.confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
+@keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
 .countdown-bar{display:flex!important;flex-direction:row!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 10px;width:auto!important;margin:0!important;padding:8px 14px!important;border-radius:0!important;background:rgba(11,30,22,.97)!important;border:none!important;border-bottom:1px solid rgba(124,240,166,.3)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .cdb-label{font-size:12px!important;font-weight:700!important;white-space:nowrap!important;color:#fff!important}
 .cdb-units{gap:3px!important}
@@ -2554,6 +2576,16 @@ const BUILTIN_PACKING = [
 ];
 
 const CAT_LABELS = {romi:'🍼 רומי (תינוקת)',lia:'👧 ליה (4 שנים)',tom:'👦 תום (4 שנים)',omri:'👶 עמרי (2 שנים)',all:'👨‍👩‍👧‍👦 כולם',apps:'📱 אפליקציות להתקין'};
+var WX={};
+function _applyDayWeather(){
+  document.querySelectorAll('.card[id^="d"]').forEach(function(card){
+    var w=WX[card.id];if(!w)return;
+    var head=card.querySelector('.card-header');if(!head)return;
+    var chip=head.querySelector('.card-wx');
+    if(!chip){chip=document.createElement('span');chip.className='card-wx';var th=head.querySelector('.day-thumb');head.insertBefore(chip,th||null);}
+    chip.innerHTML=w.ic+' '+w.mx+'\u00b0<small>/'+w.mn+'\u00b0</small>'+(w.rain>=30?' \ud83d\udca7'+w.rain+'%':'');
+  });
+}
 const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
 
 // ═══════════════ STATE ═══════════════
@@ -3082,6 +3114,9 @@ async function fetchWeather(){
       <div class="wd-rain">💧${dd.precipitation_probability_max[i]}%</div>
     </div>`).join('');
     document.getElementById('weather-container').innerHTML=`<div class="weather-strip"><div class="weather-row">${cards}</div></div>`;
+    dd.time.forEach(function(t,i){var id='d'+(i+1);WX[id]={ic:WMO[dd.weathercode[i]]||'🌡️',mx:Math.round(dd.temperature_2m_max[i]),mn:Math.round(dd.temperature_2m_min[i]),rain:dd.precipitation_probability_max[i]};});
+    if(typeof buildDateStrip==='function')buildDateStrip();
+    _applyDayWeather();
   }catch{
     document.getElementById('weather-container').innerHTML='<div class="alert alert-warning"><span class="alert-icon">⚠️</span>לא ניתן לטעון תחזית. בדוק חיבור.</div>';
   }
@@ -3388,7 +3423,7 @@ function _meterHTML(dayId){
   return '<div class="ds-meter">'+s+'</div>';
 }
 function buildDateStrip(){
-  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span>'+_meterHTML(x.id)+'</button>';}).join('');
+  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span>'+(WX[x.id]?'<span class="ds-wx">'+WX[x.id].ic+WX[x.id].mx+'°</span>':'')+_meterHTML(x.id)+'</button>';}).join('');
   [].forEach.call(document.querySelectorAll('.js-datestrip'),function(host){host.innerHTML=html;var on=host.querySelector('.ds-chip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});});
 }
 function renderDayCapacity(dayId){
@@ -3985,6 +4020,7 @@ function initItinIds(){
   });
   decorateNavIcons();
   decorateDayThumbs();
+  _addDayActions();
 }
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
 function addEventMenuBtn(item,iid){
@@ -4248,6 +4284,8 @@ function _focusBodyHTML(st){
   var dots='';for(var i=0;i<8;i++){dots+='<span class="pdot '+(i<fidx?'done':(i===fidx?'cur':''))+'"></span>';}
   var head=inTrip?('<span>יום '+(fidx+1)+' מתוך 8</span><span class="dfg">עוד '+(7-fidx)+' ימי טיול 🏔️</span>')
                  :'<span>הטיול הסתיים</span><span class="dfg">תודה! 🇦🇹</span>';
+  var greet='<div class="df-greet"><span>'+escapeHtml(_greeting())+'</span>'+
+    (inTrip?'<button class="df-share" onclick="shareDay(\''+focus+'\')" aria-label="שתף את היום"><i data-feather="share-2"></i></button>':'')+'</div>';
   var cardHtml='';
   if(inTrip){
     var card=document.getElementById(focus);
@@ -4261,9 +4299,13 @@ function _focusBodyHTML(st){
       var title=_evTitle(nxt),t=_timeStr(nxt);
       var desc=nxt.querySelector('p')?nxt.querySelector('p').textContent.trim():'';
       var q=encodeURIComponent(title+' אוסטריה');
-      var delta=_humanDelta(_evMin(nxt)-nowMin);
+      var nMin=_evMin(nxt),cMin=cur?_evMin(cur):null;
+      var frac=(cMin!=null&&nMin>cMin)?Math.max(0,Math.min(1,(nowMin-cMin)/(nMin-cMin))):0;
+      var C=94.2,off=(C*(1-frac)).toFixed(1);
+      var ring='<svg class="df-ring" viewBox="0 0 36 36"><circle class="bg" cx="18" cy="18" r="15"></circle><circle class="fg" cx="18" cy="18" r="15" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"></circle></svg>';
+      var delta=_humanDelta(nMin-nowMin);
       cardHtml='<div class="df-now"><div class="df-nb">'+nowLine+
-        '<span class="df-pill">⏭️ הבא · '+escapeHtml(delta)+'</span>'+
+        '<div class="df-pillrow">'+ring+'<span class="df-pill">⏭️ הבא · '+escapeHtml(delta)+'</span></div>'+
         '<h3>'+escapeHtml(title)+'</h3>'+
         ((t||desc)?('<div class="df-sub">'+escapeHtml([t,desc].filter(Boolean).join(' · '))+'</div>'):'')+
         '<div class="df-row"><a class="df-b df-w" target="_blank" rel="noopener" href="https://waze.com/ul?q='+q+'&navigate=yes"><i data-feather="navigation"></i> Waze</a>'+
@@ -4272,15 +4314,84 @@ function _focusBodyHTML(st){
       var after=items[nextIdx+1];
       if(after)cardHtml+='<div class="df-after"><span class="t">'+escapeHtml(_timeStr(after))+'</span><div style="flex:1;font-weight:600;font-size:14px">'+escapeHtml(_evTitle(after))+'</div><span class="df-mut">אחר כך</span></div>';
     } else {
+      if(_celebratedDay!==focus){_celebratedDay=focus;setTimeout(_celebrate,250);}
       cardHtml='<div class="df-now"><div class="df-nb">'+nowLine+
         '<span class="df-pill">✓ סיימתם להיום</span>'+
         '<h3>יום נהדר! 🎉</h3>'+
         (fidx<7?('<div class="df-sub">נתראה מחר ליום '+(fidx+2)+'</div>'):'<div class="df-sub">היום האחרון — טיסה הביתה ✈️</div>')+
-        '<div class="df-row"><button class="df-b df-gp" onclick="openFocusDay(\''+focus+'\')"><i data-feather="calendar"></i> פתח את היום</button></div>'+
+        '<div class="df-row"><button class="df-b df-w" onclick="shareDay(\''+focus+'\')"><i data-feather="share-2"></i> שתף את היום</button>'+
+        '<button class="df-b df-gp" onclick="openFocusDay(\''+focus+'\')"><i data-feather="calendar"></i> פתח את היום</button></div>'+
         '</div></div>';
     }
   }
-  return '<div class="df-head">'+head+'</div><div class="df-prog">'+dots+'</div>'+cardHtml;
+  return '<div class="df-head">'+head+'</div>'+greet+'<div class="df-prog">'+dots+'</div>'+cardHtml;
+}
+var _celebratedDay=null;
+function _greeting(){
+  var h=new Date().getHours();
+  var g=h<11?'☀️ בוקר טוב':h<15?'🌤️ צהריים טובים':h<18?'⛅ אחר הצהריים טובים':h<22?'🌙 ערב טוב':'🌙 לילה טוב';
+  var nm=(typeof currentUser!=='undefined'&&currentUser&&currentUser.name)?(', '+currentUser.name):'';
+  return g+nm;
+}
+function _celebrate(){
+  if(document.querySelector('.confetti-layer'))return;
+  var layer=document.createElement('div');layer.className='confetti-layer';
+  var colors=['#7CF0A6','#ffd98a','#9cc9ff','#ff9a9a','#ffffff'];
+  for(var i=0;i<38;i++){var c=document.createElement('i');
+    c.style.left=((i*2.6)%100)+'%';c.style.background=colors[i%colors.length];
+    c.style.animationDelay=((i%7)*0.07)+'s';c.style.setProperty('--x',(((i%5)-2)*26)+'px');
+    layer.appendChild(c);}
+  document.body.appendChild(layer);
+  setTimeout(function(){layer.remove();},2400);
+}
+function _shareTextForDay(dayId){
+  var card=document.getElementById(dayId);if(!card)return '';
+  var h=card.querySelector('.card-title h3');var title=h?h.textContent.trim():'התוכנית';
+  var lines=['📅 '+title,''];
+  [].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')).forEach(function(it){
+    var t=_timeStr(it),nm=_evTitle(it);if(nm)lines.push((t?t+' · ':'')+nm);
+  });
+  lines.push('','— אוסטריה 2026 🇦🇹');
+  return lines.join('\n');
+}
+function shareDay(dayId){
+  var text=_shareTextForDay(dayId);if(!text)return;
+  if(navigator.share){navigator.share({title:'התוכנית להיום',text:text}).catch(function(){});}
+  else{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
+}
+function _pad2(n){return String(n).padStart(2,'0');}
+function _buildICS(dayId){
+  var meta=null;for(var i=0;i<DAY_DATES.length;i++)if(DAY_DATES[i].id===dayId)meta=DAY_DATES[i];
+  if(!meta)return '';
+  var dd=_pad2(parseInt(meta.d,10));var card=document.getElementById(dayId);if(!card)return '';
+  var items=[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)'));
+  var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Austria2026//HE','CALSCALE:GREGORIAN'];
+  items.forEach(function(it,k){
+    var tm=_evMin(it);if(tm==null)return;
+    var dt='202608'+dd+'T'+_pad2(Math.floor(tm/60))+_pad2(tm%60)+'00';
+    var e=tm+60;var dte='202608'+dd+'T'+_pad2(Math.floor(e/60)%24)+_pad2(e%60)+'00';
+    var title=_evTitle(it).replace(/[\n,;\\]/g,' ');
+    ics.push('BEGIN:VEVENT','UID:a26-'+dayId+'-'+k+'@trip','DTSTART:'+dt,'DTEND:'+dte,'SUMMARY:'+title,'END:VEVENT');
+  });
+  ics.push('END:VCALENDAR');return ics.join('\r\n');
+}
+function addDayToCalendar(dayId){
+  var ics=_buildICS(dayId);if(!ics)return;
+  try{var blob=new Blob([ics],{type:'text/calendar'});var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download='austria2026-'+dayId+'.ics';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},2000);
+  }catch(e){}
+}
+function _addDayActions(){
+  document.querySelectorAll('.card[id^="d"]').forEach(function(card){
+    if(card.querySelector('.day-actions'))return;
+    var dh=card.querySelector('.day-header');if(!dh)return;
+    var row=document.createElement('div');row.className='day-actions';
+    row.innerHTML='<button onclick="shareDay(\''+card.id+'\')"><i data-feather="share-2"></i> שתף</button>'+
+      '<button onclick="addDayToCalendar(\''+card.id+'\')"><i data-feather="calendar"></i> ליומן</button>';
+    dh.parentNode.insertBefore(row,dh.nextSibling);
+  });
+  if(window.feather)feather.replace();
 }
 function renderDayFocus(){
   var host=document.getElementById('day-focus');if(!host)return;
@@ -4406,5 +4517,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <button id="add-fab" onclick="fabAdd()" aria-label="הוספה" title="הוספה"><i data-feather="plus"></i></button>
 <div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
 <div id="itin-ctx" role="menu"></div>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 </body>
 </html>
