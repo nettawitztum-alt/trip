@@ -2658,7 +2658,7 @@ function renderAttrGroup(containerId,items,isCustom){
 }
 function attrCardHTML(a,isCustom){
   const imgSrc=a.img||'';
-  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}" src="${imgSrc}" class="attr-img" alt="${a.name}" style="${imgSrc?'':'display:none'}" onload="this.style.display='block'" onerror="document.getElementById('attr-img-wrap-${a.id}').style.display='none'"></div>`;
+  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}" src="${imgSrc||NATURE_IMG}" class="attr-img" alt="${a.name}" onerror="this.onerror=null;this.src=NATURE_IMG"></div>`;
   const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
   const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
   const bookBtn=a.booking?`<a href="${a.booking}" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן</a>`:'';
@@ -2726,9 +2726,9 @@ async function loadAttrGallery(attrId){
       }
     }
     if(urls&&urls.length){
-      host.innerHTML=urls.map(function(u){return '<img src="'+u.replace(/\/\d+px-/,'/640px-')+'" loading="lazy" alt="'+(a.name||'')+'" onerror="this.remove()">';}).join('');
+      host.innerHTML=urls.map(function(u){return '<img src="'+u.replace(/\/\d+px-/,'/640px-')+'" loading="lazy" alt="'+(a.name||'')+'" onerror="this.onerror=null;this.src=NATURE_IMG">';}).join('');
       host.classList.add('on');
-    }else{host.dataset.loaded='';}
+    }else{host.innerHTML='<img src="'+NATURE_IMG+'" alt="" style="grid-column:1/-1;height:150px">';host.classList.add('on');}
   }catch(e){host.dataset.loaded='';}
 }
 
@@ -3332,6 +3332,7 @@ function renderDayCapacity(dayId){
   host.innerHTML='<div class="cap-bar '+cls+'"><div class="ds-meter">'+s+'</div><span class="cap-status">'+status+'</span></div>'+(chips?'<div class="cap-missing">'+chips+'</div>':'');
 }
 var DEFAULT_HERO='https://images.unsplash.com/photo-1612441804231-77a36b284856?w=1400&q=80&auto=format&fit=crop';
+var NATURE_IMG='https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1000&q=80&auto=format&fit=crop';
 var DAY_WIKI={d2:'Snow_Space_Salzburg',d3:'Hohenwerfen_Castle',d4:'Zauchensee',d6:'Salzburg_Zoo',d7:'Hohensalzburg_Fortress'};
 function _dayImg(dayId,cb){
   var wt=DAY_WIKI[dayId];
