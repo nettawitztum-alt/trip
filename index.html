@@ -1539,6 +1539,27 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .ds-chip .d{display:block;font-size:17px;font-weight:800;margin-top:2px;color:#fff}
 .ds-chip.on{background:var(--accent);border-color:var(--accent)}
 .ds-chip.on .w,.ds-chip.on .d{color:#072414}
+.ds-meter{display:flex;gap:2px;justify-content:center;margin-top:5px}
+.ds-meter i{width:4px;height:4px;border-radius:1px;background:rgba(255,255,255,.22)}
+.ds-meter i.g{background:var(--accent)}
+.ds-meter i.a{background:#FFD479}
+.ds-meter.ds-flight{font-size:11px;line-height:1;margin-top:4px}
+.ds-chip.on .ds-meter i{background:rgba(7,36,20,.3)}
+.ds-chip.on .ds-meter i.g{background:#072414}
+.ds-chip.on .ds-meter i.a{background:#7a5b00}
+#day-capacity{margin-bottom:12px}
+.cap-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:13px;padding:9px 13px}
+.cap-bar .ds-meter{margin-top:0}
+.cap-bar.full{background:rgba(124,240,166,.12);border-color:rgba(124,240,166,.3)}
+.cap-bar.busy{background:rgba(255,170,80,.12);border-color:rgba(255,170,80,.35)}
+.cap-status{font-size:13px;font-weight:700}
+.cap-bar.full .cap-status{color:var(--accent)}
+.cap-bar.busy .cap-status{color:#FFC061}
+.cap-missing{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cap-add{background:rgba(124,240,166,.12);color:var(--accent);border:1px dashed rgba(124,240,166,.4);border-radius:9px;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:var(--gs);cursor:pointer}
+@media (max-width:767px){
+  #itin-view-toggle,#panel-attractions .attr-view-toggle{position:sticky;top:42px;z-index:120;background:rgba(14,43,32,.9)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+}
 .tab-panel .card{scroll-margin-top:72px}
 /* sticky countdown banner — top of every page, removed after trip start */
 .countdown-section{position:sticky!important;top:0!important;z-index:200!important;padding:0!important;margin:0!important;display:block!important;background:transparent!important}
@@ -1751,6 +1772,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
     <button id="iv-map" onclick="itinView('map')"><i data-feather="map"></i> מפה</button>
   </div>
   <div id="itin-datestrip" class="js-datestrip date-strip"></div>
+  <div id="day-capacity"></div>
   <div id="itin-map-host" style="display:none">
     <div id="map-days" class="js-datestrip date-strip"></div>
     <div id="map-canvas"></div>
@@ -3187,9 +3209,58 @@ function decorateNavIcons(){
 }
 var _selDay='d1';
 var DAY_DATES=[{id:'d1',d:'11',w:'ג׳'},{id:'d2',d:'12',w:'ד׳'},{id:'d3',d:'13',w:'ה׳'},{id:'d4',d:'14',w:'ו׳'},{id:'d5',d:'15',w:'ש׳'},{id:'d6',d:'16',w:'א׳'},{id:'d7',d:'17',w:'ב׳'},{id:'d8',d:'18',w:'ג׳'}];
+var FLIGHT_DAYS=['d1','d8'];
+function _dayCap(dayId){
+  var card=document.getElementById(dayId);
+  var items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')):[];
+  var hasB=false,hasL=false,hasD=false,brk=false,attr=0,mealsOther=0;
+  items.forEach(function(it){
+    var h=it.querySelector('h4'),p=it.querySelector('p');
+    var t=((h?h.textContent:'')+' '+(p?p.textContent:''));
+    var html=it.innerHTML||'';
+    if(it.classList.contains('tl-nap')||/מנוחה|שנת צהר|הפסק|נמנ|😴/.test(t)){brk=true;return;}
+    if(/טיס|המרא|נחית|נסיע|איסוף רכב|צ'?ק.?אין|check.?in|עזיב|מעבר מלונ|🚗|✈️/.test(t))return;
+    if(/בוקר|בופה|🥐|🍳/.test(t)){hasB=true;return;}
+    if(/צהר|לאנץ|🥗|🍖/.test(t)){hasL=true;return;}
+    if(/ארוחת ערב|דינר|גורמה|🌙/.test(t)){hasD=true;return;}
+    if(/viewRestaurant/.test(html)){mealsOther++;return;}
+    attr++;
+  });
+  var bF=hasB,lF=hasL,dF=hasD,extra=mealsOther;
+  if(!bF&&extra>0){bF=true;extra--;}
+  if(!lF&&extra>0){lF=true;extra--;}
+  if(!dF&&extra>0){dF=true;extra--;}
+  var meals=(bF?1:0)+(lF?1:0)+(dF?1:0);
+  var filled=meals+(brk?1:0)+Math.min(2,attr);
+  return {hasB:bF,hasL:lF,hasD:dF,brk:brk,attr:attr,filled:Math.min(6,filled),busy:attr>2};
+}
+function _meterHTML(dayId){
+  if(FLIGHT_DAYS.indexOf(dayId)>=0)return '<div class="ds-meter ds-flight">✈️</div>';
+  var c=_dayCap(dayId),s='';
+  for(var i=0;i<6;i++)s+='<i class="'+(i<c.filled?(c.busy?'a':'g'):'')+'"></i>';
+  return '<div class="ds-meter">'+s+'</div>';
+}
 function buildDateStrip(){
-  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span></button>';}).join('');
+  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span>'+_meterHTML(x.id)+'</button>';}).join('');
   [].forEach.call(document.querySelectorAll('.js-datestrip'),function(host){host.innerHTML=html;var on=host.querySelector('.ds-chip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});});
+}
+function renderDayCapacity(dayId){
+  var host=document.getElementById('day-capacity');if(!host)return;
+  if(FLIGHT_DAYS.indexOf(dayId)>=0){host.innerHTML='<div class="cap-bar flight"><span class="cap-status">✈️ יום טיסה — אין דרישת קיבולת</span></div>';return;}
+  var c=_dayCap(dayId),miss=[];
+  if(!c.hasB)miss.push('🍳 בוקר');
+  if(c.attr<1)miss.push('⭐ אטרקציה');
+  if(!c.hasL)miss.push('🍽️ צהריים');
+  if(!c.brk)miss.push('😴 הפסקה');
+  if(c.attr<2)miss.push('⭐ אטרקציה');
+  if(!c.hasD)miss.push('🌙 ערב');
+  var cls,status;
+  if(c.busy){cls='busy';status='יום עמוס · '+c.attr+' אטרקציות';}
+  else if(miss.length===0){cls='full';status='יום מושלם ✓';}
+  else{cls='room';status='להשלמת היום המושלם: חסר '+miss.length;}
+  var s='';for(var i=0;i<6;i++)s+='<i class="'+(i<c.filled?(c.busy?'a':'g'):'')+'"></i>';
+  var chips=miss.map(function(m){return '<button class="cap-add" onclick="openAddEvent(\''+dayId+'\')">'+m+' ＋</button>';}).join('');
+  host.innerHTML='<div class="cap-bar '+cls+'"><div class="ds-meter">'+s+'</div><span class="cap-status">'+status+'</span></div>'+(chips?'<div class="cap-missing">'+chips+'</div>':'');
 }
 function selectDay(dayId){
   _selDay=dayId;window.currentFocusDay=dayId;
@@ -3204,6 +3275,7 @@ function openDayCard(dayId){
   document.querySelectorAll('.card[id^="d"]').forEach(function(c){
     var sel=c.id===dayId;c.style.display=sel?'':'none';c.classList.toggle('open',sel);
   });
+  renderDayCapacity(dayId);
 }
 var AIRPORT_GEO=[47.7933,13.0043];
 var DAY_HOTEL={d1:'h1',d2:'h1',d3:'h1',d4:'h1',d5:'h1',d6:'h2',d7:'h2',d8:'h2'};
