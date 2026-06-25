@@ -1516,7 +1516,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* hero A: editorial "Salzburg 2026" fused into the photo */
 .hero-title{font-family:'Space Mono',var(--gs)!important;font-weight:700!important;font-size:clamp(42px,15vw,64px)!important;line-height:.9!important;letter-spacing:-1px!important;color:rgba(255,255,255,.95)!important;direction:ltr;text-align:right;text-shadow:0 3px 26px rgba(0,0,0,.5)!important}
 .hero-year{display:block;font-family:'Space Mono',monospace;font-weight:700;font-size:.42em;color:var(--green);letter-spacing:5px;margin-top:8px;text-shadow:0 2px 14px rgba(0,0,0,.5)}
-@media (max-width:767px){.sticky-shell{height:28vh!important;min-height:200px!important;max-height:300px!important}}
+@media (max-width:767px){.sticky-shell{position:sticky!important;top:var(--bnr-h,40px)!important;z-index:55;height:var(--hero-h,210px)!important;min-height:0!important;max-height:none!important}}
 .day-thumb{width:58px;height:50px;border-radius:11px;background-size:cover;background-position:center;flex:0 0 auto;background-color:rgba(255,255,255,.08)}
 input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65)}
 .tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
@@ -1562,9 +1562,10 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .cap-missing{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .cap-add{background:rgba(124,240,166,.12);color:var(--accent);border:1px dashed rgba(124,240,166,.4);border-radius:9px;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:var(--gs);cursor:pointer}
 @media (max-width:767px){
-  #itin-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
+  #itin-stickyhead{position:sticky;top:calc(var(--bnr-h,40px) + 58px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
+body.map-view #itin-stickyhead{top:var(--bnr-h,40px)}
   #itin-stickyhead .date-strip{margin-bottom:2px}
-  #attr-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:12px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
+  #attr-stickyhead{position:sticky;top:calc(var(--bnr-h,40px) + 58px);z-index:120;background:var(--bg);margin:0 -16px;padding:12px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
 }
 .tab-panel .card{scroll-margin-top:72px}
 /* sticky countdown banner — top of every page, removed after trip start */
@@ -3357,6 +3358,16 @@ function decorateDayThumbs(){
     _dayImg(card.id,function(url){th.style.backgroundImage="url('"+url.replace('1024px','640px')+"')";});
   });
 }
+var HERO_FULL=210;
+function _heroResize(){HERO_FULL=Math.max(180,Math.min(280,Math.round(window.innerHeight*0.28)));onHeroScroll();}
+function onHeroScroll(){
+  var sa=document.querySelector('.page-scroll-area');if(!sa)return;
+  var hh=Math.max(58,HERO_FULL-sa.scrollTop);
+  document.documentElement.style.setProperty('--hero-h',hh+'px');
+  var hdr=document.querySelector('.app-header');
+  if(hdr)hdr.style.opacity=Math.max(0,Math.min(1,(hh-78)/(HERO_FULL-78)));
+}
+window.addEventListener('resize',_heroResize);
 function selectDay(dayId){
   _selDay=dayId;window.currentFocusDay=dayId;
   buildDateStrip();
@@ -4173,6 +4184,9 @@ function initApp(){
   buildDateStrip();
   openDayCard(_selDay);
   applyDayHero(_selDay);
+  var _sa=document.querySelector('.page-scroll-area');
+  if(_sa&&!_sa._heroBound){_sa._heroBound=1;_sa.addEventListener('scroll',onHeroScroll,{passive:true});}
+  _heroResize();
   renderDayFocus();
   setTimeout(setStickyOffsets,150);
   initItinSortable();
