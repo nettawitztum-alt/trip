@@ -1569,7 +1569,17 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .cdb-n{font-size:15px!important;color:var(--accent)!important;text-shadow:none!important}
 .cdb-u{font-size:8px!important;color:rgba(255,255,255,.6)!important}
 .cdb-sep{font-size:12px!important;margin-top:0!important;color:rgba(255,255,255,.35)!important}
+#itin-map-host{position:relative}
 #itin-map-host #map-canvas{position:relative;inset:auto;height:64vh;min-height:420px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd)}
+.map-stepper{position:absolute;left:10px;right:10px;bottom:12px;z-index:500;display:flex;align-items:center;gap:8px;background:rgba(14,43,32,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--glass-brd);border-radius:16px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.step-arrow{width:36px;height:36px;flex:0 0 auto;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(255,255,255,.06);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.step-arrow:disabled{opacity:.3}
+.step-body{flex:1;min-width:0;text-align:center}
+.step-meta{font-size:10px;color:var(--accent);font-weight:700}
+.step-title{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step-desc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step-nav{width:36px;height:36px;flex:0 0 auto;border-radius:50%;border:none;background:var(--accent);color:#072414;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.step-nav svg.feather{width:17px;height:17px;stroke:currentColor}
 #itin-map-host .map-empty{position:static;bottom:auto;left:auto;right:auto;margin-top:10px}
 .map-x{width:42px;height:42px;border-radius:50%;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .map-pin{font-size:26px;line-height:1;text-align:center;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
@@ -1776,6 +1786,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
   <div id="itin-map-host" style="display:none">
     <div id="map-days" class="js-datestrip date-strip"></div>
     <div id="map-canvas"></div>
+    <div id="map-stepper" class="map-stepper" style="display:none"></div>
     <div id="map-empty" class="map-empty" style="display:none"></div>
   </div>
   <div id="day-focus"></div>
@@ -1958,10 +1969,6 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
   </div>
   <div class="sec-bar"><i id="tasks-bar"></i></div>
   <div class="alert alert-success" style="margin-bottom:14px"><span class="alert-icon">📝</span>הוסיפו משימות משותפות · כולם רואים ומסמנים</div>
-  <div class="task-add-row">
-    <input type="text" class="form-input" id="task-new-text" placeholder="משימה חדשה..." onkeydown="if(event.key==='Enter')addTask()">
-    <button class="btn btn-primary" onclick="addTask()">＋ הוסף</button>
-  </div>
   <div id="tasks-list"></div>
 </div>
 
@@ -2990,7 +2997,9 @@ function addTask(){
   saveTasks(tasks);
   inp.value='';
   renderTasks();
+  if(document.getElementById('add-task-modal'))closeModal('add-task-modal');
 }
+function openAddTaskModal(){var i=document.getElementById('task-new-text');if(i)i.value='';openModal('add-task-modal');setTimeout(function(){if(i)i.focus();},120);}
 function toggleTask(id){
   const tasks=getTasks();const t=tasks.find(x=>x.id===id);if(!t)return;
   t.done=!t.done;
@@ -3375,17 +3384,43 @@ function _addAnchor(geo,emoji,name){
   var br=document.createElement('div');br.appendChild(btn);pop.appendChild(br);
   mk.bindPopup(pop);return mk;
 }
+var _dayStops=[],_stepIdx=0;
+function renderStepper(){
+  var host=document.getElementById('map-stepper');if(!host)return;
+  if(!_dayStops.length){host.style.display='none';return;}
+  host.style.display='flex';
+  if(_stepIdx<0)_stepIdx=0;if(_stepIdx>_dayStops.length-1)_stepIdx=_dayStops.length-1;
+  var s=_dayStops[_stepIdx];
+  host.innerHTML=
+    '<button class="step-arrow" onclick="stepPrev()" '+(_stepIdx===0?'disabled':'')+'>›</button>'+
+    '<div class="step-body"><div class="step-meta">תחנה '+s.num+' מתוך '+_dayStops.length+'</div>'+
+    '<div class="step-title">'+s.title+'</div>'+(s.desc?'<div class="step-desc">'+s.desc+'</div>':'')+'</div>'+
+    '<button class="step-nav" onclick="stepNav()" aria-label="ניווט"><i data-feather="navigation"></i></button>'+
+    '<button class="step-arrow" onclick="stepNext()" '+(_stepIdx===_dayStops.length-1?'disabled':'')+'>‹</button>';
+  if(window.feather)feather.replace();
+}
+function stepTo(i){
+  if(!_dayStops.length)return;
+  _stepIdx=Math.max(0,Math.min(_dayStops.length-1,i));
+  var s=_dayStops[_stepIdx];
+  try{_map.panTo(s.geo,{animate:true});}catch(e){}
+  renderStepper();
+}
+function stepNext(){stepTo(_stepIdx+1);}
+function stepPrev(){stepTo(_stepIdx-1);}
+function stepNav(){if(!_dayStops.length)return;var s=_dayStops[_stepIdx];navChoose(s.geo[0],s.geo[1],_placeName(s.title));}
 function renderDayMap(dayId){
   if(!_mapGroup)return;_mapGroup.clearLayers();
   var empty=document.getElementById('map-empty');empty.style.display='none';
   var card=document.getElementById(dayId);
   var items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted):not(.tl-nap)')):[];
-  var bounds=[],route=[],n=0;
+  var bounds=[],route=[],n=0;_dayStops=[];_stepIdx=0;
   items.forEach(function(it){
     var g=_eventGeo(it);if(!g)return;
     var h=it.querySelector('h4');var title=h?h.textContent.trim():'';
     var p=it.querySelector('p');var desc=p?p.textContent.trim():'';
-    n++;_addMarker(g,'📍',title,desc,n);route.push(g);bounds.push(g);
+    n++;var mk=_addMarker(g,'📍',title,desc,n);route.push(g);bounds.push(g);
+    _dayStops.push({geo:g,title:title,desc:desc,num:n,mk:mk});
   });
   if(route.length>1)L.polyline(route,{color:'#1a73e8',weight:5,opacity:.85,lineCap:'round',lineJoin:'round'}).addTo(_mapGroup);
   _addAnchor(AIRPORT_GEO,'✈️','שדה התעופה זלצבורג (SZG)');
@@ -3393,6 +3428,7 @@ function renderDayMap(dayId){
   if(hg){_addAnchor(hg,'🏨',HOTEL_NAME[hid]||'המלון');bounds.push(hg);}
   if(bounds.length)_map.fitBounds(bounds,{padding:[50,50],maxZoom:14});
   if(!route.length){empty.textContent='אין עדיין מיקומים לאירועי היום הזה — הוסיפו מיקום לאירוע כדי לראותו על המפה.';empty.style.display='block';}
+  renderStepper();
   _geocodeDayBg(items);
 }
 async function _geocodeBg(all,mode){
@@ -3424,6 +3460,7 @@ function fabAdd(){
   if(id==='panel-attractions')openAddAttrModal();
   else if(id==='panel-packing')openAddPackModal();
   else if(id==='panel-restaurants')openAddRestModal();
+  else if(id==='panel-tasks')openAddTaskModal();
   else openAddEvent(null);
 }
 function openAddEvent(dayId){
@@ -4044,6 +4081,14 @@ document.addEventListener('DOMContentLoaded',()=>{
       <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="openNav('waze')"><i data-feather="navigation"></i> Waze</button>
       <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="openNav('gmaps')"><i data-feather="map-pin"></i> Google Maps</button>
     </div>
+  </div>
+</div>
+<div class="modal-overlay" id="add-task-modal" onclick="closeModalOnBg(event,'add-task-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">➕ משימה חדשה</div>
+    <div class="form-group"><label>המשימה</label><input type="text" class="form-input" id="task-new-text" placeholder="מה צריך לעשות לפני הטיול?" onkeydown="if(event.key==='Enter')addTask()"></div>
+    <button class="btn btn-primary btn-block" onclick="addTask()">＋ הוסף משימה</button>
   </div>
 </div>
 <button id="add-fab" onclick="fabAdd()" aria-label="הוספה" title="הוספה"><i data-feather="plus"></i></button>
