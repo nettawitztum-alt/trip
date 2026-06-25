@@ -833,7 +833,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .ck-tag{font-size:11px;padding:4px 8px;border-radius:20px;font-weight:700;flex-shrink:0;margin-top:2px}
 .tag-red{background:#fff0f0;color:var(--danger)}
 .tag-orange{background:#fff8e6;color:var(--warning)}
-.tag-green{background:#f0fff4;color:var(--primary)}
+.tag-green{background:rgba(124,240,166,.16);color:#bff5d3}
 .tag-blue{background:#e8f4fd;color:#1a5280}
 
 /* ── WEATHER ── */
@@ -1094,8 +1094,8 @@ body.modal-open .page-scroll-area{overflow:hidden}
 .family-kids{font-size:11px;font-weight:400;opacity:.7;margin-top:3px}
 
 /* ── ATTRACTION DETAILS ── */
-.attr-duration{display:inline-flex;align-items:center;gap:4px;background:var(--accent-light);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:#3a5e00;margin-bottom:10px}
-.attr-kids-rating{display:inline-flex;align-items:center;gap:4px;background:#f0fff4;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--primary);margin-right:6px;margin-bottom:10px}
+.attr-duration{display:inline-flex;align-items:center;gap:4px;background:rgba(124,240,166,.16);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:#fff;margin-bottom:10px}
+.attr-kids-rating{display:inline-flex;align-items:center;gap:4px;background:rgba(124,240,166,.16);border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;color:#fff;margin-right:6px;margin-bottom:10px}
 .attr-section-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px}
 .attr-activities{list-style:none;padding:0;margin:0 0 10px}
 .attr-activities li{font-size:13px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.4}
@@ -1114,7 +1114,7 @@ body.modal-open .page-scroll-area{overflow:hidden}
 .suggest-title{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}
 .suggest-loading{font-size:12px;color:var(--muted);padding:6px 0}
 .suggest-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:132px;overflow-y:auto}
-.suggest-chip{background:rgba(124,240,166,.12);color:var(--accent);border:1px solid rgba(124,240,166,.3);border-radius:10px;padding:6px 10px;font-size:12px;font-weight:600;font-family:var(--gs);cursor:pointer}
+.suggest-chip{background:rgba(124,240,166,.18);color:#bff5d3;border:1px solid rgba(124,240,166,.32);border-radius:10px;padding:6px 10px;font-size:12px;font-weight:600;font-family:var(--gs);cursor:pointer}
 .attr-gallery.on{display:grid}
 .attr-gallery img{width:100%;height:88px;object-fit:cover;border-radius:10px;background:rgba(255,255,255,.06)}
 .attr-card.attr-open .attr-collapsible{max-height:1000px}
@@ -1400,7 +1400,7 @@ body{background:
 .tl-dot::before{background:var(--accent);box-shadow:0 0 0 4px rgba(124,240,166,.16)}
 .tl-dot::after{background:var(--border)}
 .tl-item{border-bottom-color:var(--border)}
-.tl-time{color:var(--accent)}
+.tl-time{color:var(--muted)}
 
 /* ---- buttons ---- */
 .btn-primary{background:var(--accent);color:#072414;box-shadow:0 8px 18px rgba(124,240,166,.32)}
@@ -1545,7 +1545,8 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 #itin-map-host #map-days{margin-bottom:10px}
 .date-strip{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
 .date-strip::-webkit-scrollbar{display:none}
-.ds-chip{flex:0 0 auto;width:50px;text-align:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);border-radius:14px;padding:8px 0;cursor:pointer;font-family:var(--gs);-webkit-tap-highlight-color:transparent}
+.ds-chip{flex:0 0 auto;width:50px;text-align:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);border-radius:14px;padding:8px 0;cursor:pointer;font-family:var(--gs);-webkit-tap-highlight-color:transparent;transition:background .18s,border-color .18s,color .18s,transform .12s}
+.ds-chip:active{transform:scale(.95)}
 .ds-chip .w{display:block;font-size:10px;color:var(--muted)}
 .ds-chip .d{display:block;font-size:17px;font-weight:800;margin-top:2px;color:#fff}
 .ds-chip.on{background:var(--accent);border-color:var(--accent)}
@@ -1567,7 +1568,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .cap-bar.full .cap-status{color:var(--accent)}
 .cap-bar.busy .cap-status{color:#FFC061}
 .cap-missing{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.cap-add{background:rgba(124,240,166,.12);color:var(--accent);border:1px dashed rgba(124,240,166,.4);border-radius:9px;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:var(--gs);cursor:pointer}
+.cap-add{background:rgba(124,240,166,.18);color:#bff5d3;border:1px dashed rgba(124,240,166,.45);border-radius:9px;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:var(--gs);cursor:pointer}
 @media (max-width:767px){
   #itin-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
 body.map-view #itin-stickyhead{top:var(--bnr-h,40px)}
@@ -1580,6 +1581,24 @@ body.map-view .page-scroll-area,body.attr-map-view .page-scroll-area{padding-bot
 /* sticky countdown banner — top of every page, removed after trip start */
 .countdown-section{position:sticky!important;top:0!important;z-index:200!important;padding:0!important;margin:0!important;display:block!important;background:transparent!important}
 body.trip-active .countdown-section{display:none!important}
+/* During the trip: strip planning chrome so the now/next card is the clear focus */
+body.trip-active #day-capacity{display:none}
+@media (max-width:767px){
+  body.trip-active .sticky-shell{height:148px!important;min-height:0!important}
+  body.trip-active .hero-title{font-size:clamp(30px,11vw,44px)!important}
+  body.trip-active .hero-dates{display:none}
+  body.trip-active #day-focus .df-now{box-shadow:0 12px 30px rgba(0,0,0,.45);border-color:rgba(124,240,166,.32)}
+}
+/* timeline life-states: what's done / happening now / coming up */
+.tl-item.tl-past{opacity:.5}
+.tl-item.tl-past .tl-dot::before{background:rgba(255,255,255,.4)!important;box-shadow:none!important}
+.tl-item.tl-now .tl-dot::before{background:var(--accent)!important;animation:nowPulse 2.2s ease-in-out infinite}
+@keyframes nowPulse{0%,100%{box-shadow:0 0 0 4px rgba(124,240,166,.18)}50%{box-shadow:0 0 0 8px rgba(124,240,166,.30)}}
+.tl-item.tl-now h4::after{content:' ● עכשיו';color:var(--accent);font-size:10px;font-weight:800;vertical-align:middle}
+.empty-state{text-align:center;padding:34px 16px}
+.empty-state .es-ic{font-size:40px;margin-bottom:6px}
+.empty-state .es-t{font-size:15px;font-weight:800;color:#fff}
+.empty-state .es-s{font-size:12.5px;color:var(--muted);margin:4px 0 14px}
 .countdown-bar{display:flex!important;flex-direction:row!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 10px;width:auto!important;margin:0!important;padding:8px 14px!important;border-radius:0!important;background:rgba(11,30,22,.97)!important;border:none!important;border-bottom:1px solid rgba(124,240,166,.3)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .cdb-label{font-size:12px!important;font-weight:700!important;white-space:nowrap!important;color:#fff!important}
 .cdb-units{gap:3px!important}
@@ -3084,7 +3103,7 @@ function renderTasks(){
   const tpct=tasks.length?Math.round(done/tasks.length*100):0;
   document.getElementById('tasks-total').textContent=tasks.length?`${tpct}% · ${done}/${tasks.length}`:'';
   var tb=document.getElementById('tasks-bar');if(tb)tb.style.width=tpct+'%';
-  if(!tasks.length){list.innerHTML='<div class="task-empty">אין משימות עדיין. הוסיפו את הראשונה! 👆</div>';return;}
+  if(!tasks.length){list.innerHTML='<div class="empty-state"><div class="es-ic">📝</div><div class="es-t">עדיין אין משימות</div><div class="es-s">הוסיפו משימה משותפת לכל המשפחה</div><button class="btn btn-primary btn-sm" onclick="openAddTaskModal()">＋ משימה ראשונה</button></div>';return;}
   list.innerHTML=tasks.map(t=>{
     const meta=[t.addedBy?('נוסף ע"י '+t.addedBy):'',t.done&&t.doneBy?('✓ '+t.doneBy):''].filter(Boolean).join(' · ');
     return `<div class="task-item${t.done?' done':''}">
@@ -4272,13 +4291,28 @@ function renderDayFocus(){
   if(st.idx<0){host.innerHTML='';if(_nnInterval){clearInterval(_nnInterval);_nnInterval=null;}return;}
   host.innerHTML=_focusBodyHTML(st);
   if(window.feather)feather.replace();
+  if(st.inTrip)_markDayProgress(st.days[st.fidx]);
   if(!_nnInterval)_nnInterval=setInterval(updateNowNext,60000);
+}
+function _markDayProgress(dayId){
+  var card=document.getElementById(dayId);if(!card)return;
+  var items=[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)'));
+  var rn=new Date();var nowMin=rn.getHours()*60+rn.getMinutes();
+  var lastPast=-1;
+  items.forEach(function(it,i){var tm=_evMin(it);if(tm!=null&&tm<=nowMin)lastPast=i;});
+  items.forEach(function(it,i){
+    it.classList.remove('tl-past','tl-now');
+    if(_evMin(it)==null)return;
+    if(i<lastPast)it.classList.add('tl-past');
+    else if(i===lastPast)it.classList.add('tl-now');
+  });
 }
 function updateNowNext(){
   var host=document.getElementById('day-focus');if(!host)return;
   var st=_focusState();if(st.idx<0)return;
   host.innerHTML=_focusBodyHTML(st);
   if(window.feather)feather.replace();
+  if(st.inTrip)_markDayProgress(st.days[st.fidx]);
 }
 // Open the day that matches today's real date (focused agenda view).
 // Before the trip → day 1; during → today's day (marked ● היום); after → last day.
@@ -4295,7 +4329,7 @@ function focusCurrentDay(scroll){
   fc.classList.add('open');
   if(inTrip){
     const sub=fc.querySelector('.card-title p');
-    if(sub){const b=document.createElement('span');b.className='day-today-badge';b.textContent='● היום';sub.prepend(b);}
+    /* today is already indicated by the highlighted date tab — no duplicate badge */
   }
   if(scroll)setTimeout(()=>{try{fc.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}},180);
 }
