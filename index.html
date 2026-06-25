@@ -1663,6 +1663,16 @@ body.trip-active #day-capacity{display:none}
 .bp-perf::before,.bp-perf::after{content:'';position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:#0e2b20}
 .bp-perf::before{left:-11px}.bp-perf::after{right:-11px}
 .bp-barcode{height:44px;margin:16px 2px 2px;border-radius:4px;opacity:.82;background:repeating-linear-gradient(90deg,#e3f2ea 0 2px,transparent 2px 3px,#e3f2ea 3px 7px,transparent 7px 9px,#e3f2ea 9px 11px,transparent 11px 14px,#e3f2ea 14px 16px,transparent 16px 18px)}
+.set-sec{margin-bottom:18px}
+.set-sec-h{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:9px;letter-spacing:.3px}
+.set-row-static{font-size:14px;color:#fff;margin-bottom:11px}
+.set-field{display:flex;gap:8px}
+.set-btn{display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;height:48px;padding:0 14px;border-radius:14px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:#fff;font-family:var(--gs);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px;transition:transform .12s,background .2s}
+.set-btn:last-child{margin-bottom:0}
+.set-btn:active{transform:scale(.98)}
+.set-btn>span{display:inline-flex;align-items:center;gap:11px}
+.set-btn svg.feather{width:18px;height:18px;stroke:currentColor;flex-shrink:0}
+.set-danger{background:rgba(255,128,121,.12);border-color:rgba(255,128,121,.32);color:#ffb3ae}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
@@ -2306,7 +2316,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <button class="more-tile" onclick="closeModal('more-modal');openPhrasebook()"><span class="mt-ic"><i data-feather="message-circle"></i></span><span>גרמנית</span></button>
       <button class="more-tile" onclick="closeModal('more-modal');openCurrency()"><span class="mt-ic"><i data-feather="dollar-sign"></i></span><span>מטבע</span></button>
       <button class="more-tile" onclick="closeModal('more-modal');openFamilyWhatsApp()"><span class="mt-ic"><i data-feather="users"></i></span><span>וואטסאפ</span></button>
-      <button class="more-tile" onclick="closeModal('more-modal');shareMyLocation()"><span class="mt-ic"><i data-feather="map-pin"></i></span><span>שתף מיקום</span></button>
       <button class="more-tile" onclick="closeModal('more-modal');showUserModal()"><span class="mt-ic"><i data-feather="settings"></i></span><span>הגדרות</span></button>
     </div>
   </div>
@@ -2376,27 +2385,11 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <div class="modal-overlay" id="user-modal" onclick="closeModalOnBg(event,'user-modal')">
   <div class="modal">
     <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
-    <div class="modal-title">👤 פרופיל משתמש</div>
-    <p style="font-size:14px;color:var(--muted);margin-bottom:16px">כרגע מחובר/ת בתור: <strong id="user-modal-name"></strong></p>
-    <div id="user-sync-section" style="display:none;margin-bottom:16px">
-      <div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון ענן כבוי</div>
-      <button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
+    <div class="modal-title">⚙️ הגדרות</div>
+    <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button>
-    </div>
-    <div class="form-group"><label>שנה שם</label>
-      <div style="display:flex;gap:8px">
-        <input type="text" class="form-input" id="user-new-name" placeholder="שם משפחה...">
-        <button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button>
-      </div>
-    </div>
-    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
-    <button class="btn btn-ghost btn-sm" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none;width:100%;margin-bottom:8px;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ אפס את כל השינויים בלו"ז</button>
-    <button class="btn btn-ghost btn-sm" onclick="logout()">🚪 התנתק (נקה כל הנתונים המקומיים)</button>
-    <div class="action-row" style="margin-top:8px">
-      <button class="btn btn-ghost" onclick="closeModal('user-modal')">סגור</button>
-    </div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button><button class="set-btn" onclick="closeModal('user-modal');openFamilyWhatsApp()"><span><i data-feather="users"></i> קבוצת וואטסאפ משפחתית</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div>
   </div>
 </div>
 
