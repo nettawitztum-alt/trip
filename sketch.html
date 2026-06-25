@@ -71,6 +71,34 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
 .mcard .info h3{font-size:14px;font-weight:700}
 .mcard .info p{font-size:11.5px;color:var(--muted);margin-top:2px}
 .note{font-size:11px;color:var(--muted);text-align:center;margin-top:9px;font-style:italic}
+/* D: journey spine */
+.spine{position:relative}
+.snode{position:relative;padding-right:32px}
+.snode::before{content:'';position:absolute;right:11px;top:10px;bottom:-2px;width:2px;background:rgba(124,240,166,.25)}
+.snode:last-child::before{display:none}
+.snode .dot{position:absolute;right:4px;top:10px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:3px solid var(--accent)}
+.snode.next .dot{background:var(--accent);box-shadow:0 0 0 4px rgba(124,240,166,.18)}
+.snode .sc{background:var(--card);border:1px solid var(--brd);border-radius:15px;padding:11px 13px;margin-bottom:12px}
+.snode.next .sc{border-color:rgba(124,240,166,.45);background:rgba(124,240,166,.07)}
+.snode .sd{font-size:11px;color:var(--accent);font-weight:700}
+.snode h3{font-size:14.5px;font-weight:700;margin:2px 0 3px}
+.snode .sp{font-size:11.5px;color:var(--muted);line-height:1.6}
+/* E: date strip + focused day */
+.estrip{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.estrip::-webkit-scrollbar{display:none}
+.edate{flex:0 0 auto;width:50px;text-align:center;background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:8px 0}
+.edate .w{font-size:10px;color:var(--muted)}
+.edate .d{font-size:17px;font-weight:800;margin-top:2px}
+.edate.on{background:var(--accent);border-color:var(--accent)}
+.edate.on .w,.edate.on .d{color:#072414}
+.efocus{background:var(--card);border:1px solid var(--brd);border-radius:18px;padding:15px}
+.efocus .eh{font-size:16px;font-weight:800;margin-bottom:2px}
+.efocus .es{font-size:12px;color:var(--muted);margin-bottom:10px}
+.erow{display:flex;gap:10px;padding:9px 0}
+.erow+.erow{border-top:1px solid rgba(255,255,255,.07)}
+.erow .et{font-size:12px;color:var(--accent);font-weight:700;min-width:44px}
+.erow .ei{flex:1;font-size:13.5px;font-weight:600}
+.erow .ei small{display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:2px}
 </style>
 </head>
 <body>
@@ -155,7 +183,66 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
   </div></div>
 </div>
 
-<div class="intro" style="margin-top:10px"><p>בכל שלוש האפשרויות: הכרטיס "הבא בתור: שדה תעופה" הוסר בזמן התכנון (יופיע אוטומטית רק בזמן הטיול). הבאנר הדביק נשאר למעלה גם בגלילה.</p></div>
+<!-- ===== OPTION D ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">D</span><h2>ציר המסע (Journey spine)</h2></div>
+  <div class="opt-desc">הימים מחוברים בקו אנכי אחד — תחושת "מסע שמתקדם". היום הקרוב מודגש על הציר. נרטיבי וזורם, מרגיש כמו סיפור ולא רשימה.</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky"><span>🇦🇹 עוד לטיול</span><span class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></span></div>
+    <div class="hero">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice"><rect width="360" height="230" fill="url(#sa)"/><circle cx="280" cy="55" r="34" fill="#ffe9b0" opacity=".5"/><polygon points="0,230 0,120 70,55 150,140 220,80 290,135 360,95 360,230" fill="#123f31"/><polygon points="0,230 90,130 180,200 250,150 360,190 360,230" fill="#0c2c22"/><polygon points="70,55 86,86 54,86" fill="#dff5e6"/></svg>
+      <div class="dates"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="title"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="sec">המסע · 11–18.8</div>
+      <div class="spine">
+        <div class="snode next"><span class="dot"></span><div class="sc"><div class="sd">יום 1 · ג׳ 11.8</div><h3>נחיתה והגעה למלון ✈️</h3><div class="sp">טיסה מת״א · צ׳ק-אין Kesselgrub</div></div></div>
+        <div class="snode"><span class="dot"></span><div class="sc"><div class="sd">יום 2 · ד׳ 12.8</div><h3>ממלכת הרפאים 👻</h3><div class="sp">גונדולה Geisterberg · בקתת הר 🍖</div></div></div>
+        <div class="snode"><span class="dot"></span><div class="sc"><div class="sd">יום 3 · ה׳ 13.8</div><h3>הוהנוורפן + תרמה 🏰</h3><div class="sp">מבצר · Erlebnis-Therme Amadé 🌊</div></div></div>
+        <div class="snode"><span class="dot"></span><div class="sc"><div class="sd">יום 4 · ו׳ 14.8</div><h3>אגם Zauchensee 🏔️</h3><div class="sp">שחייה · פיקניק</div></div></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===== OPTION E ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">E</span><h2>בורר תאריכים + יום במוקד</h2></div>
+  <div class="opt-desc">רצועת תאריכים אופקית (11–18) כמו לוח שנה — בוחרים יום ורואים אותו מורחב מתחת עם השעות. מודל מוכר, חוסך מקום, "קופצים" ליום שרוצים.</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky"><span>🇦🇹 עוד לטיול</span><span class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></span></div>
+    <div class="hero">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice"><rect width="360" height="230" fill="url(#sa)"/><circle cx="280" cy="55" r="34" fill="#ffe9b0" opacity=".5"/><polygon points="0,230 0,120 70,55 150,140 220,80 290,135 360,95 360,230" fill="#123f31"/><polygon points="0,230 90,130 180,200 250,150 360,190 360,230" fill="#0c2c22"/><polygon points="220,80 234,106 206,106" fill="#eafff0"/></svg>
+      <div class="dates"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="title"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="estrip">
+        <div class="edate on"><div class="w">ג׳</div><div class="d">11</div></div>
+        <div class="edate"><div class="w">ד׳</div><div class="d">12</div></div>
+        <div class="edate"><div class="w">ה׳</div><div class="d">13</div></div>
+        <div class="edate"><div class="w">ו׳</div><div class="d">14</div></div>
+        <div class="edate"><div class="w">ש׳</div><div class="d">15</div></div>
+        <div class="edate"><div class="w">א׳</div><div class="d">16</div></div>
+        <div class="edate"><div class="w">ב׳</div><div class="d">17</div></div>
+        <div class="edate"><div class="w">ג׳</div><div class="d">18</div></div>
+      </div>
+      <div class="efocus">
+        <div class="eh">יום 1 · נחיתה והגעה ✈️</div>
+        <div class="es">שלישי, 11 באוגוסט</div>
+        <div class="erow"><div class="et">09:00</div><div class="ei">שדה תעופה ת״א<small>טיסה 6H 243</small></div></div>
+        <div class="erow"><div class="et">14:35</div><div class="ei">נחיתה בזלצבורג 🇦🇹<small>איסוף רכב</small></div></div>
+        <div class="erow"><div class="et">16:30</div><div class="ei">צ׳ק-אין Kesselgrub 🏨<small>Altenmarkt im Pongau</small></div></div>
+        <div class="erow"><div class="et">19:00</div><div class="ei">ארוחת ערב 🍽️<small>מסעדת המלון</small></div></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<div class="intro" style="margin-top:10px"><p>בכל חמש האפשרויות: הכרטיס "הבא בתור: שדה תעופה" הוסר בזמן התכנון (יופיע אוטומטית רק בזמן הטיול). הבאנר הדביק נשאר למעלה גם בגלילה.</p></div>
 
 </body>
 </html>
