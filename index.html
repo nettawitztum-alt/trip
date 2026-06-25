@@ -1540,6 +1540,14 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .ds-chip.on{background:var(--accent);border-color:var(--accent)}
 .ds-chip.on .w,.ds-chip.on .d{color:#072414}
 .tab-panel .card{scroll-margin-top:72px}
+/* sticky countdown banner — top of every page, removed after trip start */
+.countdown-section{position:sticky!important;top:0!important;z-index:200!important;padding:0!important;margin:0!important;display:block!important;background:transparent!important}
+.countdown-bar{display:flex!important;flex-direction:row!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 10px;width:auto!important;margin:0!important;padding:8px 14px!important;border-radius:0!important;background:rgba(11,30,22,.97)!important;border:none!important;border-bottom:1px solid rgba(124,240,166,.3)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.cdb-label{font-size:12px!important;font-weight:700!important;white-space:nowrap!important;color:#fff!important}
+.cdb-units{gap:3px!important}
+.cdb-n{font-size:15px!important;color:var(--accent)!important;text-shadow:none!important}
+.cdb-u{font-size:8px!important;color:rgba(255,255,255,.6)!important}
+.cdb-sep{font-size:12px!important;margin-top:0!important;color:rgba(255,255,255,.35)!important}
 #itin-map-host #map-canvas{position:relative;inset:auto;height:64vh;min-height:420px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd)}
 #itin-map-host .map-empty{position:static;bottom:auto;left:auto;right:auto;margin-top:10px}
 .map-x{width:42px;height:42px;border-radius:50%;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
@@ -1698,6 +1706,21 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 <div class="app-shell">
 <div class="page-scroll-area">
 
+<div class="countdown-section">
+<div class="countdown-bar" id="countdown-bar">
+  <span class="cdb-label">✨ עוד כמה זמן נשאר לחופשה המושלמת</span>
+  <div class="cdb-units" dir="ltr">
+    <div class="cdb-unit"><span class="cdb-n" id="cd-days">--</span><span class="cdb-u">ימים</span></div>
+    <span class="cdb-sep">:</span>
+    <div class="cdb-unit"><span class="cdb-n" id="cd-hours">--</span><span class="cdb-u">שעות</span></div>
+    <span class="cdb-sep">:</span>
+    <div class="cdb-unit"><span class="cdb-n" id="cd-mins">--</span><span class="cdb-u">דקות</span></div>
+    <span class="cdb-sep">:</span>
+    <div class="cdb-unit"><span class="cdb-n" id="cd-secs">--</span><span class="cdb-u">שניות</span></div>
+  </div>
+</div>
+</div>
+
 <div class="sticky-shell">
 <header class="app-header">
   <div class="hero-top-bar">
@@ -1720,21 +1743,6 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 
 <!-- ═══ TAB CONTENT ═══ -->
 <div class="tab-content">
-
-<div class="countdown-section">
-<div class="countdown-bar" id="countdown-bar">
-  <span class="cdb-label">✨ עוד כמה זמן נשאר לחופשה המושלמת</span>
-  <div class="cdb-units" dir="ltr">
-    <div class="cdb-unit"><span class="cdb-n" id="cd-days">--</span><span class="cdb-u">ימים</span></div>
-    <span class="cdb-sep">:</span>
-    <div class="cdb-unit"><span class="cdb-n" id="cd-hours">--</span><span class="cdb-u">שעות</span></div>
-    <span class="cdb-sep">:</span>
-    <div class="cdb-unit"><span class="cdb-n" id="cd-mins">--</span><span class="cdb-u">דקות</span></div>
-    <span class="cdb-sep">:</span>
-    <div class="cdb-unit"><span class="cdb-n" id="cd-secs">--</span><span class="cdb-u">שניות</span></div>
-  </div>
-</div>
-</div>
 
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
@@ -1994,7 +2002,6 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 <div class="tab-panel" id="panel-attractions">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
     <h2 style="font-size:18px;font-weight:800">אטרקציות</h2>
-    <button class="btn btn-accent btn-sm" onclick="openAddAttrModal()">＋ הוסף אטרקציה</button>
   </div>
   <div class="attr-view-toggle">
     <button id="av-list" class="on" onclick="attrView('list')"><i data-feather="list"></i> רשימה</button>
@@ -3192,9 +3199,11 @@ function selectDay(dayId){
   else{openDayCard(_selDay);}
 }
 function openDayCard(dayId){
-  document.querySelectorAll('.card[id^="d"]').forEach(function(c){c.classList.remove('open');});
-  var c=document.getElementById(dayId);if(!c)return;c.classList.add('open');
-  setTimeout(function(){try{c.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}},60);
+  var mh=document.getElementById('itin-map-host');
+  if(mh&&mh.style.display==='block')return;            // map mode: day cards stay hidden
+  document.querySelectorAll('.card[id^="d"]').forEach(function(c){
+    var sel=c.id===dayId;c.style.display=sel?'':'none';c.classList.toggle('open',sel);
+  });
 }
 var AIRPORT_GEO=[47.7933,13.0043];
 var DAY_HOTEL={d1:'h1',d2:'h1',d3:'h1',d4:'h1',d5:'h1',d6:'h2',d7:'h2',d8:'h2'};
@@ -3216,6 +3225,7 @@ function itinView(mode){
     buildDateStrip();_ensureMap();
     setTimeout(function(){_map.invalidateSize();renderDayMap(_selDay);},160);
   }
+  else{openDayCard(_selDay);}
   if(window.feather)feather.replace();
 }
 function closeMap(){itinView('list');}
@@ -3306,10 +3316,10 @@ function renderDayMap(dayId){
     n++;_addMarker(g,'📍',title,desc,n);route.push(g);bounds.push(g);
   });
   if(route.length>1)L.polyline(route,{color:'#1a73e8',weight:5,opacity:.85,lineCap:'round',lineJoin:'round'}).addTo(_mapGroup);
-  _addAnchor(AIRPORT_GEO,'✈️','שדה התעופה זלצבורג (SZG)');bounds.push(AIRPORT_GEO);
+  _addAnchor(AIRPORT_GEO,'✈️','שדה התעופה זלצבורג (SZG)');
   var hid=DAY_HOTEL[dayId]||'h1';var hg=PLACE_GEO[hid];
   if(hg){_addAnchor(hg,'🏨',HOTEL_NAME[hid]||'המלון');bounds.push(hg);}
-  if(bounds.length)_map.fitBounds(bounds,{padding:[60,60],maxZoom:13});
+  if(bounds.length)_map.fitBounds(bounds,{padding:[50,50],maxZoom:14});
   if(!route.length){empty.textContent='אין עדיין מיקומים לאירועי היום הזה — הוסיפו מיקום לאירוע כדי לראותו על המפה.';empty.style.display='block';}
   _geocodeDayBg(items);
 }
@@ -3862,6 +3872,7 @@ function renderDayFocus(){
   const idx=Math.round((today-start)/86400000);
   const inTrip=idx>=0&&idx<=7;const fidx=idx<0?0:(idx>7?7:idx);const focus=days[fidx];
   buildDateStrip();
+  openDayCard(_selDay);
   if(idx<0){host.innerHTML='';const _cs=document.querySelector(".countdown-section");if(_cs)_cs.style.display='';return;}
   let dots='';for(let i=0;i<8;i++){dots+=`<span class="pdot ${i<fidx?'done':(i===fidx?'cur':'')}"></span>`;}
   let head;
@@ -3889,7 +3900,7 @@ function renderDayFocus(){
   }
   let afterHtml='';
   if(after)afterHtml=`<div class="df-after"><span class="t">${escapeHtml(_timeStr(after))}</span><div style="flex:1;font-weight:600;font-size:14px">${escapeHtml(_evTitle(after))}</div><span class="df-mut">אחר כך</span></div>`;
-  const cs=document.querySelector(".countdown-section");if(cs)cs.style.display=inTrip?"none":"";
+  const cs=document.querySelector(".countdown-section");if(cs)cs.style.display=idx<0?"":"none";
   host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div>${cardHtml}${afterHtml}`;
   if(window.feather)feather.replace();
 }
@@ -3926,6 +3937,7 @@ function initApp(){
   focusCurrentDay(false);
   _selDay=window.currentFocusDay||'d1';
   buildDateStrip();
+  openDayCard(_selDay);
   renderDayFocus();
   initItinSortable();
   initEditables();
