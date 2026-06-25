@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>בית — 3 אפשרויות היררכיה</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Heebo:wght@400;500;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gs:'Google Sans','Heebo','Assistant',sans-serif;--accent:#7CF0A6;--bg:#0e2b20;--card:rgba(255,255,255,.06);--brd:rgba(255,255,255,.12);--muted:rgba(255,255,255,.66)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--gs)}
+body{background:#0a1812;color:#fff;padding:26px 16px 80px}
+.intro{max-width:430px;margin:0 auto 22px;text-align:center}
+.intro h1{font-size:20px;font-weight:800;margin-bottom:6px}
+.intro p{font-size:13px;color:var(--muted);line-height:1.6}
+.opt{max-width:430px;margin:0 auto 40px}
+.opt-tag{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.opt-tag .b{background:var(--accent);color:#072414;font-weight:800;font-size:13px;border-radius:999px;padding:4px 12px}
+.opt-tag h2{font-size:16px;font-weight:700}
+.opt-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+/* phone */
+.phone{background:var(--bg);border-radius:30px;border:9px solid #05100b;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative}
+.scr{position:relative;max-height:660px;overflow:hidden}
+/* sticky banner */
+.sticky{position:sticky;top:0;z-index:9;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(8,22,16,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--brd);padding:9px 14px;font-weight:700;font-size:13px}
+.sticky .cd{display:flex;gap:5px;align-items:baseline;direction:ltr;color:var(--accent);font-weight:900;font-variant-numeric:tabular-nums}
+.sticky .cd small{color:var(--muted);font-weight:600;font-size:10px}
+/* hero */
+.hero{position:relative;height:230px}
+.hero svg{width:100%;height:100%;display:block}
+.hero .title{position:absolute;bottom:18px;right:18px;left:18px;text-align:right}
+.hero .title .l1{font-family:'Space Mono',var(--gs);font-weight:700;font-size:54px;line-height:.85;letter-spacing:-1px;color:rgba(255,255,255,.96);text-shadow:0 3px 22px rgba(0,0,0,.5);direction:ltr;text-align:right}
+.hero .title .l2{font-family:'Space Mono',var(--gs);font-weight:700;font-size:22px;color:var(--accent);letter-spacing:4px;direction:ltr;text-align:right}
+.hero .dates{position:absolute;top:14px;right:16px;left:16px;display:flex;justify-content:space-between;align-items:center}
+.hero .chip{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 11px;font-size:11.5px;font-weight:600}
+.av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#2a7de1,#7CF0A6);border:2px solid rgba(255,255,255,.8)}
+.body{padding:14px}
+/* toggle */
+.toggle{display:inline-flex;background:rgba(255,255,255,.06);border:1px solid var(--brd);border-radius:999px;padding:4px;gap:2px;margin-bottom:14px}
+.toggle b{font-weight:600;font-size:12.5px;padding:7px 15px;border-radius:999px;color:var(--muted)}
+.toggle b.on{background:var(--accent);color:#072414}
+.sec{font-size:12px;font-weight:700;color:var(--muted);margin:2px 2px 10px}
+/* A: rich day cards */
+.dcard{background:var(--card);border:1px solid var(--brd);border-radius:18px;padding:13px;margin-bottom:11px;display:flex;gap:12px;align-items:flex-start}
+.dcard .date{flex:0 0 auto;text-align:center;background:rgba(124,240,166,.12);border:1px solid rgba(124,240,166,.3);border-radius:12px;padding:7px 10px;min-width:52px}
+.dcard .date .d{font-size:18px;font-weight:900;color:var(--accent);line-height:1}
+.dcard .date .m{font-size:10px;color:var(--muted);margin-top:2px}
+.dcard .info{flex:1}
+.dcard .info .day{font-size:11px;color:var(--accent);font-weight:700}
+.dcard .info h3{font-size:15.5px;font-weight:700;margin:2px 0 6px}
+.dcard .info .ev{font-size:12px;color:var(--muted);line-height:1.7}
+.chev{color:var(--muted);font-size:18px;align-self:center}
+/* B: compact agenda */
+.agenda{background:var(--card);border:1px solid var(--brd);border-radius:18px;overflow:hidden}
+.arow{display:flex;align-items:center;gap:11px;padding:13px 14px}
+.arow+.arow{border-top:1px solid rgba(255,255,255,.07)}
+.arow.now{background:rgba(124,240,166,.08)}
+.arow .n{width:30px;height:30px;border-radius:9px;background:rgba(124,240,166,.14);color:var(--accent);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.arow .mid{flex:1}
+.arow .mid .dd{font-size:11px;color:var(--muted);font-weight:600}
+.arow .mid .tt{font-size:14px;font-weight:600;margin-top:1px}
+.arow .c{color:var(--muted);font-size:17px}
+/* C: planning strip + medium cards */
+.pstrip{display:flex;gap:8px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px}
+.pchip{flex:0 0 auto;background:var(--card);border:1px solid var(--brd);border-radius:13px;padding:8px 12px;font-size:12px;font-weight:600;display:flex;flex-direction:column;gap:2px;min-width:84px}
+.pchip .v{color:var(--accent);font-weight:800;font-size:14px}
+.pchip .k{color:var(--muted);font-size:10.5px}
+.mcard{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:12px 13px;margin-bottom:9px;display:flex;align-items:center;gap:11px}
+.mcard .date{flex:0 0 auto;text-align:center;min-width:40px}
+.mcard .date .d{font-size:16px;font-weight:900;color:var(--accent);line-height:1}
+.mcard .date .m{font-size:9.5px;color:var(--muted)}
+.mcard .info{flex:1}
+.mcard .info h3{font-size:14px;font-weight:700}
+.mcard .info p{font-size:11.5px;color:var(--muted);margin-top:2px}
+.note{font-size:11px;color:var(--muted);text-align:center;margin-top:9px;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>מסך הבית — 3 כיווני היררכיה</h1>
+  <p>באנר התרגשות דביק למעלה · כותרת גדולה נשמרת · התוכנית יום-אחר-יום היא הדבר המרכזי. שלוש דרכים להציג את הימים 👇</p>
+</div>
+
+<!-- ===== OPTION A ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">A</span><h2>כרטיסי יום עשירים</h2></div>
+  <div class="opt-desc">כל יום = כרטיס גדול עם תאריך, נושא היום ו-2 הדגשים. מרווח, ויזואלי, קל ללחוץ. פחות ימים נראים במסך אחד.</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky"><span>🇦🇹 עוד לטיול</span><span class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></span></div>
+    <div class="hero">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="sa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b6f86"/><stop offset=".55" stop-color="#3a6e63"/><stop offset="1" stop-color="#0e2b20"/></linearGradient></defs><rect width="360" height="230" fill="url(#sa)"/><circle cx="280" cy="55" r="34" fill="#ffe9b0" opacity=".5"/><polygon points="0,230 0,120 70,55 150,140 220,80 290,135 360,95 360,230" fill="#123f31"/><polygon points="0,230 90,130 180,200 250,150 360,190 360,230" fill="#0c2c22"/><polygon points="70,55 86,86 54,86" fill="#dff5e6"/><polygon points="220,80 234,106 206,106" fill="#eafff0"/></svg>
+      <div class="dates"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="title"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="sec">התוכנית יום-אחר-יום</div>
+      <div class="dcard"><div class="date"><div class="d">11.8</div><div class="m">ג׳</div></div><div class="info"><div class="day">יום 1</div><h3>נחיתה והגעה למלון ✈️</h3><div class="ev">09:00 · טיסה מת״א<br>16:30 · צ׳ק-אין Kesselgrub</div></div><div class="chev">‹</div></div>
+      <div class="dcard"><div class="date"><div class="d">12.8</div><div class="m">ד׳</div></div><div class="info"><div class="day">יום 2</div><h3>ממלכת הרפאים 👻</h3><div class="ev">גונדולה Geisterberg<br>צהריים בקתת הר 🍖</div></div><div class="chev">‹</div></div>
+      <div class="dcard"><div class="date"><div class="d">13.8</div><div class="m">ה׳</div></div><div class="info"><div class="day">יום 3</div><h3>מבצר הוהנוורפן 🏰</h3><div class="ev">תרמה Amadé 🌊</div></div><div class="chev">‹</div></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===== OPTION B ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">B</span><h2>סקירת מסלול קומפקטית</h2></div>
+  <div class="opt-desc">שורה אחת לכל יום — מספר, תאריך ונושא. רואים את כל 8 הימים כמעט במסך אחד = תחושת "סקירת המסע". לחיצה פותחת את היום.</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky"><span>🇦🇹 עוד לטיול</span><span class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></span></div>
+    <div class="hero">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice"><rect width="360" height="230" fill="url(#sa)"/><circle cx="280" cy="55" r="34" fill="#ffe9b0" opacity=".5"/><polygon points="0,230 0,120 70,55 150,140 220,80 290,135 360,95 360,230" fill="#123f31"/><polygon points="0,230 90,130 180,200 250,150 360,190 360,230" fill="#0c2c22"/><polygon points="70,55 86,86 54,86" fill="#dff5e6"/></svg>
+      <div class="dates"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="title"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="sec">8 ימים · 11–18.8</div>
+      <div class="agenda">
+        <div class="arow now"><div class="n">1</div><div class="mid"><div class="dd">ג׳ · 11.8</div><div class="tt">נחיתה והגעה למלון ✈️</div></div><span class="c">‹</span></div>
+        <div class="arow"><div class="n">2</div><div class="mid"><div class="dd">ד׳ · 12.8</div><div class="tt">ממלכת הרפאים Geisterberg 👻</div></div><span class="c">‹</span></div>
+        <div class="arow"><div class="n">3</div><div class="mid"><div class="dd">ה׳ · 13.8</div><div class="tt">מבצר הוהנוורפן + תרמה 🏰</div></div><span class="c">‹</span></div>
+        <div class="arow"><div class="n">4</div><div class="mid"><div class="dd">ו׳ · 14.8</div><div class="tt">אגם Zauchensee 🏔️</div></div><span class="c">‹</span></div>
+        <div class="arow"><div class="n">5</div><div class="mid"><div class="dd">ש׳ · 15.8</div><div class="tt">מעבר לזלצבורג + עיר עתיקה</div></div><span class="c">‹</span></div>
+        <div class="arow"><div class="n">6</div><div class="mid"><div class="dd">א׳ · 16.8</div><div class="tt">גן חיות הלבורן 🦁</div></div><span class="c">‹</span></div>
+        <div class="arow"><div class="n">7</div><div class="mid"><div class="dd">ב׳ · 17.8</div><div class="tt">מבצר הוהנזלצבורג 🏰</div></div><span class="c">‹</span></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ===== OPTION C ===== -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">C</span><h2>ימים + רצועת התקדמות תכנון</h2></div>
+  <div class="opt-desc">מוביל בתוכנית, אבל מוסיף שורה דקה אחת של "מה נשאר לארגן" (אריזה, הזמנות, אטרקציות) — נחמד דווקא עכשיו, 46 יום לפני. כרטיסי יום בינוניים.</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky"><span>🇦🇹 עוד לטיול</span><span class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></span></div>
+    <div class="hero">
+      <svg viewBox="0 0 360 230" preserveAspectRatio="xMidYMid slice"><rect width="360" height="230" fill="url(#sa)"/><circle cx="280" cy="55" r="34" fill="#ffe9b0" opacity=".5"/><polygon points="0,230 0,120 70,55 150,140 220,80 290,135 360,95 360,230" fill="#123f31"/><polygon points="0,230 90,130 180,200 250,150 360,190 360,230" fill="#0c2c22"/><polygon points="220,80 234,106 206,106" fill="#eafff0"/></svg>
+      <div class="dates"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="title"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="pstrip">
+        <div class="pchip"><span class="v">40%</span><span class="k">🧳 אריזה</span></div>
+        <div class="pchip"><span class="v">3/5</span><span class="k">✅ הזמנות</span></div>
+        <div class="pchip"><span class="v">8</span><span class="k">⭐ אטרקציות</span></div>
+        <div class="pchip"><span class="v">2</span><span class="k">🏨 מלונות</span></div>
+      </div>
+      <div class="sec">התוכנית יום-אחר-יום</div>
+      <div class="mcard"><div class="date"><div class="d">11.8</div><div class="m">ג׳</div></div><div class="info"><h3>יום 1 · נחיתה למלון ✈️</h3><p>הגעה · צ׳ק-אין Kesselgrub</p></div><span class="chev">‹</span></div>
+      <div class="mcard"><div class="date"><div class="d">12.8</div><div class="m">ד׳</div></div><div class="info"><h3>יום 2 · ממלכת הרפאים 👻</h3><p>Geisterberg + בקתת הר</p></div><span class="chev">‹</span></div>
+      <div class="mcard"><div class="date"><div class="d">13.8</div><div class="m">ה׳</div></div><div class="info"><h3>יום 3 · הוהנוורפן 🏰</h3><p>מבצר + תרמה Amadé</p></div><span class="chev">‹</span></div>
+    </div>
+  </div></div>
+</div>
+
+<div class="intro" style="margin-top:10px"><p>בכל שלוש האפשרויות: הכרטיס "הבא בתור: שדה תעופה" הוסר בזמן התכנון (יופיע אוטומטית רק בזמן הטיול). הבאנר הדביק נשאר למעלה גם בגלילה.</p></div>
+
+</body>
+</html>
