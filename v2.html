@@ -1516,7 +1516,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* hero A: editorial "Salzburg 2026" fused into the photo */
 .hero-title{font-family:'Space Mono',var(--gs)!important;font-weight:700!important;font-size:clamp(42px,15vw,64px)!important;line-height:.9!important;letter-spacing:-1px!important;color:rgba(255,255,255,.95)!important;direction:ltr;text-align:right;text-shadow:0 3px 26px rgba(0,0,0,.5)!important}
 .hero-year{display:block;font-family:'Space Mono',monospace;font-weight:700;font-size:.42em;color:var(--green);letter-spacing:5px;margin-top:8px;text-shadow:0 2px 14px rgba(0,0,0,.5)}
-@media (max-width:767px){.sticky-shell{height:42vh!important;min-height:300px!important;max-height:430px!important}}
+@media (max-width:767px){.sticky-shell{height:28vh!important;min-height:200px!important;max-height:300px!important}}
+.day-thumb{width:58px;height:50px;border-radius:11px;background-size:cover;background-position:center;flex:0 0 auto;background-color:rgba(255,255,255,.08)}
 input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65)}
 .tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
 .tl-menu-btn{cursor:pointer}
@@ -3330,9 +3331,36 @@ function renderDayCapacity(dayId){
   var chips=miss.map(function(m){return '<button class="cap-add" onclick="openAddEvent(\''+dayId+'\')">'+m+' ＋</button>';}).join('');
   host.innerHTML='<div class="cap-bar '+cls+'"><div class="ds-meter">'+s+'</div><span class="cap-status">'+status+'</span></div>'+(chips?'<div class="cap-missing">'+chips+'</div>':'');
 }
+var DEFAULT_HERO='https://images.unsplash.com/photo-1612441804231-77a36b284856?w=1400&q=80&auto=format&fit=crop';
+var DAY_WIKI={d2:'Snow_Space_Salzburg',d3:'Hohenwerfen_Castle',d4:'Zauchensee',d6:'Salzburg_Zoo',d7:'Hohensalzburg_Fortress'};
+function _dayImg(dayId,cb){
+  var wt=DAY_WIKI[dayId];
+  if(!wt){cb(DEFAULT_HERO);return;}
+  var ck='dimg_'+dayId,c=sessionStorage.getItem(ck);
+  if(c){cb(c);return;}
+  fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(wt)).then(function(r){return r.ok?r.json():null;}).then(function(d){
+    var s=d&&d.thumbnail&&d.thumbnail.source;
+    if(s){s=s.replace(/\/\d+px-/,'/1024px-');sessionStorage.setItem(ck,s);cb(s);}else cb(DEFAULT_HERO);
+  }).catch(function(){cb(DEFAULT_HERO);});
+}
+function applyDayHero(dayId){
+  _dayImg(dayId,function(url){
+    var h=document.querySelector('.sticky-shell');
+    if(h)h.style.backgroundImage="linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.22) 42%,rgba(0,0,0,.74) 100%),url('"+url+"')";
+  });
+}
+function decorateDayThumbs(){
+  document.querySelectorAll('.card[id^="d"]').forEach(function(card){
+    var head=card.querySelector('.card-header');if(!head||head.querySelector('.day-thumb'))return;
+    var th=document.createElement('div');th.className='day-thumb';
+    head.insertBefore(th,head.firstChild);
+    _dayImg(card.id,function(url){th.style.backgroundImage="url('"+url.replace('1024px','640px')+"')";});
+  });
+}
 function selectDay(dayId){
   _selDay=dayId;window.currentFocusDay=dayId;
   buildDateStrip();
+  applyDayHero(dayId);
   var mh=document.getElementById('itin-map-host');
   if(mh&&mh.style.display==='block'){renderDayMap(_selDay);}
   else{openDayCard(_selDay);}
@@ -3821,6 +3849,7 @@ function initItinIds(){
     // single add entry point = the sticky FAB (no per-day +)
   });
   decorateNavIcons();
+  decorateDayThumbs();
 }
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
 function addEventMenuBtn(item,iid){
@@ -4143,6 +4172,7 @@ function initApp(){
   _selDay=window.currentFocusDay||'d1';
   buildDateStrip();
   openDayCard(_selDay);
+  applyDayHero(_selDay);
   renderDayFocus();
   setTimeout(setStickyOffsets,150);
   initItinSortable();
