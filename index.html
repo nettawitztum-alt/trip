@@ -1596,6 +1596,7 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
 .map-search-btn{flex:0 0 auto;width:46px;border-radius:12px;border:none;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .map-search-btn svg.feather{width:18px;height:18px;stroke:currentColor}
 .map-search-pin{font-size:28px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
+.step-pop{text-align:center;min-width:180px}.step-pop .step-title{font-size:15px;font-weight:700;line-height:1.3}.step-pop .step-desc{font-size:12px;color:var(--muted);margin-top:3px;white-space:normal}.step-pop-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:11px;direction:ltr}.step-popup .leaflet-popup-content{margin:13px 15px;min-width:180px}.step-popup .leaflet-popup-content-wrapper{border:1px solid var(--glass-brd)}
 .map-stepper{position:absolute;left:78px;right:10px;bottom:14px;z-index:500;direction:ltr;display:flex;align-items:center;gap:8px;min-height:64px;background:rgba(14,43,32,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--glass-brd);border-radius:16px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .step-arrow{width:36px;height:36px;flex:0 0 auto;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(255,255,255,.06);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .step-arrow:disabled{opacity:.3}
@@ -3581,30 +3582,30 @@ function _addAnchor(geo,emoji,name){
   mk.bindPopup(pop);return mk;
 }
 var _dayStops=[],_stepIdx=0;
-function renderStepper(){
-  var host=document.getElementById('map-stepper');if(!host)return;
-  if(!_dayStops.length){host.style.display='none';return;}
-  host.style.display='flex';
-  if(_stepIdx<0)_stepIdx=0;if(_stepIdx>_dayStops.length-1)_stepIdx=_dayStops.length-1;
-  var s=_dayStops[_stepIdx];
-  host.innerHTML=
-    '<button class="step-arrow" onclick="stepNext()" '+(_stepIdx===_dayStops.length-1?'disabled':'')+' aria-label="הבא">‹</button>'+
-    '<div class="step-body"><div class="step-meta">תחנה '+s.num+' מתוך '+_dayStops.length+'</div>'+
-    '<div class="step-title">'+s.title+'</div>'+(s.desc?'<div class="step-desc">'+s.desc+'</div>':'')+'</div>'+
-    '<button class="step-nav" onclick="stepNav()" aria-label="ניווט"><i data-feather="navigation"></i></button>'+
-    '<button class="step-arrow" onclick="stepPrev()" '+(_stepIdx===0?'disabled':'')+' aria-label="הקודם">›</button>';
-  if(window.feather)feather.replace();
+var _NAV_SVG='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>';
+// The day-stop card lives ON the map as the marker popup: stop info + next/prev arrows + navigate.
+function _stepPopEl(i){
+  var N=_dayStops.length,s=_dayStops[i];
+  var wrap=document.createElement('div');wrap.className='step-pop';
+  wrap.innerHTML='<div class="step-meta">תחנה '+s.num+' מתוך '+N+'</div>'+
+    '<div class="step-title">'+s.title+'</div>'+(s.desc?'<div class="step-desc">'+s.desc+'</div>':'');
+  var row=document.createElement('div');row.className='step-pop-row';
+  var next=document.createElement('button');next.className='step-arrow';next.textContent='‹';next.setAttribute('aria-label','הבא');if(i>=N-1)next.disabled=true;next.onclick=stepNext;
+  var nav=document.createElement('button');nav.className='step-nav';nav.innerHTML=_NAV_SVG;nav.setAttribute('aria-label','ניווט');nav.onclick=stepNav;
+  var prev=document.createElement('button');prev.className='step-arrow';prev.textContent='›';prev.setAttribute('aria-label','הקודם');if(i<=0)prev.disabled=true;prev.onclick=stepPrev;
+  row.appendChild(next);row.appendChild(nav);row.appendChild(prev);
+  wrap.appendChild(row);return wrap;
 }
-function stepTo(i){
+function renderStepper(){var host=document.getElementById('map-stepper');if(host)host.style.display='none';}
+function _openStop(i){
   if(!_dayStops.length)return;
   _stepIdx=Math.max(0,Math.min(_dayStops.length-1,i));
   var s=_dayStops[_stepIdx];
-  try{_map.panTo(s.geo,{animate:true});}catch(e){}
-  try{if(s.mk&&s.mk.openPopup)s.mk.openPopup();}catch(e){}
-  renderStepper();
+  if(s&&s.mk&&s.mk.openPopup){try{s.mk.openPopup();}catch(e){}}
 }
-function stepNext(){stepTo(_stepIdx+1);}
-function stepPrev(){stepTo(_stepIdx-1);}
+function stepTo(i){_openStop(i);}
+function stepNext(){_openStop(_stepIdx+1);}
+function stepPrev(){_openStop(_stepIdx-1);}
 function stepNav(){if(!_dayStops.length)return;var s=_dayStops[_stepIdx];navChoose(s.geo[0],s.geo[1],_placeName(s.title));}
 function renderDayMap(dayId){
   if(!_mapGroup)return;_mapGroup.clearLayers();
@@ -3620,6 +3621,10 @@ function renderDayMap(dayId){
     n++;var mk=_addMarker(g,'📍',title,desc,n);route.push(g);bounds.push(g);
     _dayStops.push({geo:g,title:title,desc:desc,num:n,mk:mk});
   });
+  _dayStops.forEach(function(st,idx){
+    st.mk.bindPopup(_stepPopEl(idx),{autoPan:true,minWidth:200,className:'step-popup'});
+    st.mk.on('popupopen',function(){_stepIdx=idx;});
+  });
   if(route.length>1)L.polyline(route,{color:'#1a73e8',weight:5,opacity:.85,lineCap:'round',lineJoin:'round'}).addTo(_mapGroup);
   _addAnchor(AIRPORT_GEO,'✈️','שדה התעופה זלצבורג (SZG)');
   var hid=DAY_HOTEL[dayId]||'h1';var hg=PLACE_GEO[hid];
@@ -3627,6 +3632,7 @@ function renderDayMap(dayId){
   if(bounds.length)_map.fitBounds(bounds,{padding:[50,50],maxZoom:14});
   if(!route.length){empty.textContent='אין עדיין מיקומים לאירועי היום הזה — הוסיפו מיקום לאירוע כדי לראותו על המפה.';empty.style.display='block';}
   renderStepper();
+  if(_dayStops.length)setTimeout(function(){_openStop(0);},60);
   _geocodeDayBg(items);
 }
 async function _geocodeBg(all,mode){
