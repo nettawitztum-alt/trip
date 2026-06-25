@@ -1225,9 +1225,12 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 
   /* ── Countdown: dark pill in white content area ── */
   .countdown-section {
-    padding:16px 16px 4px;
+    position:sticky;top:0;z-index:60;
+    background:var(--bg);
+    padding:8px 12px;
     display:flex;
     justify-content:center;
+    border-bottom:1px solid var(--glass-brd);
   }
   .countdown-bar {
     background:#141414;
@@ -1529,6 +1532,14 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .map-anchor{font-size:30px;line-height:1;text-align:center;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 #itin-view-toggle{margin-bottom:12px}
 #itin-map-host #map-days{margin-bottom:10px}
+.date-strip{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.date-strip::-webkit-scrollbar{display:none}
+.ds-chip{flex:0 0 auto;width:50px;text-align:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);border-radius:14px;padding:8px 0;cursor:pointer;font-family:var(--gs);-webkit-tap-highlight-color:transparent}
+.ds-chip .w{display:block;font-size:10px;color:var(--muted)}
+.ds-chip .d{display:block;font-size:17px;font-weight:800;margin-top:2px;color:#fff}
+.ds-chip.on{background:var(--accent);border-color:var(--accent)}
+.ds-chip.on .w,.ds-chip.on .d{color:#072414}
+.tab-panel .card{scroll-margin-top:72px}
 #itin-map-host #map-canvas{position:relative;inset:auto;height:64vh;min-height:420px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd)}
 #itin-map-host .map-empty{position:static;bottom:auto;left:auto;right:auto;margin-top:10px}
 .map-x{width:42px;height:42px;border-radius:50%;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
@@ -1731,8 +1742,9 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
     <button id="iv-list" class="on" onclick="itinView('list')"><i data-feather="list"></i> רשימה</button>
     <button id="iv-map" onclick="itinView('map')"><i data-feather="map"></i> מפה</button>
   </div>
+  <div id="itin-datestrip" class="js-datestrip date-strip"></div>
   <div id="itin-map-host" style="display:none">
-    <div id="map-days" class="map-days"></div>
+    <div id="map-days" class="js-datestrip date-strip"></div>
     <div id="map-canvas"></div>
     <div id="map-empty" class="map-empty" style="display:none"></div>
   </div>
@@ -2536,7 +2548,7 @@ function switchTab(name){
   const tc=document.querySelector('.tab-content');
   if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
 }
-function toggleCard(id){const c=document.getElementById(id);if(c)c.classList.toggle('open')}
+function toggleCard(id){if(/^d[1-8]$/.test(id)){selectDay(id);return;}const c=document.getElementById(id);if(c)c.classList.toggle('open')}
 
 // ═══════════════ CHECKLIST ═══════════════
 function initBookingChecklist(){
@@ -3166,11 +3178,28 @@ function decorateNavIcons(){
   });
   if(window.feather)feather.replace();
 }
-var _mapDay='d1';
+var _selDay='d1';
+var DAY_DATES=[{id:'d1',d:'11',w:'ג׳'},{id:'d2',d:'12',w:'ד׳'},{id:'d3',d:'13',w:'ה׳'},{id:'d4',d:'14',w:'ו׳'},{id:'d5',d:'15',w:'ש׳'},{id:'d6',d:'16',w:'א׳'},{id:'d7',d:'17',w:'ב׳'},{id:'d8',d:'18',w:'ג׳'}];
+function buildDateStrip(){
+  var html=DAY_DATES.map(function(x){return '<button class="ds-chip'+(x.id===_selDay?' on':'')+'" data-day="'+x.id+'" onclick="selectDay(\''+x.id+'\')"><span class="w">'+x.w+'</span><span class="d">'+x.d+'</span></button>';}).join('');
+  [].forEach.call(document.querySelectorAll('.js-datestrip'),function(host){host.innerHTML=html;var on=host.querySelector('.ds-chip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});});
+}
+function selectDay(dayId){
+  _selDay=dayId;window.currentFocusDay=dayId;
+  buildDateStrip();
+  var mh=document.getElementById('itin-map-host');
+  if(mh&&mh.style.display==='block'){renderDayMap(_selDay);}
+  else{openDayCard(_selDay);}
+}
+function openDayCard(dayId){
+  document.querySelectorAll('.card[id^="d"]').forEach(function(c){c.classList.remove('open');});
+  var c=document.getElementById(dayId);if(!c)return;c.classList.add('open');
+  setTimeout(function(){try{c.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}},60);
+}
 var AIRPORT_GEO=[47.7933,13.0043];
 var DAY_HOTEL={d1:'h1',d2:'h1',d3:'h1',d4:'h1',d5:'h1',d6:'h2',d7:'h2',d8:'h2'};
 var HOTEL_NAME={h1:'מלון Kesselgrub',h2:'מלון Grünauerhof'};
-function openMap(dayId){switchTab('itinerary');if(dayId)_mapDay=dayId;itinView('map');}
+function openMap(dayId){switchTab('itinerary');if(dayId)_selDay=dayId;itinView('map');}
 function itinView(mode){
   var isMap=mode==='map';
   var lb=document.getElementById('iv-list'),mb=document.getElementById('iv-map');
@@ -3183,21 +3212,12 @@ function itinView(mode){
   });
   if(isMap){
     if(!window.L){alert('המפה עדיין נטענת — נסו שוב בעוד רגע');itinView('list');return;}
-    if(!_mapDay)_mapDay=window.currentFocusDay||'d1';
-    buildMapDayChips();_ensureMap();
-    setTimeout(function(){_map.invalidateSize();renderDayMap(_mapDay);},160);
+    if(!_selDay)_selDay=window.currentFocusDay||'d1';
+    buildDateStrip();_ensureMap();
+    setTimeout(function(){_map.invalidateSize();renderDayMap(_selDay);},160);
   }
   if(window.feather)feather.replace();
 }
-function buildMapDayChips(){
-  var host=document.getElementById('map-days');if(!host)return;
-  var days=['d1','d2','d3','d4','d5','d6','d7','d8'];
-  host.innerHTML=days.map(function(d,i){
-    return '<button class="map-daychip'+(d===_mapDay?' on':'')+'" onclick="selectMapDay(\''+d+'\')">יום '+(i+1)+'</button>';
-  }).join('');
-  var on=host.querySelector('.map-daychip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});
-}
-function selectMapDay(d){_mapDay=d;buildMapDayChips();renderDayMap(d);}
 function closeMap(){itinView('list');}
 function _ensureMap(){
   if(_map)return;
@@ -3315,7 +3335,7 @@ async function _geocodeDayBg(items){
     await new Promise(function(res){setTimeout(res,1100);});
   }
   localStorage.setItem('austria26_geo2',JSON.stringify(cache));_geoBusy=false;
-  if(did&&document.getElementById('map-modal').classList.contains('open'))renderDayMap(_mapDay);
+  var _mh=document.getElementById('itin-map-host');if(did&&_mh&&_mh.style.display==='block')renderDayMap(_selDay);
 }
 function fabAdd(){
   const a=document.querySelector('.tab-panel.active');const id=a?a.id:'';
@@ -3841,6 +3861,8 @@ function renderDayFocus(){
   const start=new Date(2026,7,11);start.setHours(0,0,0,0);
   const idx=Math.round((today-start)/86400000);
   const inTrip=idx>=0&&idx<=7;const fidx=idx<0?0:(idx>7?7:idx);const focus=days[fidx];
+  buildDateStrip();
+  if(idx<0){host.innerHTML='';const _cs=document.querySelector(".countdown-section");if(_cs)_cs.style.display='';return;}
   let dots='';for(let i=0;i<8;i++){dots+=`<span class="pdot ${i<fidx?'done':(i===fidx?'cur':'')}"></span>`;}
   let head;
   if(inTrip)head=`<span>יום ${fidx+1} מתוך 8</span><span class="dfg">עוד ${7-fidx} ימי טיול 🏔️</span>`;
@@ -3902,6 +3924,8 @@ function initApp(){
   initItinIds();
   applyItinMods();
   focusCurrentDay(false);
+  _selDay=window.currentFocusDay||'d1';
+  buildDateStrip();
   renderDayFocus();
   initItinSortable();
   initEditables();
