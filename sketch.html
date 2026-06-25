@@ -115,6 +115,9 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
 .fhead .info .pk{font-size:11.5px;color:var(--muted);margin-top:3px}
 .fhead .chev{color:var(--accent);font-size:18px}
 .fbody{margin-top:11px;border-top:1px solid rgba(255,255,255,.09);padding-top:5px}
+.subcap{text-align:center;font-size:12px;color:var(--muted);margin:14px 0 8px}
+.mapbox{border-radius:18px;overflow:hidden;border:1px solid var(--brd);height:380px}
+.mapbox svg{width:100%;height:100%;display:block}
 </style>
 </head>
 <body>
@@ -283,7 +286,7 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
       </div>
       <!-- selected day: open rich card -->
       <div class="fcard open">
-        <div class="fhead"><div class="date"><div class="d">11.8</div><div class="m">ג׳</div></div><div class="info"><div class="day">יום 1</div><h3>נחיתה והגעה למלון ✈️</h3></div><span class="chev">⌄</span></div>
+        <div class="fhead"><div class="info"><div class="day">יום 1</div><h3>נחיתה והגעה למלון ✈️</h3></div><span class="chev">⌄</span></div>
         <div class="fbody">
           <div class="erow"><div class="et">09:00</div><div class="ei">שדה תעופה ת״א<small>טיסה 6H 243</small></div></div>
           <div class="erow"><div class="et">14:35</div><div class="ei">נחיתה בזלצבורג 🇦🇹<small>איסוף רכב</small></div></div>
@@ -293,6 +296,39 @@ body{background:#0a1812;color:#fff;padding:26px 16px 80px}
       <!-- other days: collapsed rich cards -->
       <div class="fcard"><div class="fhead"><div class="date"><div class="d">12.8</div><div class="m">ד׳</div></div><div class="info"><div class="day">יום 2</div><h3>ממלכת הרפאים 👻</h3><div class="pk">Geisterberg · בקתת הר 🍖</div></div><span class="chev">›</span></div></div>
       <div class="fcard"><div class="fhead"><div class="date"><div class="d">13.8</div><div class="m">ה׳</div></div><div class="info"><div class="day">יום 3</div><h3>הוהנוורפן + תרמה 🏰</h3><div class="pk">מבצר · Amadé 🌊</div></div><span class="chev">›</span></div></div>
+    </div>
+  </div></div>
+  <div class="subcap">↓ אותו UX במפה — אותה רצועת תאריכים, אותו באנר דביק (גם בשאר הטאבים)</div>
+  <div class="phone"><div class="scr">
+    <div class="sticky scol"><div class="stxt">✨ עוד כמה זמן נשאר לחופשה המושלמת</div><div class="cd">46<small>ימים</small> · 12<small>שע׳</small> · 39<small>דק׳</small></div></div>
+    <div class="body" style="padding-top:14px">
+      <div class="toggle"><b>רשימה</b><b class="on">מפה</b></div>
+      <div class="estrip">
+        <div class="edate on"><div class="w">ג׳</div><div class="d">11</div></div>
+        <div class="edate"><div class="w">ד׳</div><div class="d">12</div></div>
+        <div class="edate"><div class="w">ה׳</div><div class="d">13</div></div>
+        <div class="edate"><div class="w">ו׳</div><div class="d">14</div></div>
+        <div class="edate"><div class="w">ש׳</div><div class="d">15</div></div>
+        <div class="edate"><div class="w">א׳</div><div class="d">16</div></div>
+        <div class="edate"><div class="w">ב׳</div><div class="d">17</div></div>
+        <div class="edate"><div class="w">ג׳</div><div class="d">18</div></div>
+      </div>
+      <div class="mapbox">
+        <svg viewBox="0 0 360 380" preserveAspectRatio="xMidYMid slice">
+          <rect width="360" height="380" fill="#e7ece6"/>
+          <ellipse cx="80" cy="310" rx="74" ry="46" fill="#bcd6e6"/>
+          <ellipse cx="300" cy="120" rx="55" ry="38" fill="#bcd6e6"/>
+          <path d="M-10 130 Q120 105 200 165 T370 185" stroke="#fff" stroke-width="7" fill="none"/>
+          <path d="M55 -10 L92 200 L150 390" stroke="#fff" stroke-width="6" fill="none"/>
+          <path d="M0 250 L160 230 L360 270" stroke="#fff" stroke-width="5" fill="none"/>
+          <path d="M70 95 L235 150 L160 280" stroke="#1a73e8" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="305" y="190" font-size="26" text-anchor="middle">✈️</text>
+          <text x="150" y="300" font-size="24" text-anchor="middle">🏨</text>
+          <g><circle cx="70" cy="95" r="15" fill="#7CF0A6" stroke="#fff" stroke-width="2.5"/><text x="70" y="100" text-anchor="middle" font-size="14" font-weight="800" fill="#072414">1</text></g>
+          <g><circle cx="235" cy="150" r="15" fill="#7CF0A6" stroke="#fff" stroke-width="2.5"/><text x="235" y="155" text-anchor="middle" font-size="14" font-weight="800" fill="#072414">2</text></g>
+          <g><circle cx="160" cy="280" r="15" fill="#7CF0A6" stroke="#fff" stroke-width="2.5"/><text x="160" y="285" text-anchor="middle" font-size="14" font-weight="800" fill="#072414">3</text></g>
+        </svg>
+      </div>
     </div>
   </div></div>
 </div>
