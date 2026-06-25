@@ -1572,6 +1572,8 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 body.map-view #itin-stickyhead{top:var(--bnr-h,40px)}
   #itin-stickyhead .date-strip{margin-bottom:2px}
   #attr-stickyhead{position:sticky;top:calc(var(--bnr-h,40px) + 58px);z-index:120;background:var(--bg);margin:0 -16px;padding:12px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
+body.attr-map-view #attr-stickyhead{top:var(--bnr-h,40px)}
+body.map-view .page-scroll-area,body.attr-map-view .page-scroll-area{padding-bottom:0}
 }
 .tab-panel .card{scroll-margin-top:72px}
 /* sticky countdown banner — top of every page, removed after trip start */
@@ -2665,7 +2667,7 @@ function renderAttrGroup(containerId,items,isCustom){
 }
 function attrCardHTML(a,isCustom){
   const imgSrc=a.img||'';
-  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}" src="${imgSrc||NATURE_IMG}" class="attr-img" alt="${a.name}" onerror="this.onerror=null;this.src=NATURE_IMG"></div>`;
+  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}"${imgSrc?` src="${imgSrc}"`:' style="display:none"'} class="attr-img" alt="${a.name}" onload="this.style.display='block'" onerror="this.style.display='none'"></div>`;
   const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
   const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
   const bookBtn=a.booking?`<a href="${a.booking}" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן</a>`:'';
@@ -2859,9 +2861,17 @@ function openAddAttrModal(){
   loadNearbyAttractions();
 }
 function _attrEmoji(t){return {zoo:'🦁',museum:'🏛️',viewpoint:'🏔️',theme_park:'🎢',gallery:'🖼️',aquarium:'🐠',artwork:'🗿'}[t]||'⭐';}
+function _attrTypeLabel(t){return {zoo:'גן חיות',museum:'מוזיאון',viewpoint:'נקודת תצפית',theme_park:'פארק שעשועים',gallery:'גלריה',aquarium:'אקווריום',artwork:'אמנות'}[t]||'אטרקציה';}
 function pickNearbyAttr(a){
-  var n=document.getElementById('attr-name'),l=document.getElementById('attr-location');
-  if(n)n.value=a.name;if(l)l.value=a.name;
+  function setv(id,v){var el=document.getElementById(id);if(el&&v!=null&&v!=='')el.value=v;}
+  var d1=Math.hypot(a.lat-47.39,a.lon-13.415),d2=Math.hypot(a.lat-47.785,a.lon-12.985);
+  var nearSalz=d2<d1;
+  setv('attr-name',a.name);
+  setv('attr-desc',_attrTypeLabel(a.type)+' · '+(nearSalz?'אזור זלצבורג':'אזור פונגאו')+' (~20 ק״מ מהמלון)');
+  setv('attr-location',a.name);
+  setv('attr-area',nearSalz?'salzburg':'pongau');
+  setv('attr-waze','https://waze.com/ul?ll='+a.lat+','+a.lon+'&navigate=yes');
+  setv('attr-website','https://www.google.com/maps/search/?api=1&query='+a.lat+','+a.lon);
   try{var c=_geoCache();c[a.name]=[a.lat,a.lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
 }
 async function loadNearbyAttractions(){
@@ -3339,7 +3349,7 @@ function _dayCap(dayId){
   var meals=(bF?1:0)+(lF?1:0)+(dF?1:0);
   // time-based: ~12 active hours; attractions only for genuinely free time
   var freeH=Math.max(0,12-logH-meals-(brk?1.5:0));
-  var reqAttr=Math.max(0,Math.min(2,Math.round(freeH/3)));
+  var reqAttr=freeH>=3?1:0;
   var total=4+reqAttr;
   var filled=meals+(brk?1:0)+Math.min(reqAttr,attr);
   return {hasB:bF,hasL:lF,hasD:dF,brk:brk,attr:attr,reqAttr:reqAttr,total:total,filled:Math.min(total,filled),busy:attr>reqAttr};
@@ -3380,29 +3390,39 @@ function _pageThumb(d){
   return null;
 }
 // Wikipedia ACTION api with origin=* — CORS-safe from GitHub Pages; pithumbsize gives a real 2000px image
-function _wikiImgURL(title,size){return 'https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize='+size+'&titles='+encodeURIComponent(title);}
+function _wikiImgURL(title,size){return 'https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize='+size+'&titles='+encodeURIComponent(title);}
+var FALLBACK_GRAD='linear-gradient(135deg,#1f5a42,#0e2b20)';
+function _setBgSafe(el,url,overlay){
+  if(!el)return;var pre=overlay?overlay+',':'';
+  if(!url){el.style.backgroundImage=pre+FALLBACK_GRAD;return;}
+  var im=new Image();
+  im.onload=function(){el.style.backgroundImage=pre+"url('"+url+"')";};
+  im.onerror=function(){el.style.backgroundImage=pre+FALLBACK_GRAD;};
+  im.src=url;
+}
 function _dayImg(dayId,cb){
   var wt=DAY_WIKI[dayId];
-  if(!wt){cb(DEFAULT_HERO);return;}
+  if(!wt){cb(null);return;}
   var ck='dimg4_'+dayId,c=sessionStorage.getItem(ck);
   if(c){cb(c);return;}
   fetch(_wikiImgURL(wt,2000)).then(function(r){return r.ok?r.json():null;}).then(function(d){
     var s=_pageThumb(d);
-    if(s){sessionStorage.setItem(ck,s);cb(s);}else cb(DEFAULT_HERO);
-  }).catch(function(){cb(DEFAULT_HERO);});
+    if(s){sessionStorage.setItem(ck,s);cb(s);}else cb(null);
+  }).catch(function(){cb(null);});
 }
 function applyDayHero(dayId){
-  _dayImg(dayId,function(url){
-    var h=document.querySelector('.sticky-shell');
-    if(h)h.style.backgroundImage="linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.22) 42%,rgba(0,0,0,.74) 100%),url('"+url+"')";
-  });
+  var h=document.querySelector('.sticky-shell');
+  var ov="linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.22) 42%,rgba(0,0,0,.74) 100%)";
+  if(h)h.style.backgroundImage=ov+","+FALLBACK_GRAD;
+  _dayImg(dayId,function(url){_setBgSafe(h,url,ov);});
 }
 function decorateDayThumbs(){
   document.querySelectorAll('.card[id^="d"]').forEach(function(card){
     var head=card.querySelector('.card-header');if(!head||head.querySelector('.day-thumb'))return;
     var th=document.createElement('div');th.className='day-thumb';
+    th.style.backgroundImage=FALLBACK_GRAD;
     head.insertBefore(th,head.firstChild);
-    _dayImg(card.id,function(url){th.style.backgroundImage="url('"+url.replace(/\/\d+px-/,'/600px-')+"')";});
+    _dayImg(card.id,function(url){_setBgSafe(th,url);});
   });
 }
 var HERO_FULL=210;
@@ -3568,11 +3588,11 @@ function renderStepper(){
   if(_stepIdx<0)_stepIdx=0;if(_stepIdx>_dayStops.length-1)_stepIdx=_dayStops.length-1;
   var s=_dayStops[_stepIdx];
   host.innerHTML=
-    '<button class="step-arrow" onclick="stepPrev()" '+(_stepIdx===0?'disabled':'')+'>‹</button>'+
+    '<button class="step-arrow" onclick="stepNext()" '+(_stepIdx===_dayStops.length-1?'disabled':'')+' aria-label="הבא">‹</button>'+
     '<div class="step-body"><div class="step-meta">תחנה '+s.num+' מתוך '+_dayStops.length+'</div>'+
     '<div class="step-title">'+s.title+'</div>'+(s.desc?'<div class="step-desc">'+s.desc+'</div>':'')+'</div>'+
     '<button class="step-nav" onclick="stepNav()" aria-label="ניווט"><i data-feather="navigation"></i></button>'+
-    '<button class="step-arrow" onclick="stepNext()" '+(_stepIdx===_dayStops.length-1?'disabled':'')+'>›</button>';
+    '<button class="step-arrow" onclick="stepPrev()" '+(_stepIdx===0?'disabled':'')+' aria-label="הקודם">›</button>';
   if(window.feather)feather.replace();
 }
 function stepTo(i){
@@ -3580,6 +3600,7 @@ function stepTo(i){
   _stepIdx=Math.max(0,Math.min(_dayStops.length-1,i));
   var s=_dayStops[_stepIdx];
   try{_map.panTo(s.geo,{animate:true});}catch(e){}
+  try{if(s.mk&&s.mk.openPopup)s.mk.openPopup();}catch(e){}
   renderStepper();
 }
 function stepNext(){stepTo(_stepIdx+1);}
