@@ -941,6 +941,9 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
+body.modal-open{overflow:hidden}
+body.modal-open .page-scroll-area{overflow:hidden}
+#attr-map-empty{position:fixed;top:50%;bottom:auto;left:16px;right:16px;transform:translateY(-50%)}
 .modal{background:white;border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;padding:20px}
 .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
 .modal-title{font-size:18px;font-weight:800;margin-bottom:16px}
@@ -2069,6 +2072,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   </div>
   </div>
   <div id="attr-map-canvas"></div>
+  <div id="attr-map-empty" class="map-empty" style="display:none"></div>
   <div id="attr-list-view">
   <p class="sec-title">🏔️ אזור פונגאו (ימים 1–5)</p>
   <div id="attractions-pongau"></div>
@@ -2613,7 +2617,7 @@ function switchTab(name){
   const mb=document.getElementById('more-btn');
   if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
   if(document.getElementById('more-modal'))closeModal('more-modal');
-  const fab=document.getElementById('add-fab');if(fab)fab.style.display=(['itinerary','attractions','packing','restaurants'].indexOf(name)>=0)?'flex':'none';
+  const fab=document.getElementById('add-fab');if(fab)fab.style.display=(['itinerary','attractions','packing','restaurants','tasks'].indexOf(name)>=0)?'flex':'none';
   const tc=document.querySelector('.tab-content');
   if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
 }
@@ -2656,7 +2660,7 @@ function renderAttractions(){
   renderAttrGroup('attractions-salzburg',BUILTIN_ATTRACTIONS.filter(a=>a.area==='salzburg'),false);
   const customItems=custom.filter(a=>a.area==='custom'||!['pongau','salzburg'].includes(a.area));
   const el=document.getElementById('attractions-custom');
-  if(customItems.length===0){el.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">אין אטרקציות מותאמות עדיין. לחץ ＋ כדי להוסיף!</p>';}
+  if(customItems.length===0){el.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">אין אטרקציות מותאמות אישית עדיין. לחץ ＋ כדי להוסיף!</p>';}
   else{renderAttrGroup('attractions-custom',customItems,true);}
   loadAttrImages();
   if(_attrMapActive)renderAttrMap();
@@ -3063,9 +3067,10 @@ async function fetchWeather(){
 }
 
 // ═══════════════ MODALS ═══════════════
-function openModal(id){document.getElementById(id).classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openModal(id){var m=document.getElementById(id);if(!m)return;m.classList.add('open');document.body.classList.add('modal-open');}
+function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open');if(!document.querySelector('.modal-overlay.open'))document.body.classList.remove('modal-open');}
 function closeModalOnBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var o=document.querySelector('.modal-overlay.open');if(o)closeModal(o.id);}});
 
 // ═══════════════ TASKS ═══════════════
 function getTasks(){return JSON.parse(localStorage.getItem('austria26_tasks')||'[]')}
@@ -3516,7 +3521,9 @@ function renderAttrMap(){
   const all=[].concat(BUILTIN_ATTRACTIONS,getCustomAttractions(),BUILTIN_RESTAURANTS,getCustomRest());
   const pts=[];
   all.forEach(function(a){var g=placeGeo(a.id,a.location);if(g){_addMarker(g,_emoji(a.name),a.name,a.location,null,_amapGroup);pts.push(g);}});
-  if(pts.length)_amap.fitBounds(pts,{padding:[40,40],maxZoom:12});
+  var aem=document.getElementById('attr-map-empty');
+  if(pts.length){if(aem)aem.style.display='none';_amap.fitBounds(pts,{padding:[40,40],maxZoom:12});}
+  else if(aem){aem.textContent='אין עדיין מיקומים לאטרקציות. השתמשו בחיפוש או הוסיפו אטרקציה כדי לראות אותן על המפה.';aem.style.display='block';}
   _geocodeBg(all,'attr');
 }
 // known fixed places matched by the Hebrew event title (airports etc.)
