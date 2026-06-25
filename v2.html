@@ -840,6 +840,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65)}
 .tl-dragging{opacity:.92;background:rgba(124,240,166,.10);border:1px dashed rgba(124,240,166,.55)!important;border-radius:12px}
 .tl-menu-btn{cursor:pointer}
+.modal{position:relative}
+.modal-x{position:absolute;top:14px;left:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:6;padding:0}
+.modal-x svg.feather{width:18px;height:18px;stroke:currentColor}
+.sortable-fallback{opacity:1!important;background:#1b3a2c!important;border:1px solid var(--glass-brd)!important;border-radius:14px;box-shadow:0 16px 38px rgba(0,0,0,.55)}
+.sortable-ghost{opacity:.3}
+.sortable-chosen{background:#1b3a2c}
+@media (max-width:767px){.tab-nav{justify-content:space-evenly!important;padding:4px 6px;gap:2px}.tab-btn.active{padding:8px 13px;max-width:none}}
 .tl-grip{flex-shrink:0;align-self:center;width:30px;height:42px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);background:none;border:none;padding:0;cursor:grab;touch-action:none}
 .tl-menu-btn{position:static!important;top:auto!important;transform:none!important;align-self:center;flex-shrink:0;cursor:pointer}
 .tl-grip svg.feather{width:18px;height:18px;stroke:currentColor}
@@ -1441,6 +1448,21 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
   </div>
 </div>
 
+<div class="modal-overlay" id="add-rest-modal" onclick="closeModalOnBg(event,'add-rest-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">הוסף מסעדה</div>
+    <div class="form-group"><label>שם המסעדה *</label><input type="text" class="form-input" id="rest-name" placeholder="שם..."></div>
+    <div class="form-group"><label>מיקום</label><div style="display:flex;gap:8px"><input type="text" class="form-input" id="rest-location" placeholder="כתובת / עיר..." style="flex:1"><button class="btn btn-outline btn-sm" type="button" onclick="searchRestLocation()" aria-label="חפש במפות"><i data-feather="search"></i></button></div></div>
+    <div class="form-group"><label>תיאור</label><textarea class="form-input" id="rest-desc" rows="2" placeholder="מטבח, המלצות..."></textarea></div>
+    <div class="form-group"><label>סוג</label><select class="form-select" id="rest-type"><option value="day">🍽️ בדרך</option><option value="hotel">🏨 מלון</option></select></div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="saveRestaurant()"><i data-feather="save"></i> שמור</button>
+      <button class="btn btn-ghost" onclick="closeModal('add-rest-modal')">ביטול</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ USER MODAL ═══ -->
 <div class="modal-overlay" id="user-modal" onclick="closeModalOnBg(event,'user-modal')">
   <div class="modal">
@@ -1779,7 +1801,7 @@ function switchTab(name){
   const mb=document.getElementById('more-btn');
   if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
   if(document.getElementById('more-modal'))closeModal('more-modal');
-  const fab=document.getElementById('add-fab');if(fab)fab.style.display=(name==='itinerary')?'flex':'none';
+  const fab=document.getElementById('add-fab');if(fab)fab.style.display=(['itinerary','attractions','packing','restaurants'].indexOf(name)>=0)?'flex':'none';
   const tc=document.querySelector('.tab-content');
   if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
 }
@@ -1899,11 +1921,35 @@ function restCardHTML(r){
     </div>
   </div>`;
 }
+function getCustomRest(){return JSON.parse(localStorage.getItem('austria26_rest')||'[]')}
+function saveCustomRest(a){localStorage.setItem('austria26_rest',JSON.stringify(a))}
 function renderRestaurants(){
   const hotel=document.getElementById('restaurants-hotel');
   const day=document.getElementById('restaurants-day');
-  if(hotel)hotel.innerHTML=BUILTIN_RESTAURANTS.filter(r=>r.hotel).map(r=>restCardHTML(r)).join('');
-  if(day)day.innerHTML=BUILTIN_RESTAURANTS.filter(r=>!r.hotel).map(r=>restCardHTML(r)).join('');
+  const all=[...BUILTIN_RESTAURANTS,...getCustomRest()];
+  if(hotel)hotel.innerHTML=all.filter(r=>r.hotel).map(r=>restCardHTML(r)).join('');
+  if(day)day.innerHTML=all.filter(r=>!r.hotel).map(r=>restCardHTML(r)).join('');
+  if(window.feather)feather.replace();
+}
+function openAddRestModal(){
+  ['rest-name','rest-location','rest-desc'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
+  const t=document.getElementById('rest-type');if(t)t.value='day';
+  openModal('add-rest-modal');if(window.feather)feather.replace();
+}
+function searchRestLocation(){
+  const q=(document.getElementById('rest-location').value.trim()||document.getElementById('rest-name').value.trim());
+  if(!q){alert('הקלידו מיקום קודם');return;}
+  window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' אוסטריה'),'_blank');
+}
+function saveRestaurant(){
+  const name=document.getElementById('rest-name').value.trim();if(!name){alert('נא להזין שם');return;}
+  const location=document.getElementById('rest-location').value.trim();
+  const desc=document.getElementById('rest-desc').value.trim();
+  const type=document.getElementById('rest-type').value;
+  const waze=location?'https://waze.com/ul?q='+encodeURIComponent(location+' אוסטריה')+'&navigate=yes':'';
+  const arr=getCustomRest();
+  arr.push({id:'cr'+Date.now(),hotel:type==='hotel',name:name,location:location||'—',desc:desc,waze:waze,custom:true});
+  saveCustomRest(arr);closeModal('add-rest-modal');renderRestaurants();
 }
 function viewRestaurant(id){
   switchTab('restaurants');
@@ -2308,6 +2354,23 @@ function pickAttraction(){
   document.getElementById('event-title').value=a.name||'';
   if(a.location)document.getElementById('event-location').value=a.location;
   const d=document.getElementById('event-desc');if(a.desc&&!d.value)d.value=a.desc;
+}
+function injectModalClose(){
+  document.querySelectorAll('.modal-overlay > .modal').forEach(m=>{
+    if(m.querySelector('.modal-x'))return;
+    const x=document.createElement('button');x.className='modal-x';x.setAttribute('aria-label','סגור');
+    x.innerHTML='<i data-feather="x"></i>';
+    x.onclick=function(){const ov=m.closest('.modal-overlay');if(ov)closeModal(ov.id);};
+    m.insertBefore(x,m.firstChild);
+  });
+  if(window.feather)feather.replace();
+}
+function fabAdd(){
+  const a=document.querySelector('.tab-panel.active');const id=a?a.id:'';
+  if(id==='panel-attractions')openAddAttrModal();
+  else if(id==='panel-packing')openAddPackModal();
+  else if(id==='panel-restaurants')openAddRestModal();
+  else openAddEvent(null);
 }
 function openAddEvent(dayId){
   document.getElementById('event-modal-title').textContent='הוסף אירוע';
@@ -2784,7 +2847,7 @@ function initItinSortable(){
   if(!window.Sortable)return;
   document.querySelectorAll('#panel-itinerary .timeline').forEach(tl=>{
     if(tl._sortable)return; tl._sortable=true;
-    new Sortable(tl,{handle:'.tl-grip',draggable:'.tl-item',filter:'.tl-deleted',animation:160,forceFallback:true,fallbackTolerance:3,
+    new Sortable(tl,{handle:'.tl-grip',draggable:'.tl-item',filter:'.tl-deleted',animation:160,forceFallback:true,fallbackTolerance:4,delay:170,delayOnTouchOnly:true,
       onEnd:function(){const c=tl.closest('.card[id^="d"]');if(c&&typeof persistItinOrder==='function')persistItinOrder(c.id);}});
   });
 }
@@ -2867,6 +2930,7 @@ function initApp(){
 document.addEventListener('DOMContentLoaded',()=>{
   startCountdown();
   initFirebase();
+  injectModalClose();
   // check if already logged in
   const saved=localStorage.getItem('austria26_user');
   if(saved){
@@ -2881,7 +2945,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 </script>
-<button id="add-fab" onclick="openAddEvent(null)" aria-label="הוסף אירוע ולבחור יום" title="הוסף אירוע"><i data-feather="plus"></i></button>
+<button id="add-fab" onclick="fabAdd()" aria-label="הוספה" title="הוספה"><i data-feather="plus"></i></button>
 <div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
 <div id="itin-ctx" role="menu"></div>
 </body>
