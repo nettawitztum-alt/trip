@@ -1553,16 +1553,16 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .ds-chip:active{transform:scale(.95)}
 .ds-chip .w{display:block;font-size:10px;color:var(--muted)}
 .ds-chip .d{display:block;font-size:17px;font-weight:800;margin-top:2px;color:#fff}
-.ds-chip.on{background:var(--accent);border-color:var(--accent)}
+.ds-chip.on{background:linear-gradient(150deg,#7CF0A6,#5fc892);border-color:transparent;box-shadow:0 4px 14px rgba(124,240,166,.22)}
 .ds-chip.on .w,.ds-chip.on .d{color:#072414}
 .ds-meter{display:flex;gap:2px;justify-content:center;margin-top:5px}
 .ds-meter i{width:4px;height:4px;border-radius:1px;background:rgba(255,255,255,.22)}
 .ds-meter i.g{background:var(--accent)}
-.ds-meter i.a{background:#FFD479}
+.ds-meter i.a{background:rgba(124,240,166,.55)}
 .ds-meter.ds-flight{font-size:11px;line-height:1;margin-top:4px}
 .ds-chip.on .ds-meter i{background:rgba(7,36,20,.3)}
 .ds-chip.on .ds-meter i.g{background:#072414}
-.ds-chip.on .ds-meter i.a{background:#7a5b00}
+.ds-chip.on .ds-meter i.a{background:rgba(7,36,20,.45)}
 #day-capacity{margin-bottom:12px}
 .cap-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:13px;padding:9px 13px}
 .cap-bar .ds-meter{margin-top:0}
@@ -1610,7 +1610,7 @@ body.trip-active #day-capacity{display:none}
 #day-focus .df-ring{width:38px;height:38px;flex:0 0 auto;transform:rotate(-90deg)}
 #day-focus .df-ring .bg{fill:none;stroke:rgba(255,255,255,.12);stroke-width:3}
 #day-focus .df-ring .fg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
-.day-actions{display:flex;gap:8px;padding:0 14px 8px;margin-top:-2px}
+.day-actions{display:flex;gap:8px;padding:12px 14px 6px;margin-top:0;border-top:1px solid var(--glass-brd)}
 .day-actions button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:999px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:var(--muted);font-family:var(--gs);font-size:12px;font-weight:700;cursor:pointer}
 .day-actions button svg.feather{width:15px;height:15px;stroke:currentColor}
 .day-actions button:active{transform:scale(.97)}
@@ -1618,6 +1618,18 @@ body.trip-active #day-capacity{display:none}
 .ds-chip.on .ds-wx{color:#0a2a1c}
 .card-wx{font-size:12px;font-weight:800;color:#fff;background:rgba(255,255,255,.09);border:1px solid var(--glass-brd);border-radius:999px;padding:3px 10px;white-space:nowrap;align-self:center;flex:0 0 auto;margin-inline-start:6px}
 .card-wx small{font-weight:600;opacity:.6}
+.fl-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.fl-actions button,.fl-actions a{flex:1;min-width:90px;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:999px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:#fff;font-family:var(--gs);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none}
+.fl-actions svg.feather{width:15px;height:15px;stroke:currentColor}
+.phrase-cat{font-size:13px;font-weight:800;color:var(--accent);margin:14px 0 6px}
+.phrase{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--glass-brd)}
+.phrase .he{font-size:14px;font-weight:600}
+.phrase .de{font-size:14px;font-weight:800;color:#fff;text-align:left;direction:ltr}
+.phrase .de small{display:block;font-size:11px;font-weight:600;color:var(--muted)}
+.cur-rate{text-align:center;font-size:16px;font-weight:800;color:var(--accent);margin-bottom:14px}
+.cur-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cur-row label{width:64px;font-size:13px;font-weight:700;color:var(--muted)}
+.cur-row input{flex:1;direction:ltr;text-align:left}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
@@ -1663,8 +1675,9 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
 #day-focus .df-mapbtn svg.feather{width:15px;height:15px;stroke:currentColor}
 .modal{position:relative}
 .attr-view-toggle{display:inline-flex;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);border-radius:999px;padding:4px;gap:2px;margin-bottom:14px}
-.attr-view-toggle button{border:none;background:none;color:var(--muted);font-family:var(--gs);font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.attr-view-toggle button.on{background:var(--green);color:#072414}
+.attr-view-toggle button{border:none;background:none;color:var(--muted);font-family:var(--gs);font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:color .2s,background .2s,box-shadow .2s,transform .12s}
+.attr-view-toggle button:active{transform:scale(.96)}
+.attr-view-toggle button.on{background:linear-gradient(135deg,#7CF0A6,#5fc892);color:#06231a;box-shadow:0 3px 12px rgba(124,240,166,.22)}
 .attr-view-toggle button svg.feather{width:15px;height:15px;stroke:currentColor}
 #attr-map-canvas{display:none;height:62vh;min-height:380px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid var(--glass-brd)}
 body.attr-map-view .sticky-shell{display:none}
@@ -1745,6 +1758,11 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 
 /* ═══ ANIMATIONS ═══ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sheetUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+.modal-overlay.open .modal{animation:sheetUp .32s cubic-bezier(.22,1,.36,1)}
+.modal-overlay{transition:background .2s}
+#day-focus .df-b:active,.fl-actions button:active,.fl-actions a:active,.cap-add:active,.suggest-chip:active,.df-share:active{transform:scale(.96)}
+#day-focus .df-b,.cap-add,.suggest-chip{transition:transform .12s,background .2s}
 @keyframes navGlow{0%,100%{box-shadow:0 0 0 0 rgba(124,240,166,0)}50%{box-shadow:0 0 20px 1px rgba(124,240,166,.4)}}
 .tab-panel.active>*{animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both}
 .tab-panel.active>*:nth-child(1){animation-delay:.02s}
@@ -2159,12 +2177,14 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="fl-route"><div><div class="fl-city">תל אביב</div><div class="fl-code">TLV · T1 · 12:00</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 14:35</div></div></div>
     <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 243</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
     <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span><span class="seat-tag">רומי LAP</span></div>
+    <div class="fl-actions"><button onclick="addFlightICS('out')"><i data-feather="calendar"></i> ליומן</button><a href="https://www.israir.co.il/en/" target="_blank" rel="noopener"><i data-feather="check-circle"></i> צ'ק-אין</a><button onclick="boardingPass('out')"><i data-feather="file-text"></i> כרטיס עלייה</button></div>
   </div>
   <div class="flight-card">
     <div class="fl-direction">✈️ חזור · שלישי 18.8.2026</div>
     <div class="fl-route"><div><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 12:10</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">תל אביב</div><div class="fl-code">TLV · 16:45</div></div></div>
     <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 248</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
     <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span></div>
+    <div class="fl-actions"><button onclick="addFlightICS('ret')"><i data-feather="calendar"></i> ליומן</button><a href="https://www.israir.co.il/en/" target="_blank" rel="noopener"><i data-feather="check-circle"></i> צ'ק-אין</a><button onclick="boardingPass('ret')"><i data-feather="file-text"></i> כרטיס עלייה</button></div>
   </div>
   <div class="card"><div class="card-header" style="cursor:default"><span class="card-emoji">🚗</span><div class="card-title"><h3>רכב השכרה – AutoEurope</h3><p>Res.629582 · Nissan Qashqai</p></div></div>
     <div class="card-body" style="display:block">
@@ -2246,6 +2266,10 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <button class="more-tile" onclick="switchTab('flights')"><span class="mt-ic"><i data-feather="send"></i></span><span>טיסות</span></button>
       <button class="more-tile" onclick="switchTab('restaurants')"><span class="mt-ic"><i data-feather="coffee"></i></span><span>מסעדות</span></button>
       <button class="more-tile" onclick="switchTab('tips')"><span class="mt-ic"><i data-feather="info"></i></span><span>טיפים</span></button>
+      <button class="more-tile" onclick="closeModal('more-modal');openPhrasebook()"><span class="mt-ic"><i data-feather="message-circle"></i></span><span>גרמנית</span></button>
+      <button class="more-tile" onclick="closeModal('more-modal');openCurrency()"><span class="mt-ic"><i data-feather="dollar-sign"></i></span><span>מטבע</span></button>
+      <button class="more-tile" onclick="closeModal('more-modal');openFamilyWhatsApp()"><span class="mt-ic"><i data-feather="users"></i></span><span>וואטסאפ</span></button>
+      <button class="more-tile" onclick="closeModal('more-modal');shareMyLocation()"><span class="mt-ic"><i data-feather="map-pin"></i></span><span>שתף מיקום</span></button>
       <button class="more-tile" onclick="closeModal('more-modal');showUserModal()"><span class="mt-ic"><i data-feather="settings"></i></span><span>הגדרות</span></button>
     </div>
   </div>
@@ -4315,6 +4339,51 @@ function _focusBodyHTML(st){
   }
   return greet+cardHtml;
 }
+var _eurIls=4.0;
+function openPhrasebook(){openModal('phrasebook-modal');if(window.feather)feather.replace();}
+function openCurrency(){openModal('currency-modal');if(window.feather)feather.replace();loadRate();}
+function loadRate(){
+  var el=document.getElementById('cur-rate');
+  fetch('https://api.exchangerate.host/latest?base=EUR&symbols=ILS').then(function(r){return r.ok?r.json():null;}).then(function(d){
+    if(d&&d.rates&&d.rates.ILS)_eurIls=d.rates.ILS;
+    if(el)el.textContent='€1 ≈ ₪'+_eurIls.toFixed(2);convertCur('e');
+  }).catch(function(){if(el)el.textContent='€1 ≈ ₪'+_eurIls.toFixed(2)+' (משוערך)';convertCur('e');});
+}
+function convertCur(src){
+  var e=document.getElementById('cur-eur'),i=document.getElementById('cur-ils');if(!e||!i)return;
+  if(src==='i'){var v=parseFloat(i.value)||0;e.value=(v/_eurIls).toFixed(2);}
+  else{var u=parseFloat(e.value)||0;i.value=(u*_eurIls).toFixed(2);}
+}
+function openFamilyWhatsApp(){
+  var link=localStorage.getItem('austria26_wa')||'';
+  if(!link){link=prompt('הדביקו קישור לקבוצת הוואטסאפ המשפחתית (chat.whatsapp.com/...)');if(!link)return;link=link.trim();localStorage.setItem('austria26_wa',link);}
+  window.open(link,'_blank');
+}
+function shareMyLocation(){
+  if(!navigator.geolocation){alert('המכשיר לא תומך בשיתוף מיקום');return;}
+  navigator.geolocation.getCurrentPosition(function(p){
+    var lat=p.coords.latitude.toFixed(5),lon=p.coords.longitude.toFixed(5);
+    var url='https://maps.google.com/?q='+lat+','+lon;var text='📍 אנחנו כאן: '+url;
+    if(navigator.share){navigator.share({title:'המיקום שלי',text:text,url:url}).catch(function(){});}
+    else{window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
+  },function(){alert('לא ניתן לקבל מיקום — אשרו הרשאת מיקום בדפדפן');},{enableHighAccuracy:true,timeout:9000,maximumAge:30000});
+}
+function _downloadICS(ics,name){
+  try{var blob=new Blob([ics],{type:'text/calendar'});var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download=name+'.ics';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url);},2000);}catch(e){}
+}
+function addFlightICS(which){
+  var f=which==='out'?{d:'11',ds:'1200',de:'1435',sum:'✈️ טיסה הלוך · ישראייר 6H 243 · TLV→SZG',loc:'Ben Gurion Airport T1'}
+                      :{d:'18',ds:'1210',de:'1645',sum:'✈️ טיסה חזור · ישראייר 6H 248 · SZG→TLV',loc:'Salzburg Airport'};
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Austria2026//HE\r\nBEGIN:VEVENT\r\nUID:flight-'+which+'@trip\r\nDTSTART:202608'+f.d+'T'+f.ds+'00\r\nDTEND:202608'+f.d+'T'+f.de+'00\r\nSUMMARY:'+f.sum+'\r\nLOCATION:'+f.loc+'\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  _downloadICS(ics,'flight-'+which);
+}
+function boardingPass(which){
+  var k='austria26_bp_'+which;var link=localStorage.getItem(k)||'';
+  if(!link){link=prompt('הדביקו קישור לכרטיס העלייה (PDF/תמונה מהאתר של ישראייר):');if(!link)return;link=link.trim();localStorage.setItem(k,link);}
+  window.open(link,'_blank');
+}
 var _celebratedDay=null;
 function _greeting(){
   var h=new Date().getHours();
@@ -4484,6 +4553,31 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 </script>
+<div class="modal-overlay" id="phrasebook-modal" onclick="closeModalOnBg(event,'phrasebook-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
+    <div class="modal-title">🗣️ גרמנית בסיסית</div>
+    <div class="phrase-cat">👋 ברכות</div>
+<div class="phrase"><span class="he">שלום</span><span class="de">Hallo<small>האלו</small></span></div><div class="phrase"><span class="he">תודה</span><span class="de">Danke<small>דַנקֶה</small></span></div><div class="phrase"><span class="he">בבקשה</span><span class="de">Bitte<small>בִּיטֶה</small></span></div><div class="phrase"><span class="he">סליחה</span><span class="de">Entschuldigung<small>אֶנטשולדיגונג</small></span></div><div class="phrase"><span class="he">כן / לא</span><span class="de">Ja / Nein<small>יָה / נַיְן</small></span></div>
+    <div class="phrase-cat">🍽️ במסעדה</div>
+<div class="phrase"><span class="he">התפריט בבקשה</span><span class="de">Die Karte, bitte<small>די קַארטֶה ביטה</small></span></div><div class="phrase"><span class="he">מים</span><span class="de">Wasser<small>וַאסֶר</small></span></div><div class="phrase"><span class="he">החשבון בבקשה</span><span class="de">Die Rechnung, bitte<small>די רֶכנונג ביטה</small></span></div><div class="phrase"><span class="he">בלי בשר</span><span class="de">Ohne Fleisch<small>אוֹנֶה פלַייש</small></span></div><div class="phrase"><span class="he">טעים!</span><span class="de">Lecker!<small>לֶקֶר</small></span></div>
+    <div class="phrase-cat">🧭 בדרכים</div>
+<div class="phrase"><span class="he">איפה...?</span><span class="de">Wo ist...?<small>ווֹ אִיסט</small></span></div><div class="phrase"><span class="he">ימינה / שמאלה</span><span class="de">Rechts / Links<small>רֶכטס / לִינקס</small></span></div><div class="phrase"><span class="he">כמה זה עולה?</span><span class="de">Wie viel kostet das?<small>ווי פיל קוסטֶט דאס</small></span></div>
+    <div class="phrase-cat">🆘 חירום</div>
+<div class="phrase"><span class="he">עזרה!</span><span class="de">Hilfe!<small>הִילפֶה</small></span></div><div class="phrase"><span class="he">רופא</span><span class="de">Arzt<small>אַרצט</small></span></div><div class="phrase"><span class="he">שירותים</span><span class="de">Toilette<small>טוֹאָלֶטֶה</small></span></div>
+    <a class="btn btn-outline btn-block" href="https://translate.google.com/?sl=he&tl=de&op=translate" target="_blank" rel="noopener" style="margin-top:14px;justify-content:center"><i data-feather="globe"></i> Google Translate</a>
+  </div>
+</div>
+<div class="modal-overlay" id="currency-modal" onclick="closeModalOnBg(event,'currency-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
+    <div class="modal-title">💱 המרת מטבע</div>
+    <div id="cur-rate" class="cur-rate">€1 ≈ ₪—</div>
+    <div class="cur-row"><label>€ יורו</label><input id="cur-eur" class="form-input" type="number" inputmode="decimal" value="10" oninput="convertCur('e')"></div>
+    <div class="cur-row"><label>₪ שקל</label><input id="cur-ils" class="form-input" type="number" inputmode="decimal" oninput="convertCur('i')"></div>
+    <p style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center">השער מתעדכן אונליין; ללא חיבור — שער משוערך</p>
+  </div>
+</div>
 <div class="modal-overlay" id="nav-modal" onclick="closeModalOnBg(event,'nav-modal')">
   <div class="modal">
     <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
@@ -4506,6 +4600,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <button id="add-fab" onclick="fabAdd()" aria-label="הוספה" title="הוספה"><i data-feather="plus"></i></button>
 <div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
 <div id="itin-ctx" role="menu"></div>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<script>if('serviceWorker' in navigator){var _swReloading=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(_swReloading)return;_swReloading=true;location.reload();});window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(reg){reg.addEventListener('updatefound',function(){var nw=reg.installing;if(nw)nw.addEventListener('statechange',function(){if(nw.state==='installed'&&navigator.serviceWorker.controller){nw.postMessage('skipWaiting');}});});}).catch(function(){});});}</script>
 </body>
 </html>
