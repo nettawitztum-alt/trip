@@ -1520,6 +1520,11 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .map-toggle{display:flex;border-radius:999px;padding:4px;gap:2px;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18)}
 .map-toggle button{border:none;background:none;color:rgba(255,255,255,.72);font-family:var(--gs);font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:999px;cursor:pointer}
 .map-toggle button.on{background:var(--green);color:#072414}
+.map-days{flex:1;display:flex;gap:6px;overflow-x:auto;padding:4px;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:999px;scrollbar-width:none}
+.map-days::-webkit-scrollbar{display:none}
+.map-daychip{flex:0 0 auto;border:none;background:none;color:rgba(255,255,255,.72);font-family:var(--gs);font-weight:600;font-size:12.5px;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.map-daychip.on{background:var(--green);color:#072414}
+.map-anchor{font-size:30px;line-height:1;text-align:center;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 .map-x{width:42px;height:42px;border-radius:50%;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .map-pin{font-size:26px;line-height:1;text-align:center;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
 .map-num{width:30px;height:30px;border-radius:50%;background:var(--green);color:#072414;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.5)}
@@ -1717,9 +1722,6 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
   <div id="day-focus"></div>
-  <div class="itin-edit-bar">
-    <button class="btn btn-sm" id="itin-reset-btn" onclick="resetItinMods()" style="display:none;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ איפוס</button>
-  </div>
   <div id="weather-container"><div class="weather-skeleton"></div><div class="weather-skeleton" style="height:40px;margin-top:6px;opacity:.6"></div></div>
 
   <!-- Day 1 -->
@@ -2096,7 +2098,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
       <button class="more-tile" onclick="switchTab('flights')"><span class="mt-ic"><i data-feather="send"></i></span><span>טיסות</span></button>
       <button class="more-tile" onclick="switchTab('restaurants')"><span class="mt-ic"><i data-feather="coffee"></i></span><span>מסעדות</span></button>
       <button class="more-tile" onclick="switchTab('tips')"><span class="mt-ic"><i data-feather="info"></i></span><span>טיפים</span></button>
-      <button class="more-tile" onclick="openMap('attr')"><span class="mt-ic"><i data-feather="map"></i></span><span>מפה</span></button>
+      <button class="more-tile" onclick="openMap()"><span class="mt-ic"><i data-feather="map"></i></span><span>מפת מסלול</span></button>
       <button class="more-tile" onclick="closeModal('more-modal');showUserModal()"><span class="mt-ic"><i data-feather="settings"></i></span><span>הגדרות</span></button>
     </div>
   </div>
@@ -2190,6 +2192,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
       </div>
     </div>
     <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+    <button class="btn btn-ghost btn-sm" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none;width:100%;margin-bottom:8px;background:rgba(255,128,121,.16);color:#ffb3ae;border:1px solid rgba(255,128,121,.4)">↺ אפס את כל השינויים בלו"ז</button>
     <button class="btn btn-ghost btn-sm" onclick="logout()">🚪 התנתק (נקה כל הנתונים המקומיים)</button>
     <div class="action-row" style="margin-top:8px">
       <button class="btn btn-ghost" onclick="closeModal('user-modal')">סגור</button>
@@ -3129,25 +3132,34 @@ function decorateNavIcons(){
   });
   if(window.feather)feather.replace();
 }
-function openMap(mode){
+var _mapDay='d1';
+var AIRPORT_GEO=[47.7933,13.0043];
+var DAY_HOTEL={d1:'h1',d2:'h1',d3:'h1',d4:'h1',d5:'h1',d6:'h2',d7:'h2',d8:'h2'};
+var HOTEL_NAME={h1:'מלון Kesselgrub',h2:'מלון Grünauerhof'};
+function openMap(dayId){
   if(!window.L){alert('המפה עדיין נטענת — נסו שוב בעוד רגע');return;}
   if(document.getElementById('more-modal'))closeModal('more-modal');
   document.getElementById('map-modal').classList.add('open');
-  setMapMode(mode||'attr',true);
+  _mapDay=dayId||window.currentFocusDay||'d1';
+  buildMapDayChips();
+  _ensureMap();
+  setTimeout(function(){_map.invalidateSize();renderDayMap(_mapDay);},150);
 }
+function buildMapDayChips(){
+  var host=document.getElementById('map-days');if(!host)return;
+  var days=['d1','d2','d3','d4','d5','d6','d7','d8'];
+  host.innerHTML=days.map(function(d,i){
+    return '<button class="map-daychip'+(d===_mapDay?' on':'')+'" onclick="selectMapDay(\''+d+'\')">יום '+(i+1)+'</button>';
+  }).join('');
+  var on=host.querySelector('.map-daychip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});
+}
+function selectMapDay(d){_mapDay=d;buildMapDayChips();renderDayMap(d);}
 function closeMap(){document.getElementById('map-modal').classList.remove('open');}
 function _ensureMap(){
   if(_map)return;
   _map=L.map('map-canvas',{attributionControl:false,zoomControl:true}).setView([47.6,13.2],9);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(_map);
+  L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20,subdomains:['mt0','mt1','mt2','mt3']}).addTo(_map);
   _mapGroup=L.layerGroup().addTo(_map);
-}
-function setMapMode(mode,opening){
-  _mapMode=mode;
-  const ta=document.getElementById('map-tab-attr'),td=document.getElementById('map-tab-day');
-  if(ta)ta.classList.toggle('on',mode==='attr');if(td)td.classList.toggle('on',mode==='day');
-  _ensureMap();
-  setTimeout(function(){_map.invalidateSize();renderMapMode();},opening?140:0);
 }
 function _placeName(name){return (name||'').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').trim()||name;}
 function _addMarker(geo,emoji,name,loc,num,grp){
@@ -3179,7 +3191,7 @@ function attrView(mode){
 function _ensureAttrMap(){
   if(_amap)return;
   _amap=L.map('attr-map-canvas',{attributionControl:false,zoomControl:true}).setView([47.6,13.2],9);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(_amap);
+  L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20,subdomains:['mt0','mt1','mt2','mt3']}).addTo(_amap);
   _amapGroup=L.layerGroup().addTo(_amap);
 }
 function renderAttrMap(){
@@ -3190,33 +3202,45 @@ function renderAttrMap(){
   if(pts.length)_amap.fitBounds(pts,{padding:[40,40],maxZoom:12});
   _geocodeBg(all,'attr');
 }
-function renderMapMode(){
+function _eventGeo(item){
+  var html=item.innerHTML||'';
+  var m=html.match(/view(?:Attraction|Restaurant)\(['"](\w+)['"]\)/);
+  if(m&&PLACE_GEO[m[1]])return PLACE_GEO[m[1]];
+  var cache=_geoCache();
+  var nav=item.querySelector('.tl-nav');
+  if(nav&&nav.dataset.q){var nq=_cleanQ(nav.dataset.q)||nav.dataset.q;if(cache[nq])return cache[nq];}
+  var p=item.querySelector('p');var q=p?_cleanQ(p.textContent):'';
+  if(q&&cache[q])return cache[q];
+  return null;
+}
+function _addAnchor(geo,emoji,name){
+  var icon=L.divIcon({className:'',html:'<div class="map-anchor">'+emoji+'</div>',iconSize:[40,40],iconAnchor:[20,34],popupAnchor:[0,-30]});
+  var mk=L.marker(geo,{icon:icon,zIndexOffset:-50}).addTo(_mapGroup);
+  var pop=document.createElement('div');pop.innerHTML='<b>'+name+'</b>';
+  var btn=document.createElement('button');btn.className='map-pop-btn';btn.textContent='ניווט ←';
+  btn.onclick=function(){navChoose(geo[0],geo[1],name);};
+  var br=document.createElement('div');br.appendChild(btn);pop.appendChild(br);
+  mk.bindPopup(pop);return mk;
+}
+function renderDayMap(dayId){
   if(!_mapGroup)return;_mapGroup.clearLayers();
-  const empty=document.getElementById('map-empty');empty.style.display='none';
-  if(_mapMode==='attr'){
-    const all=[].concat(BUILTIN_ATTRACTIONS,getCustomAttractions(),BUILTIN_RESTAURANTS,getCustomRest());
-    const pts=[];
-    all.forEach(function(a){var g=placeGeo(a.id,a.location);if(g){_addMarker(g,_emoji(a.name),a.name,a.location);pts.push(g);}});
-    if(pts.length)_map.fitBounds(pts,{padding:[55,55],maxZoom:12});
-    _geocodeBg(all,'attr');
-  }else{
-    const focus=window.currentFocusDay||'d1';
-    const card=document.getElementById(focus);
-    const items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')):[];
-    const cache=_geoCache();const pts=[];var n=0;
-    items.forEach(function(it){
-      var h=it.querySelector('h4');var p=it.querySelector('p');
-      var title=h?h.textContent.replace('נוסף','').trim():'';
-      var desc=p?p.textContent.trim():'';
-      var q=_cleanQ(desc)||_cleanQ(title);
-      var g=q?cache[q]:null;
-      if(g){n++;_addMarker(g,'📍',title,desc,n);pts.push(g);}
-    });
-    if(pts.length>1)L.polyline(pts,{color:'#7CF0A6',weight:3,dashArray:'2 8',lineCap:'round'}).addTo(_mapGroup);
-    if(pts.length)_map.fitBounds(pts,{padding:[60,60],maxZoom:13});
-    else{empty.textContent='אין עדיין מיקומים לאירועי היום. הוסיפו מיקום לאירוע כדי לראותו על המפה.';empty.style.display='block';}
-    _geocodeDayBg(items);
-  }
+  var empty=document.getElementById('map-empty');empty.style.display='none';
+  var card=document.getElementById(dayId);
+  var items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted):not(.tl-nap)')):[];
+  var bounds=[],route=[],n=0;
+  items.forEach(function(it){
+    var g=_eventGeo(it);if(!g)return;
+    var h=it.querySelector('h4');var title=h?h.textContent.trim():'';
+    var p=it.querySelector('p');var desc=p?p.textContent.trim():'';
+    n++;_addMarker(g,'📍',title,desc,n);route.push(g);bounds.push(g);
+  });
+  if(route.length>1)L.polyline(route,{color:'#1a73e8',weight:5,opacity:.85,lineCap:'round',lineJoin:'round'}).addTo(_mapGroup);
+  _addAnchor(AIRPORT_GEO,'✈️','שדה התעופה זלצבורג (SZG)');bounds.push(AIRPORT_GEO);
+  var hid=DAY_HOTEL[dayId]||'h1';var hg=PLACE_GEO[hid];
+  if(hg){_addAnchor(hg,'🏨',HOTEL_NAME[hid]||'המלון');bounds.push(hg);}
+  if(bounds.length)_map.fitBounds(bounds,{padding:[60,60],maxZoom:13});
+  if(!route.length){empty.textContent='אין עדיין מיקומים לאירועי היום הזה — הוסיפו מיקום לאירוע כדי לראותו על המפה.';empty.style.display='block';}
+  _geocodeDayBg(items);
 }
 async function _geocodeBg(all,mode){
   if(_geoBusy)return;const cache=_geoCache();
@@ -3227,7 +3251,6 @@ async function _geocodeBg(all,mode){
     await new Promise(function(res){setTimeout(res,1100);});
   }
   localStorage.setItem('austria26_geo',JSON.stringify(cache));_geoBusy=false;
-  if(did&&document.getElementById('map-modal').classList.contains('open')&&_mapMode===mode)renderMapMode();
   if(did&&_attrMapActive)renderAttrMap();
 }
 async function _geocodeDayBg(items){
@@ -3239,7 +3262,7 @@ async function _geocodeDayBg(items){
     await new Promise(function(res){setTimeout(res,1100);});
   }
   localStorage.setItem('austria26_geo',JSON.stringify(cache));_geoBusy=false;
-  if(did&&document.getElementById('map-modal').classList.contains('open')&&_mapMode==='day')renderMapMode();
+  if(did&&document.getElementById('map-modal').classList.contains('open'))renderDayMap(_mapDay);
 }
 function fabAdd(){
   const a=document.querySelector('.tab-panel.active');const id=a?a.id:'';
@@ -3792,7 +3815,7 @@ function renderDayFocus(){
   let afterHtml='';
   if(after)afterHtml=`<div class="df-after"><span class="t">${escapeHtml(_timeStr(after))}</span><div style="flex:1;font-weight:600;font-size:14px">${escapeHtml(_evTitle(after))}</div><span class="df-mut">אחר כך</span></div>`;
   const cs=document.querySelector(".countdown-section");if(cs)cs.style.display=inTrip?"none":"";
-  host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div><button class="df-mapbtn" onclick="openMap('day')"><i data-feather="map"></i> מפת מסלול היום</button>${cardHtml}${afterHtml}`;
+  host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div><button class="df-mapbtn" onclick="openMap('${focus}')"><i data-feather="map"></i> מפת מסלול היום</button>${cardHtml}${afterHtml}`;
   if(window.feather)feather.replace();
 }
 // Open the day that matches today's real date (focused agenda view).
@@ -3854,7 +3877,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <div id="map-modal">
   <div id="map-canvas"></div>
   <div class="map-top">
-    <div class="map-toggle"><button id="map-tab-attr" class="on" onclick="setMapMode('attr')">אטרקציות</button><button id="map-tab-day" onclick="setMapMode('day')">מסלול היום</button></div>
+    <div id="map-days" class="map-days"></div>
     <button class="map-x" onclick="closeMap()" aria-label="סגור"><i data-feather="x"></i></button>
   </div>
   <div id="map-empty" class="map-empty" style="display:none"></div>
