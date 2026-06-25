@@ -3089,7 +3089,7 @@ const PLACE_GEO={
 let _map=null,_mapGroup=null,_mapMode='attr',_navTarget=null,_geoBusy=false,_amap=null,_amapGroup=null,_attrMapActive=false;
 function _emoji(str){const m=(str||'').match(/\p{Extended_Pictographic}/u);return m?m[0]:'📍';}
 function _cleanQ(loc){return (loc||'').split('·')[0].replace(/[֐-׿]/g,'').replace(/\s+/g,' ').trim();}
-function _geoCache(){try{return JSON.parse(localStorage.getItem('austria26_geo')||'{}')}catch(e){return {}}}
+function _geoCache(){try{return JSON.parse(localStorage.getItem('austria26_geo2')||'{}')}catch(e){return {}}}
 function placeGeo(id,loc){if(PLACE_GEO[id])return PLACE_GEO[id];const q=_cleanQ(loc);return _geoCache()[q]||null;}
 function navChoose(lat,lng,name){_navTarget={lat,lng,name};document.getElementById('nav-title').textContent='ניווט · '+name;openModal('nav-modal');if(window.feather)feather.replace();}
 function navChooseQ(query,name){_navTarget={q:query,name:name};document.getElementById('nav-title').textContent='ניווט · '+(name||query);openModal('nav-modal');if(window.feather)feather.replace();}
@@ -3202,15 +3202,22 @@ function renderAttrMap(){
   if(pts.length)_amap.fitBounds(pts,{padding:[40,40],maxZoom:12});
   _geocodeBg(all,'attr');
 }
+// known fixed places matched by the Hebrew event title (airports etc.)
+var KNOWN_GEO=[
+  {re:/ת["״”']?א|נתב["״']?ג|ben.?gurion|\btlv\b/i, g:[32.0004,34.8706]}, // נתב"ג / תל אביב
+  {re:/\bszg\b/i, g:[47.7933,13.0043]}                                                                     // נמל התעופה זלצבורג
+];
+function _knownGeo(item){
+  var h=item.querySelector('h4');var t=h?h.textContent:'';
+  for(var i=0;i<KNOWN_GEO.length;i++)if(KNOWN_GEO[i].re.test(t))return KNOWN_GEO[i].g;
+  return null;
+}
 function _eventGeo(item){
-  var html=item.innerHTML||'';
-  var m=html.match(/view(?:Attraction|Restaurant)\(['"](\w+)['"]\)/);
+  var k=_knownGeo(item);if(k)return k;
+  var m=(item.innerHTML||'').match(/view(?:Attraction|Restaurant)\(['"](\w+)['"]\)/);
   if(m&&PLACE_GEO[m[1]])return PLACE_GEO[m[1]];
-  var cache=_geoCache();
-  var nav=item.querySelector('.tl-nav');
-  if(nav&&nav.dataset.q){var nq=_cleanQ(nav.dataset.q)||nav.dataset.q;if(cache[nq])return cache[nq];}
-  var p=item.querySelector('p');var q=p?_cleanQ(p.textContent):'';
-  if(q&&cache[q])return cache[q];
+  var nav=item.querySelector('.tl-nav');var q=nav&&nav.dataset.q?nav.dataset.q.trim():'';
+  if(q){var cache=_geoCache();if(cache[q])return cache[q];}
   return null;
 }
 function _addAnchor(geo,emoji,name){
@@ -3250,18 +3257,20 @@ async function _geocodeBg(all,mode){
     try{var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q+', Austria'));var j=await r.json();if(j&&j[0]){cache[q]=[parseFloat(j[0].lat),parseFloat(j[0].lon)];did=true;}}catch(e){}
     await new Promise(function(res){setTimeout(res,1100);});
   }
-  localStorage.setItem('austria26_geo',JSON.stringify(cache));_geoBusy=false;
+  localStorage.setItem('austria26_geo2',JSON.stringify(cache));_geoBusy=false;
   if(did&&_attrMapActive)renderAttrMap();
 }
 async function _geocodeDayBg(items){
   if(_geoBusy)return;const cache=_geoCache();_geoBusy=true;var did=false;
-  for(const it of items){var p=it.querySelector('p');var h=it.querySelector('h4');
-    var desc=p?p.textContent.trim():'';var title=h?h.textContent.replace('נוסף','').trim():'';
-    var q=_cleanQ(desc)||_cleanQ(title);if(!q||cache[q])continue;
+  for(const it of items){
+    if(_knownGeo(it))continue;                       // airports are hardcoded
+    if(/view(?:Attraction|Restaurant)\(/.test(it.innerHTML||''))continue; // linked place -> PLACE_GEO
+    var nav=it.querySelector('.tl-nav');var q=nav&&nav.dataset.q?nav.dataset.q.trim():'';
+    if(!q||cache[q])continue;                         // only geocode the curated Latin place query
     try{var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q+', Austria'));var j=await r.json();if(j&&j[0]){cache[q]=[parseFloat(j[0].lat),parseFloat(j[0].lon)];did=true;}}catch(e){}
     await new Promise(function(res){setTimeout(res,1100);});
   }
-  localStorage.setItem('austria26_geo',JSON.stringify(cache));_geoBusy=false;
+  localStorage.setItem('austria26_geo2',JSON.stringify(cache));_geoBusy=false;
   if(did&&document.getElementById('map-modal').classList.contains('open'))renderDayMap(_mapDay);
 }
 function fabAdd(){
@@ -3332,7 +3341,7 @@ function saveEvent(){
 let _db=null,_auth=null,_applyingRemote=false,_lastHash=null,_pushTimer=null;
 const SYNC_PREFIX='austria26_';
 const MTIME_KEY='austria26_synctime'; // local last-modified stamp (not synced)
-const SYNC_SKIP=['austria26_user',MTIME_KEY,'austria26_geo']; // per-device, not synced
+const SYNC_SKIP=['austria26_user',MTIME_KEY,'austria26_geo2']; // per-device, not synced
 
 function firebaseEnabled(){return !!(FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey&&FIREBASE_CONFIG.projectId);}
 
