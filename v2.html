@@ -1107,6 +1107,9 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .attr-card.attr-open .attr-toggle-btn{transform:rotate(180deg)}
 .attr-toggle-btn svg.feather{width:18px;height:18px;stroke:currentColor;stroke-width:2.5}
 .attr-collapsible{max-height:0;overflow:hidden;transition:max-height .28s cubic-bezier(.4,0,.2,1)}
+.attr-gallery{display:none;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.attr-gallery.on{display:grid}
+.attr-gallery img{width:100%;height:88px;object-fit:cover;border-radius:10px;background:rgba(255,255,255,.06)}
 .attr-card.attr-open .attr-collapsible{max-height:1000px}
 .attr-header-body{padding:10px 12px 2px}
 
@@ -1560,7 +1563,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 @media (max-width:767px){
   #itin-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
   #itin-stickyhead .date-strip{margin-bottom:2px}
-  #panel-attractions .attr-view-toggle{position:sticky;top:var(--bnr-h,40px);z-index:120;background:rgba(14,43,32,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 0}
+  #attr-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:12px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
 }
 .tab-panel .card{scroll-margin-top:72px}
 /* sticky countdown banner — top of every page, removed after trip start */
@@ -2049,9 +2052,11 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
     <h2 style="font-size:18px;font-weight:800">אטרקציות</h2>
   </div>
+  <div id="attr-stickyhead" style="text-align:center">
   <div class="attr-view-toggle">
     <button id="av-list" class="on" onclick="attrView('list')"><i data-feather="list"></i> רשימה</button>
     <button id="av-map" onclick="attrView('map')"><i data-feather="map"></i> מפה</button>
+  </div>
   </div>
   <div id="attr-map-canvas"></div>
   <div id="attr-list-view">
@@ -2685,6 +2690,7 @@ function attrCardHTML(a,isCustom){
     </div>
     <div class="attr-collapsible" id="attr-body-${a.id}">
       <div class="attr-body" style="padding-top:6px">
+        <div class="attr-gallery" id="attr-gallery-${a.id}"></div>
         <p class="attr-desc">${a.desc||''}</p>
         ${activitiesHTML}
         ${tipsHTML}
@@ -2698,6 +2704,31 @@ function toggleAttr(id){
   const card=document.getElementById('attr-card-'+id);
   if(!card)return;
   card.classList.toggle('attr-open');
+  if(card.classList.contains('attr-open'))loadAttrGallery(id);
+}
+async function loadAttrGallery(attrId){
+  const a=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()].find(x=>x.id===attrId);
+  if(!a||!a.wikiTitle)return;
+  const host=document.getElementById('attr-gallery-'+attrId);
+  if(!host||host.dataset.loaded)return;host.dataset.loaded='1';
+  try{
+    const ck='wgal_'+attrId;var urls=null;
+    var cached=sessionStorage.getItem(ck);
+    if(cached){urls=JSON.parse(cached);}
+    else{
+      var r=await fetch('https://en.wikipedia.org/api/rest_v1/page/media-list/'+encodeURIComponent(a.wikiTitle));
+      if(r.ok){var d=await r.json();
+        urls=(d.items||[]).filter(function(it){return it.type==='image'&&it.srcset&&it.srcset.length;})
+          .map(function(it){var s=it.srcset[0].src;return s.indexOf('//')===0?'https:'+s:s;})
+          .filter(function(u){return !/\.svg/i.test(u);}).slice(0,3);
+        sessionStorage.setItem(ck,JSON.stringify(urls));
+      }
+    }
+    if(urls&&urls.length){
+      host.innerHTML=urls.map(function(u){return '<img src="'+u.replace(/\/\d+px-/,'/640px-')+'" loading="lazy" alt="'+(a.name||'')+'" onerror="this.remove()">';}).join('');
+      host.classList.add('on');
+    }else{host.dataset.loaded='';}
+  }catch(e){host.dataset.loaded='';}
 }
 
 function restCardHTML(r){
@@ -2797,6 +2828,7 @@ function viewAttraction(attrId){
   setTimeout(()=>{
     const el=document.getElementById('attr-card-'+attrId);
     if(!el)return;
+    el.classList.add('attr-open');loadAttrGallery(attrId);
     el.scrollIntoView({behavior:'smooth',block:'center'});
     el.style.outline='3px solid var(--primary)';
     el.style.outlineOffset='3px';
