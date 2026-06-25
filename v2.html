@@ -1645,6 +1645,20 @@ body.trip-active #day-capacity{display:none}
 .loc-opt:active,.loc-opt:hover{background:rgba(124,240,166,.12)}
 .loc-opt b{font-size:14px;font-weight:700;display:block}
 .loc-opt span{font-size:11px;color:var(--muted)}
+.nrest-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.nrest{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:14px;padding:10px 12px}
+.nrest-info b{font-size:13.5px;font-weight:700;display:block}
+.nrest-info span{font-size:11px;color:var(--muted)}
+.nrest-act{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.nrest-ta{font-size:12px;font-weight:700;color:#bff5d3;text-decoration:none;white-space:nowrap}
+.nrest-add{width:32px;height:32px;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(124,240,166,.16);color:var(--accent);font-size:18px;line-height:1;cursor:pointer}
+.nrest-add:active{transform:scale(.92)}
+.flight-card{position:relative;overflow:hidden}
+.flight-card .fl-direction{position:relative}
+.bp-perf{height:0;border-top:2px dashed rgba(255,255,255,.28);margin:14px -16px 0;position:relative}
+.bp-perf::before,.bp-perf::after{content:'';position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:#0e2b20}
+.bp-perf::before{left:-11px}.bp-perf::after{right:-11px}
+.bp-barcode{height:44px;margin:16px 2px 2px;border-radius:4px;opacity:.82;background:repeating-linear-gradient(90deg,#e3f2ea 0 2px,transparent 2px 3px,#e3f2ea 3px 7px,transparent 7px 9px,#e3f2ea 9px 11px,transparent 11px 14px,#e3f2ea 14px 16px,transparent 16px 18px)}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
@@ -2192,6 +2206,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="fl-route"><div><div class="fl-city">תל אביב</div><div class="fl-code">TLV · T1 · 12:00</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 14:35</div></div></div>
     <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 243</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
     <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span><span class="seat-tag">רומי LAP</span></div>
+    <div class="bp-perf"></div><div class="bp-barcode" aria-hidden="true"></div>
     <div class="fl-actions"><button onclick="addFlightICS('out')"><i data-feather="calendar"></i> ליומן</button><a href="https://www.israir.co.il/en/" target="_blank" rel="noopener"><i data-feather="check-circle"></i> צ'ק-אין</a><button onclick="boardingPass('out')"><i data-feather="file-text"></i> כרטיס עלייה</button></div>
   </div>
   <div class="flight-card">
@@ -2199,6 +2214,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="fl-route"><div><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 12:10</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">תל אביב</div><div class="fl-code">TLV · 16:45</div></div></div>
     <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 248</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
     <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span></div>
+    <div class="bp-perf"></div><div class="bp-barcode" aria-hidden="true"></div>
     <div class="fl-actions"><button onclick="addFlightICS('ret')"><i data-feather="calendar"></i> ליומן</button><a href="https://www.israir.co.il/en/" target="_blank" rel="noopener"><i data-feather="check-circle"></i> צ'ק-אין</a><button onclick="boardingPass('ret')"><i data-feather="file-text"></i> כרטיס עלייה</button></div>
   </div>
   <div class="card"><div class="card-header" style="cursor:default"><span class="card-emoji">🚗</span><div class="card-title"><h3>רכב השכרה – AutoEurope</h3><p>Res.629582 · Nissan Qashqai</p></div></div>
@@ -2232,6 +2248,8 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   <div id="restaurants-hotel"></div>
   <p class="sec-title" style="margin-top:20px">🍽️ מסעדות ואוכל בדרך</p>
   <div id="restaurants-day"></div>
+  <p class="sec-title" style="margin-top:20px">⭐ מומלצות בקרבת המלון</p>
+  <div id="rest-nearby" class="attr-suggest"></div>
 </div>
 
 <!-- ── טיפים ── -->
@@ -2301,7 +2319,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <input type="hidden" id="edit-attr-id">
     <div class="form-group"><label>שם האטרקציה *</label><input type="text" class="form-input" id="attr-name" placeholder="שם האטרקציה"></div>
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
-    <div class="form-group"><label>מיקום / כתובת</label><input type="text" class="form-input" id="attr-location" placeholder="עיר, כתובת..."></div>
+    <div class="form-group"><label>מיקום / כתובת</label><div class="loc-wrap"><input type="text" class="form-input" id="attr-location" placeholder="התחילו להקליד מקום..." autocomplete="off" oninput="locAutocomplete('attr-location','attr-loc-suggest','attr-name')"><div class="loc-suggest" id="attr-loc-suggest"></div></div></div>
     <div class="form-group"><label>אזור</label>
       <select class="form-select" id="attr-area">
         <option value="pongau">🏔️ פונגאו (Altenmarkt, ימים 1–5)</option>
@@ -2311,11 +2329,8 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     </div>
     <div class="form-group"><label>קישור Waze (אופציונלי)</label><input type="url" class="form-input" id="attr-waze" placeholder="https://waze.com/ul?q=..." style="direction:ltr"></div>
     <div class="form-group"><label>אתר / קישור (אופציונלי)</label><input type="url" class="form-input" id="attr-website" placeholder="https://..." style="direction:ltr"></div>
-    <div class="action-row">
-      <button class="btn btn-primary" onclick="saveAttraction()">💾 שמור</button>
-      <button class="btn btn-ghost" onclick="closeModal('add-attr-modal')">ביטול</button>
-      <button class="btn btn-danger btn-sm" id="delete-attr-btn" style="display:none;margin-right:auto" onclick="deleteAttraction()">🗑️ מחק</button>
-    </div>
+    <button class="btn btn-primary btn-block" onclick="saveAttraction()">💾 שמור</button>
+    <button class="btn btn-danger btn-block btn-sm" id="delete-attr-btn" style="display:none;margin-top:8px" onclick="deleteAttraction()">🗑️ מחק</button>
   </div>
 </div>
 
@@ -2337,10 +2352,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <input type="checkbox" id="pack-urgent" style="width:18px;height:18px">
       <label for="pack-urgent" style="margin:0;cursor:pointer">⭐ פריט קריטי (אסור לשכוח!)</label>
     </div>
-    <div class="action-row">
-      <button class="btn btn-primary" onclick="savePackItem()">💾 שמור</button>
-      <button class="btn btn-ghost" onclick="closeModal('add-pack-modal')">ביטול</button>
-    </div>
+    <button class="btn btn-primary btn-block" onclick="savePackItem()">💾 שמור</button>
   </div>
 </div>
 
@@ -2349,13 +2361,10 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
     <div class="modal-title">הוסף מסעדה</div>
     <div class="form-group"><label>שם המסעדה *</label><input type="text" class="form-input" id="rest-name" placeholder="שם..."></div>
-    <div class="form-group"><label>מיקום</label><div style="display:flex;gap:8px"><input type="text" class="form-input" id="rest-location" placeholder="כתובת / עיר..." style="flex:1"><button class="btn btn-outline btn-sm" type="button" onclick="searchRestLocation()" aria-label="חפש במפות"><i data-feather="search"></i></button></div></div>
+    <div class="form-group"><label>מיקום</label><div style="display:flex;gap:8px"><div class="loc-wrap"><input type="text" class="form-input" id="rest-location" placeholder="כתובת / עיר..." style="flex:1" autocomplete="off" oninput="locAutocomplete('rest-location','rest-loc-suggest','rest-name')"><div class="loc-suggest" id="rest-loc-suggest"></div></div><button class="btn btn-outline btn-sm" type="button" onclick="searchRestLocation()" aria-label="חפש במפות"><i data-feather="search"></i></button></div></div>
     <div class="form-group"><label>תיאור</label><textarea class="form-input" id="rest-desc" rows="2" placeholder="מטבח, המלצות..."></textarea></div>
     <div class="form-group"><label>סוג</label><select class="form-select" id="rest-type"><option value="day">🍽️ בדרך</option><option value="hotel">🏨 מלון</option></select></div>
-    <div class="action-row">
-      <button class="btn btn-primary" onclick="saveRestaurant()"><i data-feather="save"></i> שמור</button>
-      <button class="btn btn-ghost" onclick="closeModal('add-rest-modal')">ביטול</button>
-    </div>
+    <button class="btn btn-primary btn-block" onclick="saveRestaurant()"><i data-feather="save"></i> שמור</button>
   </div>
 </div>
 
@@ -2842,6 +2851,7 @@ function restCardHTML(r){
   const dayBadge=r.days?`<span class="attr-duration" style="font-size:11px;padding:2px 8px">📅 ${r.days}</span>`:'';
   const wazeBtn=r.waze?`<a href="${r.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
   const webBtn=r.website?`<a href="${r.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
+  const taBtn=`<a href="https://www.tripadvisor.com/Search?q=${encodeURIComponent((r.name||'')+' '+(r.location||'')+' Salzburg')}" class="btn btn-outline btn-sm" target="_blank" rel="noopener">★ TripAdvisor</a>`;
   const menuBtn=r.menu?`<a href="${r.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
   const tipsHTML=r.tips?.length?`<div class="attr-section-title">כדאי לדעת</div><ul class="attr-tips">${r.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`:'';
   return `<div class="attr-card" id="attr-card-${r.id}">
@@ -2859,7 +2869,7 @@ function restCardHTML(r){
       <div class="attr-body" style="padding-top:6px">
         <p class="attr-desc">${r.desc||''}</p>
         ${tipsHTML}
-        <div class="action-row">${wazeBtn}${webBtn}${menuBtn}</div>
+        <div class="action-row">${wazeBtn}${webBtn}${menuBtn}${taBtn}</div>
       </div>
     </div>
   </div>`;
@@ -2873,7 +2883,49 @@ function renderRestaurants(){
   var _rh=all.filter(r=>r.hotel),_rd=all.filter(r=>!r.hotel);
   if(hotel)hotel.innerHTML=_rh.length?_rh.map(r=>restCardHTML(r)).join(''):'<p style="font-size:13px;color:var(--muted);padding:8px 0">אין מסעדות מלון להצגה.</p>';
   if(day)day.innerHTML=_rd.length?_rd.map(r=>restCardHTML(r)).join(''):'<p style="font-size:13px;color:var(--muted);padding:8px 0">אין המלצות מסעדות עדיין. לחצו ＋ כדי להוסיף!</p>';
+  loadNearbyRestaurants();
   if(window.feather)feather.replace();
+}
+function _restEmoji(a){return {restaurant:'🍽️',cafe:'☕',fast_food:'🍔',bar:'🍺',pub:'🍺',biergarten:'🍺'}[a]||'🍽️';}
+async function loadNearbyRestaurants(){
+  var host=document.getElementById('rest-nearby');if(!host||host.dataset.loaded)return;
+  host.innerHTML='<div class="suggest-loading">מחפש מסעדות מומלצות ליד המלונות…</div>';
+  try{
+    var ck='nearby_rest';var cached=sessionStorage.getItem(ck);var list;
+    if(cached){list=JSON.parse(cached);}
+    else{
+      var q='[out:json][timeout:25];(node["amenity"~"^(restaurant|cafe|fast_food)$"]["name"](around:3000,47.390,13.415);node["amenity"~"^(restaurant|cafe|fast_food)$"]["name"](around:3000,47.785,12.985););out body 60;';
+      var r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)});
+      var d=await r.json();var seen={};list=[];
+      (d.elements||[]).forEach(function(e){
+        var nm=e.tags&&(e.tags['name:en']||e.tags.name);if(!nm)return;
+        var key=nm.toLowerCase();if(seen[key])return;seen[key]=1;
+        list.push({name:nm,lat:e.lat,lon:e.lon,cuisine:(e.tags.cuisine||''),amenity:(e.tags.amenity||'restaurant')});
+      });
+      list=list.slice(0,12);
+      sessionStorage.setItem(ck,JSON.stringify(list));
+    }
+    host.dataset.loaded='1';window._nearbyRest=list;
+    if(!list.length){host.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">לא נמצאו מסעדות בקרבת מקום כרגע.</p>';return;}
+    host.innerHTML='<div class="suggest-title">🍽️ ב-3 ק״מ מהמלונות — ביקורות בטריפאדוויזר והוספה</div><div class="nrest-list">'+
+      list.map(function(a,i){
+        var ta='https://www.tripadvisor.com/Search?q='+encodeURIComponent(a.name+' Salzburg');
+        var cuisine=a.cuisine?a.cuisine.replace(/_/g,' ').replace(/;/g,', '):'';
+        return '<div class="nrest"><div class="nrest-info"><b>'+_restEmoji(a.amenity)+' '+escapeHtml(a.name)+'</b>'+(cuisine?'<span>'+escapeHtml(cuisine)+'</span>':'')+'</div>'+
+          '<div class="nrest-act"><a href="'+ta+'" target="_blank" rel="noopener" class="nrest-ta">★ ביקורות</a>'+
+          '<button type="button" onclick="addNearbyRest('+i+')" class="nrest-add" aria-label="הוסף">＋</button></div></div>';
+      }).join('')+'</div>';
+  }catch(e){host.innerHTML='';host.dataset.loaded='';}
+}
+function addNearbyRest(i){
+  var a=(window._nearbyRest||[])[i];if(!a)return;
+  var arr=getCustomRest();
+  arr.push({id:'cr'+Date.now(),hotel:false,name:a.name,location:(a.cuisine?a.cuisine.replace(/_/g,' '):'מסעדה'),desc:'',
+    waze:'https://waze.com/ul?ll='+a.lat+','+a.lon+'&navigate=yes',
+    website:'https://www.tripadvisor.com/Search?q='+encodeURIComponent(a.name+' Salzburg'),custom:true});
+  saveCustomRest(arr);
+  try{var c=_geoCache();c[a.name]=[a.lat,a.lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+  renderRestaurants();
 }
 function openAddRestModal(){
   ['rest-name','rest-location','rest-desc'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
@@ -3835,13 +3887,15 @@ function pickEventType(btn){
   if(ag)ag.style.display=(t==='restaurant'||t==='attraction')?'block':'none';
 }
 var _evLocTimer=null;
-function eventLocAutocomplete(){
-  clearTimeout(_evLocTimer);
-  var inp=document.getElementById('event-location'),box=document.getElementById('event-loc-suggest');
+var _acTimers={};
+function locAutocomplete(inputId,boxId,titleId){
+  clearTimeout(_acTimers[boxId]);
+  var inp=document.getElementById(inputId),box=document.getElementById(boxId);
   if(!inp||!box)return;
+  box.dataset.target=inputId;box.dataset.title=titleId||'';
   var q=(inp.value||'').trim();
   if(q.length<2){box.innerHTML='';box.classList.remove('on');return;}
-  _evLocTimer=setTimeout(function(){
+  _acTimers[boxId]=setTimeout(function(){
     fetch('https://photon.komoot.io/api/?limit=6&lat=47.8&lon=13.04&q='+encodeURIComponent(q))
       .then(function(r){return r.ok?r.json():null;}).then(function(d){
         if(!d||!d.features||!d.features.length){box.innerHTML='';box.classList.remove('on');return;}
@@ -3849,19 +3903,22 @@ function eventLocAutocomplete(){
           var p=f.properties||{},g=(f.geometry&&f.geometry.coordinates)||[];
           var name=p.name||p.street||p.city||q;
           var loc=[p.street&&p.name?p.street:'',p.city,p.country].filter(Boolean).join(', ');
-          return '<button type="button" class="loc-opt" onclick="pickEventLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-lat="'+(g[1]||'')+'" data-lon="'+(g[0]||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
+          return '<button type="button" class="loc-opt" onclick="pickLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-lat="'+(g[1]||'')+'" data-lon="'+(g[0]||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
         }).join('');
         box.classList.add('on');
       }).catch(function(){box.innerHTML='';box.classList.remove('on');});
   },300);
 }
-function pickEventLoc(btn){
+function pickLoc(btn){
+  var box=btn.closest('.loc-suggest');if(!box)return;
+  var inputId=box.dataset.target||'',titleId=box.dataset.title||'';
   var name=btn.dataset.name,lat=parseFloat(btn.dataset.lat),lon=parseFloat(btn.dataset.lon);
-  var li=document.getElementById('event-location');if(li)li.value=name;
-  var ti=document.getElementById('event-title');if(ti&&!ti.value.trim())ti.value=name;
+  var li=document.getElementById(inputId);if(li)li.value=name;
+  if(titleId){var ti=document.getElementById(titleId);if(ti&&!ti.value.trim())ti.value=name;}
   if(!isNaN(lat)&&!isNaN(lon)){try{var c=_geoCache();c[name]=[lat,lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}}
-  var box=document.getElementById('event-loc-suggest');if(box){box.innerHTML='';box.classList.remove('on');}
+  box.innerHTML='';box.classList.remove('on');
 }
+function eventLocAutocomplete(){locAutocomplete('event-location','event-loc-suggest','event-title');}
 function saveEvent(){
   const title=document.getElementById('event-title').value.trim();
   if(!title){alert('נא להזין כותרת');return;}
