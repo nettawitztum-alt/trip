@@ -1579,6 +1579,7 @@ body.map-view .page-scroll-area,body.attr-map-view .page-scroll-area{padding-bot
 .tab-panel .card{scroll-margin-top:72px}
 /* sticky countdown banner — top of every page, removed after trip start */
 .countdown-section{position:sticky!important;top:0!important;z-index:200!important;padding:0!important;margin:0!important;display:block!important;background:transparent!important}
+body.trip-active .countdown-section{display:none!important}
 .countdown-bar{display:flex!important;flex-direction:row!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 10px;width:auto!important;margin:0!important;padding:8px 14px!important;border-radius:0!important;background:rgba(11,30,22,.97)!important;border:none!important;border-bottom:1px solid rgba(124,240,166,.3)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .cdb-label{font-size:12px!important;font-weight:700!important;white-space:nowrap!important;color:#fff!important}
 .cdb-units{gap:3px!important}
@@ -1656,6 +1657,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 #day-focus .df-now{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.07);border:1px solid var(--glass-brd)}
 #day-focus .df-nb{padding:14px}
 #day-focus .df-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font-size:11px;font-weight:600;background:rgba(124,240,166,.16);color:var(--green)}
+#day-focus .df-nowline{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:7px}
 #day-focus h3{font-size:18px;font-weight:700;margin-top:8px}
 #day-focus .df-sub{color:rgba(255,255,255,.62);font-size:12.5px;margin-top:3px;line-height:1.45}
 #day-focus .df-row{display:flex;gap:10px;margin-top:12px}
@@ -4206,44 +4208,76 @@ function initItinSortable(){
   });
 }
 function openFocusDay(id){const c=document.getElementById(id);if(c){c.classList.add('open');c.scrollIntoView({behavior:'smooth',block:'start'});}}
+var _nnInterval=null;
+function _focusState(){
+  var days=['d1','d2','d3','d4','d5','d6','d7','d8'];
+  var today=new Date();today.setHours(0,0,0,0);
+  var start=new Date(2026,7,11);start.setHours(0,0,0,0);
+  var idx=Math.round((today-start)/86400000);
+  return {days:days,idx:idx,inTrip:idx>=0&&idx<=7,fidx:idx<0?0:(idx>7?7:idx)};
+}
+function _evMin(it){var t=_timeStr(it);var m=t&&t.match(/(\d{1,2}):(\d{2})/);return m?(+m[1])*60+(+m[2]):null;}
+function _humanDelta(mins){
+  if(mins<=1)return 'עכשיו';
+  if(mins<60)return 'בעוד '+mins+' דק׳';
+  var h=Math.floor(mins/60),m=mins%60;
+  var hs=h===1?'שעה':h===2?'שעתיים':h+' שעות';
+  return m?('בעוד '+hs+' ו-'+m+' דק׳'):('בעוד '+hs);
+}
+function _focusBodyHTML(st){
+  var idx=st.idx,inTrip=st.inTrip,fidx=st.fidx,focus=st.days[fidx];
+  var dots='';for(var i=0;i<8;i++){dots+='<span class="pdot '+(i<fidx?'done':(i===fidx?'cur':''))+'"></span>';}
+  var head=inTrip?('<span>יום '+(fidx+1)+' מתוך 8</span><span class="dfg">עוד '+(7-fidx)+' ימי טיול 🏔️</span>')
+                 :'<span>הטיול הסתיים</span><span class="dfg">תודה! 🇦🇹</span>';
+  var cardHtml='';
+  if(inTrip){
+    var card=document.getElementById(focus);
+    var items=card?[].slice.call(card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')):[];
+    var rn=new Date();var nowMin=rn.getHours()*60+rn.getMinutes();
+    var curIdx=-1,nextIdx=-1;
+    items.forEach(function(it,i){var tm=_evMin(it);if(tm==null)return;if(tm<=nowMin)curIdx=i;if(tm>nowMin&&nextIdx<0)nextIdx=i;});
+    var cur=curIdx>=0?items[curIdx]:null,nxt=nextIdx>=0?items[nextIdx]:null;
+    var nowLine=cur?('<div class="df-nowline">● עכשיו · '+escapeHtml(_evTitle(cur))+'</div>'):'';
+    if(nxt){
+      var title=_evTitle(nxt),t=_timeStr(nxt);
+      var desc=nxt.querySelector('p')?nxt.querySelector('p').textContent.trim():'';
+      var q=encodeURIComponent(title+' אוסטריה');
+      var delta=_humanDelta(_evMin(nxt)-nowMin);
+      cardHtml='<div class="df-now"><div class="df-nb">'+nowLine+
+        '<span class="df-pill">⏭️ הבא · '+escapeHtml(delta)+'</span>'+
+        '<h3>'+escapeHtml(title)+'</h3>'+
+        ((t||desc)?('<div class="df-sub">'+escapeHtml([t,desc].filter(Boolean).join(' · '))+'</div>'):'')+
+        '<div class="df-row"><a class="df-b df-w" target="_blank" rel="noopener" href="https://waze.com/ul?q='+q+'&navigate=yes"><i data-feather="navigation"></i> Waze</a>'+
+        '<button class="df-b df-gp" onclick="openFocusDay(\''+focus+'\')"><i data-feather="calendar"></i> פתח את היום</button></div>'+
+        '</div></div>';
+      var after=items[nextIdx+1];
+      if(after)cardHtml+='<div class="df-after"><span class="t">'+escapeHtml(_timeStr(after))+'</span><div style="flex:1;font-weight:600;font-size:14px">'+escapeHtml(_evTitle(after))+'</div><span class="df-mut">אחר כך</span></div>';
+    } else {
+      cardHtml='<div class="df-now"><div class="df-nb">'+nowLine+
+        '<span class="df-pill">✓ סיימתם להיום</span>'+
+        '<h3>יום נהדר! 🎉</h3>'+
+        (fidx<7?('<div class="df-sub">נתראה מחר ליום '+(fidx+2)+'</div>'):'<div class="df-sub">היום האחרון — טיסה הביתה ✈️</div>')+
+        '<div class="df-row"><button class="df-b df-gp" onclick="openFocusDay(\''+focus+'\')"><i data-feather="calendar"></i> פתח את היום</button></div>'+
+        '</div></div>';
+    }
+  }
+  return '<div class="df-head">'+head+'</div><div class="df-prog">'+dots+'</div>'+cardHtml;
+}
 function renderDayFocus(){
-  const host=document.getElementById('day-focus');if(!host)return;
-  const days=['d1','d2','d3','d4','d5','d6','d7','d8'];
-  const today=new Date();today.setHours(0,0,0,0);
-  const start=new Date(2026,7,11);start.setHours(0,0,0,0);
-  const idx=Math.round((today-start)/86400000);
-  const inTrip=idx>=0&&idx<=7;const fidx=idx<0?0:(idx>7?7:idx);const focus=days[fidx];
+  var host=document.getElementById('day-focus');if(!host)return;
+  var st=_focusState();
   buildDateStrip();
   openDayCard(_selDay);
-  if(idx<0){host.innerHTML='';const _cs=document.querySelector(".countdown-section");if(_cs)_cs.style.display='';return;}
-  let dots='';for(let i=0;i<8;i++){dots+=`<span class="pdot ${i<fidx?'done':(i===fidx?'cur':'')}"></span>`;}
-  let head;
-  if(inTrip)head=`<span>יום ${fidx+1} מתוך 8</span><span class="dfg">עוד ${7-fidx} ימי טיול 🏔️</span>`;
-  else if(idx>7)head=`<span>הטיול הסתיים</span><span class="dfg">תודה! 🇦🇹</span>`;
-  else head=`<span>לקראת הטיול 🏔️</span><span class="dfg">מתחילים ביום 1</span>`;
-  const card=document.getElementById(focus);
-  const items=card?[...card.querySelectorAll('.timeline .tl-item:not(.tl-deleted)')]:[];
-  let ni=0;
-  if(inTrip){const rn=new Date();const nowS=String(rn.getHours()).padStart(2,'0')+':'+String(rn.getMinutes()).padStart(2,'0');
-    const fi=items.findIndex(it=>{const t=_timeStr(it);return t&&t>=nowS;});ni=fi>=0?fi:0;}
-  const ev=items[ni],after=items[ni+1];
-  let cardHtml='';
-  if(ev){
-    const title=_evTitle(ev),t=_timeStr(ev);
-    const desc=ev.querySelector('p')?ev.querySelector('p').textContent.trim():'';
-    const q=encodeURIComponent(title+' אוסטריה');
-    cardHtml=`<div class="df-now"><div class="df-nb">`+
-      `<span class="df-pill">${inTrip?'● הבא בתור':'מתחילים'} · יום ${fidx+1}</span>`+
-      `<h3>${escapeHtml(title)}</h3>`+
-      ((t||desc)?`<div class="df-sub">${escapeHtml([t,desc].filter(Boolean).join(' · '))}</div>`:'')+
-      `<div class="df-row"><a class="df-b df-w" target="_blank" rel="noopener" href="https://waze.com/ul?q=${q}&navigate=yes"><i data-feather="navigation"></i> Waze</a>`+
-      `<button class="df-b df-gp" onclick="openFocusDay('${focus}')"><i data-feather="calendar"></i> פתח את היום</button></div>`+
-      `</div></div>`;
-  }
-  let afterHtml='';
-  if(after)afterHtml=`<div class="df-after"><span class="t">${escapeHtml(_timeStr(after))}</span><div style="flex:1;font-weight:600;font-size:14px">${escapeHtml(_evTitle(after))}</div><span class="df-mut">אחר כך</span></div>`;
-  const cs=document.querySelector(".countdown-section");if(cs)cs.style.display=idx<0?"":"none";
-  host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div>${cardHtml}${afterHtml}`;
+  document.body.classList.toggle('trip-active',st.idx>=0);
+  if(st.idx<0){host.innerHTML='';if(_nnInterval){clearInterval(_nnInterval);_nnInterval=null;}return;}
+  host.innerHTML=_focusBodyHTML(st);
+  if(window.feather)feather.replace();
+  if(!_nnInterval)_nnInterval=setInterval(updateNowNext,60000);
+}
+function updateNowNext(){
+  var host=document.getElementById('day-focus');if(!host)return;
+  var st=_focusState();if(st.idx<0)return;
+  host.innerHTML=_focusBodyHTML(st);
   if(window.feather)feather.replace();
 }
 // Open the day that matches today's real date (focused agenda view).
