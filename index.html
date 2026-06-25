@@ -1573,6 +1573,11 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .cdb-sep{font-size:12px!important;margin-top:0!important;color:rgba(255,255,255,.35)!important}
 #itin-map-host{position:relative}
 #itin-map-host #map-canvas{position:relative;inset:auto;height:64vh;min-height:420px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd)}
+body.map-view .sticky-shell{display:none}
+body.map-view #itin-map-host{margin:0 -16px}
+body.map-view .map-search{margin:0 16px 10px}
+body.map-view #map-canvas{height:calc(100dvh - 178px);min-height:440px;border-radius:0;border-left:0;border-right:0}
+body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 .map-search{display:flex;gap:8px;margin-bottom:10px}
 .map-search-input{flex:1;background:#fff;border:none;border-radius:12px;padding:11px 14px;font-size:14px;font-family:var(--gs);direction:rtl;color:#222;outline:none}
 .map-search-btn{flex:0 0 auto;width:46px;border-radius:12px;border:none;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;cursor:pointer}
@@ -3314,6 +3319,7 @@ var HOTEL_NAME={h1:'מלון Kesselgrub',h2:'מלון Grünauerhof'};
 function openMap(dayId){switchTab('itinerary');if(dayId)_selDay=dayId;itinView('map');}
 function itinView(mode){
   var isMap=mode==='map';
+  document.body.classList.toggle('map-view',isMap);
   var lb=document.getElementById('iv-list'),mb=document.getElementById('iv-map');
   if(lb)lb.classList.toggle('on',!isMap);if(mb)mb.classList.toggle('on',isMap);
   var host=document.getElementById('itin-map-host');if(host)host.style.display=isMap?'block':'none';
