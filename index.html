@@ -1553,16 +1553,16 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .ds-chip:active{transform:scale(.95)}
 .ds-chip .w{display:block;font-size:10px;color:var(--muted)}
 .ds-chip .d{display:block;font-size:17px;font-weight:800;margin-top:2px;color:#fff}
-.ds-chip.on{background:var(--accent);border-color:var(--accent)}
+.ds-chip.on{background:linear-gradient(150deg,#7CF0A6,#5fc892);border-color:transparent;box-shadow:0 4px 14px rgba(124,240,166,.22)}
 .ds-chip.on .w,.ds-chip.on .d{color:#072414}
 .ds-meter{display:flex;gap:2px;justify-content:center;margin-top:5px}
 .ds-meter i{width:4px;height:4px;border-radius:1px;background:rgba(255,255,255,.22)}
 .ds-meter i.g{background:var(--accent)}
-.ds-meter i.a{background:#FFD479}
+.ds-meter i.a{background:rgba(124,240,166,.55)}
 .ds-meter.ds-flight{font-size:11px;line-height:1;margin-top:4px}
 .ds-chip.on .ds-meter i{background:rgba(7,36,20,.3)}
 .ds-chip.on .ds-meter i.g{background:#072414}
-.ds-chip.on .ds-meter i.a{background:#7a5b00}
+.ds-chip.on .ds-meter i.a{background:rgba(7,36,20,.45)}
 #day-capacity{margin-bottom:12px}
 .cap-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:13px;padding:9px 13px}
 .cap-bar .ds-meter{margin-top:0}
@@ -1675,8 +1675,9 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
 #day-focus .df-mapbtn svg.feather{width:15px;height:15px;stroke:currentColor}
 .modal{position:relative}
 .attr-view-toggle{display:inline-flex;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);border-radius:999px;padding:4px;gap:2px;margin-bottom:14px}
-.attr-view-toggle button{border:none;background:none;color:var(--muted);font-family:var(--gs);font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.attr-view-toggle button.on{background:var(--green);color:#072414}
+.attr-view-toggle button{border:none;background:none;color:var(--muted);font-family:var(--gs);font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:color .2s,background .2s,box-shadow .2s,transform .12s}
+.attr-view-toggle button:active{transform:scale(.96)}
+.attr-view-toggle button.on{background:linear-gradient(135deg,#7CF0A6,#5fc892);color:#06231a;box-shadow:0 3px 12px rgba(124,240,166,.22)}
 .attr-view-toggle button svg.feather{width:15px;height:15px;stroke:currentColor}
 #attr-map-canvas{display:none;height:62vh;min-height:380px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid var(--glass-brd)}
 body.attr-map-view .sticky-shell{display:none}
@@ -1757,6 +1758,11 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 
 /* ═══ ANIMATIONS ═══ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sheetUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+.modal-overlay.open .modal{animation:sheetUp .32s cubic-bezier(.22,1,.36,1)}
+.modal-overlay{transition:background .2s}
+#day-focus .df-b:active,.fl-actions button:active,.fl-actions a:active,.cap-add:active,.suggest-chip:active,.df-share:active{transform:scale(.96)}
+#day-focus .df-b,.cap-add,.suggest-chip{transition:transform .12s,background .2s}
 @keyframes navGlow{0%,100%{box-shadow:0 0 0 0 rgba(124,240,166,0)}50%{box-shadow:0 0 20px 1px rgba(124,240,166,.4)}}
 .tab-panel.active>*{animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both}
 .tab-panel.active>*:nth-child(1){animation-delay:.02s}
