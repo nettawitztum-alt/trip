@@ -1525,6 +1525,10 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .map-daychip{flex:0 0 auto;border:none;background:none;color:rgba(255,255,255,.72);font-family:var(--gs);font-weight:600;font-size:12.5px;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
 .map-daychip.on{background:var(--green);color:#072414}
 .map-anchor{font-size:30px;line-height:1;text-align:center;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
+#itin-view-toggle{margin-bottom:12px}
+#itin-map-host #map-days{margin-bottom:10px}
+#itin-map-host #map-canvas{position:relative;inset:auto;height:64vh;min-height:420px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd)}
+#itin-map-host .map-empty{position:static;bottom:auto;left:auto;right:auto;margin-top:10px}
 .map-x{width:42px;height:42px;border-radius:50%;background:rgba(20,42,32,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .map-pin{font-size:26px;line-height:1;text-align:center;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
 .map-num{width:30px;height:30px;border-radius:50%;background:var(--green);color:#072414;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.5)}
@@ -1721,6 +1725,15 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
+  <div id="itin-view-toggle" class="attr-view-toggle">
+    <button id="iv-list" class="on" onclick="itinView('list')"><i data-feather="list"></i> רשימה</button>
+    <button id="iv-map" onclick="itinView('map')"><i data-feather="map"></i> מפה</button>
+  </div>
+  <div id="itin-map-host" style="display:none">
+    <div id="map-days" class="map-days"></div>
+    <div id="map-canvas"></div>
+    <div id="map-empty" class="map-empty" style="display:none"></div>
+  </div>
   <div id="day-focus"></div>
   <div id="weather-container"><div class="weather-skeleton"></div><div class="weather-skeleton" style="height:40px;margin-top:6px;opacity:.6"></div></div>
 
@@ -2098,7 +2111,6 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
       <button class="more-tile" onclick="switchTab('flights')"><span class="mt-ic"><i data-feather="send"></i></span><span>טיסות</span></button>
       <button class="more-tile" onclick="switchTab('restaurants')"><span class="mt-ic"><i data-feather="coffee"></i></span><span>מסעדות</span></button>
       <button class="more-tile" onclick="switchTab('tips')"><span class="mt-ic"><i data-feather="info"></i></span><span>טיפים</span></button>
-      <button class="more-tile" onclick="openMap()"><span class="mt-ic"><i data-feather="map"></i></span><span>מפת מסלול</span></button>
       <button class="more-tile" onclick="closeModal('more-modal');showUserModal()"><span class="mt-ic"><i data-feather="settings"></i></span><span>הגדרות</span></button>
     </div>
   </div>
@@ -3136,14 +3148,24 @@ var _mapDay='d1';
 var AIRPORT_GEO=[47.7933,13.0043];
 var DAY_HOTEL={d1:'h1',d2:'h1',d3:'h1',d4:'h1',d5:'h1',d6:'h2',d7:'h2',d8:'h2'};
 var HOTEL_NAME={h1:'מלון Kesselgrub',h2:'מלון Grünauerhof'};
-function openMap(dayId){
-  if(!window.L){alert('המפה עדיין נטענת — נסו שוב בעוד רגע');return;}
-  if(document.getElementById('more-modal'))closeModal('more-modal');
-  document.getElementById('map-modal').classList.add('open');
-  _mapDay=dayId||window.currentFocusDay||'d1';
-  buildMapDayChips();
-  _ensureMap();
-  setTimeout(function(){_map.invalidateSize();renderDayMap(_mapDay);},150);
+function openMap(dayId){switchTab('itinerary');if(dayId)_mapDay=dayId;itinView('map');}
+function itinView(mode){
+  var isMap=mode==='map';
+  var lb=document.getElementById('iv-list'),mb=document.getElementById('iv-map');
+  if(lb)lb.classList.toggle('on',!isMap);if(mb)mb.classList.toggle('on',isMap);
+  var host=document.getElementById('itin-map-host');if(host)host.style.display=isMap?'block':'none';
+  var panel=document.getElementById('panel-itinerary');
+  if(panel)[].forEach.call(panel.children,function(ch){
+    if(ch.id==='itin-view-toggle'||ch.id==='itin-map-host')return;
+    ch.style.display=isMap?'none':'';
+  });
+  if(isMap){
+    if(!window.L){alert('המפה עדיין נטענת — נסו שוב בעוד רגע');itinView('list');return;}
+    if(!_mapDay)_mapDay=window.currentFocusDay||'d1';
+    buildMapDayChips();_ensureMap();
+    setTimeout(function(){_map.invalidateSize();renderDayMap(_mapDay);},160);
+  }
+  if(window.feather)feather.replace();
 }
 function buildMapDayChips(){
   var host=document.getElementById('map-days');if(!host)return;
@@ -3154,7 +3176,7 @@ function buildMapDayChips(){
   var on=host.querySelector('.map-daychip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});
 }
 function selectMapDay(d){_mapDay=d;buildMapDayChips();renderDayMap(d);}
-function closeMap(){document.getElementById('map-modal').classList.remove('open');}
+function closeMap(){itinView('list');}
 function _ensureMap(){
   if(_map)return;
   _map=L.map('map-canvas',{attributionControl:false,zoomControl:true}).setView([47.6,13.2],9);
@@ -3518,7 +3540,7 @@ let _itinOriginalHTML=null;
 function reloadItinerary(){
   const panel=document.getElementById('panel-itinerary');if(!panel)return;
   const openIds=[...panel.querySelectorAll('.card[id^="d"].open')].map(c=>c.id);
-  if(_itinOriginalHTML!==null)panel.innerHTML=_itinOriginalHTML;
+  if(_itinOriginalHTML!==null){if(_map){try{_map.remove();}catch(e){}_map=null;_mapGroup=null;}panel.innerHTML=_itinOriginalHTML;}
   openIds.forEach(id=>{const c=document.getElementById(id);if(c)c.classList.add('open');});
   initItinIds();
   applyItinMods();
@@ -3824,7 +3846,7 @@ function renderDayFocus(){
   let afterHtml='';
   if(after)afterHtml=`<div class="df-after"><span class="t">${escapeHtml(_timeStr(after))}</span><div style="flex:1;font-weight:600;font-size:14px">${escapeHtml(_evTitle(after))}</div><span class="df-mut">אחר כך</span></div>`;
   const cs=document.querySelector(".countdown-section");if(cs)cs.style.display=inTrip?"none":"";
-  host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div><button class="df-mapbtn" onclick="openMap('${focus}')"><i data-feather="map"></i> מפת מסלול היום</button>${cardHtml}${afterHtml}`;
+  host.innerHTML=`<div class="df-head">${head}</div><div class="df-prog">${dots}</div>${cardHtml}${afterHtml}`;
   if(window.feather)feather.replace();
 }
 // Open the day that matches today's real date (focused agenda view).
@@ -3883,14 +3905,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 </script>
-<div id="map-modal">
-  <div id="map-canvas"></div>
-  <div class="map-top">
-    <div id="map-days" class="map-days"></div>
-    <button class="map-x" onclick="closeMap()" aria-label="סגור"><i data-feather="x"></i></button>
-  </div>
-  <div id="map-empty" class="map-empty" style="display:none"></div>
-</div>
 <div class="modal-overlay" id="nav-modal" onclick="closeModalOnBg(event,'nav-modal')">
   <div class="modal" style="text-align:right">
     <div class="modal-handle"></div>
