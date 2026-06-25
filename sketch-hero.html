@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hero — אפשרויות</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Heebo:wght@400;500;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--gs:'Google Sans','Heebo','Assistant',sans-serif;--accent:#7CF0A6;--bg:#0e2b20;--card:rgba(255,255,255,.06);--brd:rgba(255,255,255,.12);--muted:rgba(255,255,255,.66)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--gs)}
+body{background:#0a1812;color:#fff;padding:26px 16px 80px}
+.intro{max-width:430px;margin:0 auto 22px;text-align:center}
+.intro h1{font-size:20px;font-weight:800;margin-bottom:6px}
+.intro p{font-size:13px;color:var(--muted);line-height:1.6}
+.opt{max-width:430px;margin:0 auto 40px}
+.opt-tag{display:flex;align-items:center;gap:8px;margin-bottom:6px;justify-content:center}
+.opt-tag .b{background:var(--accent);color:#072414;font-weight:800;font-size:13px;border-radius:999px;padding:4px 12px}
+.opt-tag h2{font-size:16px;font-weight:700}
+.opt-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:12px;text-align:center}
+.phone{background:var(--bg);border-radius:30px;border:9px solid #05100b;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative;max-width:330px;margin:0 auto}
+.scr{position:relative;min-height:620px}
+.bnr{display:flex;align-items:center;justify-content:center;gap:9px;background:rgba(8,22,16,.96);border-bottom:1px solid rgba(124,240,166,.3);padding:9px 14px;font-size:11.5px;font-weight:700}
+.bnr .cd{color:var(--accent);font-weight:900;direction:ltr}
+/* hero */
+.hero{position:relative;background-size:cover;background-position:center}
+.hero .ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.2) 45%,rgba(14,43,32,.85) 100%)}
+.hero .top{position:absolute;top:12px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.chip{background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:600}
+.av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#2a7de1,#7CF0A6);border:2px solid rgba(255,255,255,.85)}
+.hero .ttl{position:absolute;bottom:12px;right:16px;left:16px;z-index:2;text-align:right}
+.hero .ttl .l1{font-family:'Space Mono',var(--gs);font-weight:700;font-size:38px;line-height:.9;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6);direction:ltr;text-align:right}
+.hero .ttl .l2{font-family:'Space Mono',var(--gs);font-weight:700;font-size:17px;color:var(--accent);letter-spacing:3px;direction:ltr;text-align:right}
+.hero .dtag{position:absolute;bottom:14px;left:16px;z-index:2;background:var(--accent);color:#072414;font-size:11px;font-weight:800;border-radius:999px;padding:4px 10px}
+.body{padding:13px}
+.toggle{display:inline-flex;background:rgba(255,255,255,.06);border:1px solid var(--brd);border-radius:999px;padding:4px;gap:2px;margin-bottom:12px}
+.toggle b{font-weight:600;font-size:12.5px;padding:7px 15px;border-radius:999px;color:var(--muted)}
+.toggle b.on{background:var(--accent);color:#072414}
+.center{text-align:center}
+.estrip{display:flex;gap:6px;overflow:hidden;margin-bottom:12px}
+.edate{flex:0 0 auto;width:44px;text-align:center;background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:6px 0}
+.edate .w{font-size:9px;color:var(--muted)}.edate .d{font-size:15px;font-weight:800}
+.edate.on{background:var(--accent);border-color:var(--accent)}.edate.on .w,.edate.on .d{color:#072414}
+/* day cards with photo (B) */
+.dcard{display:flex;gap:11px;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:10px;margin-bottom:10px;align-items:center}
+.dthumb{width:74px;height:64px;border-radius:12px;background-size:cover;background-position:center;flex:0 0 auto}
+.dcard .info .day{font-size:10.5px;color:var(--accent);font-weight:700}
+.dcard .info h3{font-size:14px;font-weight:700;margin-top:2px}
+.dcard .info p{font-size:11px;color:var(--muted);margin-top:3px}
+.note{font-size:11px;color:var(--muted);text-align:center;margin-top:9px;font-style:italic}
+.scaption{font-size:11.5px;color:var(--accent);text-align:center;margin:4px 0 8px;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>מסך הבית — תמונות עשירות, פחות מקום</h1>
+  <p>שלוש דרכים לשמור על התחושה הקולנועית (תמונות אמיתיות באיכות גבוהה) בלי שה-hero יבלע חצי מסך. בחר/י את הכיוון 👇</p>
+</div>
+
+<!-- A: contextual compact hero -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">A</span><h2>Hero קומפקטי שמתחלף לפי היום</h2></div>
+  <div class="opt-desc">התמונה הגדולה מתחלפת לתמונת המקום של היום הנבחר (יום 2 → Geisterberg, יום 6 → גן החיות). קטן יותר (~24% מסך), אבל עכשיו התמונה <b>שימושית</b> — מראה לאן הולכים היום.</div>
+  <div class="phone"><div class="scr">
+    <div class="bnr"><span>✨ עוד כמה זמן לחופשה המושלמת</span><span class="cd">46:13</span></div>
+    <div class="hero" style="height:180px;background-image:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&q=80&auto=format&fit=crop')">
+      <div class="ov"></div>
+      <div class="top"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="ttl"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+      <div class="dtag">יום 2 · 12.8</div>
+    </div>
+    <div class="body center">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="estrip"><div class="edate on"><div class="w">ד׳</div><div class="d">12</div></div><div class="edate"><div class="w">ה׳</div><div class="d">13</div></div><div class="edate"><div class="w">ו׳</div><div class="d">14</div></div><div class="edate"><div class="w">ש׳</div><div class="d">15</div></div><div class="edate"><div class="w">א׳</div><div class="d">16</div></div><div class="edate"><div class="w">ב׳</div><div class="d">17</div></div></div>
+      <div class="note">↑ התמונה משתנה כשבוחרים יום אחר</div>
+    </div>
+  </div></div>
+</div>
+
+<!-- B: hero + day cards with photos -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">B</span><h2>Hero בינוני + תמונה אמיתית בכל יום</h2></div>
+  <div class="opt-desc">hero בגובה בינוני, ובנוסף לכל כרטיס יום יש <b>תמונה אמיתית</b> של המקום המרכזי. ככה התמונות נמצאות בכל מקום רלוונטי — והמסך מרגיש עשיר גם בלי hero ענק.</div>
+  <div class="phone"><div class="scr">
+    <div class="bnr"><span>✨ עוד כמה זמן לחופשה המושלמת</span><span class="cd">46:13</span></div>
+    <div class="hero" style="height:150px;background-image:url('https://images.unsplash.com/photo-1612441804231-77a36b284856?w=1400&q=80&auto=format&fit=crop')">
+      <div class="ov"></div>
+      <div class="top"><span class="chip">☀️ 25° · זלצבורג</span><div class="av"></div></div>
+      <div class="ttl"><div class="l1">Salzburg</div><div class="l2">2026</div></div>
+    </div>
+    <div class="body">
+      <div class="center"><div class="toggle"><b class="on">רשימה</b><b>מפה</b></div></div>
+      <div class="dcard"><div class="dthumb" style="background-image:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&q=80&auto=format&fit=crop')"></div><div class="info"><div class="day">יום 2 · 12.8</div><h3>ממלכת הרפאים 👻</h3><p>Geisterberg · גונדולה</p></div></div>
+      <div class="dcard"><div class="dthumb" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80&auto=format&fit=crop')"></div><div class="info"><div class="day">יום 3 · 13.8</div><h3>מבצר הוהנוורפן 🏰</h3><p>מבצר + תרמה</p></div></div>
+      <div class="dcard"><div class="dthumb" style="background-image:url('https://images.unsplash.com/photo-1612441804231-77a36b284856?w=400&q=80&auto=format&fit=crop')"></div><div class="info"><div class="day">יום 4 · 14.8</div><h3>אגם Zauchensee 🏔️</h3><p>שחייה · פיקניק</p></div></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- C: collapsing hero -->
+<div class="opt">
+  <div class="opt-tag"><span class="b">C</span><h2>Hero שמתכווץ בגלילה</h2></div>
+  <div class="opt-desc">בכניסה ה-hero גדול ויפה; ברגע שמתחילים לגלול הוא <b>מתכווץ לרצועת תמונה דקה</b> מאחורי הבאנר — תמיד נשאר פס מהתמונה, אבל הוא מפסיק לתפוס מקום. (כאן מוצג מצב "אחרי גלילה".)</div>
+  <div class="scaption">מצב אחרי גלילה ↓</div>
+  <div class="phone"><div class="scr">
+    <div class="bnr"><span>✨ עוד כמה זמן לחופשה המושלמת</span><span class="cd">46:13</span></div>
+    <div class="hero" style="height:62px;background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80&auto=format&fit=crop')">
+      <div class="ov"></div>
+      <div class="ttl" style="bottom:8px"><div class="l1" style="font-size:20px">Salzburg <span style="font-size:13px;color:var(--accent)">2026</span></div></div>
+    </div>
+    <div class="body center">
+      <div class="toggle"><b class="on">רשימה</b><b>מפה</b></div>
+      <div class="estrip"><div class="edate on"><div class="w">ד׳</div><div class="d">12</div></div><div class="edate"><div class="w">ה׳</div><div class="d">13</div></div><div class="edate"><div class="w">ו׳</div><div class="d">14</div></div><div class="edate"><div class="w">ש׳</div><div class="d">15</div></div><div class="edate"><div class="w">א׳</div><div class="d">16</div></div><div class="edate"><div class="w">ב׳</div><div class="d">17</div></div></div>
+      <div class="note">פס תמונה דק נשאר תמיד למעלה — חוסך ~70% מהגובה</div>
+    </div>
+  </div></div>
+</div>
+
+<div class="intro"><p>כל התמונות כאן הן אמיתיות באיכות גבוהה. ההמלצה שלי: <b>A + B</b> — hero קומפקטי שמתחלף לפי היום, ותמונה אמיתית בכל כרטיס יום.</p></div>
+
+</body>
+</html>
