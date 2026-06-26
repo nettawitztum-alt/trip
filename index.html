@@ -4351,6 +4351,26 @@ function reorderItinItem(iid,dir){
     const card=el.closest('.card[id^="d"]');if(card)persistItinOrder(card.id);}
   closeEventMenu();
 }
+// When an item is dragged to a new spot, set its time to fit between its neighbours.
+function reflowItemTime(item){
+  if(!item)return;
+  var tl=item.closest('.timeline');if(!tl)return;
+  var items=[].slice.call(tl.querySelectorAll('.tl-item:not(.tl-deleted)'));
+  var idx=items.indexOf(item);if(idx<0)return;
+  function mins(el){if(!el)return null;var t=el.querySelector('.tl-time');var m=t&&t.textContent.match(/(\d{1,2}):(\d{2})/);return m?(+m[1])*60+(+m[2]):null;}
+  var prev=mins(items[idx-1]),next=mins(items[idx+1]),nt;
+  if(prev!=null&&next!=null){nt=next>prev?Math.round((prev+next)/2):prev+5;}
+  else if(prev!=null){nt=prev+60;}
+  else if(next!=null){nt=next-30;}
+  else return;                                   // no neighbours with a time — leave as-is
+  nt=Math.max(0,Math.min(24*60-5,Math.round(nt/5)*5));   // clamp + snap to 5 min
+  var newTime=String(Math.floor(nt/60)).padStart(2,'0')+':'+String(nt%60).padStart(2,'0');
+  var tEl=item.querySelector('.tl-time');if(tEl)tEl.textContent=newTime;
+  var iid=item.dataset.iid;if(!iid)return;
+  var m=getItinMods();m.edits=m.edits||{};
+  m.edits[iid]=Object.assign({},m.edits[iid]||{},{time:newTime});
+  saveItinMods(m);
+}
 function persistItinOrder(dayId){
   const tl=document.querySelector(`#${dayId} .timeline`);if(!tl)return;
   const ids=[...tl.querySelectorAll('.tl-item')].map(x=>x.dataset.iid).filter(Boolean);
@@ -4403,7 +4423,7 @@ function initItinSortable(){
   document.querySelectorAll('#panel-itinerary .timeline').forEach(tl=>{
     if(tl._sortable)return; tl._sortable=true;
     new Sortable(tl,{handle:'.tl-grip',draggable:'.tl-item',filter:'.tl-deleted',animation:160,forceFallback:true,fallbackTolerance:4,delay:170,delayOnTouchOnly:true,
-      onEnd:function(){const c=tl.closest('.card[id^="d"]');if(c&&typeof persistItinOrder==='function')persistItinOrder(c.id);}});
+      onEnd:function(evt){const c=tl.closest('.card[id^="d"]');if(!c)return;if(evt&&evt.item)reflowItemTime(evt.item);persistItinOrder(c.id);}});
   });
 }
 function openFocusDay(id){const c=document.getElementById(id);if(c){c.classList.add('open');c.scrollIntoView({behavior:'smooth',block:'start'});}}
