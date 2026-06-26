@@ -4079,9 +4079,13 @@ function mergeBlob(local,remote,rNewer){
   });
   if(('austria26_itin' in local)||('austria26_itin' in remote)){
     const li=_parseJ(local['austria26_itin'],{}),ri=_parseJ(remote['austria26_itin'],{});
-    const m=Object.assign({},rNewer?ri:li);
+    const lo=rNewer?li:ri,hi=rNewer?ri:li;            // hi = newer side, wins per-key conflicts
+    const m={};
     m.added=_unionById(li.added||[],ri.added||[]);
     m.deleted=Array.from(new Set([...(li.deleted||[]),...(ri.deleted||[])])).sort();
+    m.edits=Object.assign({},lo.edits||{},hi.edits||{});   // union every event edit, both sides
+    m.moved=Object.assign({},lo.moved||{},hi.moved||{});
+    m.order=Object.assign({},lo.order||{},hi.order||{});
     out['austria26_itin']=JSON.stringify(m);
   }
   return out;
