@@ -1734,7 +1734,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 .sortable-ghost{opacity:.3}
 .sortable-chosen{background:#1b3a2c}
 @media (max-width:767px){.tab-nav{justify-content:space-evenly!important;padding:4px 6px;gap:2px}.tab-btn.active{padding:8px 13px;max-width:none}}
-.tl-grip{flex-shrink:0;align-self:center;width:30px;height:42px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);background:none;border:none;padding:0;cursor:grab;touch-action:none}
+.tl-grip{display:none!important;flex-shrink:0;align-self:center;width:30px;height:42px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);background:none;border:none;padding:0;cursor:grab;touch-action:none}
 .tl-menu-btn{position:static!important;top:auto!important;transform:none!important;align-self:center;flex-shrink:0;cursor:pointer}
 .tl-grip svg.feather{width:18px;height:18px;stroke:currentColor}
 /* QA r5: selected bottom-nav tab uses GREEN icon/label (not dark-on-bright) */
@@ -4241,10 +4241,11 @@ function applyItinMods(){
     const el=document.querySelector(`[data-iid="${iid}"]`);
     if(el)el.classList.add('tl-deleted');
   });
-  // 5. apply custom ordering (reorder within a day)
-  Object.entries(m.order||{}).forEach(([dayId,ids])=>{
-    const tl=document.querySelector(`#${dayId} .timeline`);if(!tl)return;
-    ids.forEach(id=>{const el=tl.querySelector(`[data-iid="${id}"]`);if(el)tl.appendChild(el);});
+  // 5. keep every day in chronological order — the time is the source of truth,
+  //    so editing an event's hour moves it to the right place automatically.
+  document.querySelectorAll('.card[id^="d"] .timeline').forEach(tl=>{
+    const mins=el=>{const t=el.querySelector('.tl-time');const mm=t&&t.textContent.match(/(\d{1,2}):(\d{2})/);return mm?(+mm[1])*60+(+mm[2]):1e9;};
+    [...tl.querySelectorAll('.tl-item')].map(el=>[mins(el),el]).sort((a,b)=>a[0]-b[0]).forEach(p=>tl.appendChild(p[1]));
   });
   // show reset button if there are any mods
   const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0||Object.keys(m.edits||{}).length>0||(m.added||[]).length>0||Object.keys(m.order||{}).length>0;
