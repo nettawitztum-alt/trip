@@ -1674,6 +1674,8 @@ body.trip-active #day-capacity{display:none}
 .set-btn svg.feather{width:18px;height:18px;stroke:currentColor;flex-shrink:0}
 .set-danger{background:rgba(255,128,121,.12);border-color:rgba(255,128,121,.32);color:#ffb3ae}
 .confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden}
+#_toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(12px);background:rgba(20,49,36,.97);color:#bff5d3;border:1px solid rgba(124,240,166,.4);border-radius:999px;padding:9px 18px;font-family:var(--gs);font-size:13px;font-weight:700;z-index:9500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#_toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .confetti-layer i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:confFall 1.9s ease-in forwards}
 @keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(104vh) translateX(var(--x,0)) rotate(560deg);opacity:0}}
 .countdown-bar{display:flex!important;flex-direction:row!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 10px;width:auto!important;margin:0!important;padding:8px 14px!important;border-radius:0!important;background:rgba(11,30,22,.97)!important;border:none!important;border-bottom:1px solid rgba(124,240,166,.3)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
@@ -4127,7 +4129,8 @@ function getItinMods(){
   m.deleted=m.deleted||[];m.moved=m.moved||{};m.edits=m.edits||{};m.added=m.added||[];m.order=m.order||{};
   return m;
 }
-function saveItinMods(m){localStorage.setItem('austria26_itin',JSON.stringify(m));}
+function saveItinMods(m){localStorage.setItem('austria26_itin',JSON.stringify(m));toast('✓ נשמר');}
+function toast(msg){var t=document.getElementById('_toast');if(!t){t=document.createElement('div');t.id='_toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('on');clearTimeout(t._tm);t._tm=setTimeout(function(){t.classList.remove('on');},1600);}
 
 let _itinOriginalHTML=null;
 function reloadItinerary(){
@@ -4748,6 +4751,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <button id="add-fab" onclick="fabAdd()" aria-label="הוספה" title="הוספה"><i data-feather="plus"></i></button>
 <div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
 <div id="itin-ctx" role="menu"></div>
-<script>if('serviceWorker' in navigator){var _swReloading=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(_swReloading)return;_swReloading=true;location.reload();});window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(reg){reg.addEventListener('updatefound',function(){var nw=reg.installing;if(nw)nw.addEventListener('statechange',function(){if(nw.state==='installed'&&navigator.serviceWorker.controller){nw.postMessage('skipWaiting');}});});}).catch(function(){});});}</script>
+<script>if('serviceWorker' in navigator){var _swReloading=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(_swReloading)return;_swReloading=true;location.reload();});window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(reg){function _chk(){try{reg.update();}catch(e){}}reg.addEventListener('updatefound',function(){var nw=reg.installing;if(nw)nw.addEventListener('statechange',function(){if(nw.state==='installed'&&navigator.serviceWorker.controller){nw.postMessage('skipWaiting');}});});_chk();setInterval(_chk,60000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_chk();});window.addEventListener('focus',_chk);}).catch(function(){});});}</script>
 </body>
 </html>
