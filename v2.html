@@ -703,9 +703,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --glass:rgba(255,255,255,.08);--glass-brd:rgba(255,255,255,.16);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
+html,body{height:100%;height:100dvh;font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;height:100%;overflow:hidden}
-.app-shell{display:flex;flex-direction:column;height:100dvh;height:100vh;overflow:hidden}
+.app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
 .page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
 
 /* ── LOCK SCREEN ── */
@@ -1653,6 +1653,11 @@ body.trip-active #day-capacity{display:none}
 .hero-left{display:flex;align-items:center;gap:7px}
 .notif-bell{position:relative;width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
 .notif-bell:active{transform:scale(.92)}
+.notif-bell svg.feather{width:18px;height:18px;stroke:currentColor;stroke-width:2.2}
+.ish-top{position:relative;display:flex;align-items:center;justify-content:center;min-height:38px;margin-bottom:10px}
+.ish-top #itin-view-toggle{margin-bottom:0}
+.ish-top .notif-bell{position:absolute;left:0;top:50%;transform:translateY(-50%)}
+.ish-top .notif-bell:active{transform:translateY(-50%) scale(.92)}
 .nb-badge{position:absolute;top:-5px;left:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#ff5d5d;color:#fff;font-family:var(--gs);font-size:10.5px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 1px 5px rgba(0,0,0,.45)}
 .nb-badge[hidden]{display:none}
 .notif-panel{position:fixed;z-index:200;width:min(330px,88vw);background:rgba(14,43,32,.98);border:1px solid var(--glass-brd);border-radius:16px;box-shadow:0 16px 42px rgba(0,0,0,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);overflow:hidden;display:none}
@@ -1930,10 +1935,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="hero-chips">
       <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי" aria-label="פרופיל והגדרות">👤</button>
     </div>
-    <div class="hero-left">
-      <button class="notif-bell" id="notif-bell" type="button" onclick="toggleNotifPanel(event)" aria-label="התראות"><span aria-hidden="true">🔔</span><span class="nb-badge" id="nb-badge" hidden>0</span></button>
-      <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
-    </div>
+    <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
   </div>
   <!-- JS compat: keep hidden -->
   <span id="user-name-display" style="display:none"></span>
@@ -1953,9 +1955,12 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <!-- ── לו"ז ── -->
 <div class="tab-panel active" id="panel-itinerary">
   <div id="itin-stickyhead">
+  <div class="ish-top">
+  <button class="notif-bell" id="notif-bell" type="button" onclick="toggleNotifPanel(event)" aria-label="התראות"><i data-feather="bell"></i><span class="nb-badge" id="nb-badge" hidden>0</span></button>
   <div id="itin-view-toggle" class="attr-view-toggle">
     <button id="iv-list" class="on" onclick="itinView('list')"><i data-feather="list"></i> רשימה</button>
     <button id="iv-map" onclick="itinView('map')"><i data-feather="map"></i> מפה</button>
+  </div>
   </div>
   <div id="itin-datestrip" class="js-datestrip date-strip"></div>
   </div>
@@ -3990,18 +3995,39 @@ function locAutocomplete(inputId,boxId,titleId,locId){
   var q=(inp.value||'').trim();
   if(q.length<2){box.innerHTML='';box.classList.remove('on');return;}
   box.innerHTML='<div class="loc-loading">מחפש…</div>';box.classList.add('on');
-  _acTimers[boxId]=setTimeout(function(){
-    fetch('https://photon.komoot.io/api/?limit=7&lat=47.8&lon=13.04&q='+encodeURIComponent(q))
-      .then(function(r){return r.ok?r.json():null;}).then(function(d){
-        if(!d||!d.features||!d.features.length){box.innerHTML='<div class="loc-loading">לא נמצאו תוצאות</div>';return;}
-        box.innerHTML=d.features.map(function(f){
+  _acTimers[boxId]=setTimeout(function(){_acSearch(q,box);},280);
+}
+function _acOpt(name,loc,lat,lon){
+  return '<button type="button" class="loc-opt" onclick="pickLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-label="'+escapeHtml(loc||name).replace(/"/g,'&quot;')+'" data-lat="'+(lat||'')+'" data-lon="'+(lon||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
+}
+function _acUseRaw(q){
+  return '<button type="button" class="loc-opt" onclick="pickLoc(this)" data-name="'+escapeHtml(q).replace(/"/g,'&quot;')+'" data-label="'+escapeHtml(q).replace(/"/g,'&quot;')+'" data-lat="" data-lon=""><b>📍 '+escapeHtml(q)+'</b><span>השתמש בשם הזה</span></button>';
+}
+function _acSearch(q,box){
+  fetch('https://photon.komoot.io/api/?limit=7&lat=47.8&lon=13.04&q='+encodeURIComponent(q))
+    .then(function(r){return r.ok?r.json():null;}).then(function(d){
+      var feats=(d&&d.features)||[];
+      if(feats.length){
+        box.innerHTML=feats.map(function(f){
           var p=f.properties||{},g=(f.geometry&&f.geometry.coordinates)||[];
           var name=p.name||p.street||p.city||q;
           var loc=[p.street&&p.name?p.street:'',p.city,p.country].filter(Boolean).join(', ');
-          return '<button type="button" class="loc-opt" onclick="pickLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-label="'+escapeHtml(loc||name).replace(/"/g,'&quot;')+'" data-lat="'+(g[1]||'')+'" data-lon="'+(g[0]||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
-        }).join('');
-      }).catch(function(){box.innerHTML='<div class="loc-loading">שגיאת חיפוש</div>';});
-  },280);
+          return _acOpt(name,loc,g[1],g[0]);
+        }).join('')+_acUseRaw(q);
+        return;
+      }
+      return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=7&q='+encodeURIComponent(q))
+        .then(function(r){return r.ok?r.json():null;}).then(function(j){
+          if(j&&j.length){
+            box.innerHTML=j.map(function(o){
+              var name=o.name||((o.display_name||'').split(',')[0])||q;
+              return _acOpt(name,o.display_name||'',o.lat,o.lon);
+            }).join('')+_acUseRaw(q);
+          }else{
+            box.innerHTML='<div class="loc-loading">לא נמצאה התאמה מדויקת</div>'+_acUseRaw(q);
+          }
+        });
+    }).catch(function(){box.innerHTML=_acUseRaw(q);});
 }
 function pickLoc(btn){
   var box=btn.closest('.loc-suggest');if(!box)return;
@@ -4226,6 +4252,7 @@ function toast(msg){var t=document.getElementById('_toast');if(!t){t=document.cr
 let _itinOriginalHTML=null;
 function reloadItinerary(){
   const panel=document.getElementById('panel-itinerary');if(!panel)return;
+  const _sa=document.querySelector('.page-scroll-area');const _savedTop=_sa?_sa.scrollTop:0;
   const openIds=[...panel.querySelectorAll('.card[id^="d"].open')].map(c=>c.id);
   if(_itinOriginalHTML!==null){if(_map){try{_map.remove();}catch(e){}_map=null;_mapGroup=null;}panel.innerHTML=_itinOriginalHTML;}
   openIds.forEach(id=>{const c=document.getElementById(id);if(c)c.classList.add('open');});
@@ -4242,6 +4269,8 @@ function reloadItinerary(){
   }
   fetchWeather();
   if(window.feather)feather.replace();
+  updateNotifBadge();
+  if(_sa){_sa.scrollTop=_savedTop;requestAnimationFrame(function(){_sa.scrollTop=_savedTop;});}
 }
 
 function initItinIds(){
@@ -4586,10 +4615,15 @@ function openPhrasebook(){openModal('phrasebook-modal');if(window.feather)feathe
 function openCurrency(){openModal('currency-modal');if(window.feather)feather.replace();loadRate();}
 function loadRate(){
   var el=document.getElementById('cur-rate');
-  fetch('https://api.exchangerate.host/latest?base=EUR&symbols=ILS').then(function(r){return r.ok?r.json():null;}).then(function(d){
-    if(d&&d.rates&&d.rates.ILS)_eurIls=d.rates.ILS;
-    if(el)el.textContent='€1 ≈ ₪'+_eurIls.toFixed(2);convertCur('e');
-  }).catch(function(){if(el)el.textContent='€1 ≈ ₪'+_eurIls.toFixed(2)+' (משוערך)';convertCur('e');});
+  function show(exact){if(el)el.textContent='€1 ≈ ₪'+_eurIls.toFixed(2)+(exact?'':' (משוערך)');convertCur('e');}
+  fetch('https://open.er-api.com/v6/latest/EUR').then(function(r){return r.ok?r.json():null;}).then(function(d){
+    if(d&&d.rates&&d.rates.ILS){_eurIls=d.rates.ILS;show(true);return;}
+    throw 0;
+  }).catch(function(){
+    fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json').then(function(r){return r.ok?r.json():null;}).then(function(d){
+      if(d&&d.eur&&d.eur.ils){_eurIls=d.eur.ils;show(true);}else show(false);
+    }).catch(function(){show(false);});
+  });
 }
 function convertCur(src){
   var e=document.getElementById('cur-eur'),i=document.getElementById('cur-ils');if(!e||!i)return;
