@@ -2680,7 +2680,10 @@ const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️'
 let currentUser = null;
 let editingAttrId = null;
 
-function getCustomAttractions(){return JSON.parse(localStorage.getItem('austria26_attrs')||'[]')}
+function _delIds(key){var a=_parseJ(localStorage.getItem(key+'__del')||'[]',[]);return Array.isArray(a)?a.map(String):[];}
+function _addTombstone(key,id){try{var k=key+'__del';var a=_delIds(key);if(a.indexOf(String(id))<0){a.push(String(id));localStorage.setItem(k,JSON.stringify(a));}}catch(e){}}
+function _filterDeleted(key,arr){var del=_delIds(key);return del.length?arr.filter(function(x){return del.indexOf(String(x&&x.id))<0;}):arr;}
+function getCustomAttractions(){return _filterDeleted('austria26_attrs',_parseJ(localStorage.getItem('austria26_attrs'),[]))}
 function saveCustomAttractions(arr){localStorage.setItem('austria26_attrs',JSON.stringify(arr))}
 function packKey(){return 'austria26_pack_'+(currentUser?.name||'guest')}
 function packCustomKey(){return 'austria26_pack_custom_'+(currentUser?.name||'guest')}
@@ -2913,7 +2916,7 @@ function restCardHTML(r){
     </div>
   </div>`;
 }
-function getCustomRest(){return JSON.parse(localStorage.getItem('austria26_rest')||'[]')}
+function getCustomRest(){return _filterDeleted('austria26_rest',_parseJ(localStorage.getItem('austria26_rest'),[]))}
 function saveCustomRest(a){localStorage.setItem('austria26_rest',JSON.stringify(a))}
 function renderRestaurants(){
   const hotel=document.getElementById('restaurants-hotel');
@@ -3143,6 +3146,7 @@ function saveAttraction(){
 }
 function deleteAttrById(id){
   if(!confirm('למחוק אטרקציה זו?'))return;
+  _addTombstone('austria26_attrs',id);
   const custom=getCustomAttractions().filter(x=>x.id!==id);
   saveCustomAttractions(custom);
   renderAttractions();
@@ -3274,7 +3278,7 @@ function closeModalOnBg(e,id){if(e.target===document.getElementById(id))closeMod
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){var o=document.querySelector('.modal-overlay.open');if(o)closeModal(o.id);}});
 
 // ═══════════════ TASKS ═══════════════
-function getTasks(){return JSON.parse(localStorage.getItem('austria26_tasks')||'[]')}
+function getTasks(){return _filterDeleted('austria26_tasks',_parseJ(localStorage.getItem('austria26_tasks'),[]))}
 function saveTasks(arr){localStorage.setItem('austria26_tasks',JSON.stringify(arr))}
 function renderTasks(){
   const list=document.getElementById('tasks-list');if(!list)return;
@@ -3316,6 +3320,7 @@ function toggleTask(id){
 }
 function deleteTask(id){
   if(!confirm('למחוק משימה זו?'))return;
+  _addTombstone('austria26_tasks',id);
   saveTasks(getTasks().filter(x=>x.id!==id));
   renderTasks();
 }
@@ -4192,9 +4197,16 @@ function mergeBlob(local,remote,rNewer){
   const base=rNewer?remote:local;
   const out=Object.assign({},base);
   const keys=new Set([...Object.keys(local),...Object.keys(remote)]);
+  const _tomb=k=>Array.from(new Set([..._parseJ(local[k+'__del'],[]).map(String),..._parseJ(remote[k+'__del'],[]).map(String)]));
   keys.forEach(k=>{
-    if(_isAddKey(k)){out[k]=JSON.stringify(_unionById(_parseJ(local[k],[]),_parseJ(remote[k],[])));}
-    else if(!(k in base)){out[k]=(k in local)?local[k]:remote[k];}
+    if(k.slice(-5)==='__del'){
+      out[k]=JSON.stringify(Array.from(new Set([..._parseJ(local[k],[]).map(String),..._parseJ(remote[k],[]).map(String)])).sort());
+    } else if(_isAddKey(k)){
+      const del=new Set(_tomb(k));
+      let u=_unionById(_parseJ(local[k],[]),_parseJ(remote[k],[]));
+      if(del.size)u=u.filter(x=>!del.has(String(x.id)));
+      out[k]=JSON.stringify(u);
+    } else if(!(k in base)){out[k]=(k in local)?local[k]:remote[k];}
   });
   if(('austria26_itin' in local)||('austria26_itin' in remote)){
     const li=_parseJ(local['austria26_itin'],{}),ri=_parseJ(remote['austria26_itin'],{});
