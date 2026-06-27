@@ -2729,8 +2729,7 @@ function switchTab(name){
   if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
   if(document.getElementById('more-modal'))closeModal('more-modal');
   const fab=document.getElementById('add-fab');if(fab)fab.style.display=(['itinerary','attractions','packing','restaurants','tasks'].indexOf(name)>=0)?'flex':'none';
-  const tc=document.querySelector('.tab-content');
-  if(tc&&window.innerWidth>=1024)tc.scrollTop=0; else window.scrollTo(0,0);
+  _scrollTopNow();
 }
 function toggleCard(id){if(/^d[1-8]$/.test(id)){selectDay(id);return;}const c=document.getElementById(id);if(c)c.classList.toggle('open')}
 
@@ -3599,6 +3598,7 @@ var HERO_FULL=210;
 function _heroResize(){HERO_FULL=Math.max(180,Math.min(280,Math.round(window.innerHeight*0.28)));onHeroScroll();}
 function onHeroScroll(){/* hero scrolls away naturally; no sticky collapse */}
 window.addEventListener('resize',_heroResize);
+function _scrollTopNow(){var sa=document.querySelector('.page-scroll-area');if(sa)sa.scrollTop=0;var tc=document.querySelector('.tab-content');if(tc)tc.scrollTop=0;try{window.scrollTo(0,0);}catch(e){}}
 function selectDay(dayId){
   _selDay=dayId;window.currentFocusDay=dayId;
   buildDateStrip();
@@ -3606,6 +3606,7 @@ function selectDay(dayId){
   var mh=document.getElementById('itin-map-host');
   if(mh&&mh.style.display==='block'){renderDayMap(_selDay);}
   else{openDayCard(_selDay);}
+  _scrollTopNow();
 }
 function openDayCard(dayId){
   var mh=document.getElementById('itin-map-host');
