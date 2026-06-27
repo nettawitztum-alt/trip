@@ -1658,6 +1658,9 @@ body.trip-active #day-capacity{display:none}
 .form-row2 .form-group{flex:1}
 .loc-wrap{position:relative}
 .loc-suggest{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:30;background:#143124;border:1px solid var(--glass-brd);border-radius:12px;overflow:hidden;max-height:230px;overflow-y:auto;box-shadow:0 12px 32px rgba(0,0,0,.55)}
+.attr-resolved{font-size:11.5px;color:#bff5d3;background:rgba(124,240,166,.10);border:1px solid rgba(124,240,166,.22);border-radius:10px;padding:7px 11px;margin:-4px 0 12px;line-height:1.5}
+#attr-search-row{position:relative;z-index:1200}
+#attr-map-suggest{z-index:1200}
 .loc-suggest.on{display:block}
 .loc-opt{display:block;width:100%;text-align:right;background:none;border:none;border-bottom:1px solid var(--glass-brd);color:#fff;padding:10px 13px;cursor:pointer;font-family:var(--gs)}
 .loc-opt:last-child{border-bottom:none}
@@ -2228,7 +2231,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <button id="av-map" onclick="attrView('map')"><i data-feather="map"></i> מפה</button>
   </div>
   </div>
-  <div class="map-search" id="attr-search-row" style="display:none"><input id="attr-search-input" class="map-search-input" placeholder="חפש מקום להוסיף כאטרקציה…" onkeydown="if(event.key==='Enter'){attrMapSearch();return false;}"><button class="map-search-btn" onclick="attrMapSearch()" aria-label="חפש"><i data-feather="search"></i></button></div>
+  <div class="map-search" id="attr-search-row" style="display:none"><div class="loc-wrap" style="flex:1"><input id="attr-search-input" class="map-search-input" placeholder="חפש מקום להוסיף כאטרקציה…" autocomplete="off" oninput="locAutocomplete('attr-search-input','attr-map-suggest','','')" onkeydown="if(event.key==='Enter'){attrMapSearch();return false;}"><div class="loc-suggest" id="attr-map-suggest"></div></div><button class="map-search-btn" onclick="attrMapSearch()" aria-label="חפש"><i data-feather="search"></i></button></div>
   <div id="attr-map-canvas"></div>
   <div id="attr-map-empty" class="map-empty" style="display:none"></div>
   <div id="attr-list-view">
@@ -2389,6 +2392,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div id="attr-suggest" class="attr-suggest"></div>
     <input type="hidden" id="edit-attr-id">
     <div class="form-group"><label>🔎 חפש מקום / שם *</label><div class="loc-wrap"><input type="text" class="form-input" id="attr-name" placeholder="הקלידו שם מקום — גם בחו״ל…" autocomplete="off" oninput="locAutocomplete('attr-name','attr-name-suggest','','attr-location')"><div class="loc-suggest" id="attr-name-suggest"></div></div></div>
+    <div id="attr-resolved" class="attr-resolved" style="display:none"></div>
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
     <div class="form-group"><label>🌐 אתר / קישור (לא חובה)</label><input type="url" class="form-input" id="attr-website" placeholder="https://…  אם ריק נוסיף קישור Google אוטומטית" style="direction:ltr"></div>
     <input type="hidden" id="attr-location">
@@ -2462,7 +2466,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">27</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">28</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -3157,6 +3161,7 @@ function openAddAttrModal(){
   document.getElementById('attr-area').value='custom';
   document.getElementById('attr-waze').value='';
   document.getElementById('attr-website').value='';
+  var _rv=document.getElementById('attr-resolved');if(_rv){_rv.style.display='none';_rv.innerHTML='';}
   document.getElementById('attr-duration').value='';
   document.getElementById('attr-kids').value='';
   document.getElementById('attr-activities').value='';
@@ -3217,6 +3222,7 @@ function openEditAttrModal(id){
   document.getElementById('attr-area').value=a.area||'custom';
   document.getElementById('attr-waze').value=a.waze||'';
   document.getElementById('attr-website').value=a.website||'';
+  var _erv=document.getElementById('attr-resolved');if(_erv){if(a.location){_erv.innerHTML='\u{1F4CD} '+escapeHtml(a.location);_erv.style.display='block';}else{_erv.style.display='none';}}
   document.getElementById('attr-duration').value=a.duration||'';
   document.getElementById('attr-kids').value=a.forKids||'';
   document.getElementById('attr-activities').value=(a.activities||[]).join('\n');
@@ -3243,8 +3249,14 @@ function saveAttraction(){
     addedBy:currentUser?.name||'',
     addedAt:new Date().toLocaleDateString('he-IL')
   };
-  if(!obj.waze&&obj.location){obj.waze='https://waze.com/ul?q='+encodeURIComponent(obj.location+' Austria')+'&navigate=yes';}
-  obj.maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+(obj.location?(' '+obj.location):' Austria'));
+  var _ll=null;try{var _gc=_geoCache();_ll=_gc[name]||_gc[obj.location]||null;}catch(e){}
+  if(_ll&&_ll.length===2){
+    obj.maps='https://www.google.com/maps/search/?api=1&query='+_ll[0]+','+_ll[1];
+    if(!obj.waze)obj.waze='https://waze.com/ul?ll='+_ll[0]+','+_ll[1]+'&navigate=yes';
+  }else{
+    obj.maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+(obj.location?(' '+obj.location):' Austria'));
+    if(!obj.waze&&obj.location){obj.waze='https://waze.com/ul?q='+encodeURIComponent(obj.location+' Austria')+'&navigate=yes';}
+  }
   if(!obj.website){obj.website='https://www.google.com/search?q='+encodeURIComponent(name+' Austria');}
   if(editingAttrId){
     const idx=custom.findIndex(x=>x.id===editingAttrId);
@@ -3969,29 +3981,35 @@ function addSearchedPlace(){
   var lo=document.getElementById('event-location');if(lo)lo.value=_searchResult.name;
 }
 var _attrSearchMk=null;
+function _dropMapPin(name,geo,label){
+  if(!_amap||!geo||geo.length!==2)return;
+  if(_attrSearchMk){try{_amap.removeLayer(_attrSearchMk);}catch(e){}}
+  var icon=L.divIcon({className:'',html:'<div class="map-search-pin">📍</div>',iconSize:[34,34],iconAnchor:[17,30],popupAnchor:[0,-28]});
+  _attrSearchMk=L.marker(geo,{icon:icon,zIndexOffset:1000}).addTo(_amap);
+  var pop=document.createElement('div');
+  pop.innerHTML='<b>'+escapeHtml(name)+'</b>'+(label?'<div style="font-size:12px;opacity:.7;margin-top:3px">'+escapeHtml(label)+'</div>':'');
+  var btn=document.createElement('button');btn.className='map-pop-btn';btn.textContent='＋ הוסף כאטרקציה';
+  btn.onclick=function(){
+    try{var c=_geoCache();c[name]=geo;if(label)c[label]=geo;localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+    openAddAttrModal();
+    var n=document.getElementById('attr-name');if(n)n.value=name;
+    var l=document.getElementById('attr-location');if(l)l.value=label||name;
+    var rv=document.getElementById('attr-resolved');if(rv&&label){rv.innerHTML='\u{1F4CD} '+escapeHtml(label);rv.style.display='block';}
+  };
+  var br=document.createElement('div');br.appendChild(btn);pop.appendChild(br);
+  _attrSearchMk.bindPopup(pop).openPopup();
+  try{_amap.panTo(geo,{animate:true});}catch(e){}
+}
 async function attrMapSearch(){
   var inp=document.getElementById('attr-search-input');var q=(inp&&inp.value||'').trim();if(!q)return;
   try{
-    var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q+', Austria'));
+    var r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q+', Austria'));
     var j=await r.json();
     if(!j||!j[0]){alert('לא נמצא מקום בשם זה');return;}
     var geo=[parseFloat(j[0].lat),parseFloat(j[0].lon)];
-    var label=(j[0].display_name||'').split(',').slice(0,2).join(',');
-    if(_attrSearchMk){try{_amap.removeLayer(_attrSearchMk);}catch(e){}}
-    var icon=L.divIcon({className:'',html:'<div class="map-search-pin">📍</div>',iconSize:[34,34],iconAnchor:[17,30],popupAnchor:[0,-28]});
-    _attrSearchMk=L.marker(geo,{icon:icon,zIndexOffset:1000}).addTo(_amap);
-    var pop=document.createElement('div');
-    pop.innerHTML='<b>'+q+'</b>'+(label?'<div style="font-size:12px;opacity:.7;margin-top:3px">'+label+'</div>':'');
-    var btn=document.createElement('button');btn.className='map-pop-btn';btn.textContent='＋ הוסף כאטרקציה';
-    btn.onclick=function(){
-      try{var c=_geoCache();c[q]=geo;localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
-      openAddAttrModal();
-      var n=document.getElementById('attr-name');if(n)n.value=q;
-      var l=document.getElementById('attr-location');if(l)l.value=q;
-    };
-    var br=document.createElement('div');br.appendChild(btn);pop.appendChild(br);
-    _attrSearchMk.bindPopup(pop).openPopup();
-    try{_amap.panTo(geo,{animate:true});}catch(e){}
+    var label=(j[0].display_name||'').split(',').slice(0,3).join(',');
+    try{var c=_geoCache();c[q]=geo;localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}
+    _dropMapPin(q,geo,label);
   }catch(e){alert('שגיאת חיפוש — נסו שוב');}
 }
 function _eventGeo(item){
@@ -4191,11 +4209,19 @@ function pickLoc(btn){
   var box=btn.closest('.loc-suggest');if(!box)return;
   var inputId=box.dataset.target||'',titleId=box.dataset.title||'',locId=box.dataset.loc||'';
   var name=btn.dataset.name,label=btn.dataset.label||name,lat=parseFloat(btn.dataset.lat),lon=parseFloat(btn.dataset.lon);
+  var hasGeo=!isNaN(lat)&&!isNaN(lon);
+  if(hasGeo){try{var c=_geoCache();c[name]=[lat,lon];c[label]=[lat,lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}}
+  box.innerHTML='';box.classList.remove('on');
+  if(inputId==='attr-search-input'){
+    var si=document.getElementById(inputId);if(si)si.value=name;
+    if(hasGeo)_dropMapPin(name,[lat,lon],label);
+    return;
+  }
   var li=document.getElementById(inputId);if(li)li.value=name;
   if(titleId){var ti=document.getElementById(titleId);if(ti&&!ti.value.trim())ti.value=name;}
-  if(locId){var lo=document.getElementById(locId);if(lo)lo.value=label;}
-  if(!isNaN(lat)&&!isNaN(lon)){try{var c=_geoCache();c[name]=[lat,lon];c[label]=[lat,lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}}
-  box.innerHTML='';box.classList.remove('on');
+  if(locId){var lo=document.getElementById(locId);if(lo)lo.value=label;
+    if(locId==='attr-location'){var rv=document.getElementById('attr-resolved');if(rv){rv.innerHTML='\u{1F4CD} '+escapeHtml(label)+' \u2014 <span style="opacity:.8">\u05D6\u05D5 \u05D4\u05DB\u05EA\u05D5\u05D1\u05EA \u05D4\u05E0\u05DB\u05D5\u05E0\u05D4? \u05D0\u05E4\u05E9\u05E8 \u05DC\u05EA\u05E7\u05DF \u05DC\u05DE\u05E2\u05DC\u05D4</span>';rv.style.display='block';}}
+  }
 }
 function eventLocAutocomplete(){locAutocomplete('event-location','event-loc-suggest','event-title');}
 function _toMin(t){var p=String(t).split(':');return (+p[0])*60+(+p[1]);}
