@@ -705,10 +705,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;height:100dvh;font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;height:100%;overflow:hidden}
+/* app-shell stays in normal flow (NOT position:fixed) — on iOS WebKit a fixed
+   ancestor traps the fixed bottom-nav inside it, pulling it off the screen edge.
+   JS sets the height to window.innerHeight (reliable full screen in standalone). */
 .app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
-/* Home-screen PWA: pin the shell to the exact viewport so the bottom nav always
-   reaches the screen edge (100dvh/visualViewport are unreliable in standalone). */
-body.pwa-standalone .app-shell{position:fixed;top:0;left:0;right:0;bottom:0;height:auto}
 .page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 
 /* ── LOCK SCREEN ── */
@@ -4896,13 +4896,12 @@ window.addEventListener('resize',setStickyOffsets);
 // mis-size 100vh (and sometimes 100dvh), leaving dead space below the nav.
 function _fitAppHeight(){
   var sh=document.querySelector('.app-shell');if(!sh)return;
-  // In a home-screen PWA, let CSS 100dvh own the height (it covers the whole
-  // screen incl. the home-indicator area). Forcing visualViewport.height there
-  // leaves a dead strip at the bottom. Only override for Safari's moving toolbar.
   var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
   document.body.classList.toggle('pwa-standalone',!!standalone);
-  if(standalone){sh.style.height='';return;}
-  var h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+  // window.innerHeight is the full screen height in a home-screen PWA and tracks
+  // the visible area in Safari — the bottom nav is position:fixed so it pins to
+  // the viewport edge regardless; this just makes the scroll area fill the view.
+  var h=standalone?window.innerHeight:((window.visualViewport&&window.visualViewport.height)||window.innerHeight);
   if(h)sh.style.height=h+'px';
 }
 if(window.visualViewport){window.visualViewport.addEventListener('resize',_fitAppHeight);}
