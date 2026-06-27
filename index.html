@@ -1649,6 +1649,14 @@ body.trip-active #day-capacity{display:none}
 .loc-opt:active,.loc-opt:hover{background:rgba(124,240,166,.12)}
 .loc-opt b{font-size:14px;font-weight:700;display:block}
 .loc-opt span{font-size:11px;color:var(--muted)}
+.loc-loading{padding:11px 13px;font-size:12.5px;color:var(--muted)}
+.more-fields{margin-bottom:14px;border:1px solid var(--glass-brd);border-radius:12px;overflow:hidden}
+.more-fields summary{padding:11px 14px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;list-style:none}
+.more-fields summary::-webkit-details-marker{display:none}
+.more-fields summary::before{content:'▾ ';color:var(--accent)}
+.more-fields[open] summary::before{content:'▴ '}
+.more-fields .form-group{padding:0 14px}
+.more-fields .form-group:last-child{padding-bottom:12px}
 .nrest-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 .nrest{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:14px;padding:10px 12px}
 .nrest-info b{font-size:13.5px;font-weight:700;display:block}
@@ -1662,7 +1670,9 @@ body.trip-active #day-capacity{display:none}
 .bp-perf{height:0;border-top:2px dashed rgba(255,255,255,.28);margin:14px -16px 0;position:relative}
 .bp-perf::before,.bp-perf::after{content:'';position:absolute;top:-11px;width:20px;height:20px;border-radius:50%;background:#0e2b20}
 .bp-perf::before{left:-11px}.bp-perf::after{right:-11px}
-.bp-barcode{height:44px;margin:16px 2px 2px;border-radius:4px;opacity:.82;background:repeating-linear-gradient(90deg,#e3f2ea 0 2px,transparent 2px 3px,#e3f2ea 3px 7px,transparent 7px 9px,#e3f2ea 9px 11px,transparent 11px 14px,#e3f2ea 14px 16px,transparent 16px 18px)}
+.bp-stub{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:15px 2px 2px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.05);border:1px dashed var(--glass-brd)}
+.bp-stub-l{font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--muted)}
+.bp-stub-ref{font-family:'Space Mono','SF Mono',monospace;font-size:21px;font-weight:700;color:#fff;letter-spacing:3px;direction:ltr}
 .set-sec{margin-bottom:18px}
 .set-sec-h{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:9px;letter-spacing:.3px}
 .set-row-static{font-size:14px;color:#fff;margin-bottom:11px}
@@ -2222,7 +2232,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="fl-route"><div><div class="fl-city">תל אביב</div><div class="fl-code">TLV · T1 · 12:00</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 14:35</div></div></div>
     <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 243</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
     <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span><span class="seat-tag">רומי LAP</span></div>
-    <div class="bp-perf"></div><div class="bp-barcode" aria-hidden="true"></div>
+    <div class="bp-perf"></div><div class="bp-stub"><span class="bp-stub-l">BOARDING PASS · אסמכתא</span><span class="bp-stub-ref">4440455</span></div>
     <div class="fl-actions"><button onclick="addFlightICS('out')"><i data-feather="calendar"></i> ליומן</button><a href="https://www.israir.co.il/en/" target="_blank" rel="noopener"><i data-feather="check-circle"></i> צ'ק-אין</a><button onclick="boardingPass('out')"><i data-feather="file-text"></i> כרטיס עלייה</button></div>
   </div>
   <div class="flight-card">
@@ -2230,7 +2240,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="fl-route"><div><div class="fl-city">זלצבורג</div><div class="fl-code">SZG · 12:10</div></div><div style="font-size:24px;opacity:.7">→</div><div style="text-align:left"><div class="fl-city">תל אביב</div><div class="fl-code">TLV · 16:45</div></div></div>
     <div class="fl-grid"><div><div class="fl-label">חברה</div><div class="fl-val">ישראייר</div></div><div><div class="fl-label">טיסה</div><div class="fl-val">6H 248</div></div><div><div class="fl-label">מחלקה</div><div class="fl-val">Y Economy</div></div><div><div class="fl-label">Docket</div><div class="fl-val">4440455</div></div></div>
     <div class="seat-tags"><span class="seat-tag">נטע 2F</span><span class="seat-tag">עומר 2E</span><span class="seat-tag">ליה 2D</span></div>
-    <div class="bp-perf"></div><div class="bp-barcode" aria-hidden="true"></div>
+    <div class="bp-perf"></div><div class="bp-stub"><span class="bp-stub-l">BOARDING PASS · אסמכתא</span><span class="bp-stub-ref">4440455</span></div>
     <div class="fl-actions"><button onclick="addFlightICS('ret')"><i data-feather="calendar"></i> ליומן</button><a href="https://www.israir.co.il/en/" target="_blank" rel="noopener"><i data-feather="check-circle"></i> צ'ק-אין</a><button onclick="boardingPass('ret')"><i data-feather="file-text"></i> כרטיס עלייה</button></div>
   </div>
   <div class="card"><div class="card-header" style="cursor:default"><span class="card-emoji">🚗</span><div class="card-title"><h3>רכב השכרה – AutoEurope</h3><p>Res.629582 · Nissan Qashqai</p></div></div>
@@ -2332,18 +2342,20 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="modal-title" id="add-attr-title">➕ הוסף אטרקציה</div>
     <div id="attr-suggest" class="attr-suggest"></div>
     <input type="hidden" id="edit-attr-id">
-    <div class="form-group"><label>שם האטרקציה *</label><input type="text" class="form-input" id="attr-name" placeholder="שם האטרקציה"></div>
+    <div class="form-group"><label>🔎 חפש מקום / שם *</label><div class="loc-wrap"><input type="text" class="form-input" id="attr-name" placeholder="הקלידו שם מקום — גם בחו״ל…" autocomplete="off" oninput="locAutocomplete('attr-name','attr-name-suggest','','attr-location')"><div class="loc-suggest" id="attr-name-suggest"></div></div></div>
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
-    <div class="form-group"><label>מיקום / כתובת</label><div class="loc-wrap"><input type="text" class="form-input" id="attr-location" placeholder="התחילו להקליד מקום..." autocomplete="off" oninput="locAutocomplete('attr-location','attr-loc-suggest','attr-name')"><div class="loc-suggest" id="attr-loc-suggest"></div></div></div>
-    <div class="form-group"><label>אזור</label>
-      <select class="form-select" id="attr-area">
-        <option value="pongau">🏔️ פונגאו (Altenmarkt, ימים 1–5)</option>
-        <option value="salzburg">🏙️ זלצבורג (ימים 6–8)</option>
-        <option value="custom">⭐ מומלץ על ידי המשפחות</option>
-      </select>
-    </div>
-    <div class="form-group"><label>קישור Waze (אופציונלי)</label><input type="url" class="form-input" id="attr-waze" placeholder="https://waze.com/ul?q=..." style="direction:ltr"></div>
-    <div class="form-group"><label>אתר / קישור (אופציונלי)</label><input type="url" class="form-input" id="attr-website" placeholder="https://..." style="direction:ltr"></div>
+    <input type="hidden" id="attr-location">
+    <input type="hidden" id="attr-waze">
+    <details class="more-fields"><summary>פרטים נוספים (לא חובה)</summary>
+      <div class="form-group" style="margin-top:8px"><label>אזור</label>
+        <select class="form-select" id="attr-area">
+          <option value="custom">⭐ מומלץ על ידי המשפחות</option>
+          <option value="pongau">🏔️ פונגאו (ימים 1–5)</option>
+          <option value="salzburg">🏙️ זלצבורג (ימים 6–8)</option>
+        </select>
+      </div>
+      <div class="form-group"><label>אתר / קישור</label><input type="url" class="form-input" id="attr-website" placeholder="https://..." style="direction:ltr"></div>
+    </details>
     <button class="btn btn-primary btn-block" onclick="saveAttraction()">💾 שמור</button>
     <button class="btn btn-danger btn-block btn-sm" id="delete-attr-btn" style="display:none;margin-top:8px" onclick="deleteAttraction()">🗑️ מחק</button>
   </div>
@@ -3076,6 +3088,7 @@ function saveAttraction(){
     addedBy:currentUser?.name||'',
     addedAt:new Date().toLocaleDateString('he-IL')
   };
+  if(!obj.waze&&obj.location){obj.waze='https://waze.com/ul?q='+encodeURIComponent(obj.location+' Austria')+'&navigate=yes';}
   if(editingAttrId){
     const idx=custom.findIndex(x=>x.id===editingAttrId);
     if(idx>=0)custom[idx]=obj;
@@ -3892,34 +3905,35 @@ function pickEventType(btn){
 }
 var _evLocTimer=null;
 var _acTimers={};
-function locAutocomplete(inputId,boxId,titleId){
+function locAutocomplete(inputId,boxId,titleId,locId){
   clearTimeout(_acTimers[boxId]);
   var inp=document.getElementById(inputId),box=document.getElementById(boxId);
   if(!inp||!box)return;
-  box.dataset.target=inputId;box.dataset.title=titleId||'';
+  box.dataset.target=inputId;box.dataset.title=titleId||'';box.dataset.loc=locId||'';
   var q=(inp.value||'').trim();
   if(q.length<2){box.innerHTML='';box.classList.remove('on');return;}
+  box.innerHTML='<div class="loc-loading">מחפש…</div>';box.classList.add('on');
   _acTimers[boxId]=setTimeout(function(){
-    fetch('https://photon.komoot.io/api/?limit=6&lat=47.8&lon=13.04&q='+encodeURIComponent(q))
+    fetch('https://photon.komoot.io/api/?limit=7&lat=47.8&lon=13.04&q='+encodeURIComponent(q))
       .then(function(r){return r.ok?r.json():null;}).then(function(d){
-        if(!d||!d.features||!d.features.length){box.innerHTML='';box.classList.remove('on');return;}
+        if(!d||!d.features||!d.features.length){box.innerHTML='<div class="loc-loading">לא נמצאו תוצאות</div>';return;}
         box.innerHTML=d.features.map(function(f){
           var p=f.properties||{},g=(f.geometry&&f.geometry.coordinates)||[];
           var name=p.name||p.street||p.city||q;
           var loc=[p.street&&p.name?p.street:'',p.city,p.country].filter(Boolean).join(', ');
-          return '<button type="button" class="loc-opt" onclick="pickLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-lat="'+(g[1]||'')+'" data-lon="'+(g[0]||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
+          return '<button type="button" class="loc-opt" onclick="pickLoc(this)" data-name="'+escapeHtml(name).replace(/"/g,'&quot;')+'" data-label="'+escapeHtml(loc||name).replace(/"/g,'&quot;')+'" data-lat="'+(g[1]||'')+'" data-lon="'+(g[0]||'')+'"><b>'+escapeHtml(name)+'</b>'+(loc?'<span>'+escapeHtml(loc)+'</span>':'')+'</button>';
         }).join('');
-        box.classList.add('on');
-      }).catch(function(){box.innerHTML='';box.classList.remove('on');});
-  },300);
+      }).catch(function(){box.innerHTML='<div class="loc-loading">שגיאת חיפוש</div>';});
+  },280);
 }
 function pickLoc(btn){
   var box=btn.closest('.loc-suggest');if(!box)return;
-  var inputId=box.dataset.target||'',titleId=box.dataset.title||'';
-  var name=btn.dataset.name,lat=parseFloat(btn.dataset.lat),lon=parseFloat(btn.dataset.lon);
+  var inputId=box.dataset.target||'',titleId=box.dataset.title||'',locId=box.dataset.loc||'';
+  var name=btn.dataset.name,label=btn.dataset.label||name,lat=parseFloat(btn.dataset.lat),lon=parseFloat(btn.dataset.lon);
   var li=document.getElementById(inputId);if(li)li.value=name;
   if(titleId){var ti=document.getElementById(titleId);if(ti&&!ti.value.trim())ti.value=name;}
-  if(!isNaN(lat)&&!isNaN(lon)){try{var c=_geoCache();c[name]=[lat,lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}}
+  if(locId){var lo=document.getElementById(locId);if(lo)lo.value=label;}
+  if(!isNaN(lat)&&!isNaN(lon)){try{var c=_geoCache();c[name]=[lat,lon];c[label]=[lat,lon];localStorage.setItem('austria26_geo2',JSON.stringify(c));}catch(e){}}
   box.innerHTML='';box.classList.remove('on');
 }
 function eventLocAutocomplete(){locAutocomplete('event-location','event-loc-suggest','event-title');}
