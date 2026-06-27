@@ -1433,7 +1433,7 @@ body{background:
 .tl-time{color:var(--muted)}
 
 /* ---- buttons ---- */
-.btn-primary{background:var(--accent);color:#072414;box-shadow:0 4px 14px rgba(var(--accent-rgb),.22)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#06231a;box-shadow:0 4px 14px rgba(var(--accent-rgb),.25)}
 .btn-accent{background:var(--accent);color:#072414}
 .btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
 .btn-ghost{color:var(--muted);background:transparent;border:1px solid var(--glass-brd)}
@@ -1758,9 +1758,9 @@ body.map-view #itin-map-host{margin:0 -16px}
 body.map-view .map-search{margin:0 16px 10px}
 body.map-view #map-canvas{height:calc(100dvh - 178px);min-height:440px;border-radius:0;border-left:0;border-right:0}
 body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area-inset-bottom,0px))}
-.map-search{display:flex;gap:8px;margin-bottom:10px}
-.map-search-input{flex:1;background:#fff;border:none;border-radius:12px;padding:11px 14px;font-size:14px;font-family:var(--gs);direction:rtl;color:#222;outline:none}
-.map-search-btn{flex:0 0 auto;width:46px;border-radius:12px;border:none;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.map-search{display:flex;gap:8px;margin-bottom:10px;align-items:center}.map-search .loc-wrap{flex:1;min-width:0}
+.map-search-input{flex:1;width:100%;background:#fff;border:none;border-radius:12px;padding:11px 14px;font-size:14px;font-family:var(--gs);direction:rtl;color:#222;outline:none}
+.map-search-btn{flex:0 0 auto;width:46px;height:46px;border-radius:12px;border:none;background:var(--accent);color:#072414;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .map-search-btn svg.feather{width:18px;height:18px;stroke:currentColor}
 .map-search-pin{font-size:28px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
 .step-pop{text-align:center;min-width:180px}.step-pop .step-title{font-size:15px;font-weight:700;line-height:1.3}.step-pop .step-desc{font-size:12px;color:var(--muted);margin-top:3px;white-space:normal}.step-pop-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:11px;direction:ltr}.step-popup .leaflet-popup-content{margin:13px 15px;min-width:180px}.step-popup .leaflet-popup-content-wrapper{border:1px solid var(--glass-brd)}
@@ -1791,6 +1791,10 @@ body.map-view .map-stepper{left:84px;right:16px;bottom:calc(88px + env(safe-area
 .attr-view-toggle button:active{transform:scale(.96)}
 .attr-view-toggle button.on{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#06231a;box-shadow:0 3px 12px rgba(var(--accent-rgb),.22)}
 .attr-view-toggle button svg.feather{width:15px;height:15px;stroke:currentColor}
+.kids-filter-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:var(--muted);font-family:var(--gs);font-weight:600;font-size:13px;padding:9px 15px;border-radius:999px;cursor:pointer;margin-bottom:14px;transition:all .2s}
+.kids-filter-chip:active{transform:scale(.97)}
+.kids-filter-chip.on{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#06231a;border-color:transparent;box-shadow:0 3px 12px rgba(var(--accent-rgb),.22)}
+.kids-filter-chip svg.feather{width:15px;height:15px;stroke:currentColor}
 #attr-map-canvas{display:none;height:62vh;min-height:380px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid var(--glass-brd)}
 body.attr-map-view .sticky-shell{display:none}
 body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px;border-radius:0;border-left:0;border-right:0;margin:0 -16px 0}
@@ -2242,6 +2246,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   <div id="attr-map-canvas"></div>
   <div id="attr-map-empty" class="map-empty" style="display:none"></div>
   <div id="attr-list-view">
+  <button id="kids-filter-btn" class="kids-filter-chip" onclick="toggleKidsFilter()"><i data-feather="smile"></i> מתאים לפעוטות (1–5) · עד 30 דק׳</button>
   <p class="sec-title">🏔️ אזור פונגאו (ימים 1–5)</p>
   <div id="attractions-pongau"></div>
   <p class="sec-title">🏙️ אזור זלצבורג (ימים 6–8)</p>
@@ -2403,6 +2408,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
     <button type="button" class="btn btn-outline btn-block btn-sm" id="ai-fill-btn" onclick="aiFillAttraction()" style="margin-bottom:12px">✨ מלא פרטים עם AI</button>
     <div class="form-group"><label>🌐 אתר / קישור (לא חובה)</label><input type="url" class="form-input" id="attr-website" placeholder="https://…  אם ריק נוסיף קישור Google אוטומטית" style="direction:ltr"></div>
+    <div class="form-group"><label>🖼️ תמונה (קישור, לא חובה)</label><input type="url" class="form-input" id="attr-image" placeholder="הדביקו קישור לתמונה (jpg/png)…" style="direction:ltr"></div>
     <input type="hidden" id="attr-location">
     <input type="hidden" id="attr-waze">
     <details class="more-fields"><summary>פרטים נוספים (לא חובה)</summary>
@@ -2474,7 +2480,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">AI</div><div class="set-field"><input type="url" class="form-input" id="ai-proxy-url" placeholder="https://...workers.dev" style="direction:ltr"><button class="btn btn-primary btn-sm" onclick="saveAiProxy()">שמור</button></div><div class="set-row-static" style="font-size:11px;color:var(--muted)">כתובת שרת ה-AI ליצירת תוכן אטרקציות (ראו AI_PROXY_SETUP.md)</div></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">33</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">AI</div><div class="set-field"><input type="url" class="form-input" id="ai-proxy-url" placeholder="https://...workers.dev" style="direction:ltr"><button class="btn btn-primary btn-sm" onclick="saveAiProxy()">שמור</button></div><div class="set-row-static" style="font-size:11px;color:var(--muted)">כתובת שרת ה-AI ליצירת תוכן אטרקציות (ראו AI_PROXY_SETUP.md)</div></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">34</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2927,15 +2933,59 @@ async function _wikiLookup(lang,q){
     return null;
   }catch(e){return null;}
 }
+
+/* ── Curated knowledge base: rich Hebrew content for well-known places so
+   user-added attractions get real content offline (no API key needed). ── */
+const ATTRACTION_KB=[
+  {match:['flitzer'],
+   location:'Flachau · מגלשת הרים',
+   lat:47.3559239,lng:13.3852932,
+   desc:'מגלשת הרים (אלפיין קוסטר) מרהיבה בפלכאו: עגלות על מסילת מתכת שמתפתלת במורד ההר דרך יערות ואחו ירוקים, עם פניות, גלים וסיבובים. אתם שולטים במהירות עם ידית בלמים – כך שזה כיף גם לקטנטנים (ברכיבה עם מבוגר) וגם לחובבי אדרנלין.',
+   activities:['🛷 גלישה מסחררת במורד ההר – פניות, גלים וסיבובים','🚡 עלייה במעלית עד נקודת הזינוק (כלולה בכרטיס)','👨‍👧 פעוטות רוכבים על עגלה אחת עם הורה, בשליטת מהירות מלאה','🌲 נופים ירוקים של הרי פלכאו לכל אורך הדרך','🍦 מזנון בתחנה לקפה וגלידה אחרי הגלישה'],
+   tips:['פתוח בעיקר בקיץ ובמזג אוויר יבש – המסילה נסגרת בגשם','כרטיסייה לכמה גלישות משתלמת יותר מכרטיס בודד','להגיע בבוקר או לפנות ערב כדי להימנע מתורים','לבוש נוח וסגור; שיער ארוך כדאי לאסוף','פעוטות מתחת לגיל ~3 רק בחיק מבוגר ובמהירות מתונה'],
+   duration:'1–2 שעות',
+   forKids:'★★★★★',
+   toddler:true,
+   website:'https://www.flachau.com/',
+   wikiTitle:'Flachau'}
+];
+function _kbLookup(name){
+  var n=(name||'').toLowerCase();if(!n)return null;
+  for(var i=0;i<ATTRACTION_KB.length;i++){var e=ATTRACTION_KB[i];var m=e.match||[];
+    if(m.length&&m.some(function(t){return n.indexOf(t)>=0;}))return e;}
+  return null;
+}
+/* kids filter: toddler-friendly (1–5) AND within ~30 min of the hotels */
+var _kidsFilter=false;
+function _attrStars(a){return ((a.forKids||'').match(/★/g)||[]).length;}
+function _attrMins(a){var m=(a.location||'').match(/(\d+)\s*דק/);if(m)return +m[1];if(typeof a.driveMin==='number')return a.driveMin;return null;}
+function _kidsPass(a){if(_attrStars(a)<4&&!a.toddler)return false;var mn=_attrMins(a);return mn==null||mn<=30;}
+function toggleKidsFilter(){_kidsFilter=!_kidsFilter;var b=document.getElementById('kids-filter-btn');if(b)b.classList.toggle('on',_kidsFilter);renderAttractions();}
+
 async function _enrichOne(a){
   try{
     var q=a.name||'';if(!q)return false;
-    // Description must be Hebrew (this is a Hebrew app) and relevant — only he.wikipedia.
+    var arr,idx,got=false;
+    var kb=_kbLookup(q);
+    if(kb){
+      arr=getCustomAttractions();idx=arr.findIndex(function(x){return x.id===a.id;});if(idx<0)return false;
+      var r=arr[idx];
+      if(!r.desc||!_hasHeb(r.desc)){r.desc=kb.desc;got=true;}
+      if(!(r.activities&&r.activities.length)&&kb.activities){r.activities=kb.activities.slice();got=true;}
+      if(!(r.tips&&r.tips.length)&&kb.tips){r.tips=kb.tips.slice();got=true;}
+      if(!r.duration&&kb.duration){r.duration=kb.duration;got=true;}
+      if(!r.forKids&&kb.forKids){r.forKids=kb.forKids;got=true;}
+      if(!r.location&&kb.location){r.location=kb.location;got=true;}
+      if(!r.website&&kb.website){r.website=kb.website;got=true;}
+      if(!r.wikiTitle&&kb.wikiTitle){r.wikiTitle=kb.wikiTitle;got=true;}
+      if(kb.img&&!r.img){r.img=kb.img;got=true;}
+      if(kb.toddler&&!r.toddler){r.toddler=true;got=true;}
+      if(kb.lat&&kb.lng){try{var c=_geoCache();if(!c[r.name]){c[r.name]=[kb.lat,kb.lng];localStorage.setItem('austria26_geo2',JSON.stringify(c));}}catch(e){}}
+      r._enriched=true;saveCustomAttractions(arr);return got;
+    }
     var he=await _wikiLookup('he',q);
-    // wikiTitle (drives images/gallery) may come from any language, relevance-gated.
     var any=he||await _wikiLookup('de',q)||await _wikiLookup('en',q);
-    var arr=getCustomAttractions();var idx=arr.findIndex(function(x){return x.id===a.id;});if(idx<0)return false;
-    var got=false;
+    arr=getCustomAttractions();idx=arr.findIndex(function(x){return x.id===a.id;});if(idx<0)return false;
     if(he&&_hasHeb(he.extract)&&he.extract.length>60&&(!arr[idx].desc||arr[idx].desc.trim().length<25)){arr[idx].desc=he.extract;got=true;}
     if(any&&any.title&&!arr[idx].wikiTitle){arr[idx].wikiTitle=any.title;got=true;}
     arr[idx]._enriched=true;saveCustomAttractions(arr);return got;
@@ -2964,9 +3014,10 @@ function renderAttractions(){
   const custom=getCustomAttractions();
   const bIds=new Set(BUILTIN_ATTRACTIONS.map(a=>a.id));
   const all=[...BUILTIN_ATTRACTIONS,...custom];
-  renderAttrGroup('attractions-pongau',all.filter(a=>a.area==='pongau'),bIds);
-  renderAttrGroup('attractions-salzburg',all.filter(a=>a.area==='salzburg'),bIds);
-  const customItems=custom.filter(a=>a.area==='custom'||!['pongau','salzburg'].includes(a.area));
+  const flt=_kidsFilter?(a=>_kidsPass(a)):(()=>true);
+  renderAttrGroup('attractions-pongau',all.filter(a=>a.area==='pongau').filter(flt),bIds);
+  renderAttrGroup('attractions-salzburg',all.filter(a=>a.area==='salzburg').filter(flt),bIds);
+  const customItems=custom.filter(a=>a.area==='custom'||!['pongau','salzburg'].includes(a.area)).filter(flt);
   const el=document.getElementById('attractions-custom');
   if(customItems.length===0){el.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">אין אטרקציות מותאמות אישית עדיין. לחץ ＋ כדי להוסיף!</p>';}
   else{renderAttrGroup('attractions-custom',customItems,bIds);}
@@ -3220,6 +3271,7 @@ async function loadAttrImages(){
   for(const a of all){_loadAttrImageOne(a);}
 }
 async function _loadAttrImageOne(a){
+  if(a.img){var _ie=document.getElementById('attr-img-'+a.id);if(_ie){_ie.src=a.img;_ie.style.display='block';}return;}
   if(a.wikiTitle){
     try{
       var ckey='wimg4_'+a.id;
@@ -3312,6 +3364,7 @@ function openAddAttrModal(){
   document.getElementById('attr-area').value='custom';
   document.getElementById('attr-waze').value='';
   document.getElementById('attr-website').value='';
+  document.getElementById('attr-image').value='';
   var _rv=document.getElementById('attr-resolved');if(_rv){_rv.style.display='none';_rv.innerHTML='';}
   document.getElementById('attr-duration').value='';
   document.getElementById('attr-kids').value='';
@@ -3373,6 +3426,7 @@ function openEditAttrModal(id){
   document.getElementById('attr-area').value=a.area||'custom';
   document.getElementById('attr-waze').value=a.waze||'';
   document.getElementById('attr-website').value=a.website||'';
+  document.getElementById('attr-image').value=a.img||'';
   var _erv=document.getElementById('attr-resolved');if(_erv){if(a.location){_erv.innerHTML='\u{1F4CD} '+escapeHtml(a.location);_erv.style.display='block';}else{_erv.style.display='none';}}
   document.getElementById('attr-duration').value=a.duration||'';
   document.getElementById('attr-kids').value=a.forKids||'';
@@ -3397,6 +3451,7 @@ function saveAttraction(){
     tips:_linesToArr(document.getElementById('attr-tips').value),
     waze:document.getElementById('attr-waze').value.trim(),
     website:document.getElementById('attr-website').value.trim(),
+    img:document.getElementById('attr-image').value.trim(),
     addedBy:currentUser?.name||'',
     addedAt:new Date().toLocaleDateString('he-IL')
   };
@@ -3411,7 +3466,7 @@ function saveAttraction(){
   if(!obj.website){obj.website='https://www.google.com/search?q='+encodeURIComponent(name+' Austria');}
   if(editingAttrId){
     const idx=custom.findIndex(x=>x.id===editingAttrId);
-    if(idx>=0)custom[idx]=obj;
+    if(idx>=0)custom[idx]={...custom[idx],...obj};
   } else {
     custom.push(obj);
   }
