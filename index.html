@@ -2457,7 +2457,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">23</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">24</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -4975,7 +4975,14 @@ function _fitAppHeight(){
   // the visible area in Safari — the bottom nav is position:fixed so it pins to
   // the viewport edge regardless; this just makes the scroll area fill the view.
   var h=standalone?Math.max(window.innerHeight,document.documentElement.clientHeight||0,(window.screen&&window.screen.height)||0):((window.visualViewport&&window.visualViewport.height)||window.innerHeight);
-  if(h)sh.style.height=h+'px';
+  if(h){
+    sh.style.height=h+'px';
+    // Standalone iOS can report innerHeight/dvh ~60px short of the real screen,
+    // leaving a dead strip. Size html+body to screen.height too, otherwise the
+    // flex body clamps the shell back to the short value.
+    if(standalone){document.documentElement.style.height=h+'px';document.body.style.height=h+'px';}
+    else{document.documentElement.style.height='';document.body.style.height='';}
+  }
 }
 if(window.visualViewport){window.visualViewport.addEventListener('resize',_fitAppHeight);}
 window.addEventListener('resize',_fitAppHeight);
@@ -4986,10 +4993,18 @@ window.addEventListener('orientationchange',function(){setTimeout(_fitAppHeight,
 function _navWatchdog(){
   try{
     var nav=document.querySelector('.tab-nav');if(!nav)return;
-    var gap=window.innerHeight-nav.getBoundingClientRect().bottom;
-    if(gap>24){
+    var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
+    // In standalone, iOS can under-report innerHeight; screen.height is the true
+    // screen. In Safari, stick to innerHeight so we never push under the toolbar.
+    var H=standalone?Math.max(window.innerHeight,document.documentElement.clientHeight||0,(window.screen&&window.screen.height)||0):window.innerHeight;
+    if(H-nav.getBoundingClientRect().bottom>24){
       if(nav.parentElement!==document.body)document.body.appendChild(nav);
-      nav.style.position='fixed';nav.style.left='0';nav.style.right='0';nav.style.bottom='0';
+      nav.style.position='fixed';nav.style.left='0';nav.style.right='0';nav.style.bottom='0';nav.style.top='auto';
+      if(standalone)requestAnimationFrame(function(){
+        var r=nav.getBoundingClientRect();
+        // bottom:0 still mis-anchored (trapped to a short box) -> position by top vs the true screen height
+        if(H-r.bottom>24){nav.style.top=(H-r.height)+'px';nav.style.bottom='auto';}
+      });
     }
   }catch(e){}
 }
