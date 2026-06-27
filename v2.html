@@ -738,7 +738,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .weather-chip .temp{font-size:18px;font-weight:700}
 .weather-chip .wlabel{font-size:10px;opacity:.8}
 .user-chip{background:rgba(255,255,255,.2);border:none;color:white;border-radius:20px;padding:6px 12px;font-family:'Assistant',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
-.hero-avatar{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:var(--primary);color:#fff;font-family:'Assistant',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero-avatar{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.85);background:var(--primary);color:#fff;font-family:'Assistant',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.2);margin-top:-6px}
 .hero-avatar img{width:100%;height:100%;object-fit:cover}
 .hero-avatar .sync-dot{position:absolute;width:11px;height:11px;border-radius:50%;background:#34A853;border:2px solid #fff;transform:translate(14px,-14px)}
 .family-badges{display:flex;gap:6px;flex-wrap:wrap}
@@ -947,6 +947,10 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.lightbox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;padding:18px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.lightbox.on{display:flex;animation:fadeIn .2s}
+.lightbox img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lightbox::after{content:'\2715';position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:18px;color:#fff;font-size:26px;font-weight:300;opacity:.85}
 .modal-overlay.open{display:flex}
 body.modal-open{overflow:hidden}
 .modal-x{position:absolute;top:12px;left:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.10);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6}
@@ -1946,7 +1950,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="hero-chips">
       <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי" aria-label="פרופיל והגדרות">👤</button>
     </div>
-    <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
+    <div class="hero-weather-pill" id="hero-weather-pill" style="display:none">☀️ · זלצבורג</div>
   </div>
   <!-- JS compat: keep hidden -->
   <span id="user-name-display" style="display:none"></span>
@@ -2375,6 +2379,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   <button class="tab-btn nav-extra" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
   <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')" aria-label="תפריט מלא"><i data-feather="grid"></i><span class="tl">עוד</span></button>
 </nav>
+<div id="lightbox" class="lightbox" onclick="closeLightbox()"><img id="lightbox-img" alt=""></div>
 
 <!-- ═══ ADD ATTRACTION MODAL ═══ -->
 <div class="modal-overlay" id="add-attr-modal" onclick="closeModalOnBg(event,'add-attr-modal')">
@@ -2457,7 +2462,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">26</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">27</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2852,7 +2857,7 @@ function renderAttrGroup(containerId,items,bIds){
 }
 function attrCardHTML(a,isCustom){
   const imgSrc=a.img||'';
-  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}"${imgSrc?` src="${imgSrc}"`:' style="display:none"'} class="attr-img" alt="${a.name}" onload="this.style.display='block'" onerror="this.style.display='none'"></div>`;
+  const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}"${imgSrc?` src="${imgSrc}"`:' style="display:none"'} class="attr-img" alt="${a.name}" style="cursor:zoom-in" onclick="event.stopPropagation();openLightbox(this.src)" onload="this.style.display='block'" onerror="this.style.display='none'"></div>`;
   const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
   const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
   const mapsBtn=a.maps?`<a href="${a.maps}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="map-pin"></i> מפה</a>`:'';
@@ -2918,7 +2923,7 @@ async function loadAttrGallery(attrId){
       }
     }
     if(urls&&urls.length){
-      host.innerHTML=urls.map(function(u){return '<img src="'+u+'" loading="lazy" alt="'+(a.name||'')+'" onerror="this.remove()">';}).join('');
+      host.innerHTML=urls.map(function(u){return '<img src="'+u+'" loading="lazy" alt="'+(a.name||'')+'" style="cursor:zoom-in" onclick="openLightbox(this.src)" onerror="this.remove()">';}).join('');
       host.classList.add('on');
     }else{host.innerHTML='';host.classList.remove('on');}
   }catch(e){host.dataset.loaded='';}
@@ -2983,13 +2988,14 @@ async function loadNearbyRestaurants(){
         var lat=e.lat,lon=e.lon;
         list.push({name:nm,lat:lat,lon:lon,cuisine:(e.tags.cuisine||''),amenity:(e.tags.amenity||'restaurant'),website:(e.tags.website||e.tags['contact:website']||e.tags.url||''),hours:(e.tags.opening_hours||''),dist:Math.min(_km(lat,lon,47.390,13.415),_km(lat,lon,47.785,12.985))});
       });
-      list.sort(function(a,b){return a.dist-b.dist;});
+      list.forEach(function(a){a.score=(a.amenity==='restaurant'?3:(a.amenity==='cafe'?1:0))+(a.website?2:0)+(a.cuisine?1:0)+(a.hours?1:0);});
+      list.sort(function(a,b){var d=b.score-a.score;return d!==0?d:a.dist-b.dist;});
       list=list.slice(0,14);
       sessionStorage.setItem(ck,JSON.stringify(list));
     }
     host.dataset.loaded='1';window._nearbyRest=list;
     if(!list.length){host.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">לא נמצאו מסעדות בקרבת מקום כרגע.</p>';return;}
-    host.innerHTML='<div class="suggest-title">🍽️ ב-3 ק״מ מהמלונות (לפי קרבה) — דירוגים, תפריט והוספה</div><div class="nrest-list">'+
+    host.innerHTML='<div class="suggest-title">🍽️ ב-3 ק״מ מהמלונות — המומלצות למעלה · דירוגים, תפריט והוספה</div><div class="nrest-list">'+
       list.map(function(a,i){
         var qn=encodeURIComponent(a.name+' Salzburg');
         var ta='https://www.tripadvisor.com/Search?q='+qn;
@@ -3380,6 +3386,8 @@ async function fetchWeather(){
 
 // ═══════════════ MODALS ═══════════════
 function openModal(id){var m=document.getElementById(id);if(!m)return;m.classList.add('open');document.body.classList.add('modal-open');}
+function openLightbox(src){if(!src)return;var lb=document.getElementById('lightbox'),im=document.getElementById('lightbox-img');if(!lb||!im)return;im.src=src;lb.classList.add('on');}
+function closeLightbox(){var lb=document.getElementById('lightbox');if(lb)lb.classList.remove('on');}
 function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open');if(!document.querySelector('.modal-overlay.open'))document.body.classList.remove('modal-open');}
 function closeModalOnBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){var o=document.querySelector('.modal-overlay.open');if(o)closeModal(o.id);}});
