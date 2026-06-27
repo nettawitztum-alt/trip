@@ -1650,6 +1650,24 @@ body.trip-active #day-capacity{display:none}
 .loc-opt b{font-size:14px;font-weight:700;display:block}
 .loc-opt span{font-size:11px;color:var(--muted)}
 .loc-loading{padding:11px 13px;font-size:12.5px;color:var(--muted)}
+.notif-bar{position:fixed;left:84px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:80;background:rgba(14,43,32,.97);border:1px solid var(--glass-brd);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.5);overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.nb-head{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:#fff;font-family:var(--gs);font-size:13px;font-weight:700;padding:12px 14px;cursor:pointer}
+.nb-ic{font-size:16px;flex:0 0 auto}
+.nb-title{flex:1;text-align:right}
+.nb-chev{transition:transform .2s;flex:0 0 auto}.nb-chev svg.feather{width:16px;height:16px;stroke:currentColor}
+.notif-bar.open .nb-chev{transform:rotate(180deg)}
+.nb-body{display:none;padding:4px 12px 11px;max-height:44vh;overflow-y:auto}
+.notif-bar.open .nb-body{display:block}
+.nb-note{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;line-height:1.5;padding:9px 11px;border-radius:11px;margin-bottom:7px;border:1px solid var(--glass-brd)}
+.nb-note span:first-child{flex:0 0 auto}
+.nb-warn{background:rgba(255,200,90,.10);border-color:rgba(255,200,90,.28);color:#ffe4a3}
+.nb-danger{background:rgba(255,120,120,.10);border-color:rgba(255,120,120,.3);color:#ffb3ae}
+.nb-info{background:rgba(124,240,166,.10);border-color:rgba(124,240,166,.28);color:#bff5d3}
+.nb-all{width:100%;margin-top:2px;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:#fff;border-radius:11px;padding:9px;font-family:var(--gs);font-size:12.5px;font-weight:700;cursor:pointer}
+.nb-li{display:flex;align-items:center;gap:10px;width:100%;text-align:right;border-radius:12px;padding:11px 12px;margin-bottom:8px;cursor:pointer;font-family:var(--gs)}
+.nb-li-day{flex:0 0 auto;font-size:10.5px;font-weight:800;color:var(--accent);min-width:64px}
+.nb-li-ic{flex:0 0 auto;font-size:15px}
+.nb-li-t{flex:1;font-size:13px;line-height:1.45}
 .more-fields{margin-bottom:14px;border:1px solid var(--glass-brd);border-radius:12px;overflow:hidden}
 .more-fields summary{padding:11px 14px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;list-style:none}
 .more-fields summary::-webkit-details-marker{display:none}
@@ -1959,8 +1977,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
         <div class="tl-item"><div class="tl-time">16:30</div><div class="tl-dot"></div><div class="tl-body"><h4>צ'ק-אין 🏨 Ferienwelt Kesselgrub</h4><p>Lackengasse 86, Altenmarkt im Pongau</p></div></div>
         <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><h4>ארוחת ערב 🍽️</h4><p>מסעדת המלון – כלול בחבילה</p><button class="tl-attr-link" onclick="viewRestaurant('r6')"><i data-feather="external-link"></i> מסעדה</button><a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="tl-attr-link" target="_blank"><i data-feather="navigation"></i> Waze</a></div></div>
       </div>
-      <div class="alert alert-warning brosh-only"><span class="alert-icon">⚠️</span>לאשר כיסאות ילדים עם AutoEurope! Infant seat לרומי + Toddler seat לליה</div>
-      <div class="alert alert-warning aloni-only"><span class="alert-icon">⚠️</span>לאשר כיסא בטיחות לתום ועמרי עם חברת ההשכרה!</div>
       <div class="action-row">
         <a href="https://waze.com/ul?q=Salzburg+Airport&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze לשדה</a>
         <a href="https://waze.com/ul?q=Ferienwelt+Kesselgrub+Altenmarkt&navigate=yes" class="btn btn-waze btn-sm"><i data-feather="navigation"></i> Waze למלון</a>
@@ -1973,7 +1989,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="card-header" onclick="toggleCard('d2')"><span class="card-emoji">👻</span><div class="card-title"><h3>יום 2 · רביעי 12.8</h3><p>Geisterberg Adventure Mountain</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">👻 Geisterberg</div><div class="day-theme">40+ תחנות הרפתקאות</div></div><div class="day-badge">12.8<br>ד'</div></div>
-      <div class="alert alert-danger"><span class="alert-icon">🚫</span>Wagrainis Grafenberg <strong>סגור 2026</strong> – בניית גונדולה. Geisterberg הוא האלטרנטיבה!</div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>בופה בוקר במלון 🥐</h4><p>כלול בחבילה</p></div></div>
         <div class="tl-item"><div class="tl-time">10:15</div><div class="tl-dot"></div><div class="tl-body"><h4>נסיעה ל-Geisterberg</h4><p>St. Johann/Alpendorf · ~20 דקות</p></div></div>
@@ -1994,7 +2009,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="card-header" onclick="toggleCard('d3')"><span class="card-emoji">🏰</span><div class="card-title"><h3>יום 3 · חמישי 13.8</h3><p>מבצר הוהנוורפן + Therme Amadé</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">🏰 מבצר + 🌊 טרמה</div><div class="day-theme">פלקונרי + 11 בריכות</div></div><div class="day-badge">13.8<br>ה'</div></div>
-      <div class="alert alert-danger"><span class="alert-icon">🎫</span>להזמין כרטיסי מבצר מראש! עלול להימכר באוגוסט.</div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 בופה בוקר במלון</h4><p>כלול בחבילה · Kesselgrub</p></div></div>
         <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-body"><h4>יציאה למבצר הוהנוורפן 🏰</h4><p>~35 דקות · Burgstraße 2, Werfen</p><button class="tl-attr-link" onclick="viewAttraction('a2')"><i data-feather="external-link"></i> פרטים</button></div></div>
@@ -2053,9 +2067,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="card-header" onclick="toggleCard('d6')"><span class="card-emoji">🦁</span><div class="card-title"><h3>יום 6 · ראשון 16.8</h3><p>גן חיות + ארמון הלבורן + מירבל</p></div><span class="chevron"><i data-feather="chevron-down"></i></span></div>
     <div class="card-body">
       <div class="day-header"><div><div class="day-name">🦁 הלבורן</div><div class="day-theme">חיות + מזרקות + גנים</div></div><div class="day-badge">16.8<br>א'</div></div>
-      <div class="alert alert-info"><span class="alert-icon">💡</span>הצג כרטיס גן חיות בארמון = <strong>Hellbrunn Bonus</strong> (הנחה)!</div>
-      <div class="alert alert-warning brosh-only"><span class="alert-icon">💧</span>להביא חולצה יבשה לליה – המזרקות מרטיבות מאוד!</div>
-      <div class="alert alert-warning aloni-only"><span class="alert-icon">💧</span>להביא חולצה יבשה לתום – המזרקות מרטיבות מאוד!</div>
       <div class="timeline">
         <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-dot"></div><div class="tl-body"><h4>🥐 ארוחת בוקר במלון</h4><p>כלול בחבילה · Grünauerhof</p></div></div>
         <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-body"><h4>גן חיות הלבורן 🦁</h4><p>Hellbrunner Str. 60, Anif · עגלות בהשאלה חינם · מתחת ל-4 חינם!</p><button class="tl-attr-link" onclick="viewAttraction('a5')"><i data-feather="external-link"></i> פרטים</button></div></div>
@@ -2301,6 +2312,10 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 
 </div><!-- end page-scroll-area -->
 
+<div id="notif-bar" class="notif-bar" style="display:none">
+  <div class="nb-body" id="nb-body"></div>
+  <button class="nb-head" onclick="toggleNotif()"><span class="nb-ic">🔔</span><span class="nb-title" id="nb-title"></span><i data-feather="chevron-up" class="nb-chev"></i></button>
+</div>
 <nav class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
   <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="star"></i><span class="tl">אטרקציות</span></button>
@@ -2403,7 +2418,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button><button class="set-btn" onclick="closeModal('user-modal');openFamilyWhatsApp()"><span><i data-feather="users"></i> קבוצת וואטסאפ משפחתית</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div>
   </div>
 </div>
 
@@ -2729,7 +2744,7 @@ function switchTab(name){
   if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
   if(document.getElementById('more-modal'))closeModal('more-modal');
   const fab=document.getElementById('add-fab');if(fab)fab.style.display=(['itinerary','attractions','packing','restaurants','tasks'].indexOf(name)>=0)?'flex':'none';
-  _scrollTopNow();
+  _scrollTopNow();renderNotifBar(_selDay);
 }
 function toggleCard(id){if(/^d[1-8]$/.test(id)){selectDay(id);return;}const c=document.getElementById(id);if(c)c.classList.toggle('open')}
 
@@ -3598,6 +3613,35 @@ var HERO_FULL=210;
 function _heroResize(){HERO_FULL=Math.max(180,Math.min(280,Math.round(window.innerHeight*0.28)));onHeroScroll();}
 function onHeroScroll(){/* hero scrolls away naturally; no sticky collapse */}
 window.addEventListener('resize',_heroResize);
+var TRIP_NOTES=[
+  {day:'d1',ic:'⏰',sev:'warn',text:'להגיע לשדה ת״א (T1) עד 09:00 — 3 שעות לפני הטיסה'},
+  {day:'d1',ic:'⚠️',sev:'warn',text:'לאשר כיסאות בטיחות לילדים מול חברת ההשכרה (AutoEurope)'},
+  {day:'d2',ic:'🚫',sev:'danger',text:'Wagrainis Grafenberg סגור ב-2026 — Geisterberg הוא האלטרנטיבה'},
+  {day:'d3',ic:'🎫',sev:'danger',text:'להזמין כרטיסי מבצר הוהנוורפן מראש! עלול להימכר באוגוסט'},
+  {day:'d6',ic:'💡',sev:'info',text:'הציגו כרטיס גן החיות בארמון הלבורן = הנחה (Hellbrunn Bonus)'},
+  {day:'d6',ic:'💧',sev:'warn',text:'להביא חולצה יבשה לילדים — המזרקות בהלבורן מרטיבות'}
+];
+function _noteDayIdx(day){return ['d1','d2','d3','d4','d5','d6','d7','d8'].indexOf(day);}
+function _dayShort(day){var i=_noteDayIdx(day);if(i<0||!DAY_DATES[i])return '';return 'יום '+(i+1)+' · '+DAY_DATES[i].d+'.8';}
+function notesFor(day){return TRIP_NOTES.filter(function(n){return n.day===day;});}
+function renderNotifBar(dayId){
+  var bar=document.getElementById('notif-bar');if(!bar)return;
+  var itin=document.getElementById('panel-itinerary');
+  var onItin=itin&&itin.classList.contains('active');
+  var notes=notesFor(dayId);
+  if(!onItin||!notes.length){bar.style.display='none';bar.classList.remove('open');return;}
+  bar.style.display='block';
+  document.getElementById('nb-title').textContent=notes.length+' התראות ליום זה';
+  document.getElementById('nb-body').innerHTML=notes.map(function(n){return '<div class="nb-note nb-'+n.sev+'"><span>'+n.ic+'</span><span>'+escapeHtml(n.text)+'</span></div>';}).join('')+'<button class="nb-all" onclick="openNotifList()">📋 כל ההתראות בטיול</button>';
+  if(window.feather)feather.replace();
+}
+function toggleNotif(){var b=document.getElementById('notif-bar');if(b)b.classList.toggle('open');}
+function openNotifList(){
+  var host=document.getElementById('notif-all');if(!host)return;
+  host.innerHTML=TRIP_NOTES.map(function(n){return '<button class="nb-li nb-'+n.sev+'" onclick="jumpToNote(\''+n.day+'\')"><span class="nb-li-day">'+_dayShort(n.day)+'</span><span class="nb-li-ic">'+n.ic+'</span><span class="nb-li-t">'+escapeHtml(n.text)+'</span></button>';}).join('');
+  openModal('notif-modal');if(window.feather)feather.replace();
+}
+function jumpToNote(day){closeModal('notif-modal');switchTab('itinerary');selectDay(day);var b=document.getElementById('notif-bar');if(b)b.classList.add('open');}
 function _scrollTopNow(){var sa=document.querySelector('.page-scroll-area');if(sa)sa.scrollTop=0;var tc=document.querySelector('.tab-content');if(tc)tc.scrollTop=0;try{window.scrollTo(0,0);}catch(e){}}
 function selectDay(dayId){
   _selDay=dayId;window.currentFocusDay=dayId;
@@ -3606,7 +3650,7 @@ function selectDay(dayId){
   var mh=document.getElementById('itin-map-host');
   if(mh&&mh.style.display==='block'){renderDayMap(_selDay);}
   else{openDayCard(_selDay);}
-  _scrollTopNow();
+  _scrollTopNow();renderNotifBar(_selDay);
 }
 function openDayCard(dayId){
   var mh=document.getElementById('itin-map-host');
@@ -4742,6 +4786,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     <div class="cur-row"><label>€ יורו</label><input id="cur-eur" class="form-input" type="number" inputmode="decimal" value="10" oninput="convertCur('e')"></div>
     <div class="cur-row"><label>₪ שקל</label><input id="cur-ils" class="form-input" type="number" inputmode="decimal" oninput="convertCur('i')"></div>
     <p style="font-size:11px;color:var(--muted);margin-top:10px;text-align:center">השער מתעדכן אונליין; ללא חיבור — שער משוערך</p>
+  </div>
+</div>
+<div class="modal-overlay" id="notif-modal" onclick="closeModalOnBg(event,'notif-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
+    <div class="modal-title">🔔 כל ההתראות בטיול</div>
+    <div id="notif-all"></div>
   </div>
 </div>
 <div class="modal-overlay" id="nav-modal" onclick="closeModalOnBg(event,'nav-modal')">
