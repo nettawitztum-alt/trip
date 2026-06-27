@@ -708,7 +708,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 /* app-shell stays in normal flow (NOT position:fixed) — on iOS WebKit a fixed
    ancestor traps the fixed bottom-nav inside it, pulling it off the screen edge.
    JS sets the height to window.innerHeight (reliable full screen in standalone). */
-.app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
+.app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;min-height:100dvh;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
 .page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 
 /* ── LOCK SCREEN ── */
@@ -2341,18 +2341,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 </div><!-- end page-scroll-area -->
 
 <div id="notif-panel" class="notif-panel" role="dialog" aria-label="התראות"></div>
-<nav class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
-  <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="star"></i><span class="tl">אטרקציות</span></button>
-  <button class="tab-btn" onclick="switchTab('packing')" id="tab-packing"><i data-feather="package"></i><span class="tl">ציוד</span></button>
-  <button class="tab-btn" onclick="switchTab('bookings')" id="tab-bookings"><i data-feather="clipboard"></i><span class="tl">הזמנות</span></button>
-  <button class="tab-btn nav-extra" onclick="switchTab('tasks')" id="tab-tasks"><i data-feather="check-square"></i><span class="tl">משימות</span></button>
-  <button class="tab-btn nav-extra" onclick="switchTab('hotels')" id="tab-hotels"><i data-feather="home"></i><span class="tl">מלונות</span></button>
-  <button class="tab-btn nav-extra" onclick="switchTab('flights')" id="tab-flights"><i data-feather="send"></i><span class="tl">טיסות</span></button>
-  <button class="tab-btn nav-extra" onclick="switchTab('restaurants')" id="tab-restaurants"><i data-feather="coffee"></i><span class="tl">מסעדות</span></button>
-  <button class="tab-btn nav-extra" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
-  <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')" aria-label="תפריט מלא"><i data-feather="grid"></i><span class="tl">עוד</span></button>
-</nav>
 
 <!-- ═══ MORE MENU SHEET ═══ -->
 <div class="modal-overlay" id="more-modal" onclick="closeModalOnBg(event,'more-modal')">
@@ -2374,6 +2362,19 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 </div>
 
 </div><!-- end app-shell -->
+<!-- bottom nav: direct child of body so iOS WebKit anchors position:fixed to the viewport, not a touch-scroll wrapper -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
+  <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="star"></i><span class="tl">אטרקציות</span></button>
+  <button class="tab-btn" onclick="switchTab('packing')" id="tab-packing"><i data-feather="package"></i><span class="tl">ציוד</span></button>
+  <button class="tab-btn" onclick="switchTab('bookings')" id="tab-bookings"><i data-feather="clipboard"></i><span class="tl">הזמנות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('tasks')" id="tab-tasks"><i data-feather="check-square"></i><span class="tl">משימות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('hotels')" id="tab-hotels"><i data-feather="home"></i><span class="tl">מלונות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('flights')" id="tab-flights"><i data-feather="send"></i><span class="tl">טיסות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('restaurants')" id="tab-restaurants"><i data-feather="coffee"></i><span class="tl">מסעדות</span></button>
+  <button class="tab-btn nav-extra" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
+  <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')" aria-label="תפריט מלא"><i data-feather="grid"></i><span class="tl">עוד</span></button>
+</nav>
 
 <!-- ═══ ADD ATTRACTION MODAL ═══ -->
 <div class="modal-overlay" id="add-attr-modal" onclick="closeModalOnBg(event,'add-attr-modal')">
@@ -2443,7 +2444,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה</div><div class="set-row-static">גרסה <b id="app-ver">21</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -4936,12 +4937,17 @@ function _fitAppHeight(){
   // window.innerHeight is the full screen height in a home-screen PWA and tracks
   // the visible area in Safari — the bottom nav is position:fixed so it pins to
   // the viewport edge regardless; this just makes the scroll area fill the view.
-  var h=standalone?window.innerHeight:((window.visualViewport&&window.visualViewport.height)||window.innerHeight);
+  var h=standalone?Math.max(window.innerHeight,document.documentElement.clientHeight||0):((window.visualViewport&&window.visualViewport.height)||window.innerHeight);
   if(h)sh.style.height=h+'px';
 }
 if(window.visualViewport){window.visualViewport.addEventListener('resize',_fitAppHeight);}
 window.addEventListener('resize',_fitAppHeight);
 window.addEventListener('orientationchange',function(){setTimeout(_fitAppHeight,250);});
+async function forceUpdate(){
+  try{if('serviceWorker' in navigator){var rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(function(r){return r.unregister();}));}}catch(e){}
+  try{if(window.caches){var ks=await caches.keys();await Promise.all(ks.map(function(k){return caches.delete(k);}));}}catch(e){}
+  location.reload();
+}
 try{_fitAppHeight();}catch(e){}
 function initApp(){
   _fitAppHeight();
