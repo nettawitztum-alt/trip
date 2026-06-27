@@ -806,7 +806,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 /* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;font-family:'Assistant',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;background:transparent;text-decoration:none;transition:all .15s;min-height:44px;user-select:none;white-space:nowrap}
 .btn:active{opacity:.8;transform:scale(.97)}
-.btn-danger{background:var(--danger);color:white}
+.btn-danger{background:rgba(255,93,93,.14);color:#ff9b9b;border:1px solid rgba(255,93,93,.34);box-shadow:none}
 .btn-sm{padding:8px 12px;font-size:12px;min-height:40px}
 .btn-block{width:100%;justify-content:center}
 .btn-waze{background:transparent;color:var(--lime-dark);border:1.5px solid var(--accent);position:relative;overflow:hidden}
@@ -1422,7 +1422,7 @@ body{background:
 .tl-time{color:var(--muted)}
 
 /* ---- buttons ---- */
-.btn-primary{background:var(--accent);color:#072414;box-shadow:0 8px 18px rgba(124,240,166,.32)}
+.btn-primary{background:var(--accent);color:#072414;box-shadow:0 4px 14px rgba(124,240,166,.22)}
 .btn-accent{background:var(--accent);color:#072414}
 .btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid var(--glass-brd)}
 .btn-ghost{color:var(--muted);background:transparent;border:1px solid var(--glass-brd)}
@@ -1589,7 +1589,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
 .cap-missing{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .cap-add{background:rgba(124,240,166,.18);color:#bff5d3;border:1px dashed rgba(124,240,166,.45);border-radius:9px;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:var(--gs);cursor:pointer}
 @media (max-width:767px){
-  #itin-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
+  #itin-stickyhead{position:sticky;top:calc(var(--bnr-h,40px) - 1px);z-index:120;background:var(--bg);margin:0 -16px;padding:15px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
 body.map-view #itin-stickyhead{top:var(--bnr-h,40px)}
   #itin-stickyhead .date-strip{margin-bottom:2px}
   #attr-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
@@ -2410,8 +2410,8 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <div class="form-group"><label>📋 מה עושים שם? (שורה לכל פעילות)</label><textarea class="form-input" id="attr-activities" rows="3" placeholder="🚡 עלייה בגונדולה&#10;🥾 שביל טיול קצר&#10;🧺 פיקניק בפסגה"></textarea></div>
       <div class="form-group"><label>💡 כדאי לדעת (שורה לכל טיפ)</label><textarea class="form-input" id="attr-tips" rows="3" placeholder="כדאי להגיע בבוקר&#10;להביא מעיל קל"></textarea></div>
     </details>
-    <button class="btn btn-primary btn-block" onclick="saveAttraction()">💾 שמור</button>
-    <button class="btn btn-danger btn-block btn-sm" id="delete-attr-btn" style="display:none;margin-top:8px" onclick="deleteAttraction()">🗑️ מחק</button>
+    <button class="btn btn-primary btn-block" onclick="saveAttraction()"><i data-feather="save"></i> שמור</button>
+    <button class="btn btn-danger btn-block btn-sm" id="delete-attr-btn" style="display:none;margin-top:8px" onclick="deleteAttraction()"><i data-feather="trash-2"></i> מחק</button>
   </div>
 </div>
 
@@ -2433,7 +2433,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <input type="checkbox" id="pack-urgent" style="width:18px;height:18px">
       <label for="pack-urgent" style="margin:0;cursor:pointer">⭐ פריט קריטי (אסור לשכוח!)</label>
     </div>
-    <button class="btn btn-primary btn-block" onclick="savePackItem()">💾 שמור</button>
+    <button class="btn btn-primary btn-block" onclick="savePackItem()"><i data-feather="save"></i> שמור</button>
   </div>
 </div>
 
@@ -2457,7 +2457,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">25</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">26</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -3055,29 +3055,23 @@ function viewRestaurant(id){
 }
 
 async function loadAttrImages(){
-  const bIds=new Set(BUILTIN_ATTRACTIONS.map(a=>a.id));
   const all=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()];
-  for(const a of all){
-    if(a.wikiTitle){
-      try{
-        const ckey='wimg4_'+a.id;
-        let src=sessionStorage.getItem(ckey);
-        if(!src){
-          const r=await fetch(_wikiImgURL(a.wikiTitle,2000));
-          if(!r.ok)continue;
-          const d=await r.json();
-          src=_pageThumb(d);
-          if(src)sessionStorage.setItem(ckey,src);
-        }
-        if(src){
-          const el=document.getElementById('attr-img-'+a.id);
-          if(el){el.src=src;el.style.display='block';}
-        }
-      }catch(e){}
-      continue;
-    }
-    if(!bIds.has(a.id))_loadCustomAttrImage(a);
+  for(const a of all){_loadAttrImageOne(a);}
+}
+async function _loadAttrImageOne(a){
+  if(a.wikiTitle){
+    try{
+      var ckey='wimg4_'+a.id;
+      var src=sessionStorage.getItem(ckey);
+      if(!src){
+        var r=await fetch(_wikiImgURL(a.wikiTitle,2000));
+        if(r.ok){var d=await r.json();src=_pageThumb(d)||'';if(src)sessionStorage.setItem(ckey,src);}
+      }
+      if(src){var el=document.getElementById('attr-img-'+a.id);if(el){el.src=src;el.style.display='block';}return;}
+    }catch(e){}
   }
+  // wiki page had no lead image (or no wikiTitle) -> geo/name/default fallback
+  _loadCustomAttrImage(a);
 }
 function _wikiSearchImgURL(name,lang,size){return 'https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize='+size;}
 function _geoThumb(d){
