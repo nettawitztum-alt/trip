@@ -1,4 +1,4 @@
-const CACHE='austria26-v19';
+const CACHE='austria26-v20';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()).catch(()=>self.skipWaiting()));
@@ -13,7 +13,7 @@ self.addEventListener('fetch',e=>{
   const url=new URL(req.url);
   // Always serve the app shell for navigations (offline-friendly)
   if(req.mode==='navigate'){
-    e.respondWith(fetch(req).catch(()=>caches.match('./index.html')));
+    e.respondWith(fetch(req,{cache:'reload'}).then(res=>{const c=res.clone();caches.open(CACHE).then(ca=>ca.put('./index.html',c));return res;}).catch(()=>caches.match('./index.html')));
     return;
   }
   // Stale-while-revalidate for same-origin assets; cache-first fallback otherwise
