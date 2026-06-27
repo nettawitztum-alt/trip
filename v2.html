@@ -2400,6 +2400,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="form-group"><label>🔎 חפש מקום / שם *</label><div class="loc-wrap"><input type="text" class="form-input" id="attr-name" placeholder="הקלידו שם מקום — גם בחו״ל…" autocomplete="off" oninput="locAutocomplete('attr-name','attr-name-suggest','','attr-location')"><div class="loc-suggest" id="attr-name-suggest"></div></div></div>
     <div id="attr-resolved" class="attr-resolved" style="display:none"></div>
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
+    <button type="button" class="btn btn-outline btn-block btn-sm" id="ai-fill-btn" onclick="aiFillAttraction()" style="margin-bottom:12px">✨ מלא פרטים עם AI</button>
     <div class="form-group"><label>🌐 אתר / קישור (לא חובה)</label><input type="url" class="form-input" id="attr-website" placeholder="https://…  אם ריק נוסיף קישור Google אוטומטית" style="direction:ltr"></div>
     <input type="hidden" id="attr-location">
     <input type="hidden" id="attr-waze">
@@ -2472,7 +2473,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">30</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">AI</div><div class="set-field"><input type="url" class="form-input" id="ai-proxy-url" placeholder="https://...workers.dev" style="direction:ltr"><button class="btn btn-primary btn-sm" onclick="saveAiProxy()">שמור</button></div><div class="set-row-static" style="font-size:11px;color:var(--muted)">כתובת שרת ה-AI ליצירת תוכן אטרקציות (ראו AI_PROXY_SETUP.md)</div></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">31</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2783,7 +2784,31 @@ function _fillDiag(){
   var shh=sh?Math.round(sh.getBoundingClientRect().height):0;
   d.textContent='mode:'+(sa?'standalone':'browser')+' | innerH:'+window.innerHeight+' screenH:'+((window.screen&&window.screen.height)||'?')+' dvh:'+document.documentElement.clientHeight+' | shell:'+shh+' navTop:'+nt+' navBottom:'+nr+(nr===window.innerHeight?' OK':' GAP:'+(window.innerHeight-nr));
 }
+function saveAiProxy(){var v=(document.getElementById('ai-proxy-url').value||'').trim();try{localStorage.setItem('austria26_aiproxy',v);}catch(e){}toast(v?'\u2713 \u05E0\u05E9\u05DE\u05E8':'\u05E0\u05D5\u05E7\u05D4');}
+async function aiFillAttraction(){
+  var url=(localStorage.getItem('austria26_aiproxy')||'').trim();
+  if(!url){alert('\u05D4\u05D2\u05D3\u05D9\u05E8\u05D5 \u05EA\u05D7\u05D9\u05DC\u05D4 \u05DB\u05EA\u05D5\u05D1\u05EA AI \u05D1\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA (\u2699\uFE0F)');return;}
+  var name=(document.getElementById('attr-name').value||'').trim();
+  if(!name){alert('\u05D4\u05D6\u05D9\u05E0\u05D5 \u05E9\u05DD \u05DE\u05E7\u05D5\u05DD \u05E7\u05D5\u05D3\u05DD');return;}
+  var btn=document.getElementById('ai-fill-btn');if(btn){btn.disabled=true;btn.textContent='\u2728 \u05DE\u05DE\u05DC\u05D0\u2026';}
+  try{
+    var loc=(document.getElementById('attr-location').value||'').trim();
+    var r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:name,location:loc,country:'Austria'})});
+    var d=await r.json();
+    if(d&&!d.error){
+      if(d.desc)document.getElementById('attr-desc').value=d.desc;
+      if(d.duration)document.getElementById('attr-duration').value=d.duration;
+      if(d.forKids)document.getElementById('attr-kids').value=d.forKids;
+      if(d.activities&&d.activities.length)document.getElementById('attr-activities').value=d.activities.join('\n');
+      if(d.tips&&d.tips.length)document.getElementById('attr-tips').value=d.tips.join('\n');
+      var det=document.querySelector('#add-attr-modal .more-fields');if(det)det.open=true;
+      toast('\u2728 \u05DE\u05D5\u05DC\u05D0 \u2014 \u05D1\u05D3\u05E7\u05D5 \u05D5\u05E9\u05DE\u05E8\u05D5');
+    }else{alert('\u05DC\u05D0 \u05D4\u05E6\u05DC\u05D7\u05EA\u05D9 \u05DC\u05D9\u05D9\u05E6\u05E8 \u05EA\u05D5\u05DB\u05DF'+(d&&d.error?': '+d.error:''));}
+  }catch(e){alert('\u05E9\u05D2\u05D9\u05D0\u05EA \u05D7\u05D9\u05D1\u05D5\u05E8 \u05DC-AI');}
+  if(btn){btn.disabled=false;btn.textContent='\u2728 \u05DE\u05DC\u05D0 \u05E4\u05E8\u05D8\u05D9\u05DD \u05E2\u05DD AI';}
+}
 function showUserModal(){
+  var _ai=document.getElementById('ai-proxy-url');if(_ai){try{_ai.value=localStorage.getItem('austria26_aiproxy')||'';}catch(e){}}
   document.getElementById('user-modal-name').textContent=currentUser?.name||'אורח';
   _fillDiag();
   document.getElementById('user-new-name').value='';
@@ -2847,20 +2872,40 @@ function updateBookingProgress(){
 }
 
 // ═══════════════ ATTRACTIONS ═══════════════
+function _hasHeb(s){return /[֐-׿]/.test(s||'');}
+function _normToks(s){return (s||'').toLowerCase().replace(/freizeitpark|sommerrodelbahn|rodelbahn|erlebnis|museum|park|der|die|das|the|of|and/g,' ').replace(/[^a-z0-9֐-׿]+/g,' ').split(' ').filter(function(t){return t.length>2;});}
+function _wikiRelevant(title,name){var nt=(title||'').toLowerCase();var qt=_normToks(name);if(!qt.length)return false;return qt.some(function(t){return nt.indexOf(t)>=0;});}
+async function _wikiLookup(lang,q){
+  try{
+    var r=await fetch('https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrlimit=1&prop=extracts&exintro=1&explaintext=1&exsentences=3');
+    if(!r.ok)return null;var d=await r.json();var pages=(d.query&&d.query.pages)||{};var pg=Object.keys(pages).map(function(k){return pages[k];})[0];
+    if(pg&&pg.title&&_wikiRelevant(pg.title,q))return{extract:(pg.extract||'').trim(),title:pg.title};
+    return null;
+  }catch(e){return null;}
+}
 async function _enrichOne(a){
   try{
-    var q=a.name||'';if(!q)return false;var found=null;
-    for(const lang of ['en','de']){
-      var r=await fetch('https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrlimit=1&prop=extracts&exintro=1&explaintext=1&exsentences=3');
-      if(!r.ok)continue;var d=await r.json();var pages=(d.query&&d.query.pages)||{};var pg=Object.keys(pages).map(function(k){return pages[k];})[0];
-      if(pg&&pg.extract&&pg.extract.trim().length>60){found={extract:pg.extract.trim(),title:pg.title};break;}
-    }
+    var q=a.name||'';if(!q)return false;
+    // Description must be Hebrew (this is a Hebrew app) and relevant — only he.wikipedia.
+    var he=await _wikiLookup('he',q);
+    // wikiTitle (drives images/gallery) may come from any language, relevance-gated.
+    var any=he||await _wikiLookup('de',q)||await _wikiLookup('en',q);
     var arr=getCustomAttractions();var idx=arr.findIndex(function(x){return x.id===a.id;});if(idx<0)return false;
-    if(found){
-      if(!arr[idx].desc||arr[idx].desc.trim().length<25)arr[idx].desc=found.extract;
-      if(!arr[idx].wikiTitle&&found.title)arr[idx].wikiTitle=found.title;
-    }
-    arr[idx]._enriched=true;saveCustomAttractions(arr);return !!found;
+    var got=false;
+    if(he&&_hasHeb(he.extract)&&he.extract.length>60&&(!arr[idx].desc||arr[idx].desc.trim().length<25)){arr[idx].desc=he.extract;got=true;}
+    if(any&&any.title&&!arr[idx].wikiTitle){arr[idx].wikiTitle=any.title;got=true;}
+    arr[idx]._enriched=true;saveCustomAttractions(arr);return got;
+  }catch(e){return false;}
+}
+function _cleanBadEnrich(){
+  try{
+    var arr=getCustomAttractions();var changed=false;
+    arr.forEach(function(a){
+      // Purge foreign-language auto-descriptions the old enricher wrote (wrong language + often wrong article).
+      if(a._enriched&&a.desc&&a.desc.length>40&&!_hasHeb(a.desc)){a.desc='';a.wikiTitle='';a._enriched=false;changed=true;}
+    });
+    if(changed)saveCustomAttractions(arr);
+    return changed;
   }catch(e){return false;}
 }
 async function _enrichAllCustom(){
@@ -5126,6 +5171,7 @@ function initApp(){
   if(_itinOriginalHTML===null&&panel)_itinOriginalHTML=panel.innerHTML; // snapshot pristine itinerary
   initBookingChecklist();
   renderAttractions();
+  if(_cleanBadEnrich())renderAttractions();
   setTimeout(_enrichAllCustom,1500);
   renderPacking();
   renderRestaurants();
