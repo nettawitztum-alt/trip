@@ -4784,7 +4784,19 @@ function setStickyOffsets(){
   document.documentElement.style.setProperty('--bnr-h',bh+'px');
 }
 window.addEventListener('resize',setStickyOffsets);
+// Lock the app height to the *actual* visible viewport. iOS Safari/standalone
+// mis-size 100vh (and sometimes 100dvh), leaving dead space below the nav.
+function _fitAppHeight(){
+  var sh=document.querySelector('.app-shell');if(!sh)return;
+  var h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+  if(h)sh.style.height=h+'px';
+}
+if(window.visualViewport){window.visualViewport.addEventListener('resize',_fitAppHeight);}
+window.addEventListener('resize',_fitAppHeight);
+window.addEventListener('orientationchange',function(){setTimeout(_fitAppHeight,250);});
+try{_fitAppHeight();}catch(e){}
 function initApp(){
+  _fitAppHeight();
   const panel=document.getElementById('panel-itinerary');
   if(_itinOriginalHTML===null&&panel)_itinOriginalHTML=panel.innerHTML; // snapshot pristine itinerary
   initBookingChecklist();
