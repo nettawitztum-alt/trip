@@ -705,7 +705,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;height:100dvh;font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;height:100%;overflow:hidden}
-.app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
 .page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
 
 /* ── LOCK SCREEN ── */
@@ -2798,19 +2798,21 @@ function updateBookingProgress(){
 // ═══════════════ ATTRACTIONS ═══════════════
 function renderAttractions(){
   const custom=getCustomAttractions();
-  renderAttrGroup('attractions-pongau',BUILTIN_ATTRACTIONS.filter(a=>a.area==='pongau'),false);
-  renderAttrGroup('attractions-salzburg',BUILTIN_ATTRACTIONS.filter(a=>a.area==='salzburg'),false);
+  const bIds=new Set(BUILTIN_ATTRACTIONS.map(a=>a.id));
+  const all=[...BUILTIN_ATTRACTIONS,...custom];
+  renderAttrGroup('attractions-pongau',all.filter(a=>a.area==='pongau'),bIds);
+  renderAttrGroup('attractions-salzburg',all.filter(a=>a.area==='salzburg'),bIds);
   const customItems=custom.filter(a=>a.area==='custom'||!['pongau','salzburg'].includes(a.area));
   const el=document.getElementById('attractions-custom');
   if(customItems.length===0){el.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">אין אטרקציות מותאמות אישית עדיין. לחץ ＋ כדי להוסיף!</p>';}
-  else{renderAttrGroup('attractions-custom',customItems,true);}
+  else{renderAttrGroup('attractions-custom',customItems,bIds);}
   loadAttrImages();
   if(_attrMapActive)renderAttrMap();
 }
-function renderAttrGroup(containerId,items,isCustom){
+function renderAttrGroup(containerId,items,bIds){
   const el=document.getElementById(containerId);if(!el)return;
   if(!items.length){el.innerHTML='';return;}
-  el.innerHTML=items.map(a=>attrCardHTML(a,isCustom)).join('');
+  el.innerHTML=items.map(a=>attrCardHTML(a, bIds&&bIds.has?!bIds.has(a.id):!!bIds)).join('');
 }
 function attrCardHTML(a,isCustom){
   const imgSrc=a.img||'';
