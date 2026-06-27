@@ -949,8 +949,14 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .lightbox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;padding:18px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .lightbox.on{display:flex;animation:fadeIn .2s}
-.lightbox img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.lightbox::after{content:'\2715';position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:18px;color:#fff;font-size:26px;font-weight:300;opacity:.85}
+.lb-stage{position:relative;max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center;gap:10px}
+.lightbox img{max-width:100%;max-height:82vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lb-cap{color:#e7f7ee;font-size:13px;font-weight:600;text-align:center;max-width:90vw;line-height:1.4;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.lb-arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:30px;line-height:1;cursor:pointer;z-index:2;display:none;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.lb-arrow:active{background:rgba(255,255,255,.3)}
+.lb-prev{left:12px}.lb-next{right:12px}
+.lightbox.multi .lb-arrow{display:flex}
+.lightbox::after{content:'\2715';position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:18px;color:#fff;font-size:26px;font-weight:300;opacity:.85;z-index:3}
 .modal-overlay.open{display:flex}
 body.modal-open{overflow:hidden}
 .modal-x{position:absolute;top:12px;left:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.10);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6}
@@ -1596,7 +1602,7 @@ input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.65
   #itin-stickyhead{position:sticky;top:calc(var(--bnr-h,40px) - 1px);z-index:120;background:var(--bg);margin:0 -16px;padding:15px 16px 8px;box-shadow:0 6px 14px rgba(0,0,0,.28);text-align:center}
 body.map-view #itin-stickyhead{top:var(--bnr-h,40px)}
   #itin-stickyhead .date-strip{margin-bottom:2px}
-  #attr-stickyhead{position:sticky;top:var(--bnr-h,40px);z-index:120;background:var(--bg);margin:0 -16px;padding:14px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
+  #attr-stickyhead{position:sticky;top:calc(var(--bnr-h,40px) - 1px);z-index:120;background:var(--bg);margin:0 -16px;padding:15px 16px 8px;text-align:center;box-shadow:0 6px 14px rgba(0,0,0,.28)}
 body.attr-map-view #attr-stickyhead{top:var(--bnr-h,40px)}
 body.map-view .page-scroll-area,body.attr-map-view .page-scroll-area{padding-bottom:0}
 }
@@ -2382,7 +2388,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   <button class="tab-btn nav-extra" onclick="switchTab('tips')" id="tab-tips"><i data-feather="info"></i><span class="tl">טיפים</span></button>
   <button class="tab-btn nav-more" id="more-btn" onclick="openModal('more-modal')" aria-label="תפריט מלא"><i data-feather="grid"></i><span class="tl">עוד</span></button>
 </nav>
-<div id="lightbox" class="lightbox" onclick="closeLightbox()"><img id="lightbox-img" alt=""></div>
+<div id="lightbox" class="lightbox" onclick="closeLightbox()"><button class="lb-arrow lb-prev" onclick="lbPrev(event)" aria-label="הקודם">‹</button><div class="lb-stage" onclick="event.stopPropagation()"><img id="lightbox-img" alt=""><div id="lightbox-cap" class="lb-cap"></div></div><button class="lb-arrow lb-next" onclick="lbNext(event)" aria-label="הבא">›</button></div>
 
 <!-- ═══ ADD ATTRACTION MODAL ═══ -->
 <div class="modal-overlay" id="add-attr-modal" onclick="closeModalOnBg(event,'add-attr-modal')">
@@ -2466,7 +2472,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">28</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">29</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2908,26 +2914,58 @@ function toggleAttr(id){
   card.classList.toggle('attr-open');
   if(card.classList.contains('attr-open'))loadAttrGallery(id);
 }
+function _stripTags(h){var d=document.createElement('div');d.innerHTML=h||'';return (d.textContent||'').trim();}
+async function _commonsGeoPhotos(lat,lon){
+  try{
+    var u='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=geosearch&ggsnamespace=6&ggscoord='+lat+'%7C'+lon+'&ggsradius=600&ggslimit=24&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1400&iiextmetadatafilter=ObjectName|ImageDescription';
+    var r=await fetch(u);if(!r.ok)return [];
+    var d=await r.json();var pages=(d.query&&d.query.pages)||{};var out=[];
+    Object.keys(pages).forEach(function(k){
+      var p=pages[k];var ii=p.imageinfo&&p.imageinfo[0];if(!ii||!ii.thumburl)return;
+      if(!/^image\/(jpe?g|png|webp)/i.test(ii.mime||''))return;
+      var t=(p.title||'').replace(/^File:/,'');
+      if(/(map|karte|plan|grundriss|logo|coat|wappen|siegel|seal|icon|diagram|chart|schild|sign)/i.test(t))return;
+      var m=ii.extmetadata||{};
+      var cap=(m.ObjectName&&_stripTags(m.ObjectName.value))||t.replace(/\.[a-z0-9]+$/i,'').replace(/_/g,' ');
+      out.push({thumb:ii.thumburl,full:ii.url||ii.thumburl,caption:(cap||'').slice(0,90)});
+    });
+    return out.slice(0,8);
+  }catch(e){return [];}
+}
+async function _wikiPagePhotos(title){
+  try{
+    var r=await fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=images&gimlimit=24&prop=imageinfo&iiprop=url|mime&iiurlwidth=1200&titles='+encodeURIComponent(title));
+    if(!r.ok)return [];
+    var d=await r.json();var pages=(d.query&&d.query.pages)||{};var out=[];
+    Object.keys(pages).forEach(function(k){
+      var p=pages[k];var ii=p.imageinfo&&p.imageinfo[0];if(!ii||!ii.thumburl)return;
+      if(!/^image\/(jpe?g|png|webp)/i.test(ii.mime||''))return;
+      var t=(p.title||'').replace(/^File:/,'');
+      if(/(map|karte|plan|logo|coat|wappen|siegel|seal|icon|flag|grundriss)/i.test(t))return;
+      out.push({thumb:ii.thumburl,full:ii.url||ii.thumburl,caption:t.replace(/\.[a-z0-9]+$/i,'').replace(/_/g,' ').slice(0,90)});
+    });
+    return out.slice(0,8);
+  }catch(e){return [];}
+}
 async function loadAttrGallery(attrId){
-  const a=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()].find(x=>x.id===attrId);
-  if(!a||!a.wikiTitle)return;
-  const host=document.getElementById('attr-gallery-'+attrId);
+  var a=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()].find(function(x){return x.id===attrId;});
+  if(!a)return;
+  var host=document.getElementById('attr-gallery-'+attrId);
   if(!host||host.dataset.loaded)return;host.dataset.loaded='1';
   try{
-    const ck='wgal3_'+attrId;var urls=null;
+    var ck='wgal4_'+attrId;var imgs=null;
     var cached=sessionStorage.getItem(ck);
-    if(cached){urls=JSON.parse(cached);}
+    if(cached){imgs=JSON.parse(cached);}
     else{
-      var r=await fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=images&gimlimit=20&prop=imageinfo&iiprop=url|mime&iiurlwidth=900&titles='+encodeURIComponent(a.wikiTitle));
-      if(r.ok){var d=await r.json();
-        var pages=(d.query&&d.query.pages)||{};urls=[];
-        Object.keys(pages).forEach(function(k){var ii=pages[k].imageinfo&&pages[k].imageinfo[0];if(ii&&ii.thumburl&&/^image\/(jpe?g|png|webp)/i.test(ii.mime||''))urls.push(ii.thumburl);});
-        urls=urls.slice(0,3);
-        sessionStorage.setItem(ck,JSON.stringify(urls));
-      }
+      var ll=_attrCoords(a);imgs=[];
+      if(ll)imgs=await _commonsGeoPhotos(ll[0],ll[1]);
+      if((!imgs||!imgs.length)&&a.wikiTitle)imgs=await _wikiPagePhotos(a.wikiTitle);
+      imgs=imgs||[];
+      try{sessionStorage.setItem(ck,JSON.stringify(imgs));}catch(e){}
     }
-    if(urls&&urls.length){
-      host.innerHTML=urls.map(function(u){return '<img src="'+u+'" loading="lazy" alt="'+(a.name||'')+'" style="cursor:zoom-in" onclick="openLightbox(this.src)" onerror="this.remove()">';}).join('');
+    if(imgs&&imgs.length){
+      window._attrGalleries=window._attrGalleries||{};window._attrGalleries[attrId]=imgs;
+      host.innerHTML=imgs.slice(0,6).map(function(im,i){return '<img src="'+(im.thumb||im.full)+'" loading="lazy" alt="'+escapeHtml(im.caption||a.name||'')+'" style="cursor:zoom-in" onclick="openGallery(\''+attrId+'\','+i+')" onerror="this.remove()">';}).join('');
       host.classList.add('on');
     }else{host.innerHTML='';host.classList.remove('on');}
   }catch(e){host.dataset.loaded='';}
@@ -3398,8 +3436,21 @@ async function fetchWeather(){
 
 // ═══════════════ MODALS ═══════════════
 function openModal(id){var m=document.getElementById(id);if(!m)return;m.classList.add('open');document.body.classList.add('modal-open');}
-function openLightbox(src){if(!src)return;var lb=document.getElementById('lightbox'),im=document.getElementById('lightbox-img');if(!lb||!im)return;im.src=src;lb.classList.add('on');}
+var _lbImgs=[],_lbIdx=0;
+function _lbShow(){
+  var im=document.getElementById('lightbox-img'),cap=document.getElementById('lightbox-cap');
+  var it=_lbImgs[_lbIdx];if(!it||!im)return;
+  im.src=it.full||it.thumb||it.src||'';
+  if(cap)cap.textContent=(it.caption||'')+(_lbImgs.length>1?((it.caption?'  ·  ':'')+(_lbIdx+1)+'/'+_lbImgs.length):'');
+  var lb=document.getElementById('lightbox');if(lb)lb.classList.toggle('multi',_lbImgs.length>1);
+}
+function openLightbox(src){if(!src)return;_lbImgs=[{full:src,caption:''}];_lbIdx=0;_lbShow();var lb=document.getElementById('lightbox');if(lb)lb.classList.add('on');}
+function openGallery(attrId,i){var g=(window._attrGalleries||{})[attrId]||[];if(!g.length)return;_lbImgs=g;_lbIdx=i||0;_lbShow();var lb=document.getElementById('lightbox');if(lb)lb.classList.add('on');}
+function lbNext(e){if(e&&e.stopPropagation)e.stopPropagation();if(_lbImgs.length<2)return;_lbIdx=(_lbIdx+1)%_lbImgs.length;_lbShow();}
+function lbPrev(e){if(e&&e.stopPropagation)e.stopPropagation();if(_lbImgs.length<2)return;_lbIdx=(_lbIdx-1+_lbImgs.length)%_lbImgs.length;_lbShow();}
 function closeLightbox(){var lb=document.getElementById('lightbox');if(lb)lb.classList.remove('on');}
+document.addEventListener('keydown',function(e){var lb=document.getElementById('lightbox');if(!lb||!lb.classList.contains('on'))return;if(e.key==='Escape')closeLightbox();else if(e.key==='ArrowLeft')lbPrev();else if(e.key==='ArrowRight')lbNext();});
+(function(){var sx=0,sy=0;document.addEventListener('touchstart',function(e){var lb=document.getElementById('lightbox');if(lb&&lb.classList.contains('on')&&e.touches[0]){sx=e.touches[0].clientX;sy=e.touches[0].clientY;}},{passive:true});document.addEventListener('touchend',function(e){var lb=document.getElementById('lightbox');if(!lb||!lb.classList.contains('on')||!e.changedTouches[0])return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){if(dx<0)lbNext();else lbPrev();}},{passive:true});})();
 function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open');if(!document.querySelector('.modal-overlay.open'))document.body.classList.remove('modal-open');}
 function closeModalOnBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){var o=document.querySelector('.modal-overlay.open');if(o)closeModal(o.id);}});
