@@ -1676,13 +1676,13 @@ body.trip-active #day-capacity{display:none}
 .more-fields .form-group{padding:0 14px}
 .more-fields .form-group:last-child{padding-bottom:12px}
 .nrest-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.nrest{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:14px;padding:10px 12px}
-.nrest-info b{font-size:13.5px;font-weight:700;display:block}
-.nrest-info span{font-size:11px;color:var(--muted)}
-.nrest-act{display:flex;align-items:center;gap:8px;flex:0 0 auto}
-.nrest-ta{font-size:12px;font-weight:700;color:#bff5d3;text-decoration:none;white-space:nowrap}
-.nrest-add{width:32px;height:32px;border-radius:50%;border:1px solid var(--glass-brd);background:rgba(124,240,166,.16);color:var(--accent);font-size:18px;line-height:1;cursor:pointer}
-.nrest-add:active{transform:scale(.92)}
+.nrest{background:rgba(255,255,255,.05);border:1px solid var(--glass-brd);border-radius:14px;padding:11px 13px;margin-bottom:8px}
+.nrest-top b{font-size:14px;font-weight:700}
+.nrest-meta{font-size:11.5px;color:var(--muted);margin:3px 0 9px}
+.nrest-acts{display:flex;flex-wrap:wrap;gap:7px}
+.nrest-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:33px;padding:0 12px;border-radius:999px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);color:#fff;font-family:var(--gs);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none}
+.nrest-btn:active{transform:scale(.96)}
+.nrest-addb{background:rgba(124,240,166,.18);border-color:rgba(124,240,166,.32);color:#bff5d3}
 .flight-card{position:relative;overflow:hidden}
 .flight-card .fl-direction{position:relative}
 .bp-perf{height:0;border-top:2px dashed rgba(255,255,255,.28);margin:14px -16px 0;position:relative}
@@ -2912,6 +2912,8 @@ function renderRestaurants(){
   if(window.feather)feather.replace();
 }
 function _restEmoji(a){return {restaurant:'🍽️',cafe:'☕',fast_food:'🍔',bar:'🍺',pub:'🍺',biergarten:'🍺'}[a]||'🍽️';}
+function _km(la1,lo1,la2,lo2){var R=6371,p=Math.PI/180,dla=(la2-la1)*p,dlo=(lo2-lo1)*p;var x=Math.sin(dla/2)*Math.sin(dla/2)+Math.cos(la1*p)*Math.cos(la2*p)*Math.sin(dlo/2)*Math.sin(dlo/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
+function _distLabel(km){return km<1?(Math.round(km*1000)+' מ׳'):(km.toFixed(1)+' ק״מ');}
 async function loadNearbyRestaurants(){
   var host=document.getElementById('rest-nearby');if(!host||host.dataset.loaded)return;
   host.innerHTML='<div class="suggest-loading">מחפש מסעדות מומלצות ליד המלונות…</div>';
@@ -2925,20 +2927,32 @@ async function loadNearbyRestaurants(){
       (d.elements||[]).forEach(function(e){
         var nm=e.tags&&(e.tags['name:en']||e.tags.name);if(!nm)return;
         var key=nm.toLowerCase();if(seen[key])return;seen[key]=1;
-        list.push({name:nm,lat:e.lat,lon:e.lon,cuisine:(e.tags.cuisine||''),amenity:(e.tags.amenity||'restaurant')});
+        var lat=e.lat,lon=e.lon;
+        list.push({name:nm,lat:lat,lon:lon,cuisine:(e.tags.cuisine||''),amenity:(e.tags.amenity||'restaurant'),website:(e.tags.website||e.tags['contact:website']||e.tags.url||''),hours:(e.tags.opening_hours||''),dist:Math.min(_km(lat,lon,47.390,13.415),_km(lat,lon,47.785,12.985))});
       });
-      list=list.slice(0,12);
+      list.sort(function(a,b){return a.dist-b.dist;});
+      list=list.slice(0,14);
       sessionStorage.setItem(ck,JSON.stringify(list));
     }
     host.dataset.loaded='1';window._nearbyRest=list;
     if(!list.length){host.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0">לא נמצאו מסעדות בקרבת מקום כרגע.</p>';return;}
-    host.innerHTML='<div class="suggest-title">🍽️ ב-3 ק״מ מהמלונות — ביקורות בטריפאדוויזר והוספה</div><div class="nrest-list">'+
+    host.innerHTML='<div class="suggest-title">🍽️ ב-3 ק״מ מהמלונות (לפי קרבה) — דירוגים, תפריט והוספה</div><div class="nrest-list">'+
       list.map(function(a,i){
-        var ta='https://www.tripadvisor.com/Search?q='+encodeURIComponent(a.name+' Salzburg');
+        var qn=encodeURIComponent(a.name+' Salzburg');
+        var ta='https://www.tripadvisor.com/Search?q='+qn;
+        var menu=a.website||('https://www.google.com/search?q='+encodeURIComponent(a.name+' Salzburg menu תפריט'));
+        var maps='https://www.google.com/maps/search/?api=1&query='+a.lat+','+a.lon;
         var cuisine=a.cuisine?a.cuisine.replace(/_/g,' ').replace(/;/g,', '):'';
-        return '<div class="nrest"><div class="nrest-info"><b>'+_restEmoji(a.amenity)+' '+escapeHtml(a.name)+'</b>'+(cuisine?'<span>'+escapeHtml(cuisine)+'</span>':'')+'</div>'+
-          '<div class="nrest-act"><a href="'+ta+'" target="_blank" rel="noopener" class="nrest-ta">★ ביקורות</a>'+
-          '<button type="button" onclick="addNearbyRest('+i+')" class="nrest-add" aria-label="הוסף">＋</button></div></div>';
+        var meta=[cuisine,'📍 '+_distLabel(a.dist)+' מהמלון'].filter(Boolean).join(' · ');
+        return '<div class="nrest">'+
+          '<div class="nrest-top"><b>'+_restEmoji(a.amenity)+' '+escapeHtml(a.name)+'</b></div>'+
+          '<div class="nrest-meta">'+escapeHtml(meta)+'</div>'+
+          '<div class="nrest-acts">'+
+            '<a class="nrest-btn" href="'+ta+'" target="_blank" rel="noopener">⭐ דירוגים</a>'+
+            '<a class="nrest-btn" href="'+menu+'" target="_blank" rel="noopener">🍽️ תפריט</a>'+
+            '<a class="nrest-btn" href="'+maps+'" target="_blank" rel="noopener">🗺️ מפה</a>'+
+            '<button type="button" class="nrest-btn nrest-addb" onclick="addNearbyRest('+i+')">＋ הוסף</button>'+
+          '</div></div>';
       }).join('')+'</div>';
   }catch(e){host.innerHTML='';host.dataset.loaded='';}
 }
