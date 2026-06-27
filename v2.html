@@ -2373,6 +2373,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <input type="hidden" id="edit-attr-id">
     <div class="form-group"><label>🔎 חפש מקום / שם *</label><div class="loc-wrap"><input type="text" class="form-input" id="attr-name" placeholder="הקלידו שם מקום — גם בחו״ל…" autocomplete="off" oninput="locAutocomplete('attr-name','attr-name-suggest','','attr-location')"><div class="loc-suggest" id="attr-name-suggest"></div></div></div>
     <div class="form-group"><label>תיאור קצר</label><textarea class="form-input" id="attr-desc" rows="2" placeholder="מה יש שם, למה שווה לבקר..."></textarea></div>
+    <div class="form-group"><label>🌐 אתר / קישור (לא חובה)</label><input type="url" class="form-input" id="attr-website" placeholder="https://…  אם ריק נוסיף קישור Google אוטומטית" style="direction:ltr"></div>
     <input type="hidden" id="attr-location">
     <input type="hidden" id="attr-waze">
     <details class="more-fields"><summary>פרטים נוספים (לא חובה)</summary>
@@ -2383,7 +2384,6 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
           <option value="salzburg">🏙️ זלצבורג (ימים 6–8)</option>
         </select>
       </div>
-      <div class="form-group"><label>אתר / קישור</label><input type="url" class="form-input" id="attr-website" placeholder="https://..." style="direction:ltr"></div>
     </details>
     <button class="btn btn-primary btn-block" onclick="saveAttraction()">💾 שמור</button>
     <button class="btn btn-danger btn-block btn-sm" id="delete-attr-btn" style="display:none;margin-top:8px" onclick="deleteAttraction()">🗑️ מחק</button>
@@ -2455,7 +2455,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <div class="form-group"><label>יום</label><select class="form-select" id="event-day"></select></div>
       <div class="form-group"><label>שעה</label><input type="time" class="form-input" id="event-time" style="direction:ltr"></div>
     </div>
-    <div class="form-group" id="event-attr-group" style="display:none"><label>בחר מהרשימה (לא חובה)</label><select class="form-select" id="event-attr" onchange="pickAttraction()"></select></div>
+    <div class="form-group" id="event-attr-group" style="display:none"><label id="event-attr-label">בחר מהרשימה (לא חובה)</label><select class="form-select" id="event-attr" onchange="pickAttraction()"></select></div>
     <div class="form-group"><label>כותרת *</label><input type="text" class="form-input" id="event-title" placeholder="מה קורה..."></div>
     <div class="form-group"><label>מיקום</label>
       <div class="loc-wrap">
@@ -2817,6 +2817,7 @@ function attrCardHTML(a,isCustom){
   const imgEl=`<div class="attr-img-wrap" id="attr-img-wrap-${a.id}"><img id="attr-img-${a.id}"${imgSrc?` src="${imgSrc}"`:' style="display:none"'} class="attr-img" alt="${a.name}" onload="this.style.display='block'" onerror="this.style.display='none'"></div>`;
   const wazeBtn=a.waze?`<a href="${a.waze}" class="btn btn-waze btn-sm" target="_blank"><i data-feather="navigation"></i> Waze</a>`:'';
   const webBtn=a.website?`<a href="${a.website}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="globe"></i> אתר</a>`:'';
+  const mapsBtn=a.maps?`<a href="${a.maps}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="map-pin"></i> מפה</a>`:'';
   const bookBtn=a.booking?`<a href="${a.booking}" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן</a>`:'';
   const menuBtn=a.menu?`<a href="${a.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
   const editBtn=isCustom?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
@@ -2851,7 +2852,7 @@ function attrCardHTML(a,isCustom){
         <p class="attr-desc">${a.desc||''}</p>
         ${activitiesHTML}
         ${tipsHTML}
-        <div class="action-row">${wazeBtn}${webBtn}${bookBtn}${menuBtn}</div>
+        <div class="action-row">${wazeBtn}${mapsBtn}${webBtn}${bookBtn}${menuBtn}</div>
         ${editBtn}
       </div>
     </div>
@@ -3000,8 +3001,10 @@ function saveRestaurant(){
   const type=document.getElementById('rest-type').value;
   const waze=location?'https://waze.com/ul?q='+encodeURIComponent(location+' אוסטריה')+'&navigate=yes':'';
   const arr=getCustomRest();
-  arr.push({id:'cr'+Date.now(),hotel:type==='hotel',name:name,location:location||'—',desc:desc,waze:waze,custom:true});
+  const _rid='cr'+Date.now();
+  arr.push({id:_rid,hotel:type==='hotel',name:name,location:location||'—',desc:desc,waze:waze,custom:true});
   saveCustomRest(arr);closeModal('add-rest-modal');renderRestaurants();
+  _returnToEventWith('restaurant',_rid);
 }
 function viewRestaurant(id){
   switchTab('restaurants');
@@ -3134,6 +3137,8 @@ function saveAttraction(){
     addedAt:new Date().toLocaleDateString('he-IL')
   };
   if(!obj.waze&&obj.location){obj.waze='https://waze.com/ul?q='+encodeURIComponent(obj.location+' Austria')+'&navigate=yes';}
+  obj.maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+(obj.location?(' '+obj.location):' Austria'));
+  if(!obj.website){obj.website='https://www.google.com/search?q='+encodeURIComponent(name+' Austria');}
   if(editingAttrId){
     const idx=custom.findIndex(x=>x.id===editingAttrId);
     if(idx>=0)custom[idx]=obj;
@@ -3143,6 +3148,7 @@ function saveAttraction(){
   saveCustomAttractions(custom);
   closeModal('add-attr-modal');
   renderAttractions();
+  _returnToEventWith('attraction',obj.id);
 }
 function deleteAttrById(id){
   if(!confirm('למחוק אטרקציה זו?'))return;
@@ -3450,14 +3456,36 @@ function searchEventLocation(){
   if(!q){alert('הקלידו שם מקום קודם');return;}
   window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' אוסטריה'),'_blank');
 }
-function fillAttrOptions(){
+function _eventListFor(type){return type==='restaurant'?[...BUILTIN_RESTAURANTS,...getCustomRest()]:[...BUILTIN_ATTRACTIONS,...getCustomAttractions()];}
+function fillAttrOptions(type){
   const sel=document.getElementById('event-attr');if(!sel)return;
-  const all=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()];
-  sel.innerHTML='<option value="">— בחר מאטרקציה —</option>'+all.map(a=>`<option value="${a.id}">${(a.name||'').replace(/"/g,'&quot;')}</option>`).join('');
+  type=type||(document.getElementById('event-type')||{}).value||'attraction';
+  const isRest=type==='restaurant';
+  const list=_eventListFor(type);
+  const lbl=document.getElementById('event-attr-label');if(lbl)lbl.textContent=isRest?'בחר ממסעדה (לא חובה)':'בחר מאטרקציה (לא חובה)';
+  sel.innerHTML='<option value="">'+(isRest?'— בחר ממסעדה —':'— בחר מאטרקציה —')+'</option>'+list.map(a=>`<option value="${a.id}">${(a.name||'').replace(/"/g,'&quot;')}</option>`).join('')+'<option value="__new__">'+(isRest?'➕ הוסף מסעדה חדשה…':'➕ הוסף אטרקציה חדשה…')+'</option>';
+}
+var _eventAddReturn=null;
+function _openNewFromEvent(type){
+  _eventAddReturn=(type==='restaurant')?'restaurant':'attraction';
+  if(type==='restaurant')openAddRestModal();else openAddAttrModal();
+  var ov=document.getElementById(type==='restaurant'?'add-rest-modal':'add-attr-modal');if(ov)ov.style.zIndex='300';
+}
+function _returnToEventWith(type,id){
+  var ev=document.getElementById('event-modal');
+  var fromEvent=(_eventAddReturn===type)&&ev&&ev.classList.contains('open');
+  if(_eventAddReturn===type)_eventAddReturn=null;
+  if(!fromEvent)return;
+  var tv=document.getElementById('event-type');if(tv)tv.value=type;
+  var ag=document.getElementById('event-attr-group');if(ag)ag.style.display='block';
+  fillAttrOptions(type);
+  var sel=document.getElementById('event-attr');if(sel){sel.value=id;pickAttraction();}
 }
 function pickAttraction(){
   const sel=document.getElementById('event-attr');const id=sel&&sel.value;if(!id)return;
-  const a=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()].find(x=>x.id===id);if(!a)return;
+  const type=(document.getElementById('event-type')||{}).value||'attraction';
+  if(id==='__new__'){sel.value='';_openNewFromEvent(type);return;}
+  const a=_eventListFor(type).find(x=>x.id===id);if(!a)return;
   document.getElementById('event-title').value=a.name||'';
   if(a.location)document.getElementById('event-location').value=a.location;
   const d=document.getElementById('event-desc');if(a.desc&&!d.value)d.value=a.desc;
@@ -3692,7 +3720,21 @@ function selectDay(dayId){
   var mh=document.getElementById('itin-map-host');
   if(mh&&mh.style.display==='block'){renderDayMap(_selDay);}
   else{openDayCard(_selDay);}
-  _scrollTopNow();updateNotifBadge();closeNotifPanel();
+  _scrollDayStart();updateNotifBadge();closeNotifPanel();
+}
+function _scrollDayStart(){
+  var sa=document.querySelector('.page-scroll-area');
+  var card=document.getElementById(_selDay);
+  if(!sa||!card){_scrollTopNow();return;}
+  requestAnimationFrame(function(){
+    var sh=document.getElementById('itin-stickyhead');
+    var shH=sh?sh.getBoundingClientRect().height:0;
+    var bnr=document.querySelector('.countdown-section');
+    var bnrH=(bnr&&getComputedStyle(bnr).display!=='none')?bnr.getBoundingClientRect().height:0;
+    var caTop=card.getBoundingClientRect().top;
+    var saTop=sa.getBoundingClientRect().top;
+    sa.scrollTop=Math.max(0, sa.scrollTop + (caTop - saTop - bnrH - shH - 4));
+  });
 }
 function openDayCard(dayId){
   var mh=document.getElementById('itin-map-host');
@@ -3947,6 +3989,7 @@ function fabAdd(){
   else openAddEvent(null);
 }
 function openAddEvent(dayId){
+  _eventAddReturn=null;
   document.getElementById('event-modal-title').textContent='הוסף אירוע';
   document.getElementById('event-edit-iid').value='';
   fillDayOptions(dayId||window.currentFocusDay||'d1');
@@ -3989,6 +4032,7 @@ function pickEventType(btn){
   if((t==='rest'||t==='drive')&&ti&&!ti.value.trim())ti.value=em+' '+(t==='rest'?'מנוחה':'נסיעה');
   var ag=document.getElementById('event-attr-group');
   if(ag)ag.style.display=(t==='restaurant'||t==='attraction')?'block':'none';
+  if(t==='restaurant'||t==='attraction')fillAttrOptions(t);
 }
 var _evLocTimer=null;
 var _acTimers={};
@@ -4184,7 +4228,7 @@ function pushState(){
 }
 const ADD_KEYS=['austria26_attrs','austria26_rest','austria26_tasks'];
 function _isAddKey(k){return ADD_KEYS.indexOf(k)>=0||k.indexOf('austria26_pack_custom_')===0;}
-function _parseJ(s,d){try{return JSON.parse(s)}catch(e){return d}}
+function _parseJ(s,d){try{var v=JSON.parse(s);return v==null?d:v;}catch(e){return d}}
 function _unionById(a,b){
   const m=new Map();
   (a||[]).forEach(x=>{if(x&&x.id!=null)m.set(String(x.id),x);});
