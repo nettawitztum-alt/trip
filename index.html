@@ -706,6 +706,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
 html,body{height:100%;height:100dvh;font-family:'Assistant',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .app-shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
+/* Home-screen PWA: pin the shell to the exact viewport so the bottom nav always
+   reaches the screen edge (100dvh/visualViewport are unreliable in standalone). */
+body.pwa-standalone .app-shell{position:fixed;top:0;left:0;right:0;bottom:0;height:auto}
 .page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
 
 /* ── LOCK SCREEN ── */
@@ -1283,7 +1286,7 @@ body.modal-open .page-scroll-area{overflow:hidden}
   /* ── Bottom tab bar – flex child of app-shell, NOT position:fixed ── */
   .tab-nav {
     flex-shrink:0;
-    height:64px;
+    height:calc(64px + env(safe-area-inset-bottom,0px));
     flex-direction:row;
     justify-content:space-around;
     align-items:center;
@@ -1777,7 +1780,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 .sortable-fallback{opacity:1!important;background:#1b3a2c!important;border:1px solid var(--glass-brd)!important;border-radius:14px;box-shadow:0 16px 38px rgba(0,0,0,.55)}
 .sortable-ghost{opacity:.3}
 .sortable-chosen{background:#1b3a2c}
-@media (max-width:767px){.tab-nav{justify-content:space-evenly!important;padding:4px 6px;gap:2px}.tab-btn.active{padding:8px 13px;max-width:none}}
+@media (max-width:767px){.tab-nav{justify-content:space-evenly!important;padding:4px 6px;padding-bottom:calc(4px + env(safe-area-inset-bottom,0px));gap:2px}.tab-btn.active{padding:8px 13px;max-width:none}}
 .tl-grip{flex-shrink:0;align-self:center;width:30px;height:42px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);background:none;border:none;padding:0;cursor:grab;touch-action:none}
 .tl-menu-btn{position:static!important;top:auto!important;transform:none!important;align-self:center;flex-shrink:0;cursor:pointer}
 .tl-grip svg.feather{width:18px;height:18px;stroke:currentColor}
@@ -4893,6 +4896,7 @@ function _fitAppHeight(){
   // screen incl. the home-indicator area). Forcing visualViewport.height there
   // leaves a dead strip at the bottom. Only override for Safari's moving toolbar.
   var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
+  document.body.classList.toggle('pwa-standalone',!!standalone);
   if(standalone){sh.style.height='';return;}
   var h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
   if(h)sh.style.height=h+'px';
