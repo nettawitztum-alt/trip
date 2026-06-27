@@ -1361,8 +1361,8 @@ body.modal-open .page-scroll-area{overflow:hidden}
 .tl-item-edit-btn{background:#eef4ff;color:var(--primary);border:none;border-radius:8px;font-size:12px;font-weight:700;padding:5px 10px;cursor:pointer;margin-top:6px}
 .day-add-event{display:none;width:100%;margin-top:10px;border-style:dashed!important}
 .panel-itinerary.itin-editing .day-add-event,#panel-itinerary.itin-editing .day-add-event{display:flex}
-.tl-item.tl-added .tl-dot{background:var(--accent)}
-.tl-added-tag{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-light);border-radius:999px;padding:1px 7px;margin-right:4px}
+.tl-item.tl-added .tl-dot::before{box-shadow:0 0 0 3px rgba(124,240,166,.22)}
+.tl-added-tag{font-size:9.5px;font-weight:700;color:var(--accent);background:rgba(124,240,166,.12);border:1px solid rgba(124,240,166,.22);border-radius:999px;padding:1px 7px;margin-right:4px}
 
 /* ── GENERIC SECTION EDITOR ── */
 .sec-del-btn{display:none;margin-top:10px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer}
@@ -3022,25 +3022,50 @@ function viewRestaurant(id){
 }
 
 async function loadAttrImages(){
+  const bIds=new Set(BUILTIN_ATTRACTIONS.map(a=>a.id));
   const all=[...BUILTIN_ATTRACTIONS,...getCustomAttractions()];
   for(const a of all){
-    if(!a.wikiTitle)continue;
-    try{
-      const ckey='wimg4_'+a.id;
-      let src=sessionStorage.getItem(ckey);
-      if(!src){
-        const r=await fetch(_wikiImgURL(a.wikiTitle,2000));
-        if(!r.ok)continue;
-        const d=await r.json();
-        src=_pageThumb(d);
-        if(src)sessionStorage.setItem(ckey,src);
-      }
-      if(src){
-        const el=document.getElementById('attr-img-'+a.id);
-        if(el){el.src=src;el.style.display='block';}
-      }
-    }catch(e){}
+    if(a.wikiTitle){
+      try{
+        const ckey='wimg4_'+a.id;
+        let src=sessionStorage.getItem(ckey);
+        if(!src){
+          const r=await fetch(_wikiImgURL(a.wikiTitle,2000));
+          if(!r.ok)continue;
+          const d=await r.json();
+          src=_pageThumb(d);
+          if(src)sessionStorage.setItem(ckey,src);
+        }
+        if(src){
+          const el=document.getElementById('attr-img-'+a.id);
+          if(el){el.src=src;el.style.display='block';}
+        }
+      }catch(e){}
+      continue;
+    }
+    if(!bIds.has(a.id))_loadCustomAttrImage(a);
   }
+}
+function _wikiSearchImgURL(name,lang,size){return 'https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize='+size;}
+async function _defaultAttrImage(){
+  var dk='attrimg_default';try{var d=localStorage.getItem(dk);if(d)return d;}catch(e){}
+  try{var r=await fetch(_wikiImgURL('Salzburg',1600));if(r.ok){var j=await r.json();var t=_pageThumb(j);if(t){try{localStorage.setItem(dk,t);}catch(e){}return t;}}}catch(e){}
+  return '';
+}
+async function _loadCustomAttrImage(a){
+  var ckey='attrimg_'+a.id,src='';
+  try{src=localStorage.getItem(ckey)||'';}catch(e){}
+  if(!src){
+    var q=a.name||a.location||'';
+    if(q){
+      for(const lang of ['en','de']){
+        try{var r=await fetch(_wikiSearchImgURL(q,lang,1200));if(r.ok){var d=await r.json();var t=_pageThumb(d);if(t){src=t;break;}}}catch(e){}
+      }
+    }
+    if(!src)src=await _defaultAttrImage();
+    if(src){try{localStorage.setItem(ckey,src);}catch(e){}}
+  }
+  if(src){var el=document.getElementById('attr-img-'+a.id);if(el){el.src=src;el.style.display='block';}}
 }
 
 function viewAttraction(attrId){
@@ -4091,14 +4116,32 @@ function pickLoc(btn){
   box.innerHTML='';box.classList.remove('on');
 }
 function eventLocAutocomplete(){locAutocomplete('event-location','event-loc-suggest','event-title');}
+function _toMin(t){var p=String(t).split(':');return (+p[0])*60+(+p[1]);}
+function _toHHMM(m){m=((m%1440)+1440)%1440;var h=Math.floor(m/60),mm=m%60;return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm;}
+function _dayTimesTaken(day,exceptIid){
+  var set={};
+  document.querySelectorAll('#'+day+' .tl-item').forEach(function(it){
+    if(exceptIid&&it.dataset.iid===exceptIid)return;
+    var t=it.querySelector('.tl-time');var v=t?t.textContent.trim():'';
+    if(/^\d{1,2}:\d{2}$/.test(v))set[v]=1;
+  });
+  return set;
+}
+function _avoidConflict(time,day,exceptIid){
+  if(!/^\d{1,2}:\d{2}$/.test(time||''))return time;
+  var taken=_dayTimesTaken(day,exceptIid),m=_toMin(time),guard=0;
+  while(taken[_toHHMM(m)]&&guard<288){m+=5;guard++;}
+  return _toHHMM(m);
+}
 function saveEvent(){
   const title=document.getElementById('event-title').value.trim();
   if(!title){alert('נא להזין כותרת');return;}
-  const time=document.getElementById('event-time').value.trim();
+  let time=document.getElementById('event-time').value.trim();
   const desc=document.getElementById('event-desc').value.trim();
   const location=document.getElementById('event-location').value.trim();
   const day=document.getElementById('event-day').value;
   const iid=document.getElementById('event-edit-iid').value;
+  time=_avoidConflict(time,day,iid||null);
   const m=getItinMods();
   if(iid){
     if(iid.indexOf('add-')===0){
@@ -4846,6 +4889,11 @@ window.addEventListener('resize',setStickyOffsets);
 // mis-size 100vh (and sometimes 100dvh), leaving dead space below the nav.
 function _fitAppHeight(){
   var sh=document.querySelector('.app-shell');if(!sh)return;
+  // In a home-screen PWA, let CSS 100dvh own the height (it covers the whole
+  // screen incl. the home-indicator area). Forcing visualViewport.height there
+  // leaves a dead strip at the bottom. Only override for Safari's moving toolbar.
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
+  if(standalone){sh.style.height='';return;}
   var h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
   if(h)sh.style.height=h+'px';
 }
