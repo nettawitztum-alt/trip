@@ -2396,6 +2396,19 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
           <option value="salzburg">🏙️ זלצבורג (ימים 6–8)</option>
         </select>
       </div>
+      <div class="form-group"><label>⏱️ משך זמן מומלץ</label><input type="text" class="form-input" id="attr-duration" placeholder="למשל: 2–3 שעות"></div>
+      <div class="form-group"><label>👶 מתאים לילדים</label>
+        <select class="form-select" id="attr-kids">
+          <option value="">— לא צוין —</option>
+          <option value="★★★★★">★★★★★ מעולה</option>
+          <option value="★★★★☆">★★★★☆ טוב מאוד</option>
+          <option value="★★★☆☆">★★★☆☆ טוב</option>
+          <option value="★★☆☆☆">★★☆☆☆ סביר</option>
+          <option value="★☆☆☆☆">★☆☆☆☆ פחות מתאים</option>
+        </select>
+      </div>
+      <div class="form-group"><label>📋 מה עושים שם? (שורה לכל פעילות)</label><textarea class="form-input" id="attr-activities" rows="3" placeholder="🚡 עלייה בגונדולה&#10;🥾 שביל טיול קצר&#10;🧺 פיקניק בפסגה"></textarea></div>
+      <div class="form-group"><label>💡 כדאי לדעת (שורה לכל טיפ)</label><textarea class="form-input" id="attr-tips" rows="3" placeholder="כדאי להגיע בבוקר&#10;להביא מעיל קל"></textarea></div>
     </details>
     <button class="btn btn-primary btn-block" onclick="saveAttraction()">💾 שמור</button>
     <button class="btn btn-danger btn-block btn-sm" id="delete-attr-btn" style="display:none;margin-top:8px" onclick="deleteAttraction()">🗑️ מחק</button>
@@ -2444,7 +2457,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה</div><div class="set-row-static">גרסה <b id="app-ver">22</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">23</b></div><div id="app-diag" class="set-row-static" style="font-size:11px;color:var(--muted);line-height:1.7;direction:ltr;text-align:left"></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2745,8 +2758,19 @@ function logout(){
   localStorage.clear();
   location.reload();
 }
+function _fillDiag(){
+  var d=document.getElementById('app-diag');if(!d)return;
+  var nav=document.querySelector('.tab-nav');
+  var nr=nav?Math.round(nav.getBoundingClientRect().bottom):0;
+  var nt=nav?Math.round(nav.getBoundingClientRect().top):0;
+  var sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone;
+  var sh=document.querySelector('.app-shell');
+  var shh=sh?Math.round(sh.getBoundingClientRect().height):0;
+  d.textContent='mode:'+(sa?'standalone':'browser')+' | innerH:'+window.innerHeight+' screenH:'+((window.screen&&window.screen.height)||'?')+' dvh:'+document.documentElement.clientHeight+' | shell:'+shh+' navTop:'+nt+' navBottom:'+nr+(nr===window.innerHeight?' OK':' GAP:'+(window.innerHeight-nr));
+}
 function showUserModal(){
   document.getElementById('user-modal-name').textContent=currentUser?.name||'אורח';
+  _fillDiag();
   document.getElementById('user-new-name').value='';
   if(typeof firebaseEnabled==='function'&&firebaseEnabled())document.getElementById('user-sync-section').style.display='block';
   if(typeof updateSyncUI==='function')updateSyncUI();
@@ -3133,6 +3157,10 @@ function openAddAttrModal(){
   document.getElementById('attr-area').value='custom';
   document.getElementById('attr-waze').value='';
   document.getElementById('attr-website').value='';
+  document.getElementById('attr-duration').value='';
+  document.getElementById('attr-kids').value='';
+  document.getElementById('attr-activities').value='';
+  document.getElementById('attr-tips').value='';
   document.getElementById('delete-attr-btn').style.display='none';
   var sg=document.getElementById('attr-suggest');if(sg)sg.dataset.loaded='';
   openModal('add-attr-modal');
@@ -3189,9 +3217,14 @@ function openEditAttrModal(id){
   document.getElementById('attr-area').value=a.area||'custom';
   document.getElementById('attr-waze').value=a.waze||'';
   document.getElementById('attr-website').value=a.website||'';
+  document.getElementById('attr-duration').value=a.duration||'';
+  document.getElementById('attr-kids').value=a.forKids||'';
+  document.getElementById('attr-activities').value=(a.activities||[]).join('\n');
+  document.getElementById('attr-tips').value=(a.tips||[]).join('\n');
   document.getElementById('delete-attr-btn').style.display='inline-flex';
   openModal('add-attr-modal');
 }
+function _linesToArr(s){return (s||'').split('\n').map(function(x){return x.trim();}).filter(Boolean);}
 function saveAttraction(){
   const name=document.getElementById('attr-name').value.trim();
   if(!name){alert('נא להזין שם אטרקציה');return;}
@@ -3201,6 +3234,10 @@ function saveAttraction(){
     name,desc:document.getElementById('attr-desc').value.trim(),
     location:document.getElementById('attr-location').value.trim(),
     area:document.getElementById('attr-area').value,
+    duration:document.getElementById('attr-duration').value.trim(),
+    forKids:document.getElementById('attr-kids').value,
+    activities:_linesToArr(document.getElementById('attr-activities').value),
+    tips:_linesToArr(document.getElementById('attr-tips').value),
     waze:document.getElementById('attr-waze').value.trim(),
     website:document.getElementById('attr-website').value.trim(),
     addedBy:currentUser?.name||'',
@@ -4937,7 +4974,7 @@ function _fitAppHeight(){
   // window.innerHeight is the full screen height in a home-screen PWA and tracks
   // the visible area in Safari — the bottom nav is position:fixed so it pins to
   // the viewport edge regardless; this just makes the scroll area fill the view.
-  var h=standalone?Math.max(window.innerHeight,document.documentElement.clientHeight||0):((window.visualViewport&&window.visualViewport.height)||window.innerHeight);
+  var h=standalone?Math.max(window.innerHeight,document.documentElement.clientHeight||0,(window.screen&&window.screen.height)||0):((window.visualViewport&&window.visualViewport.height)||window.innerHeight);
   if(h)sh.style.height=h+'px';
 }
 if(window.visualViewport){window.visualViewport.addEventListener('resize',_fitAppHeight);}
