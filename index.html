@@ -1650,24 +1650,33 @@ body.trip-active #day-capacity{display:none}
 .loc-opt b{font-size:14px;font-weight:700;display:block}
 .loc-opt span{font-size:11px;color:var(--muted)}
 .loc-loading{padding:11px 13px;font-size:12.5px;color:var(--muted)}
-.notif-bar{position:fixed;left:84px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:80;background:rgba(14,43,32,.97);border:1px solid var(--glass-brd);border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.5);overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.nb-head{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:#fff;font-family:var(--gs);font-size:13px;font-weight:700;padding:12px 14px;cursor:pointer}
-.nb-ic{font-size:16px;flex:0 0 auto}
-.nb-title{flex:1;text-align:right}
-.nb-chev{transition:transform .2s;flex:0 0 auto}.nb-chev svg.feather{width:16px;height:16px;stroke:currentColor}
-.notif-bar.open .nb-chev{transform:rotate(180deg)}
-.nb-body{display:none;padding:4px 12px 11px;max-height:44vh;overflow-y:auto}
-.notif-bar.open .nb-body{display:block}
-.nb-note{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;line-height:1.5;padding:9px 11px;border-radius:11px;margin-bottom:7px;border:1px solid var(--glass-brd)}
-.nb-note span:first-child{flex:0 0 auto}
-.nb-warn{background:rgba(255,200,90,.10);border-color:rgba(255,200,90,.28);color:#ffe4a3}
-.nb-danger{background:rgba(255,120,120,.10);border-color:rgba(255,120,120,.3);color:#ffb3ae}
-.nb-info{background:rgba(124,240,166,.10);border-color:rgba(124,240,166,.28);color:#bff5d3}
-.nb-all{width:100%;margin-top:2px;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:#fff;border-radius:11px;padding:9px;font-family:var(--gs);font-size:12.5px;font-weight:700;cursor:pointer}
-.nb-li{display:flex;align-items:center;gap:10px;width:100%;text-align:right;border-radius:12px;padding:11px 12px;margin-bottom:8px;cursor:pointer;font-family:var(--gs)}
-.nb-li-day{flex:0 0 auto;font-size:10.5px;font-weight:800;color:var(--accent);min-width:64px}
-.nb-li-ic{flex:0 0 auto;font-size:15px}
-.nb-li-t{flex:1;font-size:13px;line-height:1.45}
+.hero-left{display:flex;align-items:center;gap:7px}
+.notif-bell{position:relative;width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 auto}
+.notif-bell:active{transform:scale(.92)}
+.nb-badge{position:absolute;top:-5px;left:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#ff5d5d;color:#fff;font-family:var(--gs);font-size:10.5px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 1px 5px rgba(0,0,0,.45)}
+.nb-badge[hidden]{display:none}
+.notif-panel{position:fixed;z-index:200;width:min(330px,88vw);background:rgba(14,43,32,.98);border:1px solid var(--glass-brd);border-radius:16px;box-shadow:0 16px 42px rgba(0,0,0,.55);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);overflow:hidden;display:none}
+.notif-panel.open{display:block;animation:nbpop .16s ease}
+@keyframes nbpop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.np-head{display:flex;align-items:center;gap:8px;padding:13px 14px 7px}
+.np-head b{flex:1;font-size:14px;font-weight:800}
+.np-mark{background:none;border:none;color:var(--accent);font-family:var(--gs);font-size:11.5px;font-weight:700;cursor:pointer;padding:0;white-space:nowrap}
+.np-weather{margin:0 14px 9px;padding:8px 11px;border-radius:11px;background:rgba(124,240,166,.10);border:1px solid rgba(124,240,166,.22);color:#bff5d3;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px}
+.np-body{padding:0 12px 4px;max-height:46vh;overflow-y:auto}
+.np-listhead{display:flex;justify-content:flex-start;padding:2px 2px 8px}
+.np-note{display:flex;gap:9px;align-items:flex-start;width:100%;text-align:right;font-size:12.5px;line-height:1.5;padding:10px 11px;border-radius:11px;margin-bottom:7px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.04);cursor:pointer;font-family:var(--gs);color:#fff}
+.np-note.sev-warn{border-color:rgba(255,200,90,.26)}
+.np-note.sev-danger{border-color:rgba(255,120,120,.28)}
+.np-note.unread{background:rgba(255,255,255,.08)}
+.np-note.read{opacity:.55}
+.np-dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px}
+.np-note.read .np-dot{background:transparent;border:1px solid var(--muted)}
+.np-day{flex:0 0 auto;font-size:10px;font-weight:800;color:var(--accent);min-width:58px}
+.np-ic{flex:0 0 auto}
+.np-tx{flex:1}
+.np-empty{padding:16px 14px 20px;text-align:center;color:var(--muted);font-size:12.5px}
+.np-foot{padding:5px 12px 12px}
+.np-all{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:#fff;border-radius:11px;padding:10px;font-family:var(--gs);font-size:12.5px;font-weight:700;cursor:pointer}
 .more-fields{margin-bottom:14px;border:1px solid var(--glass-brd);border-radius:12px;overflow:hidden}
 .more-fields summary{padding:11px 14px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;list-style:none}
 .more-fields summary::-webkit-details-marker{display:none}
@@ -1921,7 +1930,10 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="hero-chips">
       <button class="hero-avatar" id="hero-avatar" onclick="showUserModal()" title="החשבון שלי" aria-label="פרופיל והגדרות">👤</button>
     </div>
-    <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
+    <div class="hero-left">
+      <button class="notif-bell" id="notif-bell" type="button" onclick="toggleNotifPanel(event)" aria-label="התראות"><span aria-hidden="true">🔔</span><span class="nb-badge" id="nb-badge" hidden>0</span></button>
+      <div class="hero-weather-pill" id="hero-weather-pill">☀️ · זלצבורג</div>
+    </div>
   </div>
   <!-- JS compat: keep hidden -->
   <span id="user-name-display" style="display:none"></span>
@@ -2312,10 +2324,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 
 </div><!-- end page-scroll-area -->
 
-<div id="notif-bar" class="notif-bar" style="display:none">
-  <div class="nb-body" id="nb-body"></div>
-  <button class="nb-head" onclick="toggleNotif()"><span class="nb-ic">🔔</span><span class="nb-title" id="nb-title"></span><i data-feather="chevron-up" class="nb-chev"></i></button>
-</div>
+<div id="notif-panel" class="notif-panel" role="dialog" aria-label="התראות"></div>
 <nav class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('itinerary')" id="tab-itinerary"><i data-feather="calendar"></i><span class="tl">לו"ז</span></button>
   <button class="tab-btn" onclick="switchTab('attractions')" id="tab-attractions"><i data-feather="star"></i><span class="tl">אטרקציות</span></button>
@@ -2744,7 +2753,7 @@ function switchTab(name){
   if(mb){if(NAV_CORE.indexOf(name)<0)mb.classList.add('active');else mb.classList.remove('active');}
   if(document.getElementById('more-modal'))closeModal('more-modal');
   const fab=document.getElementById('add-fab');if(fab)fab.style.display=(['itinerary','attractions','packing','restaurants','tasks'].indexOf(name)>=0)?'flex':'none';
-  _scrollTopNow();renderNotifBar(_selDay);
+  _scrollTopNow();updateNotifBadge();closeNotifPanel();
 }
 function toggleCard(id){if(/^d[1-8]$/.test(id)){selectDay(id);return;}const c=document.getElementById(id);if(c)c.classList.toggle('open')}
 
@@ -3638,24 +3647,33 @@ var TRIP_NOTES=[
 function _noteDayIdx(day){return ['d1','d2','d3','d4','d5','d6','d7','d8'].indexOf(day);}
 function _dayShort(day){var i=_noteDayIdx(day);if(i<0||!DAY_DATES[i])return '';return 'יום '+(i+1)+' · '+DAY_DATES[i].d+'.8';}
 function notesFor(day){return TRIP_NOTES.filter(function(n){return n.day===day;});}
-function renderNotifBar(dayId){
-  var bar=document.getElementById('notif-bar');if(!bar)return;
-  var itin=document.getElementById('panel-itinerary');
-  var onItin=itin&&itin.classList.contains('active');
-  var notes=notesFor(dayId);
-  if(!onItin||!notes.length){bar.style.display='none';bar.classList.remove('open');return;}
-  bar.style.display='block';
-  document.getElementById('nb-title').textContent=notes.length+' התראות ליום זה';
-  document.getElementById('nb-body').innerHTML=notes.map(function(n){return '<div class="nb-note nb-'+n.sev+'"><span>'+n.ic+'</span><span>'+escapeHtml(n.text)+'</span></div>';}).join('')+'<button class="nb-all" onclick="openNotifList()">📋 כל ההתראות בטיול</button>';
-  if(window.feather)feather.replace();
+var _notifRead=null;
+function _loadNotifRead(){if(_notifRead)return _notifRead;_notifRead={};try{var r=localStorage.getItem('austria26_notif_read');if(r){JSON.parse(r).forEach(function(id){_notifRead[id]=1;});}}catch(e){}return _notifRead;}
+function _saveNotifRead(){try{localStorage.setItem('austria26_notif_read',JSON.stringify(Object.keys(_notifRead||{})));}catch(e){}}
+function _nid(n){return 'n'+TRIP_NOTES.indexOf(n);}
+function _isRead(n){return !!_loadNotifRead()['n'+TRIP_NOTES.indexOf(n)];}
+function notifUnread(day){return notesFor(day).filter(function(n){return !_isRead(n);}).length;}
+function updateNotifBadge(){var b=document.getElementById('nb-badge');if(!b)return;var c=notifUnread(_selDay||'d1');if(c>0){b.textContent=c;b.hidden=false;}else{b.hidden=true;}}
+function _noteRow(n,withDay){var id=_nid(n),read=_isRead(n);return '<button type="button" class="np-note sev-'+n.sev+' '+(read?'read':'unread')+'" onclick="setNoteRead(\''+id+'\','+(read?'false':'true')+')"><span class="np-dot"></span>'+(withDay?'<span class="np-day">'+_dayShort(n.day)+'</span>':'')+'<span class="np-ic">'+n.ic+'</span><span class="np-tx">'+escapeHtml(n.text)+'</span></button>';}
+function setNoteRead(id,read){_loadNotifRead();if(read===true||read==='true')_notifRead[id]=1;else delete _notifRead[id];_saveNotifRead();updateNotifBadge();renderNotifPanel();var m=document.getElementById('notif-modal');if(m&&m.classList.contains('open'))openNotifList();}
+function markDayRead(){_loadNotifRead();notesFor(_selDay||'d1').forEach(function(n){_notifRead[_nid(n)]=1;});_saveNotifRead();updateNotifBadge();renderNotifPanel();}
+function markAllRead(){_loadNotifRead();TRIP_NOTES.forEach(function(n){_notifRead[_nid(n)]=1;});_saveNotifRead();updateNotifBadge();openNotifList();}
+function renderNotifPanel(){var p=document.getElementById('notif-panel');if(!p||!p.classList.contains('open'))return;var day=_selDay||'d1';var notes=notesFor(day);var wxEl=document.getElementById('hero-weather-pill');var wx=wxEl?wxEl.textContent.trim():'';var unread=notes.filter(function(n){return !_isRead(n);}).length;
+  var html='<div class="np-head"><b>🔔 התראות</b>'+(unread?'<button type="button" class="np-mark" onclick="markDayRead()">סמן הכל כנקרא</button>':'')+'</div>';
+  if(wx)html+='<div class="np-weather">🌤️ <span>'+escapeHtml(wx)+'</span></div>';
+  html+='<div class="np-body">';
+  if(notes.length)html+=notes.map(function(n){return _noteRow(n,false);}).join('');
+  else html+='<div class="np-empty">אין התראות ליום זה ✓</div>';
+  html+='</div><div class="np-foot"><button type="button" class="np-all" onclick="openNotifList()">📋 כל ההתראות בטיול</button></div>';
+  p.innerHTML=html;
 }
-function toggleNotif(){var b=document.getElementById('notif-bar');if(b)b.classList.toggle('open');}
-function openNotifList(){
-  var host=document.getElementById('notif-all');if(!host)return;
-  host.innerHTML=TRIP_NOTES.map(function(n){return '<button class="nb-li nb-'+n.sev+'" onclick="jumpToNote(\''+n.day+'\')"><span class="nb-li-day">'+_dayShort(n.day)+'</span><span class="nb-li-ic">'+n.ic+'</span><span class="nb-li-t">'+escapeHtml(n.text)+'</span></button>';}).join('');
+function toggleNotifPanel(e){if(e&&e.stopPropagation)e.stopPropagation();var p=document.getElementById('notif-panel');if(!p)return;if(p.classList.contains('open')){closeNotifPanel();return;}var bell=document.getElementById('notif-bell');var r=bell?bell.getBoundingClientRect():{bottom:60};p.style.top=(r.bottom+8)+'px';p.style.left='12px';p.style.right='auto';p.classList.add('open');renderNotifPanel();}
+function closeNotifPanel(){var p=document.getElementById('notif-panel');if(p)p.classList.remove('open');}
+function openNotifList(){var host=document.getElementById('notif-all');if(!host)return;var anyUnread=TRIP_NOTES.some(function(n){return !_isRead(n);});
+  host.innerHTML=(anyUnread?'<div class="np-listhead"><button type="button" class="np-mark" onclick="markAllRead()">סמן הכל כנקרא</button></div>':'')+TRIP_NOTES.map(function(n){return _noteRow(n,true);}).join('');
   openModal('notif-modal');if(window.feather)feather.replace();
 }
-function jumpToNote(day){closeModal('notif-modal');switchTab('itinerary');selectDay(day);var b=document.getElementById('notif-bar');if(b)b.classList.add('open');}
+document.addEventListener('click',function(e){var p=document.getElementById('notif-panel');if(!p||!p.classList.contains('open'))return;if(p.contains(e.target))return;var bell=document.getElementById('notif-bell');if(bell&&bell.contains(e.target))return;closeNotifPanel();});
 function _scrollTopNow(){var sa=document.querySelector('.page-scroll-area');if(sa)sa.scrollTop=0;var tc=document.querySelector('.tab-content');if(tc)tc.scrollTop=0;try{window.scrollTo(0,0);}catch(e){}}
 function selectDay(dayId){
   _selDay=dayId;window.currentFocusDay=dayId;
@@ -3664,7 +3682,7 @@ function selectDay(dayId){
   var mh=document.getElementById('itin-map-host');
   if(mh&&mh.style.display==='block'){renderDayMap(_selDay);}
   else{openDayCard(_selDay);}
-  _scrollTopNow();renderNotifBar(_selDay);
+  _scrollTopNow();updateNotifBadge();closeNotifPanel();
 }
 function openDayCard(dayId){
   var mh=document.getElementById('itin-map-host');
@@ -4752,6 +4770,7 @@ function initApp(){
   if(_sa&&!_sa._heroBound){_sa._heroBound=1;_sa.addEventListener('scroll',onHeroScroll,{passive:true});}
   _heroResize();
   renderDayFocus();
+  updateNotifBadge();
   setTimeout(setStickyOffsets,150);
   initItinSortable();
   initEditables();
