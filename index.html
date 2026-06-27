@@ -1118,6 +1118,10 @@ body.modal-open .page-scroll-area{overflow:hidden}
 .attr-toggle-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 12px 0;user-select:none}
 .attr-toggle-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);transition:transform .2s;padding:0;line-height:1}
 .attr-card.attr-open .attr-toggle-btn{transform:rotate(180deg)}
+.attr-hdr-acts{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.attr-kebab{background:none;border:none;color:var(--muted);cursor:pointer;padding:2px;line-height:1;display:flex;align-items:center}
+.attr-kebab svg.feather{width:20px;height:20px;stroke:currentColor}
+.attr-attrib{font-size:11px;color:var(--muted);margin-top:10px}
 .attr-toggle-btn svg.feather{width:18px;height:18px;stroke:currentColor;stroke-width:2.5}
 .attr-collapsible{max-height:0;overflow:hidden;transition:max-height .28s cubic-bezier(.4,0,.2,1)}
 .attr-gallery{display:none;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
@@ -2829,11 +2833,8 @@ function attrCardHTML(a,isCustom){
   const mapsBtn=a.maps?`<a href="${a.maps}" class="btn btn-outline btn-sm" target="_blank"><i data-feather="map-pin"></i> מפה</a>`:'';
   const bookBtn=a.booking?`<a href="${a.booking}" class="btn btn-accent btn-sm" target="_blank">🎫 הזמן</a>`:'';
   const menuBtn=a.menu?`<a href="${a.menu}" class="btn btn-outline btn-sm" target="_blank" style="background:#fff8f0;border-color:#e07a00;color:#c06000">🍽️ תפריט</a>`:'';
-  const editBtn=isCustom?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-    <button class="btn btn-outline btn-sm" onclick="openEditAttrModal('${a.id}')">✏️ ערוך</button>
-    <button class="btn btn-danger btn-sm" onclick="deleteAttrById('${a.id}')">🗑️ מחק</button>
-    ${a.addedBy?`<span style="font-size:11px;color:var(--muted);align-self:center">נוסף ע"י: ${a.addedBy}</span>`:''}
-  </div>`:'';
+  const attribHTML=(isCustom&&a.addedBy)?`<div class="attr-attrib">נוסף ע"י: ${a.addedBy}</div>`:'';
+  const kebab=isCustom?`<button class="attr-kebab" onclick="event.stopPropagation();openAttrMenu('${a.id}',this)" aria-label="עוד אפשרויות"><i data-feather="more-vertical"></i></button>`:'';
   const urgentBadge=a.urgent?'<span style="background:#fff0f0;color:var(--danger);font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700">חובה להזמין!</span>':'';
   const durationBadge=a.duration?`<span class="attr-duration">⏱️ ${a.duration}</span>`:'';
   const kidsBadge=a.forKids?`<span class="attr-kids-rating">👶 ילדים ${a.forKids}</span>`:'';
@@ -2852,7 +2853,7 @@ function attrCardHTML(a,isCustom){
           <div class="attr-meta"><span>📍 ${a.location||''}</span>${urgentBadge}</div>
           <div>${kidsBadge}${durationBadge}</div>
         </div>
-        <button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${a.id}')"><i data-feather="chevron-down"></i></button>
+        <div class="attr-hdr-acts">${kebab}<button class="attr-toggle-btn" onclick="event.stopPropagation();toggleAttr('${a.id}')"><i data-feather="chevron-down"></i></button></div>
       </div>
     </div>
     <div class="attr-collapsible" id="attr-body-${a.id}">
@@ -2862,7 +2863,7 @@ function attrCardHTML(a,isCustom){
         ${activitiesHTML}
         ${tipsHTML}
         <div class="action-row">${wazeBtn}${mapsBtn}${webBtn}${bookBtn}${menuBtn}</div>
-        ${editBtn}
+        ${attribHTML}
       </div>
     </div>
   </div>`;
@@ -3054,25 +3055,59 @@ async function loadAttrImages(){
   }
 }
 function _wikiSearchImgURL(name,lang,size){return 'https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+encodeURIComponent(name)+'&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize='+size;}
+function _geoThumb(d){
+  var pages=d&&d.query&&d.query.pages;if(!pages)return '';
+  var arr=Object.keys(pages).map(function(k){return pages[k];}).sort(function(a,b){return (a.index||999)-(b.index||999);});
+  for(var i=0;i<arr.length;i++){if(arr[i].thumbnail&&arr[i].thumbnail.source)return arr[i].thumbnail.source;}
+  return '';
+}
+function _attrCoords(a){
+  try{var c=_geoCache();var keys=[a.name,a.location,_cleanQ(a.location||'')];
+    for(var i=0;i<keys.length;i++){var k=keys[i];if(k&&c[k]&&c[k].length===2)return c[k];}
+  }catch(e){}
+  var g=placeGeo(a.id,a.location);return (g&&g.length===2)?g:null;
+}
+function _geoImgURL(lang,lat,lon){return 'https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=geosearch&ggscoord='+lat+'%7C'+lon+'&ggsradius=10000&ggslimit=8&prop=pageimages&piprop=thumbnail&pithumbsize=1200';}
 async function _defaultAttrImage(){
-  var dk='attrimg_default';try{var d=localStorage.getItem(dk);if(d)return d;}catch(e){}
-  try{var r=await fetch(_wikiImgURL('Salzburg',1600));if(r.ok){var j=await r.json();var t=_pageThumb(j);if(t){try{localStorage.setItem(dk,t);}catch(e){}return t;}}}catch(e){}
+  var dk='attrimg2_default';try{var d=localStorage.getItem(dk);if(d)return d;}catch(e){}
+  try{var r=await fetch(_wikiImgURL('Pongau',1600));if(r.ok){var j=await r.json();var t=_pageThumb(j);if(t){try{localStorage.setItem(dk,t);}catch(e){}return t;}}}catch(e){}
   return '';
 }
 async function _loadCustomAttrImage(a){
-  var ckey='attrimg_'+a.id,src='';
+  var ckey='attrimg2_'+a.id,src='';
   try{src=localStorage.getItem(ckey)||'';}catch(e){}
   if(!src){
-    var q=a.name||a.location||'';
-    if(q){
-      for(const lang of ['en','de']){
-        try{var r=await fetch(_wikiSearchImgURL(q,lang,1200));if(r.ok){var d=await r.json();var t=_pageThumb(d);if(t){src=t;break;}}}catch(e){}
+    var ll=_attrCoords(a);
+    // 1) geographically-relevant: nearest Wikipedia page with a photo
+    if(ll){
+      for(const lang of ['de','en']){
+        try{var r=await fetch(_geoImgURL(lang,ll[0],ll[1]));if(r.ok){var d=await r.json();var t=_geoThumb(d);if(t){src=t;break;}}}catch(e){}
       }
     }
+    // 2) name match
+    if(!src){var q=a.name||a.location||'';if(q){for(const lang of ['en','de']){try{var r2=await fetch(_wikiSearchImgURL(q,lang,1200));if(r2.ok){var d2=await r2.json();var t2=_pageThumb(d2);if(t2){src=t2;break;}}}catch(e){}}}}
+    // 3) neutral regional default
     if(!src)src=await _defaultAttrImage();
     if(src){try{localStorage.setItem(ckey,src);}catch(e){}}
   }
   if(src){var el=document.getElementById('attr-img-'+a.id);if(el){el.src=src;el.style.display='block';}}
+}
+function openAttrMenu(id,anchor){
+  var ctx=document.getElementById('itin-ctx');if(!ctx)return;
+  ctx.innerHTML='<button class="ci" onclick="closeEventMenu();openEditAttrModal(\''+id+'\')">ערוך<i data-feather="edit-2"></i></button>'+
+    '<button class="ci del" onclick="closeEventMenu();deleteAttrById(\''+id+'\')">מחק<i data-feather="trash-2"></i></button>';
+  if(window.feather)feather.replace();
+  document.getElementById('itin-ctx-backdrop').classList.add('open');
+  ctx.classList.add('open');ctx.style.visibility='hidden';
+  var r=anchor.getBoundingClientRect();
+  requestAnimationFrame(function(){
+    var cw=ctx.offsetWidth,ch=ctx.offsetHeight;
+    var top=r.bottom+6,left=r.left;
+    if(left+cw>window.innerWidth-8)left=window.innerWidth-cw-8;
+    if(left<8)left=8;
+    if(top+ch>window.innerHeight-8)top=Math.max(8,r.top-ch-6);
+    ctx.style.top=top+'px';ctx.style.left=left+'px';ctx.style.visibility='visible';
+  });
 }
 
 function viewAttraction(attrId){
