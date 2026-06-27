@@ -709,7 +709,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 /* Home-screen PWA: pin the shell to the exact viewport so the bottom nav always
    reaches the screen edge (100dvh/visualViewport are unreliable in standalone). */
 body.pwa-standalone .app-shell{position:fixed;top:0;left:0;right:0;bottom:0;height:auto}
-.page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
+.page-scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 
 /* ── LOCK SCREEN ── */
 #lock-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--primary-dark),var(--primary));display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
@@ -1285,6 +1285,10 @@ body.modal-open .page-scroll-area{overflow:hidden}
 
   /* ── Bottom tab bar – flex child of app-shell, NOT position:fixed ── */
   .tab-nav {
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
     flex-shrink:0;
     height:calc(64px + env(safe-area-inset-bottom,0px));
     flex-direction:row;
