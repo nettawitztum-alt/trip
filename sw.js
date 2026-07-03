@@ -1,4 +1,4 @@
-const CACHE='austria26-v36';
+const CACHE='austria26-v37';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()).catch(()=>self.skipWaiting()));
@@ -11,6 +11,11 @@ self.addEventListener('fetch',e=>{
   const req=e.request;
   if(req.method!=='GET')return;
   const url=new URL(req.url);
+  // The birthday list updates often — ALWAYS fetch it fresh, never serve a cached copy.
+  if(/\/(birthday|sketch-birthday)\.html$/.test(url.pathname)){
+    e.respondWith(fetch(req,{cache:'no-store'}).catch(()=>caches.match(req)));
+    return;
+  }
   // Always serve the app shell for navigations (offline-friendly)
   if(req.mode==='navigate'){
     e.respondWith(fetch(req,{cache:'reload'}).then(res=>{const c=res.clone();caches.open(CACHE).then(ca=>ca.put('./index.html',c));return res;}).catch(()=>caches.match('./index.html')));

@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#e6457f">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>יום הולדת · ליה & גיל — רשימה משותפת</title>
 <style>
   :root{
@@ -247,7 +249,9 @@
   .sheet-input:focus{outline:none;border-color:var(--accent)}
   .sheet-input::placeholder{color:var(--faint)}
   .sheet-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .sheet-card .sheet-two .sheet-input{width:100%}
+  .sheet-two>div{min-width:0;display:flex;flex-direction:column}
+  .sheet-card .sheet-two .sheet-input{width:100%;min-width:0;box-sizing:border-box}
+  .sheet-card .sheet-input[type="date"]{-webkit-appearance:none;appearance:none}
   .sheet-attach{display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-height:10px;margin-top:4px}
   .attach-none{font-size:12.5px;color:var(--faint);font-weight:600}
   .sheet-mini-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
