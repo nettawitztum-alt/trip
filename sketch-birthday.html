@@ -195,20 +195,43 @@
 
   .sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:45}
   .sheet.show{display:flex}
-  .sheet-card{background:var(--surface);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));
-    box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:sheetUp .22s cubic-bezier(.4,0,.2,1)}
+  .sheet-card{background:var(--surface);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));
+    box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:sheetUp .22s cubic-bezier(.4,0,.2,1);
+    max-height:85vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
   @media (prefers-reduced-motion:reduce){.sheet-card{animation:none}}
   @keyframes sheetUp{from{transform:translateY(30px);opacity:.4}to{transform:translateY(0);opacity:1}}
-  .sheet-title{font-size:16px;font-weight:900;text-align:center}
+  .sheet-title{display:flex;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--surface);padding:6px 0 10px;z-index:3}
+  .sheet-ttl{flex:1;text-align:center;font-size:16px;font-weight:900;margin-inline-end:34px}
+  .sheet-x{flex:none;width:34px;height:34px;border-radius:99px;border:none;background:var(--surface2);color:var(--ink);
+    font-size:15px;cursor:pointer;display:grid;place-items:center}
+  .sheet-x:hover{background:var(--line)}
+  .sheet-x:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .pe-wrap{margin-bottom:10px}
+  .pe-row{display:flex;align-items:center;gap:10px}
+  .pe-emoji{width:48px;height:48px;border-radius:99px;border:none;font-size:24px;cursor:pointer;flex:none;line-height:1;
+    box-shadow:0 2px 6px rgba(0,0,0,.15)}
+  .pe-emoji:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .pe-name{flex:1;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 13px;
+    font:inherit;font-size:15px;font-weight:700;color:var(--ink)}
+  .pe-name:focus{outline:none;border-color:var(--accent)}
+  .pe-palette{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px;padding:10px;background:var(--surface2);border-radius:12px}
+  .pe-opt{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:21px;cursor:pointer;line-height:1}
+  .pe-opt:hover{border-color:var(--accent)}
+  .pe-opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .people-edit{display:block;margin:2px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:99px;
+    padding:6px 14px;font:inherit;font-size:12.5px;font-weight:800;color:var(--muted);cursor:pointer;box-shadow:var(--shadow-sm)}
+  .people-edit:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .sheet-hint{font-size:12px;color:var(--muted);text-align:center;margin:4px 0 14px;font-weight:600}
-  .sheet-people{display:grid;gap:8px}
-  .aperson{display:flex;align-items:center;gap:11px;background:var(--surface2);border:1px solid var(--line);border-radius:13px;
-    padding:11px 13px;font:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;text-align:right}
+  /* compact person pills — wrap instead of tall stacked rows */
+  .sheet-people{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .aperson{display:inline-flex;align-items:center;gap:7px;background:var(--surface2);border:1.5px solid var(--line);border-radius:99px;
+    padding:6px 13px 6px 7px;font:inherit;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer}
   .aperson:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
-  .aperson.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
-  .aperson .av{width:28px;height:28px;border-radius:99px;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:900;flex:none}
-  .aperson .an{flex:1}
-  .aperson .ck{color:var(--accent);font-weight:900;font-size:17px;width:18px;text-align:center}
+  .aperson.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+  .aperson .av{width:26px;height:26px;border-radius:99px;display:grid;place-items:center;font-size:15px;flex:none}
+  .aperson .an{white-space:nowrap}
+  .aperson .ck{color:var(--accent);font-weight:900;font-size:15px}
+  .aperson:not(.on) .ck{display:none}
   .sheet-done{margin-top:16px;width:100%;background:var(--accent);color:var(--accent-ink);border:none;border-radius:13px;
     padding:13px;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
   .sheet-done:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent);outline-offset:2px}
@@ -331,6 +354,7 @@
   <div class="wrap">
     <p class="people-hint">👇 לחצו על שם כדי לראות רק את המשימות שלו</p>
     <div class="people" id="people"></div>
+    <button class="people-edit" id="peopleEditBtn" type="button">🙂 אימוג׳י ושמות</button>
 
     <div class="summary">
       <div class="stat">
@@ -360,7 +384,7 @@
   <div class="lb" id="lightbox"><button class="close" id="lbClose" aria-label="סגירה">✕</button><img id="lbImg" alt="תמונה מצורפת"></div>
   <div class="sheet" id="assignSheet">
     <div class="sheet-card">
-      <div class="sheet-title" id="assignTitle"></div>
+      <div class="sheet-title"><button class="sheet-x" id="assignX" type="button" aria-label="סגירה">✕</button><span class="sheet-ttl" id="assignTitle"></span></div>
       <p class="sheet-hint">אפשר לבחור כמה אנשים</p>
       <div class="sheet-people" id="assignPeople"></div>
       <button class="sheet-done" id="assignDone">סיום</button>
@@ -368,7 +392,7 @@
   </div>
   <div class="sheet" id="editSheet">
     <div class="sheet-card">
-      <div class="sheet-title">עריכת פריט</div>
+      <div class="sheet-title"><button class="sheet-x" id="editX" type="button" aria-label="סגירה">✕</button><span class="sheet-ttl">עריכת פריט</span></div>
       <label class="sheet-lbl" for="editTitle">כותרת</label>
       <input class="sheet-input" id="editTitle" type="text" placeholder="כותרת הפריט">
       <label class="sheet-lbl" for="editSub">כותרת משנה (לא חובה)</label>
@@ -386,7 +410,7 @@
       <div class="sheet-mini-row">
         <button class="sheet-mini" id="editAddImg" type="button">📷 תמונה</button>
         <button class="sheet-mini" id="editAddLink" type="button">🔗 קישור</button>
-        <button class="sheet-mini" id="editAddCal" type="button">📅 הוספה ליומן</button>
+        <button class="sheet-mini" id="editAddCal" type="button">📲 ייצוא ליומן הטלפון</button>
       </div>
       <button class="sheet-done" id="editSave">שמירה</button>
       <button class="sheet-del" id="editDelete">מחיקת הפריט</button>
@@ -394,7 +418,7 @@
   </div>
   <div class="sheet" id="expSheet">
     <div class="sheet-card">
-      <div class="sheet-title">עריכת הוצאה</div>
+      <div class="sheet-title"><button class="sheet-x" id="expX" type="button" aria-label="סגירה">✕</button><span class="sheet-ttl">עריכת הוצאה</span></div>
       <label class="sheet-lbl" for="expDesc">תיאור</label>
       <input class="sheet-input" id="expDesc" type="text" placeholder="על מה ההוצאה">
       <label class="sheet-lbl" for="expAmt">סכום (₪)</label>
@@ -405,6 +429,14 @@
       <button class="sheet-del" id="expDel">מחיקת ההוצאה</button>
     </div>
   </div>
+  <div class="sheet" id="peopleSheet">
+    <div class="sheet-card">
+      <div class="sheet-title"><button class="sheet-x" id="peopleX" type="button" aria-label="סגירה">✕</button><span class="sheet-ttl">אנשים — אימוג׳י ושם</span></div>
+      <p class="sheet-hint">לחצו על האימוג׳י כדי לשנות אותו</p>
+      <div id="peopleEditor"></div>
+      <button class="sheet-done" id="peopleDone">סיום</button>
+    </div>
+  </div>
 
 <script>
 (function(){
@@ -412,12 +444,15 @@
 
   /* ---------- data ---------- */
   var people=[
-    {id:'hila',name:'הילה',c:'var(--p1)'},
-    {id:'neta',name:'נטע', c:'var(--p2)'},
-    {id:'omer',name:'עומר',c:'var(--p3)'},
-    {id:'nir', name:'ניר', c:'var(--p4)'}
+    {id:'hila',name:'הילה',emoji:'👩',c:'var(--p1)'},
+    {id:'neta',name:'נטע', emoji:'👧',c:'var(--p2)'},
+    {id:'omer',name:'עומר',emoji:'👨',c:'var(--p3)'},
+    {id:'nir', name:'ניר', emoji:'🧑',c:'var(--p4)'}
   ];
+  people.forEach(function(p){p._dn=p.name;p._de=p.emoji;}); // remember defaults
+  function applyPeople(){var m=(typeof state!=='undefined'&&state&&state.people)||{};people.forEach(function(p){var o=m[p.id]||{};p.name=o.name||p._dn;p.emoji=o.emoji||p._de;});}
   function pById(id){for(var i=0;i<people.length;i++)if(people[i].id===id)return people[i];return null;}
+  var EMOJI_CHOICES=['👩','👧','👨','🧑','👵','👴','🧕','👩‍🦰','👱‍♀️','🧔','🦸‍♀️','🧚','👸','🌸','⭐','🍀','🐝','🦄','🐱','🐶','🎈','🎀','💜','🧁'];
 
   function defaultState(){
     return {
@@ -480,6 +515,7 @@
     if(!s.expenses)s.expenses=[]; s.expenses.forEach(function(e){if(e.payer===undefined)e.payer=null;});
     if(!s.questions)s.questions=[]; s.questions.forEach(migWho);
     if(!s.guests)s.guests=[];
+    if(!s.people||typeof s.people!=='object')s.people={};
     return s;
   }
   var _pushTimer=null,_applyingRemote=false,_pendingLocal=false;
@@ -564,6 +600,7 @@
   var filterWho=null; // view-only: show only one person's tasks
   function render(){
     var sy=window.pageYOffset||document.documentElement.scrollTop||0; // keep the view steady across re-renders
+    applyPeople();
     board.innerHTML='';
     var f=filterWho, shown=0;
     if(f){
@@ -715,7 +752,7 @@
     if(item.amt!=null){meta.appendChild(chip('amt','₪ '+nfmt(item.amt)));has=true;}
     if(item.date){meta.appendChild(chip('date','📅 '+fmtDate(item.date)));has=true;}
     (item.whos||[]).forEach(function(id){var p=pById(id);if(!p)return;
-      var wc=chip('who','');wc.style.background=p.c;wc.style.color='#fff';wc.appendChild(html('<span>'+esc(p.name)+'</span>'));meta.appendChild(wc);has=true;});
+      var wc=chip('who','');wc.style.background=p.c;wc.style.color='#fff';wc.appendChild(html('<span>'+p.emoji+' '+esc(p.name)+'</span>'));meta.appendChild(wc);has=true;});
     if((item.imgs||[]).length){meta.appendChild(chip('mini','📷 '+item.imgs.length));has=true;}
     if((item.links||[]).length){meta.appendChild(chip('mini','🔗 '+item.links.length));has=true;}
     if(has)b.appendChild(meta);
@@ -732,7 +769,7 @@
     var frag=el('span','whowrap');
     whos.forEach(function(id){var p=pById(id);if(!p)return;
       var c=chip('who','');c.style.background=p.c;c.style.color='#fff';
-      c.appendChild(html('<span>'+esc(p.name)+'</span>'));c.title='עריכת שיוך';c.onclick=function(){openAssign(obj);};
+      c.appendChild(html('<span>'+p.emoji+' '+esc(p.name)+'</span>'));c.title='עריכת שיוך';c.onclick=function(){openAssign(obj);};
       frag.appendChild(c);});
     return frag;
   }
@@ -775,7 +812,7 @@
     people.forEach(function(p){
       var on=getSel(p.id);
       var b=el('button','aperson'+(on?' on':''));b.type='button';b.setAttribute('aria-pressed',on?'true':'false');
-      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+p.emoji+'</span>'+
         '<span class="an">'+esc(p.name)+'</span><span class="ck">'+(on?'✓':'')+'</span>';
       b.onclick=function(){ setSel(p.id, !on); persistQuiet(); };
       box.appendChild(b);
@@ -806,7 +843,7 @@
       var on=whos.indexOf(p.id)>=0;
       var b=el('button','aperson'+(on?' on':''));b.type='button';
       b.setAttribute('aria-pressed',on?'true':'false');
-      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+p.emoji+'</span>'+
         '<span class="an">'+esc(p.name)+'</span><span class="ck">'+(on?'✓':'')+'</span>';
       b.onclick=function(){var i=whos.indexOf(p.id);if(i>=0)whos.splice(i,1);else whos.push(p.id);renderAssignPeople();save();};
       box.appendChild(b);
@@ -881,7 +918,7 @@
       var payersList=people.filter(function(p){return paid[p.id];});
       payersList.forEach(function(p){
         pc.appendChild(html('<div class="paid-row"><span class="pl"><span class="av" style="background:'+p.c+'">'+
-          esc(p.name.charAt(0))+'</span>'+esc(p.name)+'</span><span class="pv">'+nfmt(paid[p.id])+' ₪</span></div>'));
+          p.emoji+'</span>'+esc(p.name)+'</span><span class="pv">'+nfmt(paid[p.id])+' ₪</span></div>'));
       });
       if(unassigned>0)pc.appendChild(html('<div class="paid-row muted"><span class="pl">❗ לא סומן מי שילם</span><span class="pv">'+nfmt(unassigned)+' ₪</span></div>'));
       var pot=payersList.reduce(function(a,p){return a+paid[p.id];},0), n=payersList.length;
@@ -970,7 +1007,7 @@
     people.forEach(function(p){
       var on=_expPayer===p.id;
       var b=el('button','aperson'+(on?' on':''));b.type='button';b.setAttribute('aria-pressed',on?'true':'false');
-      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+p.emoji+'</span>'+
         '<span class="an">'+esc(p.name)+'</span><span class="ck">'+(on?'✓':'')+'</span>';
       b.onclick=function(){_expPayer=(_expPayer===p.id?null:p.id);renderPayer();};
       box.appendChild(b);
@@ -984,6 +1021,31 @@
     _expTarget.v=a;
     _expTarget.payer=_expPayer||null;
     save();closeExpense();
+  }
+  /* people editor — change each person's emoji (and name) */
+  function setPersonMeta(id,key,val){
+    state.people=state.people||{}; state.people[id]=state.people[id]||{};
+    if(val)state.people[id][key]=val; else delete state.people[id][key];
+    if(!Object.keys(state.people[id]).length)delete state.people[id];
+    persistQuiet(); applyPeople();
+  }
+  function openPeople(){renderPeopleEditor();document.getElementById('peopleSheet').classList.add('show');}
+  function closePeople(){document.getElementById('peopleSheet').classList.remove('show');}
+  function renderPeopleEditor(){
+    var box=document.getElementById('peopleEditor');box.innerHTML='';
+    people.forEach(function(p){
+      var wrap=el('div','pe-wrap'), row=el('div','pe-row');
+      var em=el('button','pe-emoji');em.type='button';em.style.background=p.c;em.textContent=p.emoji;em.title='שינוי אימוג׳י';
+      var pal=el('div','pe-palette');pal.style.display='none';
+      em.onclick=function(){pal.style.display=(pal.style.display==='none'?'flex':'none');};
+      EMOJI_CHOICES.forEach(function(e){var o=el('button','pe-opt');o.type='button';o.textContent=e;
+        o.onclick=function(){setPersonMeta(p.id,'emoji',e!==p._de?e:null);em.textContent=e;pal.style.display='none';render();};
+        pal.appendChild(o);});
+      var nm=document.createElement('input');nm.className='pe-name';nm.value=p.name;nm.setAttribute('aria-label','שם');
+      nm.onchange=function(){var v=nm.value.trim();setPersonMeta(p.id,'name',(v&&v!==p._dn)?v:null);render();};
+      row.appendChild(em);row.appendChild(nm);
+      wrap.appendChild(row);wrap.appendChild(pal);box.appendChild(wrap);
+    });
   }
 
   function questionCard(){
@@ -1039,7 +1101,7 @@
       var active=filterWho===p.id;
       var b=el('button','person pfilter'+(active?' active':''));b.type='button';
       b.title='הצג רק את המשימות של '+p.name;
-      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+esc(p.name)+' · '+n;
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+p.emoji+'</span>'+esc(p.name)+' · '+n;
       if(active)b.style.borderColor=p.c;
       b.onclick=function(){filterWho=(filterWho===p.id?null:p.id);render();};
       box.appendChild(b);
@@ -1138,8 +1200,15 @@
   document.getElementById('expSheet').onclick=function(e){if(e.target.id==='expSheet')closeExpense();};
   document.getElementById('expAmt').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveExpense();}});
   document.getElementById('editTitle').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('editSub').focus();}});
-  document.getElementById('editSub').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveEdit();}});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();closeExpense();}});
+  // people editor + all close (✕) buttons
+  document.getElementById('peopleEditBtn').onclick=openPeople;
+  document.getElementById('peopleDone').onclick=closePeople;
+  document.getElementById('peopleSheet').onclick=function(e){if(e.target.id==='peopleSheet')closePeople();};
+  document.getElementById('editX').onclick=closeEdit;
+  document.getElementById('expX').onclick=closeExpense;
+  document.getElementById('assignX').onclick=closeAssign;
+  document.getElementById('peopleX').onclick=closePeople;
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();closeExpense();closePeople();}});
   document.getElementById('todayStat').onclick=function(){var a=document.querySelector('.card.agenda');if(a)a.scrollIntoView({behavior:'smooth',block:'start'});};
 
   /* ---------- share ---------- */
