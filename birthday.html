@@ -1021,7 +1021,7 @@
     state.expenses.forEach(function(x){ tot+=Number(x.v)||0;
       var r=el('div','row');
       var b=el('div','body');
-      var t=html('<div class="txt edit-txt">'+esc(x.t)+(x.tag?' <span class="tag">'+esc(x.tag)+'</span>':'')+'</div>');
+      var t=html('<div class="txt edit-txt">'+esc(x.t)+(x.tag&&x.tag!==x.t?' <span class="tag">'+esc(x.tag)+'</span>':'')+'</div>');
       t.title='עריכת הוצאה'; t.onclick=function(){openExpense(x);};
       b.appendChild(t);
       var meta=el('div','meta'); meta.appendChild(payerChip(x)); b.appendChild(meta);
