@@ -390,6 +390,12 @@
     box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:60;display:inline-flex;align-items:center;gap:6px}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
   .toast-undo{background:transparent;border:none;color:var(--accent);font:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:2px 8px}
+  .update-banner{position:fixed;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-160%);
+    z-index:64;background:var(--accent);color:#fff;border:none;border-radius:99px;padding:11px 20px;font:inherit;font-size:14px;font-weight:500;
+    box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;transition:transform .3s cubic-bezier(.2,.9,.3,1);max-width:92vw;white-space:nowrap}
+  .update-banner.show{transform:translateX(-50%) translateY(0)}
+  .update-banner:active{opacity:.9}
+  .update-banner:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent);outline-offset:2px}
 
   /* guest search + filter */
   .gcontrols{display:flex;flex-direction:column;gap:8px;padding:12px 16px;border-bottom:.5px solid var(--line2)}
@@ -472,6 +478,7 @@
     </p>
   </div>
 
+  <button class="update-banner" id="updateBanner" type="button">🔄 מישהו עדכן את הרשימה · הקישי לרענון</button>
   <div class="toast" id="toast"></div>
   <div class="lb" id="lightbox"><button class="close" id="lbClose" aria-label="סגירה">✕</button><img id="lbImg" alt="תמונה מצורפת"></div>
   <div class="sheet" id="assignSheet">
@@ -657,7 +664,7 @@
   function daysUntilEvent(){var t=new Date(),e=new Date(EVENT_DATE+'T00:00:00');
     t.setHours(0,0,0,0); return Math.round((e-t)/86400000);}
   var CLIENT=Math.random().toString(36).slice(2)+Date.now().toString(36);
-  var _db=null,_lastBlob=null,_synced=false;
+  var _db=null,_lastBlob=null,_synced=false,_pendingRemoteBlob=null;
 
   function setSync(kind,txt){
     var pill=document.getElementById('syncPill');
@@ -676,6 +683,20 @@
       auth.onAuthStateChanged(function(u){ if(u){ subscribe(); } else { auth.signInAnonymously().catch(function(e){console.warn('anon sign-in',e);setSync('off','לא מחובר');}); } });
     }catch(e){ console.warn('Firebase init failed',e); setSync('off','לא מחובר · מקומי בלבד'); }
   }
+  function applyRemote(blob){
+    try{
+      var incoming=JSON.parse(blob);
+      if(incoming&&incoming.sections){
+        _applyingRemote=true;
+        state=normalize(incoming); _lastBlob=blob;
+        try{localStorage.setItem(LS,blob);}catch(e){}
+        render();
+        _applyingRemote=false;
+      }
+    }catch(e){console.warn('bad remote blob',e);}
+  }
+  function showUpdateBanner(){ document.getElementById('updateBanner').classList.add('show'); }
+  function hideUpdateBanner(){ document.getElementById('updateBanner').classList.remove('show'); }
   function subscribe(){
     setSync('on','מסונכרן');
     _db.collection('trips').doc(DOC_ID).onSnapshot(function(doc){
@@ -686,17 +707,13 @@
       // Protect edits I've made but not yet pushed — but only AFTER the first real
       // sync, so a newcomer never overwrites the live list with the default seed.
       if(_pendingLocal && _synced){ clearTimeout(_pushTimer); pushCloud(); return; }
-      try{
-        var incoming=JSON.parse(d.blob);
-        if(incoming&&incoming.sections){
-          _applyingRemote=true;
-          state=normalize(incoming); _lastBlob=d.blob;
-          try{localStorage.setItem(LS,d.blob);}catch(e){}
-          render();
-          _applyingRemote=false;
-        }
-      }catch(e){console.warn('bad remote blob',e);}
-      _synced=true;
+      if(!_synced){                       // first load — show my data right away
+        applyRemote(d.blob); _synced=true; return;
+      }
+      // Someone ELSE changed the list while I'm here. Don't jump the screen —
+      // stash it and show a tappable banner so I refresh only when I'm ready.
+      _pendingRemoteBlob=d.blob;
+      showUpdateBanner();
     },function(err){console.warn('snapshot error',err);setSync('off','שגיאת סנכרון');});
   }
   function pushCloud(){
@@ -1413,6 +1430,10 @@
   document.getElementById('promptX').onclick=closePrompt;
   document.getElementById('promptSheet').onclick=function(e){if(e.target.id==='promptSheet')closePrompt();};
   document.getElementById('promptInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();promptSubmit();}});
+  document.getElementById('updateBanner').onclick=function(){
+    if(_pendingRemoteBlob){ applyRemote(_pendingRemoteBlob); _pendingRemoteBlob=null; }
+    hideUpdateBanner(); toast('הרשימה עודכנה ✓'); window.scrollTo(0,0);
+  };
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();closeExpense();closePeople();closePrompt();}});
   (function(){var tabs=document.querySelectorAll('#tabs .tab');
     for(var i=0;i<tabs.length;i++){(function(t){t.onclick=function(){activeTab=t.getAttribute('data-tab');render();window.scrollTo(0,0);};})(tabs[i]);}})();
