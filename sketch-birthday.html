@@ -111,6 +111,16 @@
   .check:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:2px}
   .row.done .check{background:var(--ok);border-color:var(--ok)}
   .row.done .check svg{opacity:1;transform:scale(1)}
+  .row.confirmed .check{background:var(--ok);border-color:var(--ok)}
+  .row.confirmed .check svg{opacity:1;transform:scale(1)}
+
+  .grow{align-items:center}
+  .gnum{flex:none;min-width:28px;height:24px;padding:0 6px;border-radius:7px;background:var(--surface2);
+    border:1px solid var(--line);color:var(--muted);font-weight:900;font-size:12px;display:grid;place-items:center;
+    font-variant-numeric:tabular-nums}
+  .grow.confirmed .gnum{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+  .grow .gname{font-size:14.5px;font-weight:600}
+  .grow.confirmed .gname{font-weight:700}
 
   .body{flex:1;min-width:0}
   .txt{font-size:14.5px;font-weight:600;line-height:1.4;word-break:break-word}
@@ -269,7 +279,8 @@
         ex('שופרסל',360),ex('טמו',300),ex('יין',257),ex('קפה',105),ex('פאן סיטי',374),
         ex('מקדמה',300,'מקדמה'),ex('הפרש',3225,'הפרש'),ex('עלי אקספרס',307),ex('עלי אקספרס',100)
       ],
-      questions:[ q('האם יש מקרר?','omer') ]
+      questions:[ q('האם יש מקרר?','omer') ],
+      guests: GUEST_NAMES.map(function(n){return guest(n);})
     };
   }
   var _seq=0;
@@ -277,6 +288,16 @@
   function it(t,who){return {id:uid('i'),t:t,amt:null,who:who||null,done:false,imgs:[],links:[]};}
   function ex(t,v,tag){return {id:uid('e'),t:t,v:v,tag:tag||null};}
   function q(t,who){return {id:uid('q'),t:t,who:who||null,done:false};}
+  function guest(name){return {id:uid('g'),name:name,coming:false};}
+  var GUEST_NAMES=[
+    'אווה אלפסי','אורי פרץ','איימי קשקש','איתן מינץ','איתן החדש','אלה ויינשטיין','אמה בן זאב',
+    'אמלי ששון אבוקסיס','אמיליה גנל','ארי מיכאל','ארי סבן','גאיה נפשי','גיל יצחק','גל אברהם הירשזון',
+    'דניאלה קליימן','הדר גורן','הראל אדמסקי','הראל ישי','ליאם גשייט','ליב ביטון','ליה ברוש','לני ליאני',
+    'מייקי איידן','נסלי פדרמן','נועם טרגנסקי','סול קרפס','עומר לזר','עמנואל אלחרר','קסניה סוטין',
+    'רוז סמדזה','ריף אלחרר','רפאל שרלוט','תאה הירשזון','תומר מאני',
+    'משי פישל','גפן פישר','הילי שגיא','ריף אלבוחר',
+    'אלי מינדל','אמה מינדל','אורי הרצברג','מתן הרצברג','נגה רון','עתי בר'
+  ];
 
   /* ---------- state + persistence ---------- */
   var LS='bday-lia-gil-v1';
@@ -285,14 +306,14 @@
   function normalize(s){
     if(!s||!s.sections)return s;
     s.sections.forEach(function(sec){(sec.items||[]).forEach(function(i){if(!i.imgs)i.imgs=[];if(!i.links)i.links=[];});});
-    if(!s.expenses)s.expenses=[]; if(!s.questions)s.questions=[];
+    if(!s.expenses)s.expenses=[]; if(!s.questions)s.questions=[]; if(!s.guests)s.guests=[];
     return s;
   }
-  var _pushTimer=null,_applyingRemote=false;
+  var _pushTimer=null,_applyingRemote=false,_pendingLocal=false;
   function save(){
     try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
     render();
-    if(!_applyingRemote){clearTimeout(_pushTimer);_pushTimer=setTimeout(pushCloud,650);}
+    if(!_applyingRemote){_pendingLocal=true;clearTimeout(_pushTimer);_pushTimer=setTimeout(pushCloud,650);}
   }
   function nfmt(n){return Number(n||0).toLocaleString('he-IL');}
 
@@ -307,7 +328,7 @@
   };
   var DOC_ID='birthday-lia-gil';          // lives in the shared "trips" collection
   var CLIENT=Math.random().toString(36).slice(2)+Date.now().toString(36);
-  var _db=null,_lastBlob=null,_gotRemote=false;
+  var _db=null,_lastBlob=null,_synced=false;
 
   function setSync(kind,txt){
     var pill=document.getElementById('syncPill');
@@ -330,10 +351,12 @@
     setSync('on','מסונכרן');
     _db.collection('trips').doc(DOC_ID).onSnapshot(function(doc){
       var d=doc.data();
-      if(!d||!d.blob){ if(!_gotRemote){_gotRemote=true;pushCloud();} return; } // seed the doc first time
-      _gotRemote=true;
-      if(d.by===CLIENT) return;                 // ignore our own echo
-      if(d.blob===_lastBlob) return;
+      if(!d||!d.blob){ if(!_synced){_synced=true;pushCloud();} return; } // empty doc: seed it once
+      if(d.by===CLIENT){ _synced=true; return; }        // our own echo
+      if(d.blob===_lastBlob){ _synced=true; return; }
+      // Protect edits I've made but not yet pushed — but only AFTER the first real
+      // sync, so a newcomer never overwrites the live list with the default seed.
+      if(_pendingLocal && _synced){ clearTimeout(_pushTimer); pushCloud(); return; }
       try{
         var incoming=JSON.parse(d.blob);
         if(incoming&&incoming.sections){
@@ -344,19 +367,21 @@
           _applyingRemote=false;
         }
       }catch(e){console.warn('bad remote blob',e);}
+      _synced=true;
     },function(err){console.warn('snapshot error',err);setSync('off','שגיאת סנכרון');});
   }
   function pushCloud(){
     if(!_db)return;
     var blob=JSON.stringify(state);
-    if(blob===_lastBlob)return;
+    if(blob===_lastBlob){_pendingLocal=false;return;}
     if(blob.length>950000){ // Firestore doc limit ~1MB — keep photos from breaking sync
+      _pendingLocal=false;
       setSync('off','תמונות כבדות — לא סונכרן'); toast('התמונות כבדות מדי לסנכרון בענן — נשמרו במכשיר');
       return;
     }
     _lastBlob=blob;
     _db.collection('trips').doc(DOC_ID).set({blob:blob,updatedAt:Date.now(),by:CLIENT},{merge:true})
-      .then(function(){setSync('on','מסונכרן');})
+      .then(function(){_pendingLocal=false;setSync('on','מסונכרן');})
       .catch(function(e){console.warn('push failed',e);setSync('off','שמירה נכשלה');});
   }
   window.addEventListener('pagehide',function(){if(_pushTimer){clearTimeout(_pushTimer);pushCloud();}});
@@ -365,11 +390,40 @@
   var board=document.getElementById('board');
   function render(){
     board.innerHTML='';
+    board.appendChild(guestCard());
     state.sections.forEach(function(sec){ board.appendChild(sectionCard(sec)); });
     board.appendChild(expenseCard());
     board.appendChild(questionCard());
     updateSummary();
     renderPeople();
+  }
+
+  function guestCard(){
+    var card=el('div','card guests');
+    var confirmed=state.guests.filter(function(g){return g.coming;}).length;
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--ok-soft)">🎉</div>'+
+      '<h2>רשימת ילדים</h2><span class="count">'+state.guests.length+' · '+confirmed+' אישרו</span></div>'));
+    var rows=el('div','rows');
+    state.guests.forEach(function(g,idx){
+      var r=el('div','row grow'+(g.coming?' confirmed':''));
+      r.appendChild(html('<div class="gnum">'+(idx+1)+'</div>'));
+      var b=el('div','body');b.appendChild(html('<div class="txt gname">'+esc(g.name)+'</div>'));
+      r.appendChild(b);
+      var c=document.createElement('button');c.className='check';c.type='button';
+      c.setAttribute('aria-pressed',g.coming?'true':'false');
+      c.setAttribute('aria-label',(g.coming?'בטל אישור: ':'אישור הגעה: ')+g.name);
+      c.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+      c.onclick=function(){g.coming=!g.coming;save();};
+      r.appendChild(c);
+      r.appendChild(delBtn('מחיקה מהרשימה: '+g.name,function(){state.guests=state.guests.filter(function(x){return x!==g;});save();}));
+      rows.appendChild(r);
+    });
+    card.appendChild(rows);
+    var add=el('div','addrow');var inp=inputEl('הוספת ילד/ה…','שם ילד/ה חדש');var btn=plusBtn();
+    function commit(){var v=inp.value.trim();if(!v)return;state.guests.push(guest(v));inp.value='';save();}
+    btn.onclick=commit;inp.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});
+    add.appendChild(inp);add.appendChild(btn);card.appendChild(add);
+    return card;
   }
 
   function sectionCard(sec){
