@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e6457f">
 <title>יום הולדת · ליה & גיל — רשימה משותפת</title>
 <style>
   :root{
@@ -191,7 +197,9 @@
     box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:30}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
-<button class="toggle" id="themeBtn" title="החלף מצב תצוגה" aria-label="החלף מצב תצוגה">🌙</button>
+</head>
+<body>
+  <button class="toggle" id="themeBtn" title="החלף מצב תצוגה" aria-label="החלף מצב תצוגה">🌙</button>
 
   <header class="hd">
     <canvas id="confetti" aria-hidden="true"></canvas>
@@ -603,3 +611,5 @@
   initFirebase();
 })();
 </script>
+</body>
+</html>
