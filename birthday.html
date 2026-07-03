@@ -140,6 +140,36 @@
   .chip.add{background:transparent;color:var(--muted);border:1px dashed var(--faint)}
   .chip.who{color:#fff}
   .chip.unassigned{background:transparent;color:var(--muted);border:1px dashed var(--faint)}
+  .chip.date{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+  .whowrap{display:inline-flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+  .chd{cursor:pointer;user-select:none}
+  .chd:focus-visible{outline:3px solid var(--accent);outline-offset:-2px;border-radius:12px}
+  .chd .caret{flex:none;color:var(--faint);font-size:12px;transition:transform .2s}
+  @media (prefers-reduced-motion:reduce){.chd .caret{transition:none}}
+  .card.collapsed .chd .caret{transform:rotate(-90deg)}
+  .card.collapsed .rows,.card.collapsed .addrow,.card.collapsed .total{display:none}
+
+  .sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:45}
+  .sheet.show{display:flex}
+  .sheet-card{background:var(--surface);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:sheetUp .22s cubic-bezier(.4,0,.2,1)}
+  @media (prefers-reduced-motion:reduce){.sheet-card{animation:none}}
+  @keyframes sheetUp{from{transform:translateY(30px);opacity:.4}to{transform:translateY(0);opacity:1}}
+  .sheet-title{font-size:16px;font-weight:900;text-align:center}
+  .sheet-hint{font-size:12px;color:var(--muted);text-align:center;margin:4px 0 14px;font-weight:600}
+  .sheet-people{display:grid;gap:8px}
+  .aperson{display:flex;align-items:center;gap:11px;background:var(--surface2);border:1px solid var(--line);border-radius:13px;
+    padding:11px 13px;font:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;text-align:right}
+  .aperson:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+  .aperson.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+  .aperson .av{width:28px;height:28px;border-radius:99px;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:900;flex:none}
+  .aperson .an{flex:1}
+  .aperson .ck{color:var(--accent);font-weight:900;font-size:17px;width:18px;text-align:center}
+  .sheet-done{margin-top:16px;width:100%;background:var(--accent);color:var(--accent-ink);border:none;border-radius:13px;
+    padding:13px;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
+  .sheet-done:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent);outline-offset:2px}
   .chip.attach{background:transparent;color:var(--muted);border:1px dashed var(--faint);font-size:13px}
   .chip.link{background:color-mix(in srgb,var(--p2) 14%,transparent);color:var(--p2);
     border-color:color-mix(in srgb,var(--p2) 32%,transparent);max-width:160px}
@@ -247,6 +277,14 @@
 
   <div class="toast" id="toast"></div>
   <div class="lb" id="lightbox"><button class="close" id="lbClose" aria-label="סגירה">✕</button><img id="lbImg" alt="תמונה מצורפת"></div>
+  <div class="sheet" id="assignSheet">
+    <div class="sheet-card">
+      <div class="sheet-title" id="assignTitle"></div>
+      <p class="sheet-hint">אפשר לבחור כמה אנשים</p>
+      <div class="sheet-people" id="assignPeople"></div>
+      <button class="sheet-done" id="assignDone">סיום</button>
+    </div>
+  </div>
 
 <script>
 (function(){
@@ -273,7 +311,7 @@
         {id:'do',icon:'🎨',bg:'var(--tang-soft)',title:'מה נשאר לעשות',items:[
           it('שקיות הפתעה — ספרונים, שוקולדים, מתנה','neta'),it('חטיפים'),
           it('להכין פלטות ירקות ופירות'),it('לשלוח תזכורת בגן — ראשון + חמישי','neta'),
-          it('לדבר עם המפעיל על הפעלת הילדים','omer')
+          it('לדבר עם המפעיל על הפעלת הילדים','omer'),it('לאסוף מלחמנינה')
         ]},
         {id:'get',icon:'🎒',bg:'var(--ok-soft)',title:'להשיג',items:[ it('ציידנית') ]},
         {id:'bring',icon:'🎈',bg:'var(--accent-soft)',title:'להביא ביום האירוע',items:[
@@ -285,7 +323,8 @@
       ],
       expenses:[
         ex('שופרסל',360),ex('טמו',300),ex('יין',257),ex('קפה',105),ex('פאן סיטי',374),
-        ex('מקדמה',300,'מקדמה'),ex('הפרש',3225,'הפרש'),ex('עלי אקספרס',307),ex('עלי אקספרס',100)
+        ex('מקדמה',300,'מקדמה'),ex('הפרש',3225,'הפרש'),ex('עלי אקספרס',307),ex('עלי אקספרס',100),
+        ex('עוגות',300)
       ],
       questions:[ q('האם יש מקרר?','omer') ],
       guests: GUEST_NAMES.map(function(n){return guest(n);})
@@ -293,9 +332,10 @@
   }
   var _seq=0;
   function uid(p){_seq++;return (p||'x')+'-'+Date.now().toString(36)+'-'+_seq;}
-  function it(t,who){return {id:uid('i'),t:t,amt:null,who:who||null,done:false,imgs:[],links:[]};}
+  function whoArr(who){return who?(Array.isArray(who)?who.slice():[who]):[];}
+  function it(t,who){return {id:uid('i'),t:t,amt:null,whos:whoArr(who),done:false,date:null,imgs:[],links:[]};}
   function ex(t,v,tag){return {id:uid('e'),t:t,v:v,tag:tag||null};}
-  function q(t,who){return {id:uid('q'),t:t,who:who||null,done:false};}
+  function q(t,who){return {id:uid('q'),t:t,whos:whoArr(who),done:false};}
   function guest(name){return {id:uid('g'),name:name,coming:false};}
   var GUEST_NAMES=[
     'אווה אלפסי','אורי פרץ','איימי קשקש','איתן מינץ','איתן החדש','אלה ויינשטיין','אמה בן זאב',
@@ -311,10 +351,15 @@
   var LS='bday-lia-gil-v1';
   var state=normalize(loadLocal()||defaultState());
   function loadLocal(){try{var s=JSON.parse(localStorage.getItem(LS));return (s&&s.sections)?s:null;}catch(e){return null;}}
+  function migWho(o){ if(!o.whos)o.whos=o.who?[o.who]:[]; if('who' in o)delete o.who; }
   function normalize(s){
     if(!s||!s.sections)return s;
-    s.sections.forEach(function(sec){(sec.items||[]).forEach(function(i){if(!i.imgs)i.imgs=[];if(!i.links)i.links=[];});});
-    if(!s.expenses)s.expenses=[]; if(!s.questions)s.questions=[]; if(!s.guests)s.guests=[];
+    s.sections.forEach(function(sec){(sec.items||[]).forEach(function(i){
+      migWho(i); if(!i.imgs)i.imgs=[]; if(!i.links)i.links=[]; if(i.date===undefined)i.date=null;
+    });});
+    if(!s.expenses)s.expenses=[];
+    if(!s.questions)s.questions=[]; s.questions.forEach(migWho);
+    if(!s.guests)s.guests=[];
     return s;
   }
   var _pushTimer=null,_applyingRemote=false,_pendingLocal=false;
@@ -398,10 +443,10 @@
   var board=document.getElementById('board');
   function render(){
     board.innerHTML='';
-    board.appendChild(guestCard());
     state.sections.forEach(function(sec){ board.appendChild(sectionCard(sec)); });
     board.appendChild(expenseCard());
     board.appendChild(questionCard());
+    board.appendChild(guestCard());
     updateSummary();
     renderPeople();
   }
@@ -431,6 +476,7 @@
     function commit(){var v=inp.value.trim();if(!v)return;state.guests.push(guest(v));inp.value='';save();}
     btn.onclick=commit;inp.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});
     add.appendChild(inp);add.appendChild(btn);card.appendChild(add);
+    collapsible(card,'guests',true);
     return card;
   }
 
@@ -448,6 +494,7 @@
     function commit(){var v=inp.value.trim();if(!v)return;sec.items.push(it(v));inp.value='';save();}
     btn.onclick=commit; inp.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});
     add.appendChild(inp);add.appendChild(btn);card.appendChild(add);
+    collapsible(card,sec.id,false);
     return card;
   }
 
@@ -464,6 +511,8 @@
     var meta=el('div','meta');
     if(item.amt!=null){var a=chip('amt','₪ '+nfmt(item.amt));a.onclick=function(){editAmt(item);};meta.appendChild(a);}
     else{var ap=chip('add','+ סכום');ap.onclick=function(){editAmt(item);};meta.appendChild(ap);}
+    if(item.date){var dc=chip('date','📅 '+fmtDate(item.date));dc.onclick=function(){pickDate(item);};meta.appendChild(dc);}
+    else{var dad=chip('add','+ תאריך');dad.onclick=function(){pickDate(item);};meta.appendChild(dad);}
     meta.appendChild(whoChip(item));
     (item.imgs||[]).forEach(function(src){ meta.appendChild(thumbEl(item,src)); });
     (item.links||[]).forEach(function(url){ meta.appendChild(linkEl(item,url)); });
@@ -476,16 +525,37 @@
     return r;
   }
 
-  function whoChip(item){
-    var p=item.who?pById(item.who):null,c;
-    if(p){c=chip('who','');c.style.background=p.c;c.appendChild(html('<span>'+esc(p.name)+'</span>'));c.style.color='#fff';}
-    else{c=chip('unassigned','+ שייך');}
-    c.title='שייך למישהו'; c.onclick=function(){cycleWho(item);};
-    return c;
+  function whoChip(obj){
+    var whos=obj.whos||[];
+    if(!whos.length){var c=chip('unassigned','+ שייך');c.title='שיוך לאנשים';c.onclick=function(){openAssign(obj);};return c;}
+    var frag=el('span','whowrap');
+    whos.forEach(function(id){var p=pById(id);if(!p)return;
+      var c=chip('who','');c.style.background=p.c;c.style.color='#fff';
+      c.appendChild(html('<span>'+esc(p.name)+'</span>'));c.title='עריכת שיוך';c.onclick=function(){openAssign(obj);};
+      frag.appendChild(c);});
+    return frag;
   }
-  function cycleWho(item){
-    var order=[null].concat(people.map(function(p){return p.id;}));
-    item.who=order[(order.indexOf(item.who||null)+1)%order.length];save();
+  /* assign dropdown (multi-select) */
+  var _assignTarget=null;
+  function openAssign(obj){
+    _assignTarget=obj; if(!obj.whos)obj.whos=[];
+    document.getElementById('assignTitle').textContent='שיוך: '+obj.t;
+    renderAssignPeople();
+    document.getElementById('assignSheet').classList.add('show');
+  }
+  function closeAssign(){document.getElementById('assignSheet').classList.remove('show');_assignTarget=null;}
+  function renderAssignPeople(){
+    var box=document.getElementById('assignPeople');box.innerHTML='';
+    var whos=_assignTarget.whos;
+    people.forEach(function(p){
+      var on=whos.indexOf(p.id)>=0;
+      var b=el('button','aperson'+(on?' on':''));b.type='button';
+      b.setAttribute('aria-pressed',on?'true':'false');
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+
+        '<span class="an">'+esc(p.name)+'</span><span class="ck">'+(on?'✓':'')+'</span>';
+      b.onclick=function(){var i=whos.indexOf(p.id);if(i>=0)whos.splice(i,1);else whos.push(p.id);renderAssignPeople();save();};
+      box.appendChild(b);
+    });
   }
   function editAmt(item){
     var v=window.prompt('סכום בש״ח לפריט: '+item.t,item.amt!=null?String(item.amt):'');
@@ -518,6 +588,7 @@
     btn.onclick=commit; [name,amt].forEach(function(i){i.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});});
     add.appendChild(name);add.appendChild(amt);add.appendChild(btn);card.appendChild(add);
     card.appendChild(html('<div class="total"><span class="l">סה״כ הוצאות</span><span class="n">'+nfmt(tot)+' <small>₪</small></span></div>'));
+    collapsible(card,'exp',false);
     return card;
   }
 
@@ -541,6 +612,7 @@
     function commit(){var v=inp.value.trim();if(!v)return;state.questions.push(q(v));inp.value='';save();}
     btn.onclick=commit;inp.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});
     add.appendChild(inp);add.appendChild(btn);card.appendChild(add);
+    collapsible(card,'q',false);
     return card;
   }
 
@@ -556,10 +628,42 @@
   function renderPeople(){
     var box=document.getElementById('people');box.innerHTML='';
     people.forEach(function(p){
-      var n=0;state.sections.forEach(function(s){s.items.forEach(function(i){if(i.who===p.id)n++;});});
-      state.questions.forEach(function(qq){if(qq.who===p.id)n++;});
+      var n=0;state.sections.forEach(function(s){s.items.forEach(function(i){if((i.whos||[]).indexOf(p.id)>=0)n++;});});
+      state.questions.forEach(function(qq){if((qq.whos||[]).indexOf(p.id)>=0)n++;});
       box.appendChild(html('<span class="person"><span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+esc(p.name)+' · '+n+'</span>'));
     });
+  }
+
+  /* ---------- dates ---------- */
+  function fmtDate(iso){ if(!iso)return''; var p=String(iso).split('-'); return p.length<3?iso:(p[2]+'/'+p[1]); }
+  function pickDate(item){
+    var inp=document.createElement('input');inp.type='date';if(item.date)inp.value=item.date;
+    inp.style.position='fixed';inp.style.left='50%';inp.style.top='50%';inp.style.opacity='0';inp.style.zIndex='-1';
+    document.body.appendChild(inp);
+    var done=false;
+    function finish(){ if(done)return;done=true;item.date=inp.value||null;if(inp.parentNode)inp.parentNode.removeChild(inp);save(); }
+    inp.addEventListener('change',finish);
+    inp.addEventListener('blur',function(){setTimeout(finish,60);});
+    try{ if(typeof inp.showPicker==='function')inp.showPicker(); else {inp.focus();inp.click();} }
+    catch(e){ if(inp.parentNode)inp.parentNode.removeChild(inp);
+      var v=window.prompt('תאריך (YYYY-MM-DD):',item.date||''); if(v===null)return;
+      item.date=v.trim()||null; save(); }
+  }
+
+  /* ---------- collapse / expand cards ---------- */
+  var COL_LS='bday-collapsed-v1';
+  var collapsed=(function(){try{return JSON.parse(localStorage.getItem(COL_LS))||{};}catch(e){return {};}})();
+  function saveCollapsed(){try{localStorage.setItem(COL_LS,JSON.stringify(collapsed));}catch(e){}}
+  function collapsible(card,key,def){
+    var hd=card.querySelector('.chd');if(!hd)return;
+    hd.appendChild(html('<span class="caret" aria-hidden="true">▾</span>'));
+    var isCol=(key in collapsed)?collapsed[key]:!!def;
+    if(isCol)card.classList.add('collapsed');
+    hd.setAttribute('role','button');hd.setAttribute('tabindex','0');
+    hd.setAttribute('aria-expanded',isCol?'false':'true');
+    function toggle(){var c=card.classList.toggle('collapsed');collapsed[key]=c;saveCollapsed();hd.setAttribute('aria-expanded',c?'false':'true');}
+    hd.onclick=toggle;
+    hd.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}};
   }
 
   /* ---------- attachments (photos + links) ---------- */
@@ -611,7 +715,9 @@
   function closeLb(){document.getElementById('lightbox').classList.remove('show');document.getElementById('lbImg').src='';}
   document.getElementById('lbClose').onclick=closeLb;
   document.getElementById('lightbox').onclick=function(e){if(e.target.id==='lightbox')closeLb();};
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb();});
+  document.getElementById('assignDone').onclick=closeAssign;
+  document.getElementById('assignSheet').onclick=function(e){if(e.target.id==='assignSheet')closeAssign();};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();}});
 
   /* ---------- share ---------- */
   document.getElementById('shareBtn').onclick=function(){
