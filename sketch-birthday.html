@@ -92,6 +92,24 @@
     transition:width .45s cubic-bezier(.4,0,.2,1)}
   @media (prefers-reduced-motion:reduce){.bar>i{transition:none}}
 
+  .filterbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:16px 0 2px}
+  .filterbar .flabel{font-size:12px;font-weight:800;color:var(--muted)}
+  .fchip{font-size:12.5px;font-weight:800;border-radius:99px;padding:6px 13px;cursor:pointer;font-family:inherit;
+    background:var(--surface);border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow-sm)}
+  .fchip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .fchip.active{border-color:var(--accent);color:var(--accent)}
+  .empty{text-align:center;color:var(--muted);font-weight:700;font-size:14px;padding:34px 16px}
+  .agh{font-size:12px;font-weight:900;letter-spacing:.02em;padding:10px 8px 5px;color:var(--muted)}
+  .agh-over{color:#d64545}
+  .agh-today{color:var(--accent)}
+  .agh-tom{color:var(--tang)}
+  @media (prefers-color-scheme:dark){.agh-over{color:#ff8080}}
+  :root[data-theme="dark"] .agh-over{color:#ff8080}
+  .subhead{font-size:12px;font-weight:900;color:var(--muted);padding:12px 8px 4px}
+  .tag2{font-size:10.5px;font-weight:800;color:var(--muted);background:var(--surface2);border:1px solid var(--line);
+    border-radius:99px;padding:1px 7px;margin-inline-start:6px}
+  .itemamts .val{color:var(--tang)}
+
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin:16px 0;overflow:hidden}
   .card>.chd{display:flex;align-items:center;gap:10px;padding:14px 16px 12px}
   .chd .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex:none}
@@ -181,6 +199,10 @@
     font:inherit;font-size:15px;font-weight:600;color:var(--ink)}
   .sheet-input:focus{outline:none;border-color:var(--accent)}
   .sheet-input::placeholder{color:var(--faint)}
+  .sheet-del{margin-top:10px;width:100%;background:transparent;color:var(--accent);border:1px solid var(--line);
+    border-radius:13px;padding:11px;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+  .sheet-del:hover{border-color:var(--accent)}
+  .sheet-del:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
   .chip.attach{background:transparent;color:var(--muted);border:1px dashed var(--faint);font-size:13px}
   .chip.link{background:color-mix(in srgb,var(--p2) 14%,transparent);color:var(--p2);
     border-color:color-mix(in srgb,var(--p2) 32%,transparent);max-width:160px}
@@ -229,6 +251,14 @@
   .total .l{font-size:14px;font-weight:800}
   .total .n{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
   .total .n small{font-size:15px;color:var(--muted)}
+  .paid{margin:0 8px 12px;padding:14px;border-radius:14px;background:var(--surface2);border:1px solid var(--line)}
+  .paid-title{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:.02em;margin-bottom:9px}
+  .paid-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;font-size:14px;font-weight:800}
+  .paid-row+.paid-row{border-top:1px solid var(--line2)}
+  .paid-row .pl{display:inline-flex;align-items:center;gap:8px}
+  .paid-row .av{width:22px;height:22px;border-radius:99px;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:900}
+  .paid-row .pv{font-variant-numeric:tabular-nums}
+  .paid-row.muted{color:var(--muted);font-weight:700}
 
   .q .row{align-items:flex-start}
   .q .txt{font-weight:700}
@@ -304,6 +334,19 @@
       <button class="sheet-done" id="editSave">שמירה</button>
     </div>
   </div>
+  <div class="sheet" id="expSheet">
+    <div class="sheet-card">
+      <div class="sheet-title">עריכת הוצאה</div>
+      <label class="sheet-lbl" for="expDesc">תיאור</label>
+      <input class="sheet-input" id="expDesc" type="text" placeholder="על מה ההוצאה">
+      <label class="sheet-lbl" for="expAmt">סכום (₪)</label>
+      <input class="sheet-input" id="expAmt" type="text" inputmode="numeric" placeholder="0">
+      <label class="sheet-lbl">מי שילם?</label>
+      <div class="sheet-people" id="expPayer"></div>
+      <button class="sheet-done" id="expSave">שמירה</button>
+      <button class="sheet-del" id="expDel">מחיקת ההוצאה</button>
+    </div>
+  </div>
 
 <script>
 (function(){
@@ -353,7 +396,7 @@
   function uid(p){_seq++;return (p||'x')+'-'+Date.now().toString(36)+'-'+_seq;}
   function whoArr(who){return who?(Array.isArray(who)?who.slice():[who]):[];}
   function it(t,who){return {id:uid('i'),t:t,sub:null,amt:null,whos:whoArr(who),done:false,date:null,imgs:[],links:[]};}
-  function ex(t,v,tag){return {id:uid('e'),t:t,v:v,tag:tag||null};}
+  function ex(t,v,tag){return {id:uid('e'),t:t,v:v,tag:tag||null,payer:null};}
   function q(t,who){return {id:uid('q'),t:t,whos:whoArr(who),done:false};}
   function guest(name){return {id:uid('g'),name:name,coming:false};}
   var GUEST_NAMES=[
@@ -376,7 +419,7 @@
     s.sections.forEach(function(sec){(sec.items||[]).forEach(function(i){
       migWho(i); if(!i.imgs)i.imgs=[]; if(!i.links)i.links=[]; if(i.date===undefined)i.date=null; if(i.sub===undefined)i.sub=null;
     });});
-    if(!s.expenses)s.expenses=[];
+    if(!s.expenses)s.expenses=[]; s.expenses.forEach(function(e){if(e.payer===undefined)e.payer=null;});
     if(!s.questions)s.questions=[]; s.questions.forEach(migWho);
     if(!s.guests)s.guests=[];
     return s;
@@ -460,14 +503,45 @@
 
   /* ---------- render ---------- */
   var board=document.getElementById('board');
+  var filterWho=null; // view-only: show only one person's tasks
   function render(){
     board.innerHTML='';
-    state.sections.forEach(function(sec){ board.appendChild(sectionCard(sec)); });
-    board.appendChild(expenseCard());
-    board.appendChild(questionCard());
-    board.appendChild(guestCard());
+    board.appendChild(filterBar());
+    var f=filterWho, shown=0;
+    var ag=agendaCard(f); if(ag)board.appendChild(ag);
+    state.sections.forEach(function(sec){ var c=sectionCard(sec,f); if(c){board.appendChild(c);shown++;} });
+    if(f){
+      if(!shown)board.appendChild(html('<div class="empty">אין משימות משויכות ל'+esc(personName(f))+' 🎉</div>'));
+    }else{
+      board.appendChild(expenseCard());
+      board.appendChild(questionCard());
+      board.appendChild(guestCard());
+    }
     updateSummary();
     renderPeople();
+  }
+  function personName(id){var p=pById(id);return p?p.name:'';}
+  function isoLocal(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function fmtDate(iso){if(!iso)return'';var p=String(iso).split('-');return p.length<3?iso:(p[2]+'/'+p[1]);}
+  function cmpItems(a,b){
+    if((a.done?1:0)!==(b.done?1:0))return (a.done?1:0)-(b.done?1:0); // undone first
+    var ad=a.date||'',bd=b.date||'';                                  // then chronological
+    if(ad&&bd)return ad<bd?-1:(ad>bd?1:0);
+    if(ad)return -1; if(bd)return 1; return 0;
+  }
+
+  function filterBar(){
+    var bar=el('div','filterbar');
+    bar.appendChild(html('<span class="flabel">סינון:</span>'));
+    var all=el('button','fchip'+(filterWho?'':' active'));all.type='button';all.textContent='הכל';
+    all.onclick=function(){filterWho=null;render();};bar.appendChild(all);
+    people.forEach(function(p){
+      var b=el('button','fchip'+(filterWho===p.id?' active':''));b.type='button';b.textContent=p.name;
+      if(filterWho===p.id){b.style.background=p.c;b.style.color='#fff';b.style.borderColor='transparent';}
+      b.onclick=function(){filterWho=(filterWho===p.id?null:p.id);render();};
+      bar.appendChild(b);
+    });
+    return bar;
   }
 
   function guestCard(){
@@ -499,21 +573,65 @@
     return card;
   }
 
-  function sectionCard(sec){
-    var left=sec.items.filter(function(i){return !i.done;}).length;
+  function agendaCard(f){
+    var today=isoLocal(new Date()); var td=new Date();td.setDate(td.getDate()+1);var tom=isoLocal(td);
+    var groups=[
+      {key:'over',label:'באיחור',ic:'⚠️',items:[]},
+      {key:'today',label:'היום',ic:'📌',items:[]},
+      {key:'tom',label:'מחר',ic:'➡️',items:[]}
+    ];
+    state.sections.forEach(function(sec){ sec.items.forEach(function(i){
+      if(i.done||!i.date)return;
+      if(f&&(i.whos||[]).indexOf(f)<0)return;
+      if(i.date<today)groups[0].items.push([sec,i]);
+      else if(i.date===today)groups[1].items.push([sec,i]);
+      else if(i.date===tom)groups[2].items.push([sec,i]);
+    });});
+    if(!groups.some(function(g){return g.items.length;}))return null;
+    var card=el('div','card agenda');
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--accent-soft)">📆</div><h2>היום ומחר</h2></div>'));
+    var wrap=el('div','rows');
+    groups.forEach(function(g){ if(!g.items.length)return;
+      wrap.appendChild(html('<div class="agh agh-'+g.key+'">'+g.ic+' '+g.label+' · '+g.items.length+'</div>'));
+      g.items.sort(function(a,b){return a[1].date<b[1].date?-1:(a[1].date>b[1].date?1:0);});
+      g.items.forEach(function(pr){ wrap.appendChild(agendaRow(pr[0],pr[1])); });
+    });
+    card.appendChild(wrap);
+    collapsible(card,'agenda',false);
+    return card;
+  }
+  function agendaRow(sec,item){
+    var r=el('div','row');
+    var c=document.createElement('button');c.className='check';c.type='button';
+    c.setAttribute('aria-label','סמן כבוצע: '+item.t);
+    c.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    c.onclick=function(){item.done=true;burst();save();};
+    r.appendChild(c);
+    var b=el('div','body');
+    var t=html('<div class="txt edit-txt">'+esc(item.t)+'</div>');t.onclick=function(){openEdit(item);};
+    b.appendChild(t);
+    b.appendChild(html('<div class="subtxt">'+esc(sec.title)+' · 📅 '+fmtDate(item.date)+'</div>'));
+    r.appendChild(b);
+    return r;
+  }
+
+  function sectionCard(sec,f){
+    var list = f ? sec.items.filter(function(i){return (i.whos||[]).indexOf(f)>=0;}) : sec.items;
+    if(f && !list.length) return null;
+    var left=list.filter(function(i){return !i.done;}).length;
     var card=el('div','card');
     card.appendChild(html('<div class="chd"><div class="ic" style="background:'+sec.bg+'">'+sec.icon+'</div>'+
       '<h2>'+esc(sec.title)+'</h2><span class="count">'+left+' פתוחים</span></div>'));
     var rows=el('div','rows');
-    sec.items.slice().sort(function(a,b){return (a.done?1:0)-(b.done?1:0);}).forEach(function(it){ rows.appendChild(itemRow(sec,it)); });
+    list.slice().sort(cmpItems).forEach(function(it){ rows.appendChild(itemRow(sec,it)); });
     card.appendChild(rows);
     var add=el('div','addrow');
     var inp=inputEl('הוספת פריט…','פריט חדש ב'+sec.title);
     var btn=plusBtn();
-    function commit(){var v=inp.value.trim();if(!v)return;sec.items.push(it(v));inp.value='';save();}
+    function commit(){var v=inp.value.trim();if(!v)return;sec.items.push(it(v,f||undefined));inp.value='';save();}
     btn.onclick=commit; inp.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});
     add.appendChild(inp);add.appendChild(btn);card.appendChild(add);
-    collapsible(card,sec.id,false);
+    if(!f)collapsible(card,sec.id,false);
     return card;
   }
 
@@ -610,9 +728,14 @@
     var rows=el('div','rows'),tot=0;
     state.expenses.forEach(function(x){ tot+=Number(x.v)||0;
       var r=el('div','row');
-      r.appendChild(html('<div class="body"><div class="txt">'+esc(x.t)+(x.tag?'<span class="tag">'+esc(x.tag)+'</span>':'')+'</div></div>'));
+      var b=el('div','body');
+      var t=html('<div class="txt edit-txt">'+esc(x.t)+(x.tag?' <span class="tag">'+esc(x.tag)+'</span>':'')+'</div>');
+      t.title='עריכת הוצאה'; t.onclick=function(){openExpense(x);};
+      b.appendChild(t);
+      var meta=el('div','meta'); meta.appendChild(payerChip(x)); b.appendChild(meta);
+      r.appendChild(b);
       var val=html('<button class="val" type="button" title="עריכת סכום">'+nfmt(x.v)+' ₪</button>');
-      val.onclick=function(){var v=window.prompt('סכום ל'+x.t,String(x.v));if(v===null)return;x.v=Math.round(parseFloat(v.replace(/[^\d.]/g,''))||0);save();};
+      val.onclick=function(){openExpense(x);};
       r.appendChild(val);
       r.appendChild(delBtn('מחיקת הוצאה: '+x.t,function(){state.expenses=state.expenses.filter(function(e){return e!==x;});save();}));
       rows.appendChild(r);
@@ -627,9 +750,78 @@
       if(!n||!a)return;state.expenses.push(ex(n,a));name.value='';amt.value='';save();}
     btn.onclick=commit; [name,amt].forEach(function(i){i.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});});
     add.appendChild(name);add.appendChild(amt);add.appendChild(btn);card.appendChild(add);
+    // amounts written on list items also count toward expenses
+    var itemAmts=[];
+    state.sections.forEach(function(s){s.items.forEach(function(i){if(i.amt!=null&&Number(i.amt)>0)itemAmts.push([s,i]);});});
+    var itemsSum=itemAmts.reduce(function(a,pr){return a+(Number(pr[1].amt)||0);},0);
+    tot+=itemsSum;
+    if(itemAmts.length){
+      var ig=el('div','rows itemamts');
+      ig.appendChild(html('<div class="subhead">💡 סכומים מהרשימה · '+itemAmts.length+'</div>'));
+      itemAmts.slice().sort(function(a,b){return cmpItems(a[1],b[1]);}).forEach(function(pr){
+        var s=pr[0],i=pr[1],r=el('div','row'),b2=el('div','body');
+        var t2=html('<div class="txt edit-txt">'+esc(i.t)+' <span class="tag2">'+esc(s.title)+'</span></div>');
+        t2.title='עריכת סכום'; t2.onclick=function(){editAmt(i);};
+        b2.appendChild(t2); r.appendChild(b2);
+        var v2=html('<button class="val" type="button" title="עריכת סכום">'+nfmt(i.amt)+' ₪</button>');
+        v2.onclick=function(){editAmt(i);}; r.appendChild(v2);
+        ig.appendChild(r);
+      });
+      card.appendChild(ig);
+    }
     card.appendChild(html('<div class="total"><span class="l">סה״כ הוצאות</span><span class="n">'+nfmt(tot)+' <small>₪</small></span></div>'));
+    // settlement breakdown — how much each person paid
+    var paid={},unassigned=0;
+    state.expenses.forEach(function(x){var v=Number(x.v)||0;if(x.payer){paid[x.payer]=(paid[x.payer]||0)+v;}else{unassigned+=v;}});
+    if(Object.keys(paid).length){
+      var pc=el('div','paid');
+      pc.appendChild(html('<div class="paid-title">מי שילם · להתקזזות</div>'));
+      people.forEach(function(p){ if(!paid[p.id])return;
+        pc.appendChild(html('<div class="paid-row"><span class="pl"><span class="av" style="background:'+p.c+'">'+
+          esc(p.name.charAt(0))+'</span>'+esc(p.name)+'</span><span class="pv">'+nfmt(paid[p.id])+' ₪</span></div>'));
+      });
+      if(unassigned>0)pc.appendChild(html('<div class="paid-row muted"><span class="pl">לא סומן מי שילם</span><span class="pv">'+nfmt(unassigned)+' ₪</span></div>'));
+      card.appendChild(pc);
+    }
     collapsible(card,'exp',false);
     return card;
+  }
+  function payerChip(x){
+    var p=x.payer?pById(x.payer):null;
+    if(p){var c=chip('who','');c.style.background=p.c;c.style.color='#fff';
+      c.appendChild(html('<span>💳 '+esc(p.name)+'</span>'));c.title='מי שילם';c.onclick=function(){openExpense(x);};return c;}
+    var a=chip('add','+ מי שילם');a.onclick=function(){openExpense(x);};return a;
+  }
+  /* edit expense: description + amount + payer */
+  var _expTarget=null,_expPayer=null;
+  function openExpense(x){
+    _expTarget=x;_expPayer=x.payer||null;
+    document.getElementById('expDesc').value=x.t||'';
+    document.getElementById('expAmt').value=(x.v!=null?String(x.v):'');
+    renderPayer();
+    document.getElementById('expSheet').classList.add('show');
+    setTimeout(function(){document.getElementById('expDesc').focus();},60);
+  }
+  function closeExpense(){document.getElementById('expSheet').classList.remove('show');_expTarget=null;}
+  function renderPayer(){
+    var box=document.getElementById('expPayer');box.innerHTML='';
+    people.forEach(function(p){
+      var on=_expPayer===p.id;
+      var b=el('button','aperson'+(on?' on':''));b.type='button';b.setAttribute('aria-pressed',on?'true':'false');
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+
+        '<span class="an">'+esc(p.name)+'</span><span class="ck">'+(on?'✓':'')+'</span>';
+      b.onclick=function(){_expPayer=(_expPayer===p.id?null:p.id);renderPayer();};
+      box.appendChild(b);
+    });
+  }
+  function saveExpense(){
+    if(!_expTarget){closeExpense();return;}
+    var d=document.getElementById('expDesc').value.trim();
+    var a=Math.round(parseFloat((document.getElementById('expAmt').value||'').replace(/[^\d.]/g,''))||0);
+    if(d)_expTarget.t=d;
+    _expTarget.v=a;
+    _expTarget.payer=_expPayer||null;
+    save();closeExpense();
   }
 
   function questionCard(){
@@ -663,6 +855,7 @@
     document.getElementById('totalN').textContent=total;
     document.getElementById('barFill').style.width=(total?Math.round(done/total*100):0)+'%';
     var spent=state.expenses.reduce(function(a,x){return a+(Number(x.v)||0);},0);
+    state.sections.forEach(function(s){s.items.forEach(function(i){spent+=Number(i.amt)||0;});}); // list amounts count too
     document.getElementById('spentV').textContent=nfmt(spent)+' ₪';
   }
   function renderPeople(){
@@ -757,9 +950,13 @@
   document.getElementById('assignSheet').onclick=function(e){if(e.target.id==='assignSheet')closeAssign();};
   document.getElementById('editSave').onclick=saveEdit;
   document.getElementById('editSheet').onclick=function(e){if(e.target.id==='editSheet')closeEdit();};
+  document.getElementById('expSave').onclick=saveExpense;
+  document.getElementById('expDel').onclick=function(){if(!_expTarget)return;state.expenses=state.expenses.filter(function(e){return e!==_expTarget;});save();closeExpense();};
+  document.getElementById('expSheet').onclick=function(e){if(e.target.id==='expSheet')closeExpense();};
+  document.getElementById('expAmt').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveExpense();}});
   document.getElementById('editTitle').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('editSub').focus();}});
   document.getElementById('editSub').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveEdit();}});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();closeExpense();}});
 
   /* ---------- share ---------- */
   document.getElementById('shareBtn').onclick=function(){
