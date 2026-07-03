@@ -151,13 +151,18 @@
   .row.confirmed .check{background:var(--ok);border-color:var(--ok)}
   .row.confirmed .check svg{opacity:1;transform:scale(1)}
 
-  .grow{align-items:center}
-  .gnum{flex:none;min-width:28px;height:24px;padding:0 6px;border-radius:7px;background:var(--surface2);
-    border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:12px;display:grid;place-items:center;
-    font-variant-numeric:tabular-nums}
-  .grow.confirmed .gnum{background:var(--ok-soft);color:var(--ok);border-color:transparent}
-  .grow .gname{font-size:14.5px;font-weight:500}
-  .grow.confirmed .gname{font-weight:700}
+  .grow{align-items:center;gap:8px}
+  .gnum{flex:none;min-width:26px;height:22px;padding:0 6px;border-radius:6px;background:var(--fill);
+    color:var(--muted);font-weight:500;font-size:12px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+  .grow .gname{font-size:16px;font-weight:400}
+  .gtog{flex:none;font-size:12px;font-weight:500;border:1px solid var(--line);background:transparent;color:var(--muted);
+    border-radius:99px;padding:5px 10px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
+  .gtog:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .gtog.conf.on{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:0 2px 8px color-mix(in srgb,var(--ok) 35%,transparent)}
+  .gtog.arr.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px color-mix(in srgb,var(--accent) 35%,transparent)}
+  .gsum{display:flex;gap:16px;padding:10px 16px;font-size:13px;font-weight:500;border-bottom:.5px solid var(--line2)}
+  .gsum .gs-conf{color:var(--ok)}
+  .gsum .gs-arr{color:var(--accent)}
 
   .body{flex:1;min-width:0}
   .txt{font-size:14.5px;font-weight:500;line-height:1.4;word-break:break-word}
@@ -491,7 +496,7 @@
   function it(t,who){return {id:uid('i'),t:t,sub:null,amt:null,payer:null,whos:whoArr(who),done:false,date:null,imgs:[],links:[]};}
   function ex(t,v,tag){return {id:uid('e'),t:t,v:v,tag:tag||null,payer:null};}
   function q(t,who){return {id:uid('q'),t:t,whos:whoArr(who),done:false};}
-  function guest(name){return {id:uid('g'),name:name,coming:false};}
+  function guest(name){return {id:uid('g'),name:name,confirmed:false,arrived:false};}
   var GUEST_NAMES=[
     'אווה אלפסי','אורי פרץ','איימי קשקש','איתן מינץ','איתן החדש','אלה ויינשטיין','אמה בן זאב',
     'אמלי ששון אבוקסיס','אמיליה גנל','ארי מיכאל','ארי סבן','גאיה נפשי','גיל יצחק','גל אברהם הירשזון',
@@ -515,6 +520,7 @@
     if(!s.expenses)s.expenses=[]; s.expenses.forEach(function(e){if(e.payer===undefined)e.payer=null;});
     if(!s.questions)s.questions=[]; s.questions.forEach(migWho);
     if(!s.guests)s.guests=[];
+    s.guests.forEach(function(g){ if(g.confirmed===undefined)g.confirmed=!!g.coming; if(g.arrived===undefined)g.arrived=false; if('coming' in g)delete g.coming; });
     if(!s.people||typeof s.people!=='object')s.people={};
     if(!s.mig||typeof s.mig!=='object')s.mig={};
     return s;
@@ -658,25 +664,34 @@
 
   function guestCard(){
     var card=el('div','card guests');
-    var confirmed=state.guests.filter(function(g){return g.coming;}).length;
+    var confirmed=state.guests.filter(function(g){return g.confirmed;}).length;
+    var arrived=state.guests.filter(function(g){return g.arrived;}).length;
     card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--ok-soft)">🎉</div>'+
-      '<h2>רשימת ילדים</h2><span class="count">'+state.guests.length+' · '+confirmed+' אישרו</span></div>'));
+      '<h2>רשימת מוזמנים</h2><span class="count">'+state.guests.length+' ילדים</span></div>'));
     var rows=el('div','rows');
+    // summary strip
+    rows.appendChild(html('<div class="gsum"><span class="gs gs-conf">✓ אישרו · '+confirmed+'</span>'+
+      '<span class="gs gs-arr">🎈 הגיעו · '+arrived+'</span></div>'));
     state.guests.forEach(function(g,idx){
-      var r=el('div','row grow'+(g.coming?' confirmed':''));
+      var r=el('div','row grow');
       r.appendChild(html('<div class="gnum">'+(idx+1)+'</div>'));
       var b=el('div','body');
       var nm=html('<div class="txt gname edit-txt">'+esc(g.name)+'</div>');
       nm.title='עריכת שם'; nm.onclick=function(){renameGuest(g);};
       b.appendChild(nm);
       r.appendChild(b);
-      var c=document.createElement('button');c.className='check';c.type='button';
-      c.setAttribute('aria-pressed',g.coming?'true':'false');
-      c.setAttribute('aria-label',(g.coming?'בטל אישור: ':'אישור הגעה: ')+g.name);
-      c.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-      c.onclick=function(){g.coming=!g.coming;save();};
-      r.appendChild(c);
-      r.appendChild(iconBtn('edit','✏️','עריכת שם: '+g.name,function(){renameGuest(g);}));
+      var conf=el('button','gtog conf'+(g.confirmed?' on':''));conf.type='button';
+      conf.setAttribute('aria-pressed',g.confirmed?'true':'false');
+      conf.setAttribute('aria-label',(g.confirmed?'בטל אישור הגעה: ':'סימון אישר הגעה: ')+g.name);
+      conf.textContent=(g.confirmed?'✓ ':'')+'אישר';
+      conf.onclick=function(){g.confirmed=!g.confirmed;save();};
+      r.appendChild(conf);
+      var arr=el('button','gtog arr'+(g.arrived?' on':''));arr.type='button';
+      arr.setAttribute('aria-pressed',g.arrived?'true':'false');
+      arr.setAttribute('aria-label',(g.arrived?'בטל הגעה: ':'סימון הגיע בפועל: ')+g.name);
+      arr.textContent=(g.arrived?'✓ ':'')+'הגיע';
+      arr.onclick=function(){g.arrived=!g.arrived; if(g.arrived)g.confirmed=true; save();};
+      r.appendChild(arr);
       r.appendChild(delBtn('מחיקה מהרשימה: '+g.name,function(){state.guests=state.guests.filter(function(x){return x!==g;});save();}));
       rows.appendChild(r);
     });
