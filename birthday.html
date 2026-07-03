@@ -174,16 +174,13 @@
   .chip.who{color:#fff}
   .chip.unassigned{background:transparent;color:var(--muted);border:1px dashed var(--faint)}
   .chip.datein{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);
-    border-color:color-mix(in srgb,var(--accent) 30%,transparent);gap:5px;padding:3px 9px;cursor:pointer}
-  .chip.datein .dicon{font-size:12px}
-  .chip.datein .dinput{border:none;background:transparent;color:inherit;font:inherit;font-weight:800;font-size:11.5px;
-    padding:0;margin:0;cursor:pointer;font-variant-numeric:tabular-nums;min-width:82px;color-scheme:light}
-  .chip.datein .dinput::-webkit-calendar-picker-indicator{opacity:0;width:0;margin:0;padding:0;display:none}
-  .chip.datein .dinput::-webkit-date-and-time-value{text-align:right}
-  @media (prefers-color-scheme:dark){.chip.datein .dinput{color-scheme:dark}}
-  @media (prefers-color-scheme:dark){.chip.datein .dinput{color-scheme:dark}}
-  :root[data-theme="dark"] .chip.datein .dinput{color-scheme:dark}
-  :root[data-theme="light"] .chip.datein .dinput{color-scheme:light}
+    border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:99px;padding:3px 10px;
+    font:inherit;font-weight:800;font-size:11.5px;cursor:pointer;font-variant-numeric:tabular-nums;color-scheme:light}
+  .chip.datein::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.7;margin-inline-start:5px}
+  .chip.datein::-webkit-date-and-time-value{text-align:right}
+  @media (prefers-color-scheme:dark){.chip.datein{color-scheme:dark}}
+  :root[data-theme="dark"] .chip.datein{color-scheme:dark}
+  :root[data-theme="light"] .chip.datein{color-scheme:light}
   .whowrap{display:inline-flex;gap:6px;flex-wrap:wrap;align-items:center}
 
   .chd{cursor:pointer;user-select:none}
@@ -282,7 +279,8 @@
   .paid-split.ok{color:var(--ok);font-weight:800;border-top:none}
   .settle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;margin-top:7px;
     background:var(--surface);border:1px solid var(--line);border-radius:11px;font-size:14px;font-weight:800}
-  .settle-row .sarr{color:var(--muted);margin:0 4px}
+  .settle-row .pl{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+  .settle-row .sarr{color:var(--muted);font-weight:700;font-size:12.5px}
   .settle-row .pv{font-variant-numeric:tabular-nums;color:var(--tang)}
   .agenda-empty{padding:16px 10px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);line-height:1.7}
   .agenda-empty b{color:var(--accent)}
@@ -535,6 +533,7 @@
   var board=document.getElementById('board');
   var filterWho=null; // view-only: show only one person's tasks
   function render(){
+    var sy=window.pageYOffset||document.documentElement.scrollTop||0; // keep the view steady across re-renders
     board.innerHTML='';
     var f=filterWho, shown=0;
     if(f){
@@ -556,6 +555,7 @@
     }
     updateSummary();
     renderPeople();
+    if(sy)window.scrollTo(0,sy);
   }
   function personName(id){var p=pById(id);return p?p.name:'';}
   function isoLocal(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
@@ -828,7 +828,8 @@
           transfers.forEach(function(t){
             var from=pById(t.from),to=pById(t.to);
             pc.appendChild(html('<div class="settle-row"><span class="pl">'+
-              '<b style="color:'+from.c+'">'+esc(from.name)+'</b> <span class="sarr">→</span> '+
+              '<b style="color:'+from.c+'">'+esc(from.name)+'</b>'+
+              '<span class="sarr">מעביר/ה ל־</span>'+
               '<b style="color:'+to.c+'">'+esc(to.name)+'</b></span>'+
               '<span class="pv">'+nfmt(Math.round(t.amt))+' ₪</span></div>'));
           });
@@ -947,16 +948,12 @@
 
   /* ---------- dates (native, reliable) ---------- */
   function dateControl(item){
-    var lab=el('label','chip datein'+(item.date?' set':''));
-    lab.appendChild(html('<span class="dicon" aria-hidden="true">📅</span>'));
-    var di=document.createElement('input');di.type='date';di.className='dinput';
+    // plain native date field — the browser's own picker; no auto-open, no jump
+    var di=document.createElement('input');di.type='date';di.className='chip datein';
     if(item.date)di.value=item.date;
-    di.setAttribute('aria-label','תאריך לפריט: '+item.t);
+    di.title='תאריך'; di.setAttribute('aria-label','תאריך לפריט: '+item.t);
     di.onchange=function(){item.date=di.value||null;save();};
-    // desktop: clicking anywhere on the chip opens the native calendar
-    lab.addEventListener('click',function(e){ if(e.target!==di){ try{ di.showPicker&&di.showPicker(); }catch(_){ di.focus(); } } });
-    lab.appendChild(di);
-    return lab;
+    return di;
   }
 
   /* ---------- collapse / expand cards ---------- */
