@@ -68,21 +68,37 @@
   .hd .eyebrow{font-size:13px;font-weight:500;letter-spacing:0;color:var(--muted);text-transform:none;margin:0 0 2px}
   .hd h1{margin:0;font-size:34px;font-weight:700;letter-spacing:.37px;line-height:1.1}
   .hd h1 .amp{color:var(--accent)}
-  .sync{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--muted);margin-top:6px}
+  .hd-meta{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}
+  .sync{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--muted)}
   .sync .led{width:8px;height:8px;border-radius:99px;background:var(--faint)}
   .sync.on .led{background:var(--ok)}
   .sync.off .led{background:var(--tang)}
+  /* event countdown pill */
+  .countdown{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13px;font-weight:700;color:var(--accent);
+    background:var(--accent-soft);border:none;border-radius:99px;padding:6px 13px;cursor:pointer}
+  .countdown:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .countdown.today{background:var(--accent);color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
+  .countdown:empty{display:none}
 
   /* iOS segmented control */
   .tabs-wrap{position:sticky;top:0;z-index:15;margin:0 -16px;padding:8px 16px 8px;
     background:color-mix(in srgb,var(--bg) 80%, transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+  .mini-title{font-size:17px;font-weight:700;text-align:center;letter-spacing:.2px;
+    max-height:0;opacity:0;overflow:hidden;transition:max-height .25s,opacity .2s,margin .25s;margin:0}
+  .mini-title .amp{color:var(--accent)}
+  body.scrolled .mini-title{max-height:28px;opacity:1;margin:0 0 8px}
   .tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--fill);border-radius:9px;padding:2px}
   .tab{border:none;background:transparent;color:var(--ink);border-radius:7px;padding:7px 6px;font:inherit;
-    font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;position:relative;transition:.2s}
+    font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;position:relative;transition:.2s;
+    display:inline-flex;align-items:center;justify-content:center;gap:5px}
   .tab+.tab::before{content:"";position:absolute;right:0;top:20%;height:60%;width:1px;background:var(--line2)}
   .tab.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12),0 1px 1px rgba(0,0,0,.04);font-weight:500}
   .tab.active::before,.tab.active+.tab::before{background:transparent}
   .tab:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .tab-c{font-size:11px;font-weight:700;color:var(--muted);background:var(--fill);border-radius:99px;
+    min-width:17px;padding:0 5px;height:17px;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}
+  .tab-c:empty{display:none}
+  .tab.active .tab-c{background:var(--accent-soft);color:var(--accent)}
 
   .people-row{display:flex;align-items:center;gap:8px;margin:2px 0}
   .people{display:flex;flex-wrap:nowrap;gap:6px;justify-content:flex-start;flex:1;overflow-x:auto;
@@ -105,16 +121,21 @@
     font:inherit;font-size:15px;font-weight:500;cursor:pointer;flex:none}
   .fbanner-reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 
-  /* slim completed-progress strip */
-  .progress{background:var(--surface);border-radius:var(--r);padding:12px 16px;margin:10px 0;box-shadow:var(--shadow-sm)}
-  .progress-head{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500;
-    color:var(--muted);margin-bottom:9px}
-  .progress-n{font-variant-numeric:tabular-nums;color:var(--muted)}
-  .progress-n b{color:var(--ink);font-size:15px;font-weight:700}
-  .bar{width:100%;height:6px;border-radius:99px;background:var(--fill);overflow:hidden}
-  .bar>i{display:block;height:100%;width:0;border-radius:99px;background:var(--ok);
-    transition:width .45s cubic-bezier(.4,0,.2,1)}
-  @media (prefers-reduced-motion:reduce){.bar>i{transition:none}}
+  /* completed-progress with ring */
+  .progress{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:var(--r);
+    padding:12px 16px;margin:10px 0;box-shadow:var(--shadow-sm)}
+  .ring{width:44px;height:44px;flex:none;transform:rotate(-90deg)}
+  .ring-bg{fill:none;stroke:var(--fill);stroke-width:4}
+  .ring-fg{fill:none;stroke:var(--ok);stroke-width:4;stroke-linecap:round;
+    stroke-dasharray:100.5;stroke-dashoffset:100.5;transition:stroke-dashoffset .5s cubic-bezier(.4,0,.2,1)}
+  @media (prefers-reduced-motion:reduce){.ring-fg{transition:none}}
+  .progress-txt{flex:1}
+  .progress-big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+  .progress-big .progress-tot{color:var(--faint);font-size:16px;font-weight:500}
+  .progress-lbl{font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
+  /* per-person progress ring inside the filter banner */
+  .fbanner .ring{width:34px;height:34px}
+  .bar{display:none}
 
   .empty{text-align:center;color:var(--muted);font-weight:500;font-size:15px;padding:34px 16px}
   /* the agenda is the hero — elevated with a soft tinted shadow */
@@ -344,9 +365,37 @@
   .toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   .toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:99px;font-size:14px;font-weight:500;
-    box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:30}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    background:var(--ink);color:var(--bg);padding:10px 12px 10px 18px;border-radius:99px;font-size:14px;font-weight:500;
+    box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:60;display:inline-flex;align-items:center;gap:6px}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .toast-undo{background:transparent;border:none;color:var(--accent);font:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:2px 8px}
+
+  /* guest search + filter */
+  .gcontrols{display:flex;flex-direction:column;gap:8px;padding:12px 16px;border-bottom:.5px solid var(--line2)}
+  .gsearch{width:100%;background:color-mix(in srgb,var(--ink) 5%,var(--surface));border:none;border-radius:10px;
+    padding:9px 12px;font:inherit;font-size:16px;color:var(--ink);box-shadow:var(--inset)}
+  .gsearch:focus{outline:2px solid var(--accent)}
+  .gsearch::placeholder{color:var(--faint)}
+  .gfilters{display:flex;gap:6px;flex-wrap:wrap}
+  .gfchip{font-size:13px;font-weight:500;border:none;background:var(--fill);color:var(--ink);border-radius:99px;
+    padding:5px 12px;cursor:pointer;font-family:inherit}
+  .gfchip.on{background:var(--accent);color:#fff}
+  .gfchip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  /* stacked assignee avatars */
+  .avstack{display:inline-flex;align-items:center}
+  .avstack .sav{width:22px;height:22px;border-radius:99px;display:grid;place-items:center;font-size:13px;
+    border:2px solid var(--surface);margin-inline-start:-8px}
+  .avstack .sav:first-child{margin-inline-start:0}
+  .avstack .avname{margin-inline-start:6px;font-size:13px;font-weight:500;color:var(--muted)}
+  /* swipe-to-delete */
+  .swipe{position:relative;overflow:hidden;padding:0!important}
+  .swipe-del{position:absolute;top:0;bottom:0;left:0;width:80px;background:var(--danger);color:#fff;border:none;
+    font:inherit;font-size:15px;font-weight:500;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:0}
+  .swipe.armed .swipe-del{display:flex}
+  .swipe-body{position:relative;z-index:1;width:100%;background:var(--surface);display:flex;align-items:center;gap:12px;
+    padding:11px 16px;min-height:44px;box-sizing:border-box;transition:transform .22s cubic-bezier(.4,0,.2,1)}
+  .swipe.dragging .swipe-body{transition:none;will-change:transform}
+  .row+.row::before{z-index:3}
 </style>
 <button class="toggle" id="themeBtn" title="מצב תצוגה" aria-label="החלף מצב תצוגה">🌙</button>
   <button class="toggle share" id="shareBtn" title="שיתוף" aria-label="שיתוף הרשימה">🔗</button>
@@ -355,15 +404,19 @@
     <canvas id="confetti" aria-hidden="true"></canvas>
     <p class="eyebrow">רשימה משותפת · יום הולדת</p>
     <h1>ליה <span class="amp">&amp;</span> גיל</h1>
-    <span class="sync" id="syncPill"><span class="led"></span><span id="syncTxt">מתחבר…</span></span>
+    <div class="hd-meta">
+      <button class="countdown" id="countdown" type="button"></button>
+      <span class="sync" id="syncPill"><span class="led"></span><span id="syncTxt">מתחבר…</span></span>
+    </div>
   </header>
 
   <div class="wrap">
     <div class="tabs-wrap">
+      <div class="mini-title" id="miniTitle">ליה <span class="amp">&amp;</span> גיל</div>
       <div class="tabs" id="tabs">
-        <button class="tab" type="button" data-tab="tasks">📋 משימות</button>
-        <button class="tab" type="button" data-tab="money">🧾 הוצאות</button>
-        <button class="tab" type="button" data-tab="kids">🎉 ילדים</button>
+        <button class="tab" type="button" data-tab="tasks"><span class="tab-l">📋 משימות</span><span class="tab-c" id="c-tasks"></span></button>
+        <button class="tab" type="button" data-tab="money"><span class="tab-l">🧾 הוצאות</span></button>
+        <button class="tab" type="button" data-tab="kids"><span class="tab-l">🎉 ילדים</span><span class="tab-c" id="c-kids"></span></button>
       </div>
     </div>
 
@@ -375,8 +428,14 @@
     </div>
 
     <div class="progress" id="summary">
-      <div class="progress-head"><span>✔︎ הושלמו</span><span class="progress-n"><b id="doneN">0</b> מתוך <span id="totalN">0</span></span></div>
-      <div class="bar"><i id="barFill"></i></div>
+      <svg class="ring" viewBox="0 0 40 40" aria-hidden="true">
+        <circle class="ring-bg" cx="20" cy="20" r="16"></circle>
+        <circle class="ring-fg" id="ringFg" cx="20" cy="20" r="16"></circle>
+      </svg>
+      <div class="progress-txt">
+        <div class="progress-big"><b id="doneN">0</b><span class="progress-tot"> / <span id="totalN">0</span></span></div>
+        <div class="progress-lbl">משימות הושלמו</div>
+      </div>
     </div>
 
     <div id="board"></div>
@@ -458,6 +517,7 @@
   people.forEach(function(p){p._dn=p.name;p._de=p.emoji;}); // remember defaults
   function applyPeople(){var m=(typeof state!=='undefined'&&state&&state.people)||{};people.forEach(function(p){var o=m[p.id]||{};p.name=o.name||p._dn;p.emoji=o.emoji||p._de;});}
   function pById(id){for(var i=0;i<people.length;i++)if(people[i].id===id)return people[i];return null;}
+  var SEC_COLOR={buy:'var(--p1)',do:'var(--p3)',get:'var(--p4)',bring:'var(--p2)'};
   var EMOJI_CHOICES=['👩','👧','👨','🧑','👵','👴','🧕','👩‍🦰','👱‍♀️','🧔','🦸‍♀️','🧚','👸','🌸','⭐','🍀','🐝','🦄','🐱','🐶','🎈','🎀','💜','🧁'];
 
   function defaultState(){
@@ -552,6 +612,9 @@
     appId:"1:186679628811:web:273fe3a6c95ac5ff6fa30e"
   };
   var DOC_ID='birthday-lia-gil';          // lives in the shared "trips" collection
+  var EVENT_DATE='2026-07-10';            // the party day
+  function daysUntilEvent(){var t=new Date(),e=new Date(EVENT_DATE+'T00:00:00');
+    t.setHours(0,0,0,0); return Math.round((e-t)/86400000);}
   var CLIENT=Math.random().toString(36).slice(2)+Date.now().toString(36);
   var _db=null,_lastBlob=null,_synced=false;
 
@@ -615,18 +678,30 @@
   var board=document.getElementById('board');
   var filterWho=null; // view-only: show only one person's tasks
   var activeTab='tasks';
+  var guestFilter='all', guestSearch=''; // guest-list view state
   function renderTabs(){
     var openN=0; state.sections.forEach(function(s){s.items.forEach(function(i){if(!i.done)openN++;});});
-    var meta={tasks:openN, money:'', kids:(state.guests||[]).length};
     var tabs=document.querySelectorAll('#tabs .tab');
     for(var i=0;i<tabs.length;i++){var k=tabs[i].getAttribute('data-tab');
       tabs[i].classList.toggle('active',k===activeTab);}
+    var ct=document.getElementById('c-tasks'); if(ct)ct.textContent=openN?String(openN):'';
+    var ck=document.getElementById('c-kids'); if(ck)ck.textContent=(state.guests||[]).length||'';
+  }
+  function renderCountdown(){
+    var el0=document.getElementById('countdown'); if(!el0)return;
+    var d=daysUntilEvent();
+    el0.classList.toggle('today',d===0);
+    if(d>1)el0.textContent='🎂 עוד '+d+' ימים · 10.7';
+    else if(d===1)el0.textContent='🎂 מחר האירוע! · 10.7';
+    else if(d===0)el0.textContent='🎉 היום האירוע!';
+    else el0.textContent='';
   }
   function render(){
     var sy=window.pageYOffset||document.documentElement.scrollTop||0; // keep the view steady across re-renders
     applyPeople();
     runMigrations();
     renderTabs();
+    renderCountdown();
     var f=filterWho, shown=0, tasksTab=(activeTab==='tasks');
     document.getElementById('peopleWrap').style.display=tasksTab?'':'none';
     document.getElementById('summary').style.display=tasksTab?'':'none';
@@ -667,13 +742,39 @@
     var card=el('div','card guests');
     var confirmed=state.guests.filter(function(g){return g.confirmed;}).length;
     var arrived=state.guests.filter(function(g){return g.arrived;}).length;
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--ok-soft)">🎉</div>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--p4)">🎉</div>'+
       '<h2>רשימת מוזמנים</h2><span class="count">'+state.guests.length+' ילדים</span></div>'));
     var rows=el('div','rows');
     // summary strip
     rows.appendChild(html('<div class="gsum"><span class="gs gs-conf">✓ אישרו · '+confirmed+'</span>'+
       '<span class="gs gs-arr">🎈 הגיעו · '+arrived+'</span></div>'));
-    state.guests.forEach(function(g,idx){
+    // search + filter controls
+    var ctrls=el('div','gcontrols');
+    var srch=document.createElement('input');srch.className='gsearch';srch.type='search';srch.placeholder='🔍 חיפוש שם…';
+    srch.value=guestSearch;srch.setAttribute('aria-label','חיפוש מוזמן');
+    srch.addEventListener('input',function(){guestSearch=srch.value;var sy=window.pageYOffset;render();window.scrollTo(0,sy);
+      var s2=document.querySelector('.gsearch');if(s2){s2.focus();try{s2.setSelectionRange(guestSearch.length,guestSearch.length);}catch(e){}}});
+    ctrls.appendChild(srch);
+    var filt=el('div','gfilters');
+    [['all','הכל'],['pending','לא אישרו'],['confirmed','אישרו'],['arrived','הגיעו']].forEach(function(o){
+      var c=el('button','gfchip'+(guestFilter===o[0]?' on':''));c.type='button';c.textContent=o[1];
+      c.onclick=function(){guestFilter=o[0];render();};filt.appendChild(c);
+    });
+    ctrls.appendChild(filt);
+    rows.appendChild(ctrls);
+    // apply filter + search (keep original numbering)
+    var q=guestSearch.trim();
+    var list=state.guests.map(function(g,idx){return [g,idx];}).filter(function(pair){
+      var g=pair[0];
+      if(guestFilter==='confirmed'&&!g.confirmed)return false;
+      if(guestFilter==='arrived'&&!g.arrived)return false;
+      if(guestFilter==='pending'&&g.confirmed)return false;
+      if(q&&g.name.indexOf(q)<0)return false;
+      return true;
+    });
+    if(!list.length)rows.appendChild(html('<div class="empty">אין תוצאות</div>'));
+    list.forEach(function(pair){
+      var g=pair[0],idx=pair[1];
       var r=el('div','row grow');
       r.appendChild(html('<div class="gnum">'+(idx+1)+'</div>'));
       var b=el('div','body');
@@ -693,7 +794,7 @@
       arr.textContent=(g.arrived?'✓ ':'')+'הגיע';
       arr.onclick=function(){g.arrived=!g.arrived; if(g.arrived)g.confirmed=true; save();};
       r.appendChild(arr);
-      r.appendChild(delBtn('מחיקה מהרשימה: '+g.name,function(){state.guests=state.guests.filter(function(x){return x!==g;});save();}));
+      r.appendChild(delBtn('מחיקה מהרשימה: '+g.name,function(){removeFrom(state.guests,g,'הילד/ה');}));
       rows.appendChild(r);
     });
     card.appendChild(rows);
@@ -721,7 +822,7 @@
     });});
     var totalDated=groups.reduce(function(a,g){return a+g.items.length;},0);
     var card=el('div','card agenda');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--accent-soft)">📆</div><h2>הפוקוס להיום ומחר</h2>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--accent)">📆</div><h2>הפוקוס להיום ומחר</h2>'+
       (totalDated?'<span class="count">'+totalDated+'</span>':'')+'</div>'));
     var wrap=el('div','rows');
     if(!totalDated){
@@ -756,7 +857,7 @@
     if(f && !list.length) return null;
     var left=list.filter(function(i){return !i.done;}).length;
     var card=el('div','card');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:'+sec.bg+'">'+sec.icon+'</div>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:'+(SEC_COLOR[sec.id]||'var(--accent)')+'">'+sec.icon+'</div>'+
       '<h2>'+esc(sec.title)+'</h2><span class="count">'+left+' פתוחים</span></div>'));
     var rows=el('div','rows');
     list.slice().sort(cmpItems).forEach(function(it){ rows.appendChild(itemRow(sec,it)); });
@@ -786,15 +887,20 @@
     var meta=el('div','meta'), has=false;
     if(item.amt!=null){meta.appendChild(chip('amt','₪ '+nfmt(item.amt)));has=true;}
     if(item.date){meta.appendChild(chip('date','📅 '+fmtDate(item.date)));has=true;}
-    (item.whos||[]).forEach(function(id){var p=pById(id);if(!p)return;
-      var wc=chip('who','');wc.style.background=p.c;wc.style.color='#fff';wc.appendChild(html('<span>'+p.emoji+' '+esc(p.name)+'</span>'));meta.appendChild(wc);has=true;});
+    var whos=(item.whos||[]).map(pById).filter(Boolean);
+    if(whos.length){
+      var stack=el('span','avstack');
+      whos.forEach(function(p){stack.appendChild(html('<span class="sav" style="background:'+p.c+'">'+p.emoji+'</span>'));});
+      if(whos.length===1)stack.appendChild(html('<span class="avname">'+esc(whos[0].name)+'</span>'));
+      meta.appendChild(stack);has=true;
+    }
     if((item.imgs||[]).length){meta.appendChild(chip('mini','📷 '+item.imgs.length));has=true;}
     if((item.links||[]).length){meta.appendChild(chip('mini','🔗 '+item.links.length));has=true;}
     if(has)b.appendChild(meta);
     // whole body opens the editor
     b.style.cursor='pointer'; b.title='עריכה'; b.onclick=function(){openEdit(item);};
     r.appendChild(b);
-    r.appendChild(iconBtn('edit','✏️','עריכת פריט: '+item.t,function(){openEdit(item);}));
+    swipeToDelete(r,function(){deleteItem(item);}); // swipe-left to delete
     return r;
   }
 
@@ -892,7 +998,7 @@
 
   function expenseCard(){
     var card=el('div','card exp');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--tang-soft)">🧾</div>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--tang)">🧾</div>'+
       '<h2>הוצאות</h2><span class="count">'+state.expenses.length+' רשומות</span></div>'));
     var rows=el('div','rows'),tot=0;
     state.expenses.forEach(function(x){ tot+=Number(x.v)||0;
@@ -906,8 +1012,7 @@
       var val=html('<button class="val" type="button" title="עריכת סכום">'+nfmt(x.v)+' ₪</button>');
       val.onclick=function(){openExpense(x);};
       r.appendChild(val);
-      r.appendChild(iconBtn('edit','✏️','עריכת הוצאה: '+x.t,function(){openExpense(x);}));
-      r.appendChild(delBtn('מחיקת הוצאה: '+x.t,function(){state.expenses=state.expenses.filter(function(e){return e!==x;});save();}));
+      swipeToDelete(r,function(){removeFrom(state.expenses,x,'ההוצאה');}); // swipe-left to delete
       rows.appendChild(r);
     });
     card.appendChild(rows);
@@ -1084,7 +1189,7 @@
 
   function questionCard(){
     var card=el('div','card q');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--accent-soft)">❓</div><h2>שאלות לצוות</h2></div>'));
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--p2)">❓</div><h2>שאלות לצוות</h2></div>'));
     var rows=el('div','rows');
     state.questions.forEach(function(qq){
       var r=el('div','row'+(qq.done?' done':''));
@@ -1094,7 +1199,7 @@
       var b=el('div','body');b.appendChild(html('<div class="txt">'+esc(qq.t)+'</div>'));
       var meta=el('div','meta');meta.appendChild(whoChip(qq));b.appendChild(meta);
       r.appendChild(b);
-      r.appendChild(delBtn('מחיקת שאלה',function(){state.questions=state.questions.filter(function(x){return x!==qq;});save();}));
+      r.appendChild(delBtn('מחיקת שאלה',function(){removeFrom(state.questions,qq,'השאלה');}));
       rows.appendChild(r);
     });
     card.appendChild(rows);
@@ -1107,11 +1212,15 @@
   }
 
   function updateSummary(){
-    var total=0,done=0;
-    state.sections.forEach(function(s){s.items.forEach(function(i){total++;if(i.done)done++;});});
+    var f=filterWho,total=0,done=0;
+    state.sections.forEach(function(s){s.items.forEach(function(i){
+      if(f&&(i.whos||[]).indexOf(f)<0)return; total++; if(i.done)done++;
+    });});
     document.getElementById('doneN').textContent=done;
     document.getElementById('totalN').textContent=total;
-    document.getElementById('barFill').style.width=(total?Math.round(done/total*100):0)+'%';
+    var C=100.5,pct=total?done/total:0;
+    var ring=document.getElementById('ringFg'); if(ring)ring.style.strokeDashoffset=String(C*(1-pct));
+    var lbl=document.querySelector('.progress-lbl'); if(lbl)lbl.textContent=f?('המשימות של '+personName(f)):'משימות הושלמו';
   }
   function renderPeople(){
     var box=document.getElementById('people');box.innerHTML='';
@@ -1210,9 +1319,7 @@
   document.getElementById('assignDone').onclick=closeAssign;
   document.getElementById('assignSheet').onclick=function(e){if(e.target.id==='assignSheet')closeAssign();};
   document.getElementById('editSave').onclick=saveEdit;
-  document.getElementById('editDelete').onclick=function(){if(!_editTarget)return;
-    var sec=sectionOf(_editTarget); if(sec)sec.items=sec.items.filter(function(x){return x!==_editTarget;});
-    save();closeEdit();};
+  document.getElementById('editDelete').onclick=function(){if(!_editTarget)return;var it=_editTarget;closeEdit();deleteItem(it);};
   document.getElementById('editAddImg').onclick=function(){if(_editTarget)pickImage(_editTarget,renderEditAttach);};
   document.getElementById('editAddLink').onclick=function(){if(_editTarget)addLink(_editTarget,renderEditAttach);};
   document.getElementById('editAddCal').onclick=function(){if(!_editTarget)return;
@@ -1220,7 +1327,7 @@
     addToCalendar(_editTarget);};
   document.getElementById('editSheet').onclick=function(e){if(e.target.id==='editSheet')closeEdit();};
   document.getElementById('expSave').onclick=saveExpense;
-  document.getElementById('expDel').onclick=function(){if(!_expTarget)return;state.expenses=state.expenses.filter(function(e){return e!==_expTarget;});save();closeExpense();};
+  document.getElementById('expDel').onclick=function(){if(!_expTarget)return;var x=_expTarget;closeExpense();removeFrom(state.expenses,x,'ההוצאה');};
   document.getElementById('expSheet').onclick=function(e){if(e.target.id==='expSheet')closeExpense();};
   document.getElementById('expAmt').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveExpense();}});
   document.getElementById('editTitle').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('editSub').focus();}});
@@ -1235,6 +1342,14 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();closeExpense();closePeople();}});
   (function(){var tabs=document.querySelectorAll('#tabs .tab');
     for(var i=0;i<tabs.length;i++){(function(t){t.onclick=function(){activeTab=t.getAttribute('data-tab');render();window.scrollTo(0,0);};})(tabs[i]);}})();
+  // collapsing large title -> mini title in the sticky bar
+  var _scd=false; window.addEventListener('scroll',function(){var s=(window.pageYOffset||0)>96;
+    if(s!==_scd){_scd=s;document.body.classList.toggle('scrolled',s);}},{passive:true});
+  // countdown: on the day jump to guest check-in, otherwise to the agenda
+  document.getElementById('countdown').onclick=function(){
+    if(daysUntilEvent()<=0){activeTab='kids';render();window.scrollTo(0,0);}
+    else{activeTab='tasks';render();var a=document.querySelector('.card.agenda');if(a)a.scrollIntoView({behavior:'smooth',block:'start'});}
+  };
 
   /* ---------- share ---------- */
   document.getElementById('shareBtn').onclick=function(){
@@ -1245,6 +1360,44 @@
   };
   function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
     clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},1900);}
+  function toastUndo(msg,fn){
+    var t=document.getElementById('toast');t.innerHTML='';
+    t.appendChild(document.createTextNode(msg+'  '));
+    var btn=document.createElement('button');btn.className='toast-undo';btn.type='button';btn.textContent='בטל';
+    btn.onclick=function(){t.classList.remove('show');clearTimeout(toast._t);fn();};
+    t.appendChild(btn); t.classList.add('show');
+    clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},6000);
+  }
+  // delete an entry from a list with a 6s undo
+  function removeFrom(list,obj,label){
+    var i=list.indexOf(obj); if(i<0)return;
+    list.splice(i,1); save();
+    toastUndo((label||'הפריט')+' נמחק',function(){ list.splice(Math.min(i,list.length),0,obj); save(); });
+  }
+  function deleteItem(item){ var sec=sectionOf(item); if(sec)removeFrom(sec.items,item,'הפריט'); }
+  // wrap a row's content so it can be swiped left to reveal a delete action
+  function swipeToDelete(row,onDelete){
+    var W=80, body=el('div','swipe-body');
+    while(row.firstChild)body.appendChild(row.firstChild);
+    var del=el('button','swipe-del');del.type='button';del.textContent='מחק';
+    del.setAttribute('aria-label','מחיקה');
+    del.onclick=function(e){e.stopPropagation();onDelete();};
+    row.classList.add('swipe'); row.appendChild(del); row.appendChild(body);
+    var startX=0,startY=0,dx=0,open=false,dragging=false,decided=false,horiz=false;
+    function setX(x){body.style.transform='translateX('+x+'px)';}
+    function close(){open=false;setX(0);setTimeout(function(){if(!open)row.classList.remove('armed');},240);}
+    body.addEventListener('touchstart',function(e){var t=e.touches[0];startX=t.clientX;startY=t.clientY;dx=open?-W:0;decided=false;horiz=false;dragging=true;row.classList.add('dragging');},{passive:true});
+    body.addEventListener('touchmove',function(e){ if(!dragging)return; var t=e.touches[0],mx=t.clientX-startX,my=t.clientY-startY;
+      if(!decided){ if(Math.abs(mx)>8||Math.abs(my)>8){decided=true;horiz=Math.abs(mx)>Math.abs(my); if(horiz)row.classList.add('armed');} }
+      if(!horiz)return; e.preventDefault();
+      var nx=(open?-W:0)+mx; nx=Math.max(-W-24,Math.min(0,nx)); dx=nx; setX(nx);
+    },{passive:false});
+    body.addEventListener('touchend',function(){ if(!dragging)return; dragging=false;row.classList.remove('dragging');
+      if(!horiz){setX(open?-W:0);return;}
+      open=dx<-W*0.5; if(open){setX(-W);}else{close();}
+    });
+    body.addEventListener('click',function(e){ if(open){e.stopPropagation();e.preventDefault();close();} },true);
+  }
 
   /* ---------- helpers ---------- */
   function el(tag,cls){var e=document.createElement(tag);if(cls)e.className=cls;return e;}
