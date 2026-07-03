@@ -81,10 +81,22 @@
   .sync.on .led{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
   .sync.off .led{background:var(--tang)}
 
-  .people{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0 2px}
-  .person{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;
+  .people-hint{text-align:center;font-size:12px;font-weight:700;color:var(--muted);margin:16px 0 8px}
+  .people{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 2px}
+  .person{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--ink);
     background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 12px 5px 6px;box-shadow:var(--shadow-sm)}
+  .person.pfilter{cursor:pointer;font-family:inherit}
+  .person.pfilter:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .person.active{border-width:2px;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+  .person .pall{padding:0 4px;font-weight:900}
   .person .av{width:20px;height:20px;border-radius:99px;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:900}
+  .fbanner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accent-soft);
+    border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:14px;padding:11px 14px;margin:16px 0 4px;
+    font-size:13.5px;font-weight:800;color:var(--ink)}
+  .fbanner b{color:var(--accent)}
+  .fbanner-reset{background:var(--accent);color:var(--accent-ink);border:none;border-radius:99px;padding:7px 14px;
+    font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;flex:none}
+  .fbanner-reset:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
 
   .summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 8px}
   .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow-sm)}
@@ -300,6 +312,7 @@
   </header>
 
   <div class="wrap">
+    <p class="people-hint">👇 לחצו על שם כדי לראות רק את המשימות שלו</p>
     <div class="people" id="people"></div>
 
     <div class="summary">
@@ -514,8 +527,15 @@
   var filterWho=null; // view-only: show only one person's tasks
   function render(){
     board.innerHTML='';
-    board.appendChild(filterBar());
     var f=filterWho, shown=0;
+    if(f){
+      var ban=el('div','fbanner');
+      ban.appendChild(html('<span>🔍 מציג רק את המשימות של <b>'+esc(personName(f))+'</b></span>'));
+      var rst=el('button','fbanner-reset');rst.type='button';rst.textContent='הצג הכל';
+      rst.onclick=function(){filterWho=null;render();};
+      ban.appendChild(rst);
+      board.appendChild(ban);
+    }
     var ag=agendaCard(f); if(ag)board.appendChild(ag);
     state.sections.forEach(function(sec){ var c=sectionCard(sec,f); if(c){board.appendChild(c);shown++;} });
     if(f){
@@ -538,19 +558,6 @@
     if(ad)return -1; if(bd)return 1; return 0;
   }
 
-  function filterBar(){
-    var bar=el('div','filterbar');
-    bar.appendChild(html('<span class="flabel">סינון:</span>'));
-    var all=el('button','fchip'+(filterWho?'':' active'));all.type='button';all.textContent='הכל';
-    all.onclick=function(){filterWho=null;render();};bar.appendChild(all);
-    people.forEach(function(p){
-      var b=el('button','fchip'+(filterWho===p.id?' active':''));b.type='button';b.textContent=p.name;
-      if(filterWho===p.id){b.style.background=p.c;b.style.color='#fff';b.style.borderColor='transparent';}
-      b.onclick=function(){filterWho=(filterWho===p.id?null:p.id);render();};
-      bar.appendChild(b);
-    });
-    return bar;
-  }
 
   function guestCard(){
     var card=el('div','card guests');
@@ -561,7 +568,10 @@
     state.guests.forEach(function(g,idx){
       var r=el('div','row grow'+(g.coming?' confirmed':''));
       r.appendChild(html('<div class="gnum">'+(idx+1)+'</div>'));
-      var b=el('div','body');b.appendChild(html('<div class="txt gname">'+esc(g.name)+'</div>'));
+      var b=el('div','body');
+      var nm=html('<div class="txt gname edit-txt">'+esc(g.name)+'</div>');
+      nm.title='עריכת שם'; nm.onclick=function(){renameGuest(g);};
+      b.appendChild(nm);
       r.appendChild(b);
       var c=document.createElement('button');c.className='check';c.type='button';
       c.setAttribute('aria-pressed',g.coming?'true':'false');
@@ -569,12 +579,14 @@
       c.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
       c.onclick=function(){g.coming=!g.coming;save();};
       r.appendChild(c);
+      r.appendChild(iconBtn('edit','✏️','עריכת שם: '+g.name,function(){renameGuest(g);}));
       r.appendChild(delBtn('מחיקה מהרשימה: '+g.name,function(){state.guests=state.guests.filter(function(x){return x!==g;});save();}));
       rows.appendChild(r);
     });
     card.appendChild(rows);
     var add=el('div','addrow');var inp=inputEl('הוספת ילד/ה…','שם ילד/ה חדש');var btn=plusBtn();
     function commit(){var v=inp.value.trim();if(!v)return;state.guests.push(guest(v));inp.value='';save();}
+    function renameGuest(g){var v=window.prompt('שם הילד/ה:',g.name);if(v===null)return;v=v.trim();if(v)g.name=v;save();}
     btn.onclick=commit;inp.addEventListener('keydown',function(e){if(e.key==='Enter')commit();});
     add.appendChild(inp);add.appendChild(btn);card.appendChild(add);
     collapsible(card,'guests',true);
@@ -868,10 +880,20 @@
   }
   function renderPeople(){
     var box=document.getElementById('people');box.innerHTML='';
+    var all=el('button','person pfilter'+(filterWho?'':' active'));all.type='button';
+    all.innerHTML='<span class="pall">הכל</span>';
+    all.title='הצג את כל המשימות';
+    all.onclick=function(){filterWho=null;render();};
+    box.appendChild(all);
     people.forEach(function(p){
       var n=0;state.sections.forEach(function(s){s.items.forEach(function(i){if((i.whos||[]).indexOf(p.id)>=0)n++;});});
-      state.questions.forEach(function(qq){if((qq.whos||[]).indexOf(p.id)>=0)n++;});
-      box.appendChild(html('<span class="person"><span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+esc(p.name)+' · '+n+'</span>'));
+      var active=filterWho===p.id;
+      var b=el('button','person pfilter'+(active?' active':''));b.type='button';
+      b.title='הצג רק את המשימות של '+p.name;
+      b.innerHTML='<span class="av" style="background:'+p.c+'">'+esc(p.name.charAt(0))+'</span>'+esc(p.name)+' · '+n;
+      if(active)b.style.borderColor=p.c;
+      b.onclick=function(){filterWho=(filterWho===p.id?null:p.id);render();};
+      box.appendChild(b);
     });
   }
 
