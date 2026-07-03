@@ -3,14 +3,14 @@
   /* ===== iOS design tokens ===== */
   :root{
     --bg:#F2F2F7; --surface:#FFFFFF; --surface2:#787880; /* surface2 used as fill base via color-mix */
-    --fill:rgba(120,120,128,.12); --fill2:rgba(120,120,128,.08);
+    --fill:rgba(120,120,128,.10); --fill2:rgba(120,120,128,.06);
     --ink:#1C1C1E; --muted:rgba(60,60,67,.6); --faint:rgba(60,60,67,.3);
     --line:rgba(60,60,67,.29); --line2:rgba(60,60,67,.13);
     --accent:#FF2D55; --accent-ink:#ffffff; --accent-soft:rgba(255,45,85,.12);
     --tang:#FF9500; --tang-soft:rgba(255,149,0,.14);
     --ok:#34C759; --ok-soft:rgba(52,199,89,.15);
     --danger:#FF3B30;
-    --shadow:0 6px 22px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.05); --shadow-sm:0 1px 2px rgba(0,0,0,.05),0 6px 16px rgba(0,0,0,.05); --shadow-hero:0 14px 38px color-mix(in srgb,var(--accent) 24%,transparent),0 2px 8px rgba(0,0,0,.06);
+    --shadow:0 6px 22px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.05); --shadow-sm:0 1px 2px rgba(0,0,0,.05),0 6px 16px rgba(0,0,0,.05); --shadow-hero:0 14px 38px color-mix(in srgb,var(--accent) 24%,transparent),0 2px 8px rgba(0,0,0,.06); --inset:inset 0 1px 3px rgba(60,60,67,.10);
     --r:12px;
     --p1:#FF2D55; --p2:#AF52DE; --p3:#FF9500; --p4:#34C759;
   }
@@ -23,18 +23,18 @@
       --accent:#FF375F; --accent-ink:#ffffff; --accent-soft:rgba(255,55,95,.22);
       --tang:#FF9F0A; --tang-soft:rgba(255,159,10,.22);
       --ok:#30D158; --ok-soft:rgba(48,209,88,.22); --danger:#FF453A;
-      --shadow:0 10px 28px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4); --shadow-sm:0 1px 3px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.4); --shadow-hero:0 16px 40px rgba(0,0,0,.6),0 0 0 .5px color-mix(in srgb,var(--accent) 32%,transparent);
+      --shadow:0 10px 28px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4); --shadow-sm:0 1px 3px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.4); --shadow-hero:0 16px 40px rgba(0,0,0,.6),0 0 0 .5px color-mix(in srgb,var(--accent) 32%,transparent); --inset:inset 0 1px 3px rgba(0,0,0,.35);
       --p1:#FF375F; --p2:#BF5AF2; --p3:#FF9F0A; --p4:#30D158;
     }
   }
   :root[data-theme="light"]{
     --bg:#F2F2F7; --surface:#FFFFFF; --surface2:#787880;
-    --fill:rgba(120,120,128,.12); --fill2:rgba(120,120,128,.08);
+    --fill:rgba(120,120,128,.10); --fill2:rgba(120,120,128,.06);
     --ink:#1C1C1E; --muted:rgba(60,60,67,.6); --faint:rgba(60,60,67,.3);
     --line:rgba(60,60,67,.29); --line2:rgba(60,60,67,.13);
     --accent:#FF2D55; --accent-ink:#ffffff; --accent-soft:rgba(255,45,85,.12);
     --tang:#FF9500; --tang-soft:rgba(255,149,0,.14); --ok:#34C759; --ok-soft:rgba(52,199,89,.15); --danger:#FF3B30;
-    --shadow:0 6px 22px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.05); --shadow-sm:0 1px 2px rgba(0,0,0,.05),0 6px 16px rgba(0,0,0,.05); --shadow-hero:0 14px 38px color-mix(in srgb,var(--accent) 24%,transparent),0 2px 8px rgba(0,0,0,.06);
+    --shadow:0 6px 22px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.05); --shadow-sm:0 1px 2px rgba(0,0,0,.05),0 6px 16px rgba(0,0,0,.05); --shadow-hero:0 14px 38px color-mix(in srgb,var(--accent) 24%,transparent),0 2px 8px rgba(0,0,0,.06); --inset:inset 0 1px 3px rgba(60,60,67,.10);
     --p1:#FF2D55; --p2:#AF52DE; --p3:#FF9500; --p4:#34C759;
   }
   :root[data-theme="dark"]{
@@ -44,7 +44,7 @@
     --line:rgba(84,84,88,.65); --line2:rgba(84,84,88,.4);
     --accent:#FF375F; --accent-ink:#ffffff; --accent-soft:rgba(255,55,95,.22);
     --tang:#FF9F0A; --tang-soft:rgba(255,159,10,.22); --ok:#30D158; --ok-soft:rgba(48,209,88,.22); --danger:#FF453A;
-    --shadow:0 10px 28px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4); --shadow-sm:0 1px 3px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.4); --shadow-hero:0 16px 40px rgba(0,0,0,.6),0 0 0 .5px color-mix(in srgb,var(--accent) 32%,transparent);
+    --shadow:0 10px 28px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4); --shadow-sm:0 1px 3px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.4); --shadow-hero:0 16px 40px rgba(0,0,0,.6),0 0 0 .5px color-mix(in srgb,var(--accent) 32%,transparent); --inset:inset 0 1px 3px rgba(0,0,0,.35);
     --p1:#FF375F; --p2:#BF5AF2; --p3:#FF9F0A; --p4:#30D158;
   }
 
@@ -221,10 +221,11 @@
   .pe-emoji{width:48px;height:48px;border-radius:99px;border:none;font-size:24px;cursor:pointer;flex:none;line-height:1;
     box-shadow:0 2px 6px rgba(0,0,0,.15)}
   .pe-emoji:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-  .pe-name{flex:1;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 13px;
-    font:inherit;font-size:15px;font-weight:700;color:var(--ink)}
-  .pe-name:focus{outline:none;border-color:var(--accent)}
-  .pe-palette{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px;padding:10px;background:var(--surface2);border-radius:12px}
+  .pe-name{flex:1;background:color-mix(in srgb,var(--ink) 5%,var(--surface));border:none;border-radius:10px;padding:12px 13px;
+    font:inherit;font-size:16px;font-weight:400;color:var(--ink);box-shadow:var(--inset)}
+  .pe-name:focus{outline:2px solid var(--accent)}
+  .pe-palette{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px;padding:10px;border-radius:10px;
+    background:color-mix(in srgb,var(--ink) 4%,var(--surface));box-shadow:var(--inset)}
   .pe-opt{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:21px;cursor:pointer;line-height:1}
   .pe-opt:hover{border-color:var(--accent)}
   .pe-opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
@@ -244,8 +245,8 @@
   .sheet-done:active{opacity:.85}
   .sheet-done:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent);outline-offset:2px}
   .sheet-lbl{display:block;font-size:13px;font-weight:400;color:var(--muted);margin:16px 4px 6px}
-  .sheet-input{width:100%;background:var(--fill);border:none;border-radius:10px;padding:12px 13px;
-    font:inherit;font-size:17px;font-weight:400;color:var(--ink)}
+  .sheet-input{width:100%;background:color-mix(in srgb,var(--ink) 5%,var(--surface));border:none;border-radius:10px;padding:12px 13px;
+    font:inherit;font-size:17px;font-weight:400;color:var(--ink);box-shadow:var(--inset)}
   .sheet-input:focus{outline:2px solid var(--accent);outline-offset:0}
   .sheet-input::placeholder{color:var(--faint)}
   .sheet-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -292,8 +293,8 @@
   .del:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
   .addrow{display:flex;gap:10px;align-items:center;padding:8px 16px 14px}
-  .addrow input{flex:1;background:var(--fill);border:none;border-radius:10px;padding:11px 13px;
-    font:inherit;font-size:16px;color:var(--ink);min-width:0}
+  .addrow input{flex:1;background:color-mix(in srgb,var(--ink) 5%,var(--surface));border:none;border-radius:10px;padding:11px 13px;
+    font:inherit;font-size:16px;color:var(--ink);min-width:0;box-shadow:var(--inset)}
   .addrow input.mini{flex:none;width:92px}
   .addrow input::placeholder{color:var(--faint)}
   .addrow input:focus{outline:2px solid var(--accent)}
