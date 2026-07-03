@@ -130,7 +130,10 @@
 
   .body{flex:1;min-width:0}
   .txt{font-size:14.5px;font-weight:600;line-height:1.4;word-break:break-word}
+  .edit-txt{cursor:pointer}
+  .subtxt{font-size:12.5px;font-weight:600;color:var(--muted);line-height:1.35;margin-top:2px;word-break:break-word}
   .row.done .txt{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--faint)}
+  .row.done .subtxt{color:var(--faint)}
   .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;align-items:center}
 
   .chip{font-size:11.5px;font-weight:800;border-radius:99px;padding:3px 9px;cursor:pointer;border:1px solid transparent;
@@ -140,8 +143,17 @@
   .chip.add{background:transparent;color:var(--muted);border:1px dashed var(--faint)}
   .chip.who{color:#fff}
   .chip.unassigned{background:transparent;color:var(--muted);border:1px dashed var(--faint)}
-  .chip.date{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);
-    border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+  .chip.datein{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 30%,transparent);gap:5px;padding:3px 9px;cursor:pointer}
+  .chip.datein .dicon{font-size:12px}
+  .chip.datein .dinput{border:none;background:transparent;color:inherit;font:inherit;font-weight:800;font-size:11.5px;
+    padding:0;margin:0;cursor:pointer;font-variant-numeric:tabular-nums;min-width:82px;color-scheme:light}
+  .chip.datein .dinput::-webkit-calendar-picker-indicator{opacity:0;width:0;margin:0;padding:0;display:none}
+  .chip.datein .dinput::-webkit-date-and-time-value{text-align:right}
+  @media (prefers-color-scheme:dark){.chip.datein .dinput{color-scheme:dark}}
+  @media (prefers-color-scheme:dark){.chip.datein .dinput{color-scheme:dark}}
+  :root[data-theme="dark"] .chip.datein .dinput{color-scheme:dark}
+  :root[data-theme="light"] .chip.datein .dinput{color-scheme:light}
   .whowrap{display:inline-flex;gap:6px;flex-wrap:wrap;align-items:center}
 
   .chd{cursor:pointer;user-select:none}
@@ -170,6 +182,11 @@
   .sheet-done{margin-top:16px;width:100%;background:var(--accent);color:var(--accent-ink);border:none;border-radius:13px;
     padding:13px;font:inherit;font-size:15px;font-weight:800;cursor:pointer}
   .sheet-done:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent);outline-offset:2px}
+  .sheet-lbl{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:12px 2px 5px}
+  .sheet-input{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 13px;
+    font:inherit;font-size:15px;font-weight:600;color:var(--ink)}
+  .sheet-input:focus{outline:none;border-color:var(--accent)}
+  .sheet-input::placeholder{color:var(--faint)}
   .chip.attach{background:transparent;color:var(--muted);border:1px dashed var(--faint);font-size:13px}
   .chip.link{background:color-mix(in srgb,var(--p2) 14%,transparent);color:var(--p2);
     border-color:color-mix(in srgb,var(--p2) 32%,transparent);max-width:160px}
@@ -285,6 +302,16 @@
       <button class="sheet-done" id="assignDone">סיום</button>
     </div>
   </div>
+  <div class="sheet" id="editSheet">
+    <div class="sheet-card">
+      <div class="sheet-title">עריכת פריט</div>
+      <label class="sheet-lbl" for="editTitle">כותרת</label>
+      <input class="sheet-input" id="editTitle" type="text" placeholder="כותרת הפריט">
+      <label class="sheet-lbl" for="editSub">כותרת משנה (לא חובה)</label>
+      <input class="sheet-input" id="editSub" type="text" placeholder="פרטים נוספים…">
+      <button class="sheet-done" id="editSave">שמירה</button>
+    </div>
+  </div>
 
 <script>
 (function(){
@@ -333,7 +360,7 @@
   var _seq=0;
   function uid(p){_seq++;return (p||'x')+'-'+Date.now().toString(36)+'-'+_seq;}
   function whoArr(who){return who?(Array.isArray(who)?who.slice():[who]):[];}
-  function it(t,who){return {id:uid('i'),t:t,amt:null,whos:whoArr(who),done:false,date:null,imgs:[],links:[]};}
+  function it(t,who){return {id:uid('i'),t:t,sub:null,amt:null,whos:whoArr(who),done:false,date:null,imgs:[],links:[]};}
   function ex(t,v,tag){return {id:uid('e'),t:t,v:v,tag:tag||null};}
   function q(t,who){return {id:uid('q'),t:t,whos:whoArr(who),done:false};}
   function guest(name){return {id:uid('g'),name:name,coming:false};}
@@ -355,7 +382,7 @@
   function normalize(s){
     if(!s||!s.sections)return s;
     s.sections.forEach(function(sec){(sec.items||[]).forEach(function(i){
-      migWho(i); if(!i.imgs)i.imgs=[]; if(!i.links)i.links=[]; if(i.date===undefined)i.date=null;
+      migWho(i); if(!i.imgs)i.imgs=[]; if(!i.links)i.links=[]; if(i.date===undefined)i.date=null; if(i.sub===undefined)i.sub=null;
     });});
     if(!s.expenses)s.expenses=[];
     if(!s.questions)s.questions=[]; s.questions.forEach(migWho);
@@ -507,12 +534,14 @@
     c.onclick=function(){item.done=!item.done;if(item.done)burst();save();};
     r.appendChild(c);
     var b=el('div','body');
-    b.appendChild(html('<div class="txt">'+esc(item.t)+'</div>'));
+    var titleEl=html('<div class="txt edit-txt">'+esc(item.t)+'</div>');
+    titleEl.title='עריכת טקסט'; titleEl.onclick=function(){openEdit(item);};
+    b.appendChild(titleEl);
+    if(item.sub)b.appendChild(html('<div class="subtxt">'+esc(item.sub)+'</div>'));
     var meta=el('div','meta');
     if(item.amt!=null){var a=chip('amt','₪ '+nfmt(item.amt));a.onclick=function(){editAmt(item);};meta.appendChild(a);}
     else{var ap=chip('add','+ סכום');ap.onclick=function(){editAmt(item);};meta.appendChild(ap);}
-    if(item.date){var dc=chip('date','📅 '+fmtDate(item.date));dc.onclick=function(){pickDate(item);};meta.appendChild(dc);}
-    else{var dad=chip('add','+ תאריך');dad.onclick=function(){pickDate(item);};meta.appendChild(dad);}
+    meta.appendChild(dateControl(item));
     meta.appendChild(whoChip(item));
     (item.imgs||[]).forEach(function(src){ meta.appendChild(thumbEl(item,src)); });
     (item.links||[]).forEach(function(url){ meta.appendChild(linkEl(item,url)); });
@@ -521,6 +550,7 @@
     var lnkBtn=chip('attach','🔗'); lnkBtn.title='צירוף קישור'; lnkBtn.setAttribute('aria-label','צירוף קישור: '+item.t);
     lnkBtn.onclick=function(){addLink(item);}; meta.appendChild(lnkBtn);
     b.appendChild(meta);r.appendChild(b);
+    r.appendChild(iconBtn('edit','✏️','עריכת פריט: '+item.t,function(){openEdit(item);}));
     r.appendChild(delBtn('מחיקת פריט: '+item.t,function(){sec.items=sec.items.filter(function(x){return x!==item;});save();}));
     return r;
   }
@@ -544,6 +574,24 @@
     document.getElementById('assignSheet').classList.add('show');
   }
   function closeAssign(){document.getElementById('assignSheet').classList.remove('show');_assignTarget=null;}
+  /* edit item text: title + optional subtitle */
+  var _editTarget=null;
+  function openEdit(item){
+    _editTarget=item;
+    document.getElementById('editTitle').value=item.t||'';
+    document.getElementById('editSub').value=item.sub||'';
+    document.getElementById('editSheet').classList.add('show');
+    setTimeout(function(){var t=document.getElementById('editTitle');t.focus();t.select();},60);
+  }
+  function closeEdit(){document.getElementById('editSheet').classList.remove('show');_editTarget=null;}
+  function saveEdit(){
+    if(!_editTarget){closeEdit();return;}
+    var t=document.getElementById('editTitle').value.trim();
+    var s=document.getElementById('editSub').value.trim();
+    if(t)_editTarget.t=t;
+    _editTarget.sub=s||null;
+    save();closeEdit();
+  }
   function renderAssignPeople(){
     var box=document.getElementById('assignPeople');box.innerHTML='';
     var whos=_assignTarget.whos;
@@ -634,20 +682,18 @@
     });
   }
 
-  /* ---------- dates ---------- */
-  function fmtDate(iso){ if(!iso)return''; var p=String(iso).split('-'); return p.length<3?iso:(p[2]+'/'+p[1]); }
-  function pickDate(item){
-    var inp=document.createElement('input');inp.type='date';if(item.date)inp.value=item.date;
-    inp.style.position='fixed';inp.style.left='50%';inp.style.top='50%';inp.style.opacity='0';inp.style.zIndex='-1';
-    document.body.appendChild(inp);
-    var done=false;
-    function finish(){ if(done)return;done=true;item.date=inp.value||null;if(inp.parentNode)inp.parentNode.removeChild(inp);save(); }
-    inp.addEventListener('change',finish);
-    inp.addEventListener('blur',function(){setTimeout(finish,60);});
-    try{ if(typeof inp.showPicker==='function')inp.showPicker(); else {inp.focus();inp.click();} }
-    catch(e){ if(inp.parentNode)inp.parentNode.removeChild(inp);
-      var v=window.prompt('תאריך (YYYY-MM-DD):',item.date||''); if(v===null)return;
-      item.date=v.trim()||null; save(); }
+  /* ---------- dates (native, reliable) ---------- */
+  function dateControl(item){
+    var lab=el('label','chip datein'+(item.date?' set':''));
+    lab.appendChild(html('<span class="dicon" aria-hidden="true">📅</span>'));
+    var di=document.createElement('input');di.type='date';di.className='dinput';
+    if(item.date)di.value=item.date;
+    di.setAttribute('aria-label','תאריך לפריט: '+item.t);
+    di.onchange=function(){item.date=di.value||null;save();};
+    // desktop: clicking anywhere on the chip opens the native calendar
+    lab.addEventListener('click',function(e){ if(e.target!==di){ try{ di.showPicker&&di.showPicker(); }catch(_){ di.focus(); } } });
+    lab.appendChild(di);
+    return lab;
   }
 
   /* ---------- collapse / expand cards ---------- */
@@ -717,7 +763,11 @@
   document.getElementById('lightbox').onclick=function(e){if(e.target.id==='lightbox')closeLb();};
   document.getElementById('assignDone').onclick=closeAssign;
   document.getElementById('assignSheet').onclick=function(e){if(e.target.id==='assignSheet')closeAssign();};
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();}});
+  document.getElementById('editSave').onclick=saveEdit;
+  document.getElementById('editSheet').onclick=function(e){if(e.target.id==='editSheet')closeEdit();};
+  document.getElementById('editTitle').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('editSub').focus();}});
+  document.getElementById('editSub').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();saveEdit();}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLb();closeAssign();closeEdit();}});
 
   /* ---------- share ---------- */
   document.getElementById('shareBtn').onclick=function(){
@@ -736,7 +786,9 @@
   function inputEl(ph,label){var i=document.createElement('input');i.placeholder=ph;i.setAttribute('aria-label',label);return i;}
   function plusBtn(){var b=document.createElement('button');b.type='button';b.textContent='+';b.title='הוסף';return b;}
   function delBtn(label,fn){var b=document.createElement('button');b.className='del';b.type='button';b.textContent='✕';
-    b.setAttribute('aria-label',label);b.onclick=function(){fn();};return b;}
+    b.setAttribute('aria-label',label);b.onclick=function(e){e.stopPropagation();fn();};return b;}
+  function iconBtn(cls,icon,label,fn){var b=document.createElement('button');b.className='del '+cls;b.type='button';
+    b.textContent=icon;b.title=label;b.setAttribute('aria-label',label);b.onclick=function(e){e.stopPropagation();fn();};return b;}
   function esc(s){return String(s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
 
   /* ---------- theme ---------- */
