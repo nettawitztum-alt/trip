@@ -151,7 +151,7 @@
   .empty{text-align:center;color:var(--muted);font-weight:500;font-size:15px;padding:34px 16px}
   /* the agenda is the hero — elevated with a soft tinted shadow */
   .card.agenda{box-shadow:var(--shadow-hero);margin-top:14px}
-  .card.agenda>.chd .ic{background:var(--accent)!important;box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 40%,transparent)}
+  .card.agenda>.chd .ic{background:color-mix(in srgb,var(--accent) 20%,var(--surface))!important}
   .card.agenda>.chd h2{color:var(--accent)}
   .agh{font-size:13px;font-weight:500;letter-spacing:0;padding:12px 16px 4px;color:var(--muted)}
   .agh-over{color:var(--danger)}
@@ -398,14 +398,18 @@
     border:2px solid var(--surface);margin-inline-start:-8px}
   .avstack .sav:first-child{margin-inline-start:0}
   .avstack .avname{margin-inline-start:6px;font-size:13px;font-weight:500;color:var(--muted)}
-  /* swipe-to-delete */
+  /* swipe row actions (edit + delete) */
   .swipe{position:relative;overflow:hidden;padding:0!important}
-  .swipe-del{position:absolute;top:0;bottom:0;left:0;width:80px;background:var(--danger);color:#fff;border:none;
-    font:inherit;font-size:15px;font-weight:500;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:0}
-  .swipe.armed .swipe-del{display:flex}
+  .swipe-actions{position:absolute;top:0;bottom:0;left:0;display:none;z-index:0}
+  .swipe.armed .swipe-actions{display:flex}
+  .swipe-actions button{border:none;color:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer;
+    width:72px;display:flex;align-items:center;justify-content:center}
+  .swipe-edit{background:var(--p2)}
+  .swipe-del{background:var(--danger)}
   .swipe-body{position:relative;z-index:1;width:100%;background:var(--surface);display:flex;align-items:center;gap:12px;
-    padding:11px 16px;min-height:44px;box-sizing:border-box;transition:transform .22s cubic-bezier(.4,0,.2,1)}
-  .swipe.dragging .swipe-body{transition:none;will-change:transform}
+    padding:11px 16px;min-height:44px;box-sizing:border-box;touch-action:pan-y;
+    transition:transform .22s cubic-bezier(.4,0,.2,1)}
+  .swipe.dragging .swipe-body{transition:none}
   .row+.row::before{z-index:3}
 </style>
 </head>
@@ -530,7 +534,7 @@
   people.forEach(function(p){p._dn=p.name;p._de=p.emoji;}); // remember defaults
   function applyPeople(){var m=(typeof state!=='undefined'&&state&&state.people)||{};people.forEach(function(p){var o=m[p.id]||{};p.name=o.name||p._dn;p.emoji=o.emoji||p._de;});}
   function pById(id){for(var i=0;i<people.length;i++)if(people[i].id===id)return people[i];return null;}
-  var SEC_COLOR={buy:'var(--p1)',do:'var(--p3)',get:'var(--p4)',bring:'var(--p2)'};
+  var SEC_COLOR={buy:'color-mix(in srgb,var(--p1) 20%,var(--surface))',do:'color-mix(in srgb,var(--p3) 20%,var(--surface))',get:'color-mix(in srgb,var(--p4) 20%,var(--surface))',bring:'color-mix(in srgb,var(--p2) 20%,var(--surface))'};
   var EMOJI_CHOICES=['👩','👧','👨','🧑','👵','👴','🧕','👩‍🦰','👱‍♀️','🧔','🦸‍♀️','🧚','👸','🌸','⭐','🍀','🐝','🦄','🐱','🐶','🎈','🎀','💜','🧁'];
 
   function defaultState(){
@@ -755,7 +759,7 @@
     var card=el('div','card guests');
     var confirmed=state.guests.filter(function(g){return g.confirmed;}).length;
     var arrived=state.guests.filter(function(g){return g.arrived;}).length;
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--p4)">🎉</div>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:color-mix(in srgb,var(--p4) 20%,var(--surface))">🎉</div>'+
       '<h2>רשימת מוזמנים</h2><span class="count">'+state.guests.length+' ילדים</span></div>'));
     var rows=el('div','rows');
     // summary strip
@@ -835,7 +839,7 @@
     });});
     var totalDated=groups.reduce(function(a,g){return a+g.items.length;},0);
     var card=el('div','card agenda');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--accent)">📆</div><h2>הפוקוס להיום ומחר</h2>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:color-mix(in srgb,var(--accent) 20%,var(--surface))">📆</div><h2>הפוקוס להיום ומחר</h2>'+
       (totalDated?'<span class="count">'+totalDated+'</span>':'')+'</div>'));
     var wrap=el('div','rows');
     if(!totalDated){
@@ -913,7 +917,7 @@
     // whole body opens the editor
     b.style.cursor='pointer'; b.title='עריכה'; b.onclick=function(){openEdit(item);};
     r.appendChild(b);
-    swipeToDelete(r,function(){deleteItem(item);}); // swipe-left to delete
+    swipeRow(r,function(){openEdit(item);},function(){deleteItem(item);}); // swipe: edit / delete
     return r;
   }
 
@@ -1011,7 +1015,7 @@
 
   function expenseCard(){
     var card=el('div','card exp');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--tang)">🧾</div>'+
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:color-mix(in srgb,var(--tang) 20%,var(--surface))">🧾</div>'+
       '<h2>הוצאות</h2><span class="count">'+state.expenses.length+' רשומות</span></div>'));
     var rows=el('div','rows'),tot=0;
     state.expenses.forEach(function(x){ tot+=Number(x.v)||0;
@@ -1025,7 +1029,7 @@
       var val=html('<button class="val" type="button" title="עריכת סכום">'+nfmt(x.v)+' ₪</button>');
       val.onclick=function(){openExpense(x);};
       r.appendChild(val);
-      swipeToDelete(r,function(){removeFrom(state.expenses,x,'ההוצאה');}); // swipe-left to delete
+      swipeRow(r,function(){openExpense(x);},function(){removeFrom(state.expenses,x,'ההוצאה');}); // swipe: edit / delete
       rows.appendChild(r);
     });
     card.appendChild(rows);
@@ -1202,7 +1206,7 @@
 
   function questionCard(){
     var card=el('div','card q');
-    card.appendChild(html('<div class="chd"><div class="ic" style="background:var(--p2)">❓</div><h2>שאלות לצוות</h2></div>'));
+    card.appendChild(html('<div class="chd"><div class="ic" style="background:color-mix(in srgb,var(--p2) 20%,var(--surface))">❓</div><h2>שאלות לצוות</h2></div>'));
     var rows=el('div','rows');
     state.questions.forEach(function(qq){
       var r=el('div','row'+(qq.done?' done':''));
@@ -1388,27 +1392,32 @@
     toastUndo((label||'הפריט')+' נמחק',function(){ list.splice(Math.min(i,list.length),0,obj); save(); });
   }
   function deleteItem(item){ var sec=sectionOf(item); if(sec)removeFrom(sec.items,item,'הפריט'); }
-  // wrap a row's content so it can be swiped left to reveal a delete action
-  function swipeToDelete(row,onDelete){
-    var W=80, body=el('div','swipe-body');
+  // wrap a row so it can be swiped left to reveal Edit + Delete (pointer events)
+  function swipeRow(row,onEdit,onDelete){
+    var AW=144, body=el('div','swipe-body');
     while(row.firstChild)body.appendChild(row.firstChild);
-    var del=el('button','swipe-del');del.type='button';del.textContent='מחק';
-    del.setAttribute('aria-label','מחיקה');
-    del.onclick=function(e){e.stopPropagation();onDelete();};
-    row.classList.add('swipe'); row.appendChild(del); row.appendChild(body);
-    var startX=0,startY=0,dx=0,open=false,dragging=false,decided=false,horiz=false;
-    function setX(x){body.style.transform='translateX('+x+'px)';}
+    var acts=el('div','swipe-actions');
+    if(onEdit){var eb=el('button','swipe-edit');eb.type='button';eb.textContent='עריכה';eb.setAttribute('aria-label','עריכה');
+      eb.onclick=function(e){e.stopPropagation();close();onEdit();};acts.appendChild(eb);} else AW=80;
+    var db=el('button','swipe-del');db.type='button';db.textContent='מחק';db.setAttribute('aria-label','מחיקה');
+    db.onclick=function(e){e.stopPropagation();onDelete();};acts.appendChild(db);
+    row.classList.add('swipe'); row.appendChild(acts); row.appendChild(body);
+    var x0=0,y0=0,cur=0,open=false,drag=false,decided=false,horiz=false;
+    function setX(x){cur=x;body.style.transform='translateX('+x+'px)';}
+    function openIt(){open=true;row.classList.add('armed');setX(-AW);}
     function close(){open=false;setX(0);setTimeout(function(){if(!open)row.classList.remove('armed');},240);}
-    body.addEventListener('touchstart',function(e){var t=e.touches[0];startX=t.clientX;startY=t.clientY;dx=open?-W:0;decided=false;horiz=false;dragging=true;row.classList.add('dragging');},{passive:true});
-    body.addEventListener('touchmove',function(e){ if(!dragging)return; var t=e.touches[0],mx=t.clientX-startX,my=t.clientY-startY;
-      if(!decided){ if(Math.abs(mx)>8||Math.abs(my)>8){decided=true;horiz=Math.abs(mx)>Math.abs(my); if(horiz)row.classList.add('armed');} }
-      if(!horiz)return; e.preventDefault();
-      var nx=(open?-W:0)+mx; nx=Math.max(-W-24,Math.min(0,nx)); dx=nx; setX(nx);
-    },{passive:false});
-    body.addEventListener('touchend',function(){ if(!dragging)return; dragging=false;row.classList.remove('dragging');
-      if(!horiz){setX(open?-W:0);return;}
-      open=dx<-W*0.5; if(open){setX(-W);}else{close();}
+    body.addEventListener('pointerdown',function(e){ if(e.pointerType==='mouse'&&e.button!==0)return;
+      x0=e.clientX;y0=e.clientY;drag=true;decided=false;horiz=false;row.classList.add('dragging');},{passive:true});
+    body.addEventListener('pointermove',function(e){ if(!drag)return; var dx=e.clientX-x0,dy=e.clientY-y0;
+      if(!decided){ if(Math.abs(dx)>6||Math.abs(dy)>6){decided=true;horiz=Math.abs(dx)>Math.abs(dy);
+        if(horiz){row.classList.add('armed');try{body.setPointerCapture(e.pointerId);}catch(_){}}} }
+      if(!horiz)return;
+      var nx=(open?-AW:0)+dx; nx=Math.max(-AW-30,Math.min(0,nx)); setX(nx);
     });
+    function end(){ if(!drag)return; drag=false; row.classList.remove('dragging');
+      if(!horiz){setX(open?-AW:0);return;} if(cur<-AW*0.45)openIt(); else close(); }
+    body.addEventListener('pointerup',end);
+    body.addEventListener('pointercancel',end);
     body.addEventListener('click',function(e){ if(open){e.stopPropagation();e.preventDefault();close();} },true);
   }
 
