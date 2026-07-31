@@ -2481,7 +2481,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">40</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">41</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2772,25 +2772,78 @@ const BUILTIN_PACKING = [
   {id:'ro10',cat:'romi',family:'ברוש',text:'תיק רחצה (סבון עדין, קרם גוף, קרם החתלה, SPF 50 לגיל, אלתוש לגיל שנה)'},
   {id:'ro11',cat:'romi',family:'ברוש',text:'⭐ תרופות רומי: חום (אקמול טיפות), אנטיהיסטמין לגיל, מדחום',urgent:true},
   {id:'ro12',cat:'romi',family:'ברוש',text:'שמיכה מוכרת + בובת שינה'},
-  // ── עמרי – אלוני (2 שנים) ──
-  {id:'pa1',cat:'omri',text:'⭐ כיסא בטיחות Toddler לרכב',urgent:true,family:'אלוני'},
-  {id:'pa2',cat:'omri',text:'עגלה קלה / stroller מתקפלת',family:'אלוני'},
-  {id:'pa3',cat:'omri',text:'חיתולים (x20)',family:'אלוני'},
-  {id:'pa4',cat:'omri',text:'מגבוני לחים (x3 חבילות)',family:'אלוני'},
-  {id:'pa5',cat:'omri',text:'כוס שתייה עם קשית',family:'אלוני'},
-  {id:'pa6',cat:'omri',text:'בגדים x8 (כולל שכבות לקור ההרים)',family:'אלוני'},
-  {id:'pa7',cat:'omri',text:'כובע שמש',family:'אלוני'},
-  {id:'pa8',cat:'omri',text:'קרם שמש לפעוטות SPF 50+',family:'אלוני'},
-  {id:'pa9',cat:'omri',text:'שמיכה מוכרת לשינה + בובה מוכרת',family:'אלוני'},
-  {id:'pa10',cat:'omri',text:'⭐ תרופות: חום (אקמול), אנטיהיסטמין',urgent:true,family:'אלוני'},
-  // ── תום – אלוני (4 שנים) ──
-  {id:'pb1',cat:'tom',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true,family:'אלוני'},
-  {id:'pb2',cat:'tom',text:'בגדים x8 (כולל מכנסיים ארוכים)',family:'אלוני'},
-  {id:'pb3',cat:'tom',text:'נעלי טיול נוחות',family:'אלוני'},
-  {id:'pb4',cat:'tom',text:'כובע שמש',family:'אלוני'},
-  {id:'pb5',cat:'tom',text:'משחקים / ספרים לטיסה',family:'אלוני'},
-  {id:'pb6',cat:'tom',text:'אוזניות לילדים + iPad / טאבלט',family:'אלוני'},
-  {id:'pb7',cat:'tom',text:'חטיפים מועדפים לטיסה',family:'אלוני'},
+  // ══════════ משפחת אלוני ══════════
+  // ── טל (אמא) ──
+  {id:'ta1',cat:'tal',family:'אלוני',text:'חולצות יומיומיות ×12'},
+  {id:'ta2',cat:'tal',family:'אלוני',text:'חולצות אימון ×3'},
+  {id:'ta3',cat:'tal',family:'אלוני',text:'מכנסיים קצרים ×4 + ארוכים ×2'},
+  {id:'ta4',cat:'tal',family:'אלוני',text:'שמלות ×2'},
+  {id:'ta5',cat:'tal',family:'אלוני',text:'טייצים / מכנסי אימון ×3 + חזיות ספורט ×3'},
+  {id:'ta6',cat:'tal',family:'אלוני',text:'תחתונים ×11 + חזיות רגילות ×4–5'},
+  {id:'ta7',cat:'tal',family:'אלוני',text:'גרביים ×10 + גרבי ספורט ×3'},
+  {id:'ta8',cat:'tal',family:'אלוני',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
+  {id:'ta9',cat:'tal',family:'אלוני',text:'בגדי ים ×2 + כיסוי לבגד ים'},
+  {id:'ta10',cat:'tal',family:'אלוני',text:'נעלי הליכה/ספורט + נעלי חדר כושר + סנדלים + כפכפים'},
+  {id:'ta11',cat:'tal',family:'אלוני',text:'תיק רחצה שיער (שמפו, מרכך, מברשת, גומיות/קליפסים)'},
+  {id:'ta12',cat:'tal',family:'אלוני',text:'טיפוח פנים (מסיר איפור, תרחיץ, סרום, קרם יום/לילה, SPF פנים)'},
+  {id:'ta13',cat:'tal',family:'אלוני',text:'דאודורנט + קרם גוף/ידיים + בושם'},
+  {id:'ta14',cat:'tal',family:'אלוני',text:'מוצרי היגיינה נשית ל־8 ימים + רזרבה'},
+  {id:'ta15',cat:'tal',family:'אלוני',text:'איפור (רק מה שבשימוש)'},
+  // ── גיא (אבא) ──
+  {id:'gu1',cat:'guy',family:'אלוני',text:'חולצות יומיומיות ×12'},
+  {id:'gu2',cat:'guy',family:'אלוני',text:'חולצות אימון ×3'},
+  {id:'gu3',cat:'guy',family:'אלוני',text:'מכנסיים קצרים ×4 + ארוכים ×2 + מכנסי אימון ×3'},
+  {id:'gu4',cat:'guy',family:'אלוני',text:'תחתונים ×11 + גרביים ×10 + גרבי ספורט ×3'},
+  {id:'gu5',cat:'guy',family:'אלוני',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
+  {id:'gu6',cat:'guy',family:'אלוני',text:'בגד ים ×2'},
+  {id:'gu7',cat:'guy',family:'אלוני',text:'נעלי הליכה/ספורט + נעלי חדר כושר + כפכפים + חגורה'},
+  {id:'gu8',cat:'guy',family:'אלוני',text:'תיק רחצה (מברשת+משחת שיניים, חוט דנטלי, שמפו+סבון, דאודורנט, סכין גילוח, מסרק)'},
+  // ── תום (4) ──
+  {id:'to1',cat:'tom',family:'אלוני',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true},
+  {id:'to2',cat:'tom',family:'אלוני',text:'חולצות ×7'},
+  {id:'to3',cat:'tom',family:'אלוני',text:'מכנסיים קצרים ×4 + ארוכים ×3'},
+  {id:'to4',cat:'tom',family:'אלוני',text:'תחתונים ×12 + גרביים ×10'},
+  {id:'to5',cat:'tom',family:'אלוני',text:'פיג׳מות ×3 + קרדיגן/פליז ×1 + סווטשרט נוסף ×1 + מעיל גשם דק ×1'},
+  {id:'to6',cat:'tom',family:'אלוני',text:'בגדי ים ×2 + חולצת UV ×1–2 + כובע שמש'},
+  {id:'to7',cat:'tom',family:'אלוני',text:'נעלי ספורט סגורות + סנדלים + כפכפים/נעלי מים'},
+  {id:'to8',cat:'tom',family:'אלוני',text:'תיק רחצה (מברשת+משחת שיניים ילדים, שמפו, סבון, SPF 50, אלתוש לגיל)'},
+  {id:'to9',cat:'tom',family:'אלוני',text:'משחקים/ספרים + חוברת וטושים + אוזניות ילדים + חטיפים לטיסה'},
+  // ── עמרי (2) ──
+  {id:'ob1',cat:'omri',family:'אלוני',text:'⭐ כיסא בטיחות Toddler לרכב (לאשר AutoEurope!)',urgent:true},
+  {id:'ob2',cat:'omri',family:'אלוני',text:'בגדי גוף / חולצות קצרות ×12'},
+  {id:'ob3',cat:'omri',family:'אלוני',text:'מכנסיים/טייצים קצרים ×8 + סטים ארוכים ×3'},
+  {id:'ob4',cat:'omri',family:'אלוני',text:'גרביים ×10 + פיג׳מות ×4'},
+  {id:'ob5',cat:'omri',family:'אלוני',text:'סווטשרט/פליז ×2 + מעיל גשם דק ×1'},
+  {id:'ob6',cat:'omri',family:'אלוני',text:'בגדי ים ×2 + חולצת UV ×2 + כובע שמש ×1 + ספייר'},
+  {id:'ob7',cat:'omri',family:'אלוני',text:'נעליים סגורות + סנדלים/נעלי מים'},
+  {id:'ob8',cat:'omri',family:'אלוני',text:'סינרי אוכל ×4 + חיתולי טטרה ×2'},
+  {id:'ob9',cat:'omri',family:'אלוני',text:'תיק רחצה (סבון עדין, קרם גוף, קרם החתלה, SPF 50 לגיל, אלתוש לגיל)'},
+  {id:'ob10',cat:'omri',family:'אלוני',text:'⭐ תרופות עמרי: חום (אקמול), אנטיהיסטמין לגיל, מדחום',urgent:true},
+  {id:'ob11',cat:'omri',family:'אלוני',text:'שמיכה מוכרת + בובת שינה'},
+  // ── בריכה וחדר כושר (אלוני) ──
+  {id:'plb1',cat:'pool',family:'אלוני',text:'בגדי ים ×2 לכל אחד (לפחות 4 כניסות)'},
+  {id:'plb2',cat:'pool',family:'אלוני',text:'חיתולי שחייה לעמרי ×10–12'},
+  {id:'plb3',cat:'pool',family:'אלוני',text:'חולצות UV (תום ×1–2, עמרי ×2)'},
+  {id:'plb4',cat:'pool',family:'אלוני',text:'כפכפים/נעלי מים לכולם + משקפי שחייה'},
+  {id:'plb5',cat:'pool',family:'אלוני',text:'מצוף/אביזר ציפה (אם המלון לא מספק) + תיק רטוב אטום ×2'},
+  {id:'plb6',cat:'pool',family:'אלוני',text:'חדר כושר: 3 סטי אימון לכל מבוגר + נעלי אימון + אוזניות ×2 + בקבוקי מים'},
+  // ── אוכל ונשנושים לטיסה (אלוני) ──
+  {id:'fdb1',cat:'food',family:'אלוני',text:'עמרי: פאוצ׳ים ×8, חטיפי פעוטות ×3, קרקרים ×2, כפיות ×3, קערית, כוס+ספייר'},
+  {id:'fdb2',cat:'food',family:'אלוני',text:'תום+מבוגרים: חטיפי גרנולה ×8, קרקרים ×2, בייגלה ×2, חטיפי פירות ×6–8, עוגיות'},
+  {id:'fdb3',cat:'food',family:'אלוני',text:'מסטיקים/סוכריות למבוגרים (להמראה ולנחיתה)'},
+  {id:'fdb4',cat:'food',family:'אלוני',text:'מפיות ×10 + מגבוני ידיים / אלכוג׳ל'},
+  // ── עגלה, שינה וחיתולים לעמרי (אלוני) ──
+  {id:'bbb1',cat:'baby',family:'אלוני',text:'⭐ עגלה + בדיקת תקינות + תיק עגלה',urgent:true},
+  {id:'bbb2',cat:'baby',family:'אלוני',text:'ווים לעגלה ×2 + מנשא/רצועת נשיאה'},
+  {id:'bbb3',cat:'baby',family:'אלוני',text:'שק שינה / שמיכת מעבר + בובת שינה'},
+  {id:'bbb4',cat:'baby',family:'אלוני',text:'סדין נסיעות ×2 (אם לא בטוחים מה המלון מספק)'},
+  {id:'bbb5',cat:'baby',family:'אלוני',text:'⭐ חיתולים מידה 5–6 — 40–48 לכל השהות',urgent:true},
+  {id:'bbb6',cat:'baby',family:'אלוני',text:'חיתולי שחייה ×10–12'},
+  {id:'bbb7',cat:'baby',family:'אלוני',text:'מגבונים: 3 חבילות + חבילת נסיעות'},
+  {id:'bbb8',cat:'baby',family:'אלוני',text:'משטח החתלה + קרם החתלה (מלא + קטן)'},
+  {id:'bbb9',cat:'baby',family:'אלוני',text:'שקיות לחיתולים ×20 + שקיות אטומות ×5'},
+  {id:'bbb10',cat:'baby',family:'אלוני',text:'לוודא מיטת תינוק/מעבר במלון + כיסא בטיחות מתאים ברכב'},
+  {id:'bbb11',cat:'baby',family:'אלוני',text:'פרטי זיהוי וטלפון על העגלה'},
   // ── תרופות ועזרה ראשונה (כולם) ──
   {id:'md1',cat:'meds',text:'⭐ תרופות קבועות לכל נוסע: 8 ימים + 3 רזרבה (בתיק גב)',urgent:true},
   {id:'md2',cat:'meds',text:'משכך כאבים / מוריד חום למבוגרים'},
@@ -2839,7 +2892,7 @@ const BUILTIN_PACKING = [
   {id:'p53',cat:'apps',text:'ישראייר app',urgent:false}
 ];
 
-const CAT_LABELS = {docs:'🛂 מסמכים וכסף',gear:'🎒 ציוד משפחתי כללי',neta:'🧕 נטע',omer:'🧔 עומר',lia:'👧 ליה (4)',tom:'👦 תום (4)',omri:'👶 עמרי (2)',romi:'🍼 רומי (1)',meds:'💊 תרופות ועזרה ראשונה',pool:'🏊 בריכה וחדר כושר',food:'🍎 אוכל ונשנושים לטיסה',electr:'🔌 אלקטרוניקה',baby:'👶 עגלה, שינה וחיתולים',apps:'📱 אפליקציות להתקין'};
+const CAT_LABELS = {docs:'🛂 מסמכים וכסף',gear:'🎒 ציוד משפחתי כללי',neta:'🧕 נטע',omer:'🧔 עומר',tal:'🧕 טל',guy:'🧔 גיא',lia:'👧 ליה (4)',tom:'👦 תום (4)',romi:'🍼 רומי (1)',omri:'👦 עמרי (2)',meds:'💊 תרופות ועזרה ראשונה',pool:'🏊 בריכה וחדר כושר',food:'🍎 אוכל ונשנושים לטיסה',electr:'🔌 אלקטרוניקה',baby:'👶 עגלה, שינה וחיתולים',apps:'📱 אפליקציות להתקין'};
 var WX={};
 function _applyDayWeather(){/* weather shown on the date strip only — no per-card duplicate */}
 const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
