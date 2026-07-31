@@ -2481,7 +2481,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">39</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">40</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2698,32 +2698,81 @@ const BUILTIN_RESTAURANTS = [
 ];
 
 const BUILTIN_PACKING = [
-  // רומי – ברוש
-  {id:'p1',cat:'romi',text:'⭐ כיסא בטיחות Infant לרכב (לאשר AutoEurope!)',urgent:true,family:'ברוש'},
-  {id:'p2',cat:'romi',text:'עגלה קלה / stroller מתקפלת',urgent:false,family:'ברוש'},
-  {id:'p3',cat:'romi',text:'חיתולים (x30 לפחות)',urgent:false,family:'ברוש'},
-  {id:'p4',cat:'romi',text:'מגבוני לחים (x4 חבילות)',urgent:false,family:'ברוש'},
-  {id:'p5',cat:'romi',text:'מזון לתינוק לטיסה + 2 ימים ראשונים',urgent:false,family:'ברוש'},
-  {id:'p6',cat:'romi',text:'⭐ מוצץ x3 (אחד אבוד תמיד...)',urgent:true,family:'ברוש'},
-  {id:'p7',cat:'romi',text:'בקבוק שתייה / sippy cup',urgent:false,family:'ברוש'},
-  {id:'p8',cat:'romi',text:'בגדים x10 (כולל שכבות לקור ההרים 15°C)',urgent:false,family:'ברוש'},
-  {id:'p9',cat:'romi',text:'פיג\'מות x4',urgent:false,family:'ברוש'},
-  {id:'p10',cat:'romi',text:'כובע שמש + כיסוי לעגלה',urgent:false,family:'ברוש'},
-  {id:'p11',cat:'romi',text:'קרם שמש לתינוקות SPF 50+',urgent:false,family:'ברוש'},
-  {id:'p12',cat:'romi',text:'אמבטיה מתנפחת / ספוג רחצה',urgent:false,family:'ברוש'},
-  {id:'p13',cat:'romi',text:'שמיכה מוכרת לשינה + בובה מוכרת',urgent:false,family:'ברוש'},
-  {id:'p14',cat:'romi',text:'⭐ תרופות: חום (אקמול טיפות), כאב שיניים (תנקה), אנטיהיסטמין',urgent:true,family:'ברוש'},
-  {id:'p15',cat:'romi',text:'⭐ אישור ישראייר ל-lap infant לרומי (נולדה 09/07/2025)',urgent:true,family:'ברוש'},
-  // ליה – ברוש
-  {id:'p20',cat:'lia',text:'⭐ כיסא בטיחות Toddler לרכב (לאשר AutoEurope!)',urgent:true,family:'ברוש'},
-  {id:'p21',cat:'lia',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true,family:'ברוש'},
-  {id:'p22',cat:'lia',text:'בגדים x8 (כולל מכנסיים ארוכים)',urgent:false,family:'ברוש'},
-  {id:'p23',cat:'lia',text:'נעלי טיול נוחות',urgent:false,family:'ברוש'},
-  {id:'p24',cat:'lia',text:'כובע שמש',urgent:false,family:'ברוש'},
-  {id:'p25',cat:'lia',text:'משחקים / ספרים לטיסה (2–3 שעות)',urgent:false,family:'ברוש'},
-  {id:'p26',cat:'lia',text:'אוזניות לילדים + iPad',urgent:false,family:'ברוש'},
-  {id:'p27',cat:'lia',text:'חטיפים מועדפים לטיסה',urgent:false,family:'ברוש'},
-  // עמרי – אלוני (2 שנים)
+  // ── מסמכים וכסף (כולם) ──
+  {id:'d1c',cat:'docs',text:'⭐ 4 דרכונים בתוקף (עד לפחות אפריל 2027)',urgent:true},
+  {id:'d2c',cat:'docs',text:'⭐ כרטיסי טיסה / אישורי צ׳ק־אין',urgent:true},
+  {id:'d3c',cat:'docs',text:'אישורי מלון'},
+  {id:'d4c',cat:'docs',text:'⭐ אישור הזמנת רכב (AutoEurope)',urgent:true},
+  {id:'d5c',cat:'docs',text:'רישיון נהיגה ישראלי + בינלאומי (אם נדרש)'},
+  {id:'d6c',cat:'docs',text:'⭐ ביטוח נסיעות + מספרי חירום (לוודא כיסוי תינוקת)',urgent:true},
+  {id:'d7c',cat:'docs',text:'כרטיסי אשראי ×2 (לשמור בנפרד)'},
+  {id:'d8c',cat:'docs',text:'~€200 מזומן באירו'},
+  {id:'d9c',cat:'docs',text:'צילום דיגיטלי של כל המסמכים (נגיש אופליין)'},
+  {id:'d10c',cat:'docs',text:'מרשמים לתרופות קבועות'},
+  {id:'d11c',cat:'docs',text:'כתובת המלון וטלפון שמורים'},
+  {id:'d12c',cat:'docs',text:'מפות אופליין לאזור זלצבורג'},
+  // ── ציוד משפחתי כללי (כולם) ──
+  {id:'gr1',cat:'gear',text:'מטרייה מתקפלת ×1'},
+  {id:'gr2',cat:'gear',text:'שקי כביסה גדולים ×2'},
+  {id:'gr3',cat:'gear',text:'שקיות זיפר בגדלים שונים ×10'},
+  {id:'gr4',cat:'gear',text:'שקיות לבגדים רטובים ×2 + שקיות אשפה קטנות ×10'},
+  {id:'gr5',cat:'gear',text:'מגבות מיקרופייבר ×2 (אם המלון לא מספק לבריכה)'},
+  {id:'gr6',cat:'gear',text:'משקפי שמש וכובעי שמש לכולם'},
+  {id:'gr7',cat:'gear',text:'בקבוקי שתייה רב־פעמיים ×4 + ספייר לילדות'},
+  {id:'gr8',cat:'gear',text:'מעיל גשם דק לכולם'},
+  {id:'gr9',cat:'gear',text:'שכבות ביניים לקור ההרים (13–18°C בגובה)'},
+  {id:'gr10',cat:'gear',text:'כיסוי גשם לעגלה'},
+  {id:'gr11',cat:'gear',text:'תיק יום מתקפל + ערכת תפירה / סיכות ביטחון'},
+  {id:'gr12',cat:'gear',text:'תגי איתור (AirTag) לכל מזוודה'},
+  // ── נטע ──
+  {id:'ne1',cat:'neta',family:'ברוש',text:'חולצות יומיומיות ×12'},
+  {id:'ne2',cat:'neta',family:'ברוש',text:'חולצות אימון ×3'},
+  {id:'ne3',cat:'neta',family:'ברוש',text:'מכנסיים קצרים ×4 + ארוכים ×2'},
+  {id:'ne4',cat:'neta',family:'ברוש',text:'שמלות ×2'},
+  {id:'ne5',cat:'neta',family:'ברוש',text:'טייצים / מכנסי אימון ×3 + חזיות ספורט ×3'},
+  {id:'ne6',cat:'neta',family:'ברוש',text:'תחתונים ×11 + חזיות רגילות ×4–5'},
+  {id:'ne7',cat:'neta',family:'ברוש',text:'גרביים ×10 + גרבי ספורט ×3'},
+  {id:'ne8',cat:'neta',family:'ברוש',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
+  {id:'ne9',cat:'neta',family:'ברוש',text:'בגדי ים ×2 + כיסוי לבגד ים'},
+  {id:'ne10',cat:'neta',family:'ברוש',text:'נעלי הליכה/ספורט + נעלי חדר כושר + סנדלים + כפכפים'},
+  {id:'ne11',cat:'neta',family:'ברוש',text:'תיק רחצה שיער (שמפו, מרכך, מברשת, גומיות/קליפסים)'},
+  {id:'ne12',cat:'neta',family:'ברוש',text:'טיפוח פנים (מסיר איפור, תרחיץ, סרום, קרם יום/לילה, SPF פנים)'},
+  {id:'ne13',cat:'neta',family:'ברוש',text:'דאודורנט + קרם גוף/ידיים + בושם'},
+  {id:'ne14',cat:'neta',family:'ברוש',text:'מוצרי היגיינה נשית ל־8 ימים + רזרבה'},
+  {id:'ne15',cat:'neta',family:'ברוש',text:'איפור (רק מה שבשימוש)'},
+  // ── עומר ──
+  {id:'om1',cat:'omer',family:'ברוש',text:'חולצות יומיומיות ×12'},
+  {id:'om2',cat:'omer',family:'ברוש',text:'חולצות אימון ×3'},
+  {id:'om3',cat:'omer',family:'ברוש',text:'מכנסיים קצרים ×4 + ארוכים ×2 + מכנסי אימון ×3'},
+  {id:'om4',cat:'omer',family:'ברוש',text:'תחתונים ×11 + גרביים ×10 + גרבי ספורט ×3'},
+  {id:'om5',cat:'omer',family:'ברוש',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
+  {id:'om6',cat:'omer',family:'ברוש',text:'בגד ים ×2'},
+  {id:'om7',cat:'omer',family:'ברוש',text:'נעלי הליכה/ספורט + נעלי חדר כושר + כפכפים + חגורה'},
+  {id:'om8',cat:'omer',family:'ברוש',text:'תיק רחצה (מברשת+משחת שיניים, חוט דנטלי, שמפו+סבון, דאודורנט, סכין גילוח, מסרק)'},
+  // ── ליה (4) ──
+  {id:'li1',cat:'lia',family:'ברוש',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true},
+  {id:'li2',cat:'lia',family:'ברוש',text:'חולצות ×7 + שמלות ×3 + חצאיות ×2'},
+  {id:'li3',cat:'lia',family:'ברוש',text:'שורטים/טייצים קצרים ×4 + מכנסיים ארוכים ×3'},
+  {id:'li4',cat:'lia',family:'ברוש',text:'תחתונים ×12 + גרביים ×10'},
+  {id:'li5',cat:'lia',family:'ברוש',text:'פיג׳מות ×3 + קרדיגן/פליז ×1 + סווטשרט נוסף ×1 + מעיל גשם דק ×1'},
+  {id:'li6',cat:'lia',family:'ברוש',text:'בגדי ים ×2 + חולצת UV ×1–2 + כובע שמש'},
+  {id:'li7',cat:'lia',family:'ברוש',text:'נעלי ספורט סגורות + סנדלים + כפכפים/נעלי מים'},
+  {id:'li8',cat:'lia',family:'ברוש',text:'תיק רחצה (מברשת+משחת שיניים ילדים, שמפו, סבון, SPF 50, אלתוש לגיל)'},
+  {id:'li9',cat:'lia',family:'ברוש',text:'משחקים/ספרים + חוברת וטושים + אוזניות ילדים + חטיפים לטיסה'},
+  // ── רומי (1) ──
+  {id:'ro1',cat:'romi',family:'ברוש',text:'⭐ כיסא בטיחות Infant לרכב (לאשר AutoEurope!)',urgent:true},
+  {id:'ro2',cat:'romi',family:'ברוש',text:'⭐ אישור ישראייר ל-lap infant (נולדה 09/07/2025)',urgent:true},
+  {id:'ro3',cat:'romi',family:'ברוש',text:'בגדי גוף קצרים ×12 + חולצות קצרות ×4'},
+  {id:'ro4',cat:'romi',family:'ברוש',text:'מכנסיים/טייצים קצרים ×8 + סטים ארוכים ×3'},
+  {id:'ro5',cat:'romi',family:'ברוש',text:'גרביים ×10 + פיג׳מות ×4'},
+  {id:'ro6',cat:'romi',family:'ברוש',text:'סווטשרט/פליז ×2 + מעיל גשם דק ×1'},
+  {id:'ro7',cat:'romi',family:'ברוש',text:'בגדי ים ×2 + חולצת UV ×2 + כובע שמש ×1 + ספייר'},
+  {id:'ro8',cat:'romi',family:'ברוש',text:'נעליים סגורות + סנדלים/נעלי מים'},
+  {id:'ro9',cat:'romi',family:'ברוש',text:'סינרי אוכל ×6 + חיתולי טטרה ×4'},
+  {id:'ro10',cat:'romi',family:'ברוש',text:'תיק רחצה (סבון עדין, קרם גוף, קרם החתלה, SPF 50 לגיל, אלתוש לגיל שנה)'},
+  {id:'ro11',cat:'romi',family:'ברוש',text:'⭐ תרופות רומי: חום (אקמול טיפות), אנטיהיסטמין לגיל, מדחום',urgent:true},
+  {id:'ro12',cat:'romi',family:'ברוש',text:'שמיכה מוכרת + בובת שינה'},
+  // ── עמרי – אלוני (2 שנים) ──
   {id:'pa1',cat:'omri',text:'⭐ כיסא בטיחות Toddler לרכב',urgent:true,family:'אלוני'},
   {id:'pa2',cat:'omri',text:'עגלה קלה / stroller מתקפלת',family:'אלוני'},
   {id:'pa3',cat:'omri',text:'חיתולים (x20)',family:'אלוני'},
@@ -2734,7 +2783,7 @@ const BUILTIN_PACKING = [
   {id:'pa8',cat:'omri',text:'קרם שמש לפעוטות SPF 50+',family:'אלוני'},
   {id:'pa9',cat:'omri',text:'שמיכה מוכרת לשינה + בובה מוכרת',family:'אלוני'},
   {id:'pa10',cat:'omri',text:'⭐ תרופות: חום (אקמול), אנטיהיסטמין',urgent:true,family:'אלוני'},
-  // תום – אלוני (4 שנים)
+  // ── תום – אלוני (4 שנים) ──
   {id:'pb1',cat:'tom',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true,family:'אלוני'},
   {id:'pb2',cat:'tom',text:'בגדים x8 (כולל מכנסיים ארוכים)',family:'אלוני'},
   {id:'pb3',cat:'tom',text:'נעלי טיול נוחות',family:'אלוני'},
@@ -2742,20 +2791,47 @@ const BUILTIN_PACKING = [
   {id:'pb5',cat:'tom',text:'משחקים / ספרים לטיסה',family:'אלוני'},
   {id:'pb6',cat:'tom',text:'אוזניות לילדים + iPad / טאבלט',family:'אלוני'},
   {id:'pb7',cat:'tom',text:'חטיפים מועדפים לטיסה',family:'אלוני'},
-  // כולם
-  {id:'p30',cat:'all',text:'⭐ דרכונים (תוקף עד לפחות אפריל 2027!)',urgent:true},
-  {id:'p31',cat:'all',text:'⭐ כרטיסי ביטוח רפואי',urgent:true},
-  {id:'p32',cat:'all',text:'⭐ ביטוח נסיעות (לוודא שמכסה תינוקת)',urgent:true},
-  {id:'p33',cat:'all',text:'מתאמי שקע Type F (אוסטריה!) + מפצל USB-C',urgent:false},
-  {id:'p34',cat:'all',text:'מטען נייד / Power bank',urgent:false},
-  {id:'p35',cat:'all',text:'מעיל גשם לכולם',urgent:false},
-  {id:'p36',cat:'all',text:'שכבות ביניים לקור ההרים (15–18°C בגובה)',urgent:false},
-  {id:'p37',cat:'all',text:'בגדי ים x2 לכל אחד',urgent:false},
-  {id:'p38',cat:'all',text:'קרם שמש SPF 50+ לכולם',urgent:false},
-  {id:'p39',cat:'all',text:'~€200 יורו מזומן',urgent:false},
-  {id:'p40',cat:'all',text:'ביגוד לסעודת ערב (Kesselgrub – מסעדה גורמה)',urgent:false},
-  {id:'p41',cat:'all',text:'מצלמה + מטען',urgent:false},
-  {id:'p42',cat:'all',text:'ערכת עזרה ראשונה',urgent:false},
+  // ── תרופות ועזרה ראשונה (כולם) ──
+  {id:'md1',cat:'meds',text:'⭐ תרופות קבועות לכל נוסע: 8 ימים + 3 רזרבה (בתיק גב)',urgent:true},
+  {id:'md2',cat:'meds',text:'משכך כאבים / מוריד חום למבוגרים'},
+  {id:'md3',cat:'meds',text:'תרופה לבטן/שלשול + תרופה לאלרגיה (לפי המלצה)'},
+  {id:'md4',cat:'meds',text:'פלסטרים ×10 + פלסטרים לשלפוחיות ×4'},
+  {id:'md5',cat:'meds',text:'חומר חיטוי + גזה סטרילית ×4 + תחבושת אלסטית'},
+  {id:'md6',cat:'meds',text:'מדחום + מי מלח לאף + פינצטה'},
+  {id:'md7',cat:'meds',text:'מזרקי מדידה מסומנים לכל תרופת ילדים'},
+  // ── בריכה וחדר כושר (ברוש) ──
+  {id:'pl1',cat:'pool',family:'ברוש',text:'בגדי ים ×2 לכל אחד (לפחות 4 כניסות)'},
+  {id:'pl2',cat:'pool',family:'ברוש',text:'חיתולי שחייה לרומי ×10–12'},
+  {id:'pl3',cat:'pool',family:'ברוש',text:'חולצות UV (ליה ×1–2, רומי ×2)'},
+  {id:'pl4',cat:'pool',family:'ברוש',text:'כפכפים/נעלי מים לכולם + משקפי שחייה'},
+  {id:'pl5',cat:'pool',family:'ברוש',text:'מצוף/אביזר ציפה (אם המלון לא מספק) + תיק רטוב אטום ×2'},
+  {id:'pl6',cat:'pool',family:'ברוש',text:'חדר כושר: 3 סטי אימון לכל מבוגר + נעלי אימון + אוזניות ×2 + בקבוקי מים'},
+  // ── אוכל ונשנושים לטיסה (ברוש) ──
+  {id:'fd1',cat:'food',family:'ברוש',text:'רומי: פאוצ׳ים ×8, חטיפי תינוקות ×3, קרקרים ×2, כפיות ×3, קערית, כוס+ספייר'},
+  {id:'fd2',cat:'food',family:'ברוש',text:'ליה+מבוגרים: חטיפי גרנולה ×8, קרקרים ×2, בייגלה ×2, חטיפי פירות ×6–8, עוגיות'},
+  {id:'fd3',cat:'food',family:'ברוש',text:'מסטיקים/סוכריות למבוגרים (להמראה ולנחיתה)'},
+  {id:'fd4',cat:'food',family:'ברוש',text:'מפיות ×10 + מגבוני ידיים / אלכוג׳ל'},
+  // ── אלקטרוניקה (כולם) ──
+  {id:'el1',cat:'electr',text:'טלפונים + מטענים ×2 + כבל ספייר'},
+  {id:'el2',cat:'electr',text:'אוזניות מבוגרים ×2 + אוזניות ילדים'},
+  {id:'el3',cat:'electr',text:'טאבלט/iPad ×1–2 + מטענים (תכנים אופליין מראש)'},
+  {id:'el4',cat:'electr',text:'סוללה ניידת ×1–2 (בתיק יד בלבד)'},
+  {id:'el5',cat:'electr',text:'מטען USB לרכב + מחזיק טלפון לרכב'},
+  {id:'el6',cat:'electr',text:'⭐ מתאם תקע ישראל–אירופה (Type F) ×1–2 + מפצל',urgent:true},
+  {id:'el7',cat:'electr',text:'מצלמה + מטען'},
+  // ── עגלה, שינה וחיתולים לרומי (ברוש) ──
+  {id:'bb1',cat:'baby',family:'ברוש',text:'⭐ עגלה + בדיקת תקינות + תיק עגלה',urgent:true},
+  {id:'bb2',cat:'baby',family:'ברוש',text:'ווים לעגלה ×2 + מנשא/רצועת נשיאה'},
+  {id:'bb3',cat:'baby',family:'ברוש',text:'שק שינה קבוע + חלופי + שמיכת מעבר + בובת שינה'},
+  {id:'bb4',cat:'baby',family:'ברוש',text:'סדין נסיעות ×2 (אם לא בטוחים מה המלון מספק)'},
+  {id:'bb5',cat:'baby',family:'ברוש',text:'מוניטור לתינוק (אם משתמשים)'},
+  {id:'bb6',cat:'baby',family:'ברוש',text:'⭐ Huggies מידה 6 — 52–56 חיתולים',urgent:true},
+  {id:'bb7',cat:'baby',family:'ברוש',text:'חיתולי שחייה ×10–12'},
+  {id:'bb8',cat:'baby',family:'ברוש',text:'מגבונים: 3 חבילות + חבילת נסיעות'},
+  {id:'bb9',cat:'baby',family:'ברוש',text:'משטח החתלה + קרם החתלה (מלא + קטן)'},
+  {id:'bb10',cat:'baby',family:'ברוש',text:'שקיות לחיתולים ×20 + שקיות אטומות ×5'},
+  {id:'bb11',cat:'baby',family:'ברוש',text:'לוודא מיטת תינוק במלון + כיסא בטיחות מתאים ברכב'},
+  {id:'bb12',cat:'baby',family:'ברוש',text:'פרטי זיהוי וטלפון על העגלה'},
   // apps
   {id:'p50',cat:'apps',text:'⭐ Waze מותקן ומעודכן',urgent:true},
   {id:'p51',cat:'apps',text:'Google Maps – הוריד אזור זלצבורג לאופליין',urgent:false},
@@ -2763,7 +2839,7 @@ const BUILTIN_PACKING = [
   {id:'p53',cat:'apps',text:'ישראייר app',urgent:false}
 ];
 
-const CAT_LABELS = {romi:'🍼 רומי (תינוקת)',lia:'👧 ליה (4 שנים)',tom:'👦 תום (4 שנים)',omri:'👶 עמרי (2 שנים)',all:'👨‍👩‍👧‍👦 כולם',apps:'📱 אפליקציות להתקין'};
+const CAT_LABELS = {docs:'🛂 מסמכים וכסף',gear:'🎒 ציוד משפחתי כללי',neta:'🧕 נטע',omer:'🧔 עומר',lia:'👧 ליה (4)',tom:'👦 תום (4)',omri:'👶 עמרי (2)',romi:'🍼 רומי (1)',meds:'💊 תרופות ועזרה ראשונה',pool:'🏊 בריכה וחדר כושר',food:'🍎 אוכל ונשנושים לטיסה',electr:'🔌 אלקטרוניקה',baby:'👶 עגלה, שינה וחיתולים',apps:'📱 אפליקציות להתקין'};
 var WX={};
 function _applyDayWeather(){/* weather shown on the date strip only — no per-card duplicate */}
 const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
