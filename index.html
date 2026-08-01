@@ -918,6 +918,15 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .pack-progress{font-size:12px;color:var(--muted);margin-right:auto}
 .sec-bar{height:7px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;margin:8px 0 16px}
 .sec-bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#38D9A9);border-radius:999px;transition:width .5s ease}
+.pack-filters{margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+.pf-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pf-search{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:#fff;border-radius:12px;padding:10px 14px;font-family:var(--gs);font-size:14px;outline:none}
+.pf-clear{flex:0 0 auto;background:rgba(255,128,121,.12);border:1px solid rgba(255,128,121,.3);color:#ffb3ae;border-radius:12px;padding:9px 12px;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--gs)}
+.pf-chip{background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:var(--muted);font-family:var(--gs);font-weight:700;font-size:12.5px;padding:8px 13px;border-radius:999px;cursor:pointer;transition:all .15s}
+.pf-chip:active{transform:scale(.96)}
+.pf-chip.on{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#06231a;border-color:transparent;box-shadow:0 3px 10px rgba(var(--accent-rgb),.22)}
+.pf-select{background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:#fff;font-family:var(--gs);font-weight:600;font-size:12.5px;padding:8px 10px;border-radius:999px;cursor:pointer;max-width:47%;outline:none}
+.pf-select option{background:#123524;color:#fff}
 .pack-sub{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.3px;margin:12px 4px 6px;opacity:.9}
 .pack-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:white;box-shadow:var(--shadow);margin-bottom:6px;cursor:pointer;transition:all .15s;min-height:48px;user-select:none}
 .pack-item:active{transform:scale(.99)}
@@ -2322,6 +2331,18 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
   </div>
   <div class="sec-bar"><i id="packing-bar"></i></div>
   <div class="alert alert-warning" style="margin-bottom:14px"><span class="alert-icon">⚠️</span>פריטים עם ⭐ הם קריטיים – אסור לשכוח!</div>
+  <div class="pack-filters">
+    <div class="pf-row">
+      <input id="pack-search" class="pf-search" placeholder="🔎 חיפוש פריט…" oninput="setPackFilter('q',this.value)">
+      <button class="pf-clear" id="pf-clear" style="display:none" onclick="clearPackFilters()">נקה ✕</button>
+    </div>
+    <div class="pf-row pf-chips">
+      <button class="pf-chip" id="pf-todo" onclick="togglePackFlag('todo')">❑ לא ארוז</button>
+      <button class="pf-chip" id="pf-must" onclick="togglePackFlag('must')">⭐ חובה</button>
+      <select class="pf-select" id="pf-person" onchange="setPackFilter('person',this.value)"><option value="">כל האנשים</option></select>
+      <select class="pf-select" id="pf-bag" onchange="setPackFilter('bag',this.value)"><option value="">כל התיקים</option></select>
+    </div>
+  </div>
   <div id="packing-list"></div>
   <div style="margin-top:16px">
     <button class="btn btn-outline btn-block" onclick="openAddPackModal()">＋ הוסף פריט לרשימה</button>
@@ -2486,7 +2507,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">43</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">44</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -3670,21 +3691,55 @@ function _packItemsHTML(items,checked){
   });
   return out;
 }
+var _packFilters={bag:'',person:'',must:false,todo:false,q:''};
+function _packPerson(item){
+  var PEOPLE=['נטע','עומר','ליה','רומי','טל','גיא','תום','עמרי'];
+  var s=(item.sub||'').trim();var name=s.split(' · ')[0].trim();
+  if(PEOPLE.indexOf(name)>=0)return name;
+  if(PEOPLE.indexOf(s)>=0)return s;
+  return '';
+}
+function setPackFilter(k,v){_packFilters[k]=v;renderPacking();}
+function togglePackFlag(k){_packFilters[k]=!_packFilters[k];renderPacking();}
+function clearPackFilters(){_packFilters={bag:'',person:'',must:false,todo:false,q:''};var s=document.getElementById('pack-search');if(s)s.value='';renderPacking();}
+function _buildPackFilterUI(items){
+  var F=_packFilters;
+  var order=['נטע','עומר','ליה','רומי','טל','גיא','תום','עמרי'];
+  var have={},hasShared=false;
+  items.forEach(function(i){var p=_packPerson(i);if(p)have[p]=1;else hasShared=true;});
+  var psel=document.getElementById('pf-person');
+  if(psel){var o='<option value="">כל האנשים</option>';order.forEach(function(p){if(have[p])o+='<option value="'+p+'">'+p+'</option>';});if(hasShared)o+='<option value="__shared">משפחתי / כללי</option>';psel.innerHTML=o;psel.value=F.person;}
+  var bsel=document.getElementById('pf-bag');
+  if(bsel){var o2='<option value="">כל התיקים</option>';Object.keys(CAT_LABELS).forEach(function(c){if(items.some(function(i){return i.cat===c;}))o2+='<option value="'+c+'">'+CAT_LABELS[c]+'</option>';});bsel.innerHTML=o2;bsel.value=F.bag;}
+  var mb=document.getElementById('pf-must');if(mb)mb.classList.toggle('on',F.must);
+  var tb=document.getElementById('pf-todo');if(tb)tb.classList.toggle('on',F.todo);
+  var cl=document.getElementById('pf-clear');if(cl)cl.style.display=(F.bag||F.person||F.must||F.todo||F.q)?'':'none';
+}
+function _packMatch(i,checked){
+  var F=_packFilters;
+  if(F.bag&&i.cat!==F.bag)return false;
+  if(F.must&&!i.urgent)return false;
+  if(F.todo&&checked[i.id])return false;
+  if(F.person){var pp=_packPerson(i);if(F.person==='__shared'){if(pp!=='')return false;}else if(pp!==F.person)return false;}
+  if(F.q){var q=F.q.toLowerCase();if((i.text||'').toLowerCase().indexOf(q)<0&&(i.sub||'').toLowerCase().indexOf(q)<0)return false;}
+  return true;
+}
 function renderPacking(){
   const checked=getPackingChecked();
   const customItems=getCustomPackItems();
   const fam=currentUser?.name||'';
-  const allItems=[
+  const famItems=[
     ...BUILTIN_PACKING.filter(i=>!i.family||i.family===fam),
     ...customItems.map(i=>({...i,custom:true}))
   ];
+  _buildPackFilterUI(famItems);
+  const allItems=famItems.filter(i=>_packMatch(i,checked));
   const cats=Object.keys(CAT_LABELS);
-  let html='';let total=0;let done=0;
+  let html='';
   cats.forEach(cat=>{
     const items=allItems.filter(i=>i.cat===cat);
     if(!items.length)return;
     const catDone=items.filter(i=>checked[i.id]).length;
-    total+=items.length;done+=catDone;
     html+=`<div class="pack-category">
       <div class="pack-header">
         <h3>${CAT_LABELS[cat]}</h3>
@@ -3693,23 +3748,19 @@ function renderPacking(){
       ${_packItemsHTML(items,checked)}
     </div>`;
   });
-  document.getElementById('packing-list').innerHTML=html;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById('packing-total').textContent=total?`${pct}% · ${done}/${total}`:'';
+  document.getElementById('packing-list').innerHTML=html||'<p style="font-size:13px;color:var(--muted);padding:18px 4px;text-align:center">אין פריטים שתואמים לסינון</p>';
+  const ftotal=famItems.length,fdone=famItems.filter(i=>checked[i.id]).length;
+  const pct=ftotal?Math.round(fdone/ftotal*100):0;
+  const anyF=_packFilters.bag||_packFilters.person||_packFilters.must||_packFilters.todo||_packFilters.q;
+  document.getElementById('packing-total').textContent=anyF?(allItems.length+' מציג · '+fdone+'/'+ftotal+' ארוז'):(ftotal?`${pct}% · ${fdone}/${ftotal}`:'');
   var pb=document.getElementById('packing-bar');if(pb)pb.style.width=pct+'%';
 }
 function togglePackItem(el,id){
   const checked=getPackingChecked();
-  const isDone=el.classList.toggle('done');
-  checked[id]=isDone?true:undefined;
-  if(!isDone)delete checked[id];
+  const isDone=!checked[id];
+  if(isDone)checked[id]=true;else delete checked[id];
   savePackingChecked(checked);
-  const circle=el.querySelector('.pack-circle');
-  if(circle)circle.textContent=isDone?'✓':'';
-  // update total
-  const items=document.querySelectorAll('.pack-item');
-  const doneCount=[...items].filter(i=>i.classList.contains('done')).length;
-  document.getElementById('packing-total').textContent=`${doneCount}/${items.length} פריטים`;
+  renderPacking();
 }
 function openAddPackModal(){openModal('add-pack-modal')}
 function savePackItem(){
