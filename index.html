@@ -918,6 +918,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .pack-progress{font-size:12px;color:var(--muted);margin-right:auto}
 .sec-bar{height:7px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;margin:8px 0 16px}
 .sec-bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#38D9A9);border-radius:999px;transition:width .5s ease}
+.pack-sub{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.3px;margin:12px 4px 6px;opacity:.9}
 .pack-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:white;box-shadow:var(--shadow);margin-bottom:6px;cursor:pointer;transition:all .15s;min-height:48px;user-select:none}
 .pack-item:active{transform:scale(.99)}
 .pack-item.done{opacity:.5}
@@ -2447,10 +2448,14 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="form-group"><label>שם הפריט *</label><input type="text" class="form-input" id="pack-item-text" placeholder="מה להביא..."></div>
     <div class="form-group"><label>קטגוריה</label>
       <select class="form-select" id="pack-item-category">
-        <option value="romi">🍼 רומי (תינוקת)</option>
-        <option value="lia">👧 ליה (4 שנים)</option>
-        <option value="all">👨‍👩‍👧‍👦 כולם</option>
-        <option value="apps">📱 אפליקציות</option>
+        <option value="suit1">🧳 מזוודה גדולה 1 — מבוגרים</option>
+        <option value="suit2">🧳 מזוודה גדולה 2 — ילדים</option>
+        <option value="trl1">🎒 טרולי 1 — גיבוי 48 שעות</option>
+        <option value="trl2">🎒 טרולי 2 — חיתולים ואוכל</option>
+        <option value="bp1">🎒 תיק גב 1 — מסמכים ותרופות</option>
+        <option value="bp2">🎒 תיק גב 2 — טיסה עם הילדים</option>
+        <option value="strbag">👶 תיק עגלה</option>
+        <option value="shop">🛍️ לקנות</option>
       </select>
     </div>
     <div class="form-group" style="display:flex;align-items:center;gap:10px">
@@ -2481,7 +2486,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">41</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">42</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2698,201 +2703,229 @@ const BUILTIN_RESTAURANTS = [
 ];
 
 const BUILTIN_PACKING = [
-  // ── מסמכים וכסף (כולם) ──
-  {id:'d1c',cat:'docs',text:'⭐ 4 דרכונים בתוקף (עד לפחות אפריל 2027)',urgent:true},
-  {id:'d2c',cat:'docs',text:'⭐ כרטיסי טיסה / אישורי צ׳ק־אין',urgent:true},
-  {id:'d3c',cat:'docs',text:'אישורי מלון'},
-  {id:'d4c',cat:'docs',text:'⭐ אישור הזמנת רכב (AutoEurope)',urgent:true},
-  {id:'d5c',cat:'docs',text:'רישיון נהיגה ישראלי + בינלאומי (אם נדרש)'},
-  {id:'d6c',cat:'docs',text:'⭐ ביטוח נסיעות + מספרי חירום (לוודא כיסוי תינוקת)',urgent:true},
-  {id:'d7c',cat:'docs',text:'כרטיסי אשראי ×2 (לשמור בנפרד)'},
-  {id:'d8c',cat:'docs',text:'~€200 מזומן באירו'},
-  {id:'d9c',cat:'docs',text:'צילום דיגיטלי של כל המסמכים (נגיש אופליין)'},
-  {id:'d10c',cat:'docs',text:'מרשמים לתרופות קבועות'},
-  {id:'d11c',cat:'docs',text:'כתובת המלון וטלפון שמורים'},
-  {id:'d12c',cat:'docs',text:'מפות אופליין לאזור זלצבורג'},
-  // ── ציוד משפחתי כללי (כולם) ──
-  {id:'gr1',cat:'gear',text:'מטרייה מתקפלת ×1'},
-  {id:'gr2',cat:'gear',text:'שקי כביסה גדולים ×2'},
-  {id:'gr3',cat:'gear',text:'שקיות זיפר בגדלים שונים ×10'},
-  {id:'gr4',cat:'gear',text:'שקיות לבגדים רטובים ×2 + שקיות אשפה קטנות ×10'},
-  {id:'gr5',cat:'gear',text:'מגבות מיקרופייבר ×2 (אם המלון לא מספק לבריכה)'},
-  {id:'gr6',cat:'gear',text:'משקפי שמש וכובעי שמש לכולם'},
-  {id:'gr7',cat:'gear',text:'בקבוקי שתייה רב־פעמיים ×4 + ספייר לילדות'},
-  {id:'gr8',cat:'gear',text:'מעיל גשם דק לכולם'},
-  {id:'gr9',cat:'gear',text:'שכבות ביניים לקור ההרים (13–18°C בגובה)'},
-  {id:'gr10',cat:'gear',text:'כיסוי גשם לעגלה'},
-  {id:'gr11',cat:'gear',text:'תיק יום מתקפל + ערכת תפירה / סיכות ביטחון'},
-  {id:'gr12',cat:'gear',text:'תגי איתור (AirTag) לכל מזוודה'},
-  // ── נטע ──
-  {id:'ne1',cat:'neta',family:'ברוש',text:'חולצות יומיומיות ×12'},
-  {id:'ne2',cat:'neta',family:'ברוש',text:'חולצות אימון ×3'},
-  {id:'ne3',cat:'neta',family:'ברוש',text:'מכנסיים קצרים ×4 + ארוכים ×2'},
-  {id:'ne4',cat:'neta',family:'ברוש',text:'שמלות ×2'},
-  {id:'ne5',cat:'neta',family:'ברוש',text:'טייצים / מכנסי אימון ×3 + חזיות ספורט ×3'},
-  {id:'ne6',cat:'neta',family:'ברוש',text:'תחתונים ×11 + חזיות רגילות ×4–5'},
-  {id:'ne7',cat:'neta',family:'ברוש',text:'גרביים ×10 + גרבי ספורט ×3'},
-  {id:'ne8',cat:'neta',family:'ברוש',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
-  {id:'ne9',cat:'neta',family:'ברוש',text:'בגדי ים ×2 + כיסוי לבגד ים'},
-  {id:'ne10',cat:'neta',family:'ברוש',text:'נעלי הליכה/ספורט + נעלי חדר כושר + סנדלים + כפכפים'},
-  {id:'ne11',cat:'neta',family:'ברוש',text:'תיק רחצה שיער (שמפו, מרכך, מברשת, גומיות/קליפסים)'},
-  {id:'ne12',cat:'neta',family:'ברוש',text:'טיפוח פנים (מסיר איפור, תרחיץ, סרום, קרם יום/לילה, SPF פנים)'},
-  {id:'ne13',cat:'neta',family:'ברוש',text:'דאודורנט + קרם גוף/ידיים + בושם'},
-  {id:'ne14',cat:'neta',family:'ברוש',text:'מוצרי היגיינה נשית ל־8 ימים + רזרבה'},
-  {id:'ne15',cat:'neta',family:'ברוש',text:'איפור (רק מה שבשימוש)'},
-  // ── עומר ──
-  {id:'om1',cat:'omer',family:'ברוש',text:'חולצות יומיומיות ×12'},
-  {id:'om2',cat:'omer',family:'ברוש',text:'חולצות אימון ×3'},
-  {id:'om3',cat:'omer',family:'ברוש',text:'מכנסיים קצרים ×4 + ארוכים ×2 + מכנסי אימון ×3'},
-  {id:'om4',cat:'omer',family:'ברוש',text:'תחתונים ×11 + גרביים ×10 + גרבי ספורט ×3'},
-  {id:'om5',cat:'omer',family:'ברוש',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
-  {id:'om6',cat:'omer',family:'ברוש',text:'בגד ים ×2'},
-  {id:'om7',cat:'omer',family:'ברוש',text:'נעלי הליכה/ספורט + נעלי חדר כושר + כפכפים + חגורה'},
-  {id:'om8',cat:'omer',family:'ברוש',text:'תיק רחצה (מברשת+משחת שיניים, חוט דנטלי, שמפו+סבון, דאודורנט, סכין גילוח, מסרק)'},
-  // ── ליה (4) ──
-  {id:'li1',cat:'lia',family:'ברוש',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true},
-  {id:'li2',cat:'lia',family:'ברוש',text:'חולצות ×7 + שמלות ×3 + חצאיות ×2'},
-  {id:'li3',cat:'lia',family:'ברוש',text:'שורטים/טייצים קצרים ×4 + מכנסיים ארוכים ×3'},
-  {id:'li4',cat:'lia',family:'ברוש',text:'תחתונים ×12 + גרביים ×10'},
-  {id:'li5',cat:'lia',family:'ברוש',text:'פיג׳מות ×3 + קרדיגן/פליז ×1 + סווטשרט נוסף ×1 + מעיל גשם דק ×1'},
-  {id:'li6',cat:'lia',family:'ברוש',text:'בגדי ים ×2 + חולצת UV ×1–2 + כובע שמש'},
-  {id:'li7',cat:'lia',family:'ברוש',text:'נעלי ספורט סגורות + סנדלים + כפכפים/נעלי מים'},
-  {id:'li8',cat:'lia',family:'ברוש',text:'תיק רחצה (מברשת+משחת שיניים ילדים, שמפו, סבון, SPF 50, אלתוש לגיל)'},
-  {id:'li9',cat:'lia',family:'ברוש',text:'משחקים/ספרים + חוברת וטושים + אוזניות ילדים + חטיפים לטיסה'},
-  // ── רומי (1) ──
-  {id:'ro1',cat:'romi',family:'ברוש',text:'⭐ כיסא בטיחות Infant לרכב (לאשר AutoEurope!)',urgent:true},
-  {id:'ro2',cat:'romi',family:'ברוש',text:'⭐ אישור ישראייר ל-lap infant (נולדה 09/07/2025)',urgent:true},
-  {id:'ro3',cat:'romi',family:'ברוש',text:'בגדי גוף קצרים ×12 + חולצות קצרות ×4'},
-  {id:'ro4',cat:'romi',family:'ברוש',text:'מכנסיים/טייצים קצרים ×8 + סטים ארוכים ×3'},
-  {id:'ro5',cat:'romi',family:'ברוש',text:'גרביים ×10 + פיג׳מות ×4'},
-  {id:'ro6',cat:'romi',family:'ברוש',text:'סווטשרט/פליז ×2 + מעיל גשם דק ×1'},
-  {id:'ro7',cat:'romi',family:'ברוש',text:'בגדי ים ×2 + חולצת UV ×2 + כובע שמש ×1 + ספייר'},
-  {id:'ro8',cat:'romi',family:'ברוש',text:'נעליים סגורות + סנדלים/נעלי מים'},
-  {id:'ro9',cat:'romi',family:'ברוש',text:'סינרי אוכל ×6 + חיתולי טטרה ×4'},
-  {id:'ro10',cat:'romi',family:'ברוש',text:'תיק רחצה (סבון עדין, קרם גוף, קרם החתלה, SPF 50 לגיל, אלתוש לגיל שנה)'},
-  {id:'ro11',cat:'romi',family:'ברוש',text:'⭐ תרופות רומי: חום (אקמול טיפות), אנטיהיסטמין לגיל, מדחום',urgent:true},
-  {id:'ro12',cat:'romi',family:'ברוש',text:'שמיכה מוכרת + בובת שינה'},
-  // ══════════ משפחת אלוני ══════════
-  // ── טל (אמא) ──
-  {id:'ta1',cat:'tal',family:'אלוני',text:'חולצות יומיומיות ×12'},
-  {id:'ta2',cat:'tal',family:'אלוני',text:'חולצות אימון ×3'},
-  {id:'ta3',cat:'tal',family:'אלוני',text:'מכנסיים קצרים ×4 + ארוכים ×2'},
-  {id:'ta4',cat:'tal',family:'אלוני',text:'שמלות ×2'},
-  {id:'ta5',cat:'tal',family:'אלוני',text:'טייצים / מכנסי אימון ×3 + חזיות ספורט ×3'},
-  {id:'ta6',cat:'tal',family:'אלוני',text:'תחתונים ×11 + חזיות רגילות ×4–5'},
-  {id:'ta7',cat:'tal',family:'אלוני',text:'גרביים ×10 + גרבי ספורט ×3'},
-  {id:'ta8',cat:'tal',family:'אלוני',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
-  {id:'ta9',cat:'tal',family:'אלוני',text:'בגדי ים ×2 + כיסוי לבגד ים'},
-  {id:'ta10',cat:'tal',family:'אלוני',text:'נעלי הליכה/ספורט + נעלי חדר כושר + סנדלים + כפכפים'},
-  {id:'ta11',cat:'tal',family:'אלוני',text:'תיק רחצה שיער (שמפו, מרכך, מברשת, גומיות/קליפסים)'},
-  {id:'ta12',cat:'tal',family:'אלוני',text:'טיפוח פנים (מסיר איפור, תרחיץ, סרום, קרם יום/לילה, SPF פנים)'},
-  {id:'ta13',cat:'tal',family:'אלוני',text:'דאודורנט + קרם גוף/ידיים + בושם'},
-  {id:'ta14',cat:'tal',family:'אלוני',text:'מוצרי היגיינה נשית ל־8 ימים + רזרבה'},
-  {id:'ta15',cat:'tal',family:'אלוני',text:'איפור (רק מה שבשימוש)'},
-  // ── גיא (אבא) ──
-  {id:'gu1',cat:'guy',family:'אלוני',text:'חולצות יומיומיות ×12'},
-  {id:'gu2',cat:'guy',family:'אלוני',text:'חולצות אימון ×3'},
-  {id:'gu3',cat:'guy',family:'אלוני',text:'מכנסיים קצרים ×4 + ארוכים ×2 + מכנסי אימון ×3'},
-  {id:'gu4',cat:'guy',family:'אלוני',text:'תחתונים ×11 + גרביים ×10 + גרבי ספורט ×3'},
-  {id:'gu5',cat:'guy',family:'אלוני',text:'פיג׳מות ×2 + סווטשרט/פליז ×1 + מעיל גשם דק ×1'},
-  {id:'gu6',cat:'guy',family:'אלוני',text:'בגד ים ×2'},
-  {id:'gu7',cat:'guy',family:'אלוני',text:'נעלי הליכה/ספורט + נעלי חדר כושר + כפכפים + חגורה'},
-  {id:'gu8',cat:'guy',family:'אלוני',text:'תיק רחצה (מברשת+משחת שיניים, חוט דנטלי, שמפו+סבון, דאודורנט, סכין גילוח, מסרק)'},
-  // ── תום (4) ──
-  {id:'to1',cat:'tom',family:'אלוני',text:'⭐ חולצה יבשה נוספת לארמון הלבורן – המזרקות מרטיבות!',urgent:true},
-  {id:'to2',cat:'tom',family:'אלוני',text:'חולצות ×7'},
-  {id:'to3',cat:'tom',family:'אלוני',text:'מכנסיים קצרים ×4 + ארוכים ×3'},
-  {id:'to4',cat:'tom',family:'אלוני',text:'תחתונים ×12 + גרביים ×10'},
-  {id:'to5',cat:'tom',family:'אלוני',text:'פיג׳מות ×3 + קרדיגן/פליז ×1 + סווטשרט נוסף ×1 + מעיל גשם דק ×1'},
-  {id:'to6',cat:'tom',family:'אלוני',text:'בגדי ים ×2 + חולצת UV ×1–2 + כובע שמש'},
-  {id:'to7',cat:'tom',family:'אלוני',text:'נעלי ספורט סגורות + סנדלים + כפכפים/נעלי מים'},
-  {id:'to8',cat:'tom',family:'אלוני',text:'תיק רחצה (מברשת+משחת שיניים ילדים, שמפו, סבון, SPF 50, אלתוש לגיל)'},
-  {id:'to9',cat:'tom',family:'אלוני',text:'משחקים/ספרים + חוברת וטושים + אוזניות ילדים + חטיפים לטיסה'},
-  // ── עמרי (2) ──
-  {id:'ob1',cat:'omri',family:'אלוני',text:'⭐ כיסא בטיחות Toddler לרכב (לאשר AutoEurope!)',urgent:true},
-  {id:'ob2',cat:'omri',family:'אלוני',text:'בגדי גוף / חולצות קצרות ×12'},
-  {id:'ob3',cat:'omri',family:'אלוני',text:'מכנסיים/טייצים קצרים ×8 + סטים ארוכים ×3'},
-  {id:'ob4',cat:'omri',family:'אלוני',text:'גרביים ×10 + פיג׳מות ×4'},
-  {id:'ob5',cat:'omri',family:'אלוני',text:'סווטשרט/פליז ×2 + מעיל גשם דק ×1'},
-  {id:'ob6',cat:'omri',family:'אלוני',text:'בגדי ים ×2 + חולצת UV ×2 + כובע שמש ×1 + ספייר'},
-  {id:'ob7',cat:'omri',family:'אלוני',text:'נעליים סגורות + סנדלים/נעלי מים'},
-  {id:'ob8',cat:'omri',family:'אלוני',text:'סינרי אוכל ×4 + חיתולי טטרה ×2'},
-  {id:'ob9',cat:'omri',family:'אלוני',text:'תיק רחצה (סבון עדין, קרם גוף, קרם החתלה, SPF 50 לגיל, אלתוש לגיל)'},
-  {id:'ob10',cat:'omri',family:'אלוני',text:'⭐ תרופות עמרי: חום (אקמול), אנטיהיסטמין לגיל, מדחום',urgent:true},
-  {id:'ob11',cat:'omri',family:'אלוני',text:'שמיכה מוכרת + בובת שינה'},
-  // ── בריכה וחדר כושר (אלוני) ──
-  {id:'plb1',cat:'pool',family:'אלוני',text:'בגדי ים ×2 לכל אחד (לפחות 4 כניסות)'},
-  {id:'plb2',cat:'pool',family:'אלוני',text:'חיתולי שחייה לעמרי ×10–12'},
-  {id:'plb3',cat:'pool',family:'אלוני',text:'חולצות UV (תום ×1–2, עמרי ×2)'},
-  {id:'plb4',cat:'pool',family:'אלוני',text:'כפכפים/נעלי מים לכולם + משקפי שחייה'},
-  {id:'plb5',cat:'pool',family:'אלוני',text:'מצוף/אביזר ציפה (אם המלון לא מספק) + תיק רטוב אטום ×2'},
-  {id:'plb6',cat:'pool',family:'אלוני',text:'חדר כושר: 3 סטי אימון לכל מבוגר + נעלי אימון + אוזניות ×2 + בקבוקי מים'},
-  // ── אוכל ונשנושים לטיסה (אלוני) ──
-  {id:'fdb1',cat:'food',family:'אלוני',text:'עמרי: פאוצ׳ים ×8, חטיפי פעוטות ×3, קרקרים ×2, כפיות ×3, קערית, כוס+ספייר'},
-  {id:'fdb2',cat:'food',family:'אלוני',text:'תום+מבוגרים: חטיפי גרנולה ×8, קרקרים ×2, בייגלה ×2, חטיפי פירות ×6–8, עוגיות'},
-  {id:'fdb3',cat:'food',family:'אלוני',text:'מסטיקים/סוכריות למבוגרים (להמראה ולנחיתה)'},
-  {id:'fdb4',cat:'food',family:'אלוני',text:'מפיות ×10 + מגבוני ידיים / אלכוג׳ל'},
-  // ── עגלה, שינה וחיתולים לעמרי (אלוני) ──
-  {id:'bbb1',cat:'baby',family:'אלוני',text:'⭐ עגלה + בדיקת תקינות + תיק עגלה',urgent:true},
-  {id:'bbb2',cat:'baby',family:'אלוני',text:'ווים לעגלה ×2 + מנשא/רצועת נשיאה'},
-  {id:'bbb3',cat:'baby',family:'אלוני',text:'שק שינה / שמיכת מעבר + בובת שינה'},
-  {id:'bbb4',cat:'baby',family:'אלוני',text:'סדין נסיעות ×2 (אם לא בטוחים מה המלון מספק)'},
-  {id:'bbb5',cat:'baby',family:'אלוני',text:'⭐ חיתולים מידה 5–6 — 40–48 לכל השהות',urgent:true},
-  {id:'bbb6',cat:'baby',family:'אלוני',text:'חיתולי שחייה ×10–12'},
-  {id:'bbb7',cat:'baby',family:'אלוני',text:'מגבונים: 3 חבילות + חבילת נסיעות'},
-  {id:'bbb8',cat:'baby',family:'אלוני',text:'משטח החתלה + קרם החתלה (מלא + קטן)'},
-  {id:'bbb9',cat:'baby',family:'אלוני',text:'שקיות לחיתולים ×20 + שקיות אטומות ×5'},
-  {id:'bbb10',cat:'baby',family:'אלוני',text:'לוודא מיטת תינוק/מעבר במלון + כיסא בטיחות מתאים ברכב'},
-  {id:'bbb11',cat:'baby',family:'אלוני',text:'פרטי זיהוי וטלפון על העגלה'},
-  // ── תרופות ועזרה ראשונה (כולם) ──
-  {id:'md1',cat:'meds',text:'⭐ תרופות קבועות לכל נוסע: 8 ימים + 3 רזרבה (בתיק גב)',urgent:true},
-  {id:'md2',cat:'meds',text:'משכך כאבים / מוריד חום למבוגרים'},
-  {id:'md3',cat:'meds',text:'תרופה לבטן/שלשול + תרופה לאלרגיה (לפי המלצה)'},
-  {id:'md4',cat:'meds',text:'פלסטרים ×10 + פלסטרים לשלפוחיות ×4'},
-  {id:'md5',cat:'meds',text:'חומר חיטוי + גזה סטרילית ×4 + תחבושת אלסטית'},
-  {id:'md6',cat:'meds',text:'מדחום + מי מלח לאף + פינצטה'},
-  {id:'md7',cat:'meds',text:'מזרקי מדידה מסומנים לכל תרופת ילדים'},
-  // ── בריכה וחדר כושר (ברוש) ──
-  {id:'pl1',cat:'pool',family:'ברוש',text:'בגדי ים ×2 לכל אחד (לפחות 4 כניסות)'},
-  {id:'pl2',cat:'pool',family:'ברוש',text:'חיתולי שחייה לרומי ×10–12'},
-  {id:'pl3',cat:'pool',family:'ברוש',text:'חולצות UV (ליה ×1–2, רומי ×2)'},
-  {id:'pl4',cat:'pool',family:'ברוש',text:'כפכפים/נעלי מים לכולם + משקפי שחייה'},
-  {id:'pl5',cat:'pool',family:'ברוש',text:'מצוף/אביזר ציפה (אם המלון לא מספק) + תיק רטוב אטום ×2'},
-  {id:'pl6',cat:'pool',family:'ברוש',text:'חדר כושר: 3 סטי אימון לכל מבוגר + נעלי אימון + אוזניות ×2 + בקבוקי מים'},
-  // ── אוכל ונשנושים לטיסה (ברוש) ──
-  {id:'fd1',cat:'food',family:'ברוש',text:'רומי: פאוצ׳ים ×8, חטיפי תינוקות ×3, קרקרים ×2, כפיות ×3, קערית, כוס+ספייר'},
-  {id:'fd2',cat:'food',family:'ברוש',text:'ליה+מבוגרים: חטיפי גרנולה ×8, קרקרים ×2, בייגלה ×2, חטיפי פירות ×6–8, עוגיות'},
-  {id:'fd3',cat:'food',family:'ברוש',text:'מסטיקים/סוכריות למבוגרים (להמראה ולנחיתה)'},
-  {id:'fd4',cat:'food',family:'ברוש',text:'מפיות ×10 + מגבוני ידיים / אלכוג׳ל'},
-  // ── אלקטרוניקה (כולם) ──
-  {id:'el1',cat:'electr',text:'טלפונים + מטענים ×2 + כבל ספייר'},
-  {id:'el2',cat:'electr',text:'אוזניות מבוגרים ×2 + אוזניות ילדים'},
-  {id:'el3',cat:'electr',text:'טאבלט/iPad ×1–2 + מטענים (תכנים אופליין מראש)'},
-  {id:'el4',cat:'electr',text:'סוללה ניידת ×1–2 (בתיק יד בלבד)'},
-  {id:'el5',cat:'electr',text:'מטען USB לרכב + מחזיק טלפון לרכב'},
-  {id:'el6',cat:'electr',text:'⭐ מתאם תקע ישראל–אירופה (Type F) ×1–2 + מפצל',urgent:true},
-  {id:'el7',cat:'electr',text:'מצלמה + מטען'},
-  // ── עגלה, שינה וחיתולים לרומי (ברוש) ──
-  {id:'bb1',cat:'baby',family:'ברוש',text:'⭐ עגלה + בדיקת תקינות + תיק עגלה',urgent:true},
-  {id:'bb2',cat:'baby',family:'ברוש',text:'ווים לעגלה ×2 + מנשא/רצועת נשיאה'},
-  {id:'bb3',cat:'baby',family:'ברוש',text:'שק שינה קבוע + חלופי + שמיכת מעבר + בובת שינה'},
-  {id:'bb4',cat:'baby',family:'ברוש',text:'סדין נסיעות ×2 (אם לא בטוחים מה המלון מספק)'},
-  {id:'bb5',cat:'baby',family:'ברוש',text:'מוניטור לתינוק (אם משתמשים)'},
-  {id:'bb6',cat:'baby',family:'ברוש',text:'⭐ Huggies מידה 6 — 52–56 חיתולים',urgent:true},
-  {id:'bb7',cat:'baby',family:'ברוש',text:'חיתולי שחייה ×10–12'},
-  {id:'bb8',cat:'baby',family:'ברוש',text:'מגבונים: 3 חבילות + חבילת נסיעות'},
-  {id:'bb9',cat:'baby',family:'ברוש',text:'משטח החתלה + קרם החתלה (מלא + קטן)'},
-  {id:'bb10',cat:'baby',family:'ברוש',text:'שקיות לחיתולים ×20 + שקיות אטומות ×5'},
-  {id:'bb11',cat:'baby',family:'ברוש',text:'לוודא מיטת תינוק במלון + כיסא בטיחות מתאים ברכב'},
-  {id:'bb12',cat:'baby',family:'ברוש',text:'פרטי זיהוי וטלפון על העגלה'},
-  // apps
-  {id:'p50',cat:'apps',text:'⭐ Waze מותקן ומעודכן',urgent:true},
-  {id:'p51',cat:'apps',text:'Google Maps – הוריד אזור זלצבורג לאופליין',urgent:false},
-  {id:'p52',cat:'apps',text:'Google Translate – הוריד גרמנית לאופליין',urgent:false},
-  {id:'p53',cat:'apps',text:'ישראייר app',urgent:false}
+  {id:'pb0001',cat:'suit1',family:'ברוש',sub:'עומר · ביגוד',text:'חולצות יומיומיות ×10'},
+  {id:'pb0002',cat:'suit1',family:'ברוש',sub:'עומר · ביגוד',text:'מכנסיים קצרים ×4 + ארוכים ×2'},
+  {id:'pb0003',cat:'suit1',family:'ברוש',sub:'עומר · ביגוד',text:'תחתונים ×9 + גרביים ×8 זוגות'},
+  {id:'pb0004',cat:'suit1',family:'ברוש',sub:'עומר · ביגוד',text:'פיג׳מה ×1 + סווטשרט/פליז ×1'},
+  {id:'pb0005',cat:'suit1',family:'ברוש',sub:'עומר · כושר ובריכה',text:'חולצות אימון ×2 + מכנסי אימון ×2 + גרבי ספורט ×2'},
+  {id:'pb0006',cat:'suit1',family:'ברוש',sub:'עומר · כושר ובריכה',text:'בגד ים ×1'},
+  {id:'pb0007',cat:'suit1',family:'ברוש',sub:'עומר · נעליים',text:'נעלי חדר כושר + כפכפים + חגורה'},
+  {id:'pb0008',cat:'suit1',family:'ברוש',sub:'נטע · ביגוד',text:'חולצות יומיומיות ×10'},
+  {id:'pb0009',cat:'suit1',family:'ברוש',sub:'נטע · ביגוד',text:'מכנסיים קצרים ×4 + ארוכים ×2 + שמלות ×2'},
+  {id:'pb0010',cat:'suit1',family:'ברוש',sub:'נטע · ביגוד',text:'תחתונים ×9 + חזיות רגילות ×4–5'},
+  {id:'pb0011',cat:'suit1',family:'ברוש',sub:'נטע · ביגוד',text:'גרביים ×8 זוגות + פיג׳מה ×1 + סווטשרט/פליז ×1'},
+  {id:'pb0012',cat:'suit1',family:'ברוש',sub:'נטע · כושר ובריכה',text:'חולצות אימון ×2 + טייצים ×2 + חזיות ספורט ×2 + גרבי ספורט ×2'},
+  {id:'pb0013',cat:'suit1',family:'ברוש',sub:'נטע · כושר ובריכה',text:'בגד ים ×1 + כיסוי לבגד ים'},
+  {id:'pb0014',cat:'suit1',family:'ברוש',sub:'נטע · נעליים',text:'נעלי חדר כושר + סנדלים + כפכפים'},
+  {id:'pb0015',cat:'suit1',family:'ברוש',sub:'תיקי רחצה',text:'תיק רחצה עומר (משחת+מברשת שיניים, חוט דנטלי, שמפו, סבון, דאודורנט, סכין+ג׳ל גילוח, אפטר שייב, מסרק, בושם)'},
+  {id:'pb0016',cat:'suit1',family:'ברוש',sub:'תיקי רחצה',text:'תיק רחצה נטע — שיער (שמפו, מרכך, מברשת+מסרק, גומיות ×10, קליפסים, סרום, מכשיר עיצוב)'},
+  {id:'pb0017',cat:'suit1',family:'ברוש',sub:'תיקי רחצה',text:'תיק רחצה נטע — פנים וגוף (מסיר איפור, תרחיץ, סרום, קרם יום/לילה/עיניים, SPF פנים, שפתון, קרם גוף/ידיים, דאודורנט, פינצטה)'},
+  {id:'pb0018',cat:'suit1',family:'ברוש',sub:'תיקי רחצה',text:'נטע — היגיינה נשית ל־8 ימים + רזרבה + בושם'},
+  {id:'pb0019',cat:'suit1',family:'ברוש',sub:'תיקי רחצה',text:'איפור נטע (BB, קונסילר, פודרה, סומק, מסקרה, אייליינר, גבות, שפתון, מברשות)'},
+  {id:'pb0020',cat:'suit1',family:'ברוש',sub:'שקית נוזלים משפחתית',text:'קרם הגנה גוף SPF 50 ×2 + הגנה לפנים ×1'},
+  {id:'pb0021',cat:'suit1',family:'ברוש',sub:'שקית נוזלים משפחתית',text:'אלתוש מבוגרים + אלתוש לגיל 4 ולגיל שנה + טיפול עקיצות + אפטר־סאן'},
+  {id:'pb0022',cat:'suit1',family:'ברוש',sub:'שקית נוזלים משפחתית',text:'כל הנוזלים בשתי שקיות אטומות'},
+  {id:'pb0023',cat:'suit1',family:'ברוש',sub:'כיס פנימי',text:'שק כביסה ×1 + שקיות נעליים ×4'},
+  {id:'pb0024',cat:'suit1',family:'ברוש',sub:'כיס פנימי',text:'תג שם + AirTag'},
+  {id:'pb0025',cat:'suit2',family:'ברוש',sub:'ליה · ביגוד',text:'חולצות ×5 + שמלות ×3 + חצאיות ×2'},
+  {id:'pb0026',cat:'suit2',family:'ברוש',sub:'ליה · ביגוד',text:'שורטים/טייצים קצרים ×3 + ארוכים ×2'},
+  {id:'pb0027',cat:'suit2',family:'ברוש',sub:'ליה · ביגוד',text:'תחתונים ×9 + גרביים ×8 זוגות'},
+  {id:'pb0028',cat:'suit2',family:'ברוש',sub:'ליה · ביגוד',text:'פיג׳מות ×2 + קרדיגן/פליז ×1 + סווטשרט נוסף ×1'},
+  {id:'pb0029',cat:'suit2',family:'ברוש',sub:'ליה · ביגוד',text:'בגד ים ×1 + חולצת UV ×1–2 + כובע שמש ספייר'},
+  {id:'pb0030',cat:'suit2',family:'ברוש',sub:'ליה · נעליים',text:'סנדלים + כפכפים/נעלי מים (נעלי ספורט על הגוף)'},
+  {id:'pb0031',cat:'suit2',family:'ברוש',sub:'רומי · ביגוד',text:'בגדי גוף קצרים ×9 + חולצות קצרות ×3'},
+  {id:'pb0032',cat:'suit2',family:'ברוש',sub:'רומי · ביגוד',text:'מכנסיים/טייצים קצרים ×6 + סטים ארוכים ×2 + שמלות ×2'},
+  {id:'pb0033',cat:'suit2',family:'ברוש',sub:'רומי · ביגוד',text:'גרביים ×8 זוגות + פיג׳מות ×2 + סווטשרט/פליז ×1'},
+  {id:'pb0034',cat:'suit2',family:'ברוש',sub:'רומי · ביגוד',text:'בגד ים ×1 + חולצות UV ×2 + כובע שמש ספייר'},
+  {id:'pb0035',cat:'suit2',family:'ברוש',sub:'רומי · ביגוד',text:'סינרי אוכל ×3 + חיתולי טטרה ×2'},
+  {id:'pb0036',cat:'suit2',family:'ברוש',sub:'רומי · נעליים',text:'נעליים סגורות + סנדלים/נעלי מים'},
+  {id:'pb0037',cat:'suit2',family:'ברוש',sub:'רומי · שינה',text:'שק שינה קבוע + שמיכת מעבר + בובת שינה'},
+  {id:'pb0038',cat:'suit2',family:'ברוש',sub:'רומי · שינה',text:'סדינים למיטת תינוק ×2 + תאורת לילה'},
+  {id:'pb0039',cat:'suit2',family:'ברוש',sub:'תיקי רחצה',text:'תיק רחצה ליה (משחת+מברשת שיניים ילדים, שמפו, סבון, מברשת שיער, גומיות, קרם גוף)'},
+  {id:'pb0040',cat:'suit2',family:'ברוש',sub:'תיקי רחצה',text:'תיק רחצה רומי (משחת+מברשת גיל, שמפו/סבון עדין, קרם גוף/פנים, קרם החתלה, קוצץ ציפורניים)'},
+  {id:'pb0041',cat:'suit2',family:'ברוש',sub:'שקית החתלה ראשית',text:'חיתולי Huggies מידה 6 ×22',urgent:true},
+  {id:'pb0042',cat:'suit2',family:'ברוש',sub:'שקית החתלה ראשית',text:'חיתולי שחייה ×10 + מגבונים ×2 חבילות + שקיות לחיתולים ×15'},
+  {id:'pb0043',cat:'suit2',family:'ברוש',sub:'כיס פנימי',text:'שק כביסה ×1 + שקיות אטומות ×2 + זיפר ×5'},
+  {id:'pb0044',cat:'suit2',family:'ברוש',sub:'כיס פנימי',text:'תג שם + AirTag'},
+  {id:'pb0045',cat:'trl1',family:'ברוש',sub:'נטע',text:'2 חולצות + מכנס נוח + תחתונים ×2 + גרביים ×2 + פיג׳מה'},
+  {id:'pb0046',cat:'trl1',family:'ברוש',sub:'נטע',text:'סט אימון (חולצה+טייץ+חזיית ספורט+גרביים) + בגד ים + מעיל גשם דק'},
+  {id:'pb0047',cat:'trl1',family:'ברוש',sub:'עומר',text:'2 חולצות + מכנס נוח + תחתונים ×2 + גרביים ×2 + פיג׳מה'},
+  {id:'pb0048',cat:'trl1',family:'ברוש',sub:'עומר',text:'סט אימון (חולצה+מכנס+גרביים) + בגד ים + מעיל גשם דק'},
+  {id:'pb0049',cat:'trl1',family:'ברוש',sub:'ליה',text:'2 סטים מלאים + מכנס ארוך נוסף + תחתונים ×3 + גרביים ×2 + פיג׳מה'},
+  {id:'pb0050',cat:'trl1',family:'ברוש',sub:'ליה',text:'בגד ים + מעיל גשם דק'},
+  {id:'pb0051',cat:'trl1',family:'ברוש',sub:'רומי',text:'3 סטים מלאים + סט ארוך + גרביים ×2 + פיג׳מה + סווטשרט'},
+  {id:'pb0052',cat:'trl1',family:'ברוש',sub:'רומי',text:'בגד ים + שק שינה חלופי + מעיל גשם דק'},
+  {id:'pb0053',cat:'trl1',family:'ברוש',sub:'כיס הטרולי',text:'מטרייה מתקפלת + שקיות לבגדים מלוכלכים ×3'},
+  {id:'pb0054',cat:'trl1',family:'ברוש',sub:'כיס הטרולי',text:'תג שם + AirTag'},
+  {id:'pb0055',cat:'trl2',family:'ברוש',sub:'שקית החתלה',text:'חיתולי Huggies מידה 6 ×22 + חיתולי שחייה ×2',urgent:true},
+  {id:'pb0056',cat:'trl2',family:'ברוש',sub:'שקית החתלה',text:'מגבונים ×1 חבילה + קרם החתלה בינוני + משטח החתלה + שקיות לחיתולים ×5'},
+  {id:'pb0057',cat:'trl2',family:'ברוש',sub:'אוכל 48 שעות',text:'פאוצ׳ים לרומי ×6 + חטיפי תינוקות ×2 + קרקרים ×2'},
+  {id:'pb0058',cat:'trl2',family:'ברוש',sub:'אוכל 48 שעות',text:'חטיפי גרנולה ×6 + בייגלה ×1 + חטיפי פירות ×6 + עוגיות ×1'},
+  {id:'pb0059',cat:'trl2',family:'ברוש',sub:'אוכל 48 שעות',text:'קערית + כפיות ×1–2 + סינרים ×3'},
+  {id:'pb0060',cat:'trl2',family:'ברוש',sub:'בריכה',text:'מצופים + משקפי שחייה + תיק רטוב אטום ×2 + מגבות מיקרופייבר ×2'},
+  {id:'pb0061',cat:'trl2',family:'ברוש',sub:'ציוד משפחתי',text:'בקבוק ספייר לילדות + תיק יום מתקפל'},
+  {id:'pb0062',cat:'trl2',family:'ברוש',sub:'ציוד משפחתי',text:'מפצל חשמל + מתאם תקע ישראל–אירופה ×1–2 + ערכת תפירה + זיפר ×5'},
+  {id:'pb0063',cat:'trl2',family:'ברוש',sub:'ציוד משפחתי',text:'תג שם + AirTag'},
+  {id:'pb0064',cat:'bp1',family:'ברוש',sub:'מסמכים',text:'דרכונים ×4 + כרטיסי טיסה / אישורי צ׳ק־אין',urgent:true},
+  {id:'pb0065',cat:'bp1',family:'ברוש',sub:'מסמכים',text:'אישורי מלון + אישור הזמנת רכב + רישיונות נהיגה (+ בינלאומי)',urgent:true},
+  {id:'pb0066',cat:'bp1',family:'ברוש',sub:'מסמכים',text:'ביטוח נסיעות + מספרי חירום + מרשמים',urgent:true},
+  {id:'pb0067',cat:'bp1',family:'ברוש',sub:'מסמכים',text:'כתובת המלון + צילום דיגיטלי של כל המסמכים (אופליין)'},
+  {id:'pb0068',cat:'bp1',family:'ברוש',sub:'ארנק',text:'כרטיסי אשראי ×2 (בנפרד) + מזומן באירו + ת.ז + מפתחות בית ורכב'},
+  {id:'pb0069',cat:'bp1',family:'ברוש',sub:'תרופות',text:'תרופות קבועות לכל נוסע ל־8 ימים + 3 רזרבה (אריזות מקוריות/מרשמים)',urgent:true},
+  {id:'pb0070',cat:'bp1',family:'ברוש',sub:'תרופות',text:'לילדות: חום/כאב + מזרק מדידה + מדחום + מי מלח לאף + שואב נזלת + אלרגיה/עקיצות לפי גיל',urgent:true},
+  {id:'pb0071',cat:'bp1',family:'ברוש',sub:'תרופות',text:'מבוגרים: משכך כאבים + בטן/שלשול + אלרגיה'},
+  {id:'pb0072',cat:'bp1',family:'ברוש',sub:'תרופות',text:'פלסטרים ×10 + לשלפוחיות ×4 + לילדים ×10 + חיטוי + גזה ×4 + תחבושת אלסטית + מסכות ×4'},
+  {id:'pb0073',cat:'bp1',family:'ברוש',sub:'אלקטרוניקה',text:'טלפונים ×2 + מטענים ×2 + כבל ספייר + שעונים חכמים'},
+  {id:'pb0074',cat:'bp1',family:'ברוש',sub:'אלקטרוניקה',text:'אוזניות מבוגרים ×2 + ילדים ×1 + טאבלט ×1–2 + מטענים'},
+  {id:'pb0075',cat:'bp1',family:'ברוש',sub:'אלקטרוניקה',text:'סוללה ניידת ×1–2 + מטען USB לרכב + מחזיק טלפון + מוניטור לתינוק'},
+  {id:'pb0076',cat:'bp1',family:'ברוש',sub:'כיס עליון',text:'משקפי ראייה/עדשות + שפתון לנטע + טישו + אלכוג׳ל'},
+  {id:'pb0077',cat:'bp1',family:'ברוש',sub:'כיס עליון',text:'בקבוקי שתייה ריקים ×2 + חטיפים למבוגרים ×2–4'},
+  {id:'pb0078',cat:'bp2',family:'ברוש',sub:'החלפות ליה',text:'החלפה מלאה + תחתונים ×2 + סווטשרט קל + שקית אטומה'},
+  {id:'pb0079',cat:'bp2',family:'ברוש',sub:'החלפות רומי',text:'החלפות מלאות ×2 + גרביים + סינרים ×2 + חיתול טטרה + שקית אטומה ×2'},
+  {id:'pb0080',cat:'bp2',family:'ברוש',sub:'ערכת החתלה לטיסה',text:'חיתולי Huggies מידה 6 ×6 + מגבוני נסיעות + משטח החתלה + קרם החתלה קטן + שקיות ×5',urgent:true},
+  {id:'pb0081',cat:'bp2',family:'ברוש',sub:'אוכל לטיסה',text:'פאוצ׳ים ×2 + חטיפי תינוקות ×2–3 + נשנושים לליה ×2–3 + כפיות ×2 + מפיות ×10'},
+  {id:'pb0082',cat:'bp2',family:'ברוש',sub:'אוכל לטיסה',text:'בקבוקי שתייה ריקים לילדות ×2 + כוס/בקבוק מוכר של רומי'},
+  {id:'pb0083',cat:'bp2',family:'ברוש',sub:'בידור ליה',text:'חוברת מדבקות + צביעה + טושים רחיצים + ספר + משחק + בובה אהובה'},
+  {id:'pb0084',cat:'bp2',family:'ברוש',sub:'בידור רומי',text:'צעצועים שקטים ×3–4 + ספר קרטון + נשכן + חפץ שינה מוכר'},
+  {id:'pb0085',cat:'bp2',family:'ברוש',sub:'כיס חיצוני',text:'שמיכה דקה + טישו + מגבוני ידיים + שקיות קטנות ×2'},
+  {id:'pb0086',cat:'strbag',family:'ברוש',sub:'',text:'חיתולי Huggies מידה 6 ×4 + מגבונים + משטח החתלה דק + קרם החתלה קטן'},
+  {id:'pb0087',cat:'strbag',family:'ברוש',sub:'',text:'החלפה מלאה לרומי + תחתונים והחלפה קלה לליה + חיתול טטרה + שקיות קטנות ×3'},
+  {id:'pb0088',cat:'strbag',family:'ברוש',sub:'',text:'נשנוש לכל ילדה + כובעי שמש לילדות ×2 + קרם הגנה קטן + אלתוש לגיל'},
+  {id:'pb0089',cat:'strbag',family:'ברוש',sub:'',text:'בקבוקי השתייה של הילדות ×2 + כיסוי גשם לעגלה + ווים לעגלה ×2'},
+  {id:'pb0090',cat:'str',family:'ברוש',sub:'',text:'עגלה תקינה ונקייה + ווים מחוברים'},
+  {id:'pb0091',cat:'str',family:'ברוש',sub:'',text:'כיסוי גשם נמצא בתיק העגלה'},
+  {id:'pb0092',cat:'str',family:'ברוש',sub:'',text:'תג שם ומספר טלפון על העגלה'},
+  {id:'pb0093',cat:'str',family:'ברוש',sub:'',text:'מנשא לרומי בסל העגלה / בטרולי 2'},
+  {id:'pb0094',cat:'str',family:'ברוש',sub:'',text:'לבדוק מדיניות מסירת עגלה בשער המטוס'},
+  {id:'pb0095',cat:'wear',family:'ברוש',sub:'נטע',text:'מכנס ארוך + חולצה + שכבה קלה + נעלי ספורט'},
+  {id:'pb0096',cat:'wear',family:'ברוש',sub:'עומר',text:'מכנס ארוך + חולצה + שכבה קלה + נעלי ספורט'},
+  {id:'pb0097',cat:'wear',family:'ברוש',sub:'ליה',text:'טייץ/מכנס ארוך + חולצה קצרה + סווטשרט + נעלי ספורט סגורות'},
+  {id:'pb0098',cat:'wear',family:'ברוש',sub:'רומי',text:'בגד גוף + מכנס ארוך + סווטשרט + גרביים + נעליים'},
+  {id:'pb0099',cat:'shop',family:'ברוש',sub:'',text:'Huggies מידה 6 להשלמה ל־54–56 + חיתולי שחייה ×12'},
+  {id:'pb0100',cat:'shop',family:'ברוש',sub:'',text:'מגבונים 3 חבילות + נסיעות + קרם החתלה מלא+קטן'},
+  {id:'pb0101',cat:'shop',family:'ברוש',sub:'',text:'SPF גוף ×2 + פנים + אלתוש מבוגרים + אלתוש לגיל 4 ושנה'},
+  {id:'pb0102',cat:'shop',family:'ברוש',sub:'',text:'תרופות ילדים בתוקף + מזרקי מדידה + תרופות קבועות ל־8+3 ימים'},
+  {id:'pb0103',cat:'shop',family:'ברוש',sub:'',text:'שקיות אטומות + בקבוקי נסיעות + מתאם תקע ×1–2 + מטען USB לרכב'},
+  {id:'pb0104',cat:'shop',family:'ברוש',sub:'',text:'כיסוי גשם לעגלה + תגי איתור + נשנושים ל־48 שעות + פלסטרים'},
+  {id:'pb0105',cat:'confirm',family:'ברוש',sub:'',text:'לבדוק תחזית 7–10 ימים לפני ושוב 48–72 שעות'},
+  {id:'pb0106',cat:'confirm',family:'ברוש',sub:'',text:'לוודא מיטת תינוק + סדינים + מגבות בריכה במלון'},
+  {id:'pb0107',cat:'confirm',family:'ברוש',sub:'',text:'לאשר 2 כיסאות בטיחות מתאימים ברכב',urgent:true},
+  {id:'pb0108',cat:'confirm',family:'ברוש',sub:'',text:'לבדוק מגבלת משקל/מידות + כללי נוזלים/מזון תינוק בטיסה'},
+  {id:'pb0109',cat:'confirm',family:'ברוש',sub:'',text:'לבדוק מדיניות עגלה עד שער + סופר בדרך מהשדה'},
+  {id:'pb0110',cat:'confirm',family:'ברוש',sub:'',text:'להוריד מפות אופליין + סרטים/מוזיקה לטאבלטים'},
+  {id:'pa0001',cat:'suit1',family:'אלוני',sub:'גיא · ביגוד',text:'חולצות יומיומיות ×10'},
+  {id:'pa0002',cat:'suit1',family:'אלוני',sub:'גיא · ביגוד',text:'מכנסיים קצרים ×4 + ארוכים ×2'},
+  {id:'pa0003',cat:'suit1',family:'אלוני',sub:'גיא · ביגוד',text:'תחתונים ×9 + גרביים ×8 זוגות'},
+  {id:'pa0004',cat:'suit1',family:'אלוני',sub:'גיא · ביגוד',text:'פיג׳מה ×1 + סווטשרט/פליז ×1'},
+  {id:'pa0005',cat:'suit1',family:'אלוני',sub:'גיא · כושר ובריכה',text:'חולצות אימון ×2 + מכנסי אימון ×2 + גרבי ספורט ×2'},
+  {id:'pa0006',cat:'suit1',family:'אלוני',sub:'גיא · כושר ובריכה',text:'בגד ים ×1'},
+  {id:'pa0007',cat:'suit1',family:'אלוני',sub:'גיא · נעליים',text:'נעלי חדר כושר + כפכפים + חגורה'},
+  {id:'pa0008',cat:'suit1',family:'אלוני',sub:'טל · ביגוד',text:'חולצות יומיומיות ×10'},
+  {id:'pa0009',cat:'suit1',family:'אלוני',sub:'טל · ביגוד',text:'מכנסיים קצרים ×4 + ארוכים ×2 + שמלות ×2'},
+  {id:'pa0010',cat:'suit1',family:'אלוני',sub:'טל · ביגוד',text:'תחתונים ×9 + חזיות רגילות ×4–5'},
+  {id:'pa0011',cat:'suit1',family:'אלוני',sub:'טל · ביגוד',text:'גרביים ×8 זוגות + פיג׳מה ×1 + סווטשרט/פליז ×1'},
+  {id:'pa0012',cat:'suit1',family:'אלוני',sub:'טל · כושר ובריכה',text:'חולצות אימון ×2 + טייצים ×2 + חזיות ספורט ×2 + גרבי ספורט ×2'},
+  {id:'pa0013',cat:'suit1',family:'אלוני',sub:'טל · כושר ובריכה',text:'בגד ים ×1 + כיסוי לבגד ים'},
+  {id:'pa0014',cat:'suit1',family:'אלוני',sub:'טל · נעליים',text:'נעלי חדר כושר + סנדלים + כפכפים'},
+  {id:'pa0015',cat:'suit1',family:'אלוני',sub:'תיקי רחצה',text:'תיק רחצה גיא (משחת+מברשת שיניים, חוט דנטלי, שמפו, סבון, דאודורנט, סכין+ג׳ל גילוח, אפטר שייב, מסרק, בושם)'},
+  {id:'pa0016',cat:'suit1',family:'אלוני',sub:'תיקי רחצה',text:'תיק רחצה טל — שיער (שמפו, מרכך, מברשת+מסרק, גומיות ×10, קליפסים, סרום, מכשיר עיצוב)'},
+  {id:'pa0017',cat:'suit1',family:'אלוני',sub:'תיקי רחצה',text:'תיק רחצה טל — פנים וגוף (מסיר איפור, תרחיץ, סרום, קרם יום/לילה/עיניים, SPF פנים, שפתון, קרם גוף/ידיים, דאודורנט, פינצטה)'},
+  {id:'pa0018',cat:'suit1',family:'אלוני',sub:'תיקי רחצה',text:'טל — היגיינה נשית ל־8 ימים + רזרבה + בושם'},
+  {id:'pa0019',cat:'suit1',family:'אלוני',sub:'תיקי רחצה',text:'איפור טל (BB, קונסילר, פודרה, סומק, מסקרה, אייליינר, גבות, שפתון, מברשות)'},
+  {id:'pa0020',cat:'suit1',family:'אלוני',sub:'שקית נוזלים משפחתית',text:'קרם הגנה גוף SPF 50 ×2 + הגנה לפנים ×1'},
+  {id:'pa0021',cat:'suit1',family:'אלוני',sub:'שקית נוזלים משפחתית',text:'אלתוש מבוגרים + אלתוש לגיל 4 ולגיל שנה + טיפול עקיצות + אפטר־סאן'},
+  {id:'pa0022',cat:'suit1',family:'אלוני',sub:'שקית נוזלים משפחתית',text:'כל הנוזלים בשתי שקיות אטומות'},
+  {id:'pa0023',cat:'suit1',family:'אלוני',sub:'כיס פנימי',text:'שק כביסה ×1 + שקיות נעליים ×4'},
+  {id:'pa0024',cat:'suit1',family:'אלוני',sub:'כיס פנימי',text:'תג שם + AirTag'},
+  {id:'pa0025',cat:'suit2',family:'אלוני',sub:'תום · ביגוד',text:'חולצות ×7 + מכנסיים קצרים ×2'},
+  {id:'pa0026',cat:'suit2',family:'אלוני',sub:'תום · ביגוד',text:'שורטים/טייצים קצרים ×3 + ארוכים ×2'},
+  {id:'pa0027',cat:'suit2',family:'אלוני',sub:'תום · ביגוד',text:'תחתונים ×9 + גרביים ×8 זוגות'},
+  {id:'pa0028',cat:'suit2',family:'אלוני',sub:'תום · ביגוד',text:'פיג׳מות ×2 + קרדיגן/פליז ×1 + סווטשרט נוסף ×1'},
+  {id:'pa0029',cat:'suit2',family:'אלוני',sub:'תום · ביגוד',text:'בגד ים ×1 + חולצת UV ×1–2 + כובע שמש ספייר'},
+  {id:'pa0030',cat:'suit2',family:'אלוני',sub:'תום · נעליים',text:'סנדלים + כפכפים/נעלי מים (נעלי ספורט על הגוף)'},
+  {id:'pa0031',cat:'suit2',family:'אלוני',sub:'עמרי · ביגוד',text:'בגדי גוף קצרים ×9 + חולצות קצרות ×3'},
+  {id:'pa0032',cat:'suit2',family:'אלוני',sub:'עמרי · ביגוד',text:'מכנסיים/טייצים קצרים ×6 + סטים ארוכים ×2'},
+  {id:'pa0033',cat:'suit2',family:'אלוני',sub:'עמרי · ביגוד',text:'גרביים ×8 זוגות + פיג׳מות ×2 + סווטשרט/פליז ×1'},
+  {id:'pa0034',cat:'suit2',family:'אלוני',sub:'עמרי · ביגוד',text:'בגד ים ×1 + חולצות UV ×2 + כובע שמש ספייר'},
+  {id:'pa0035',cat:'suit2',family:'אלוני',sub:'עמרי · ביגוד',text:'סינרי אוכל ×3 + חיתולי טטרה ×2'},
+  {id:'pa0036',cat:'suit2',family:'אלוני',sub:'עמרי · נעליים',text:'נעליים סגורות + סנדלים/נעלי מים'},
+  {id:'pa0037',cat:'suit2',family:'אלוני',sub:'עמרי · שינה',text:'שק שינה קבוע + שמיכת מעבר + בובת שינה'},
+  {id:'pa0038',cat:'suit2',family:'אלוני',sub:'עמרי · שינה',text:'סדינים למיטת תינוק ×2 + תאורת לילה'},
+  {id:'pa0039',cat:'suit2',family:'אלוני',sub:'תיקי רחצה',text:'תיק רחצה תום (משחת+מברשת שיניים ילדים, שמפו, סבון, מברשת שיער, גומיות, קרם גוף)'},
+  {id:'pa0040',cat:'suit2',family:'אלוני',sub:'תיקי רחצה',text:'תיק רחצה עמרי (משחת+מברשת גיל, שמפו/סבון עדין, קרם גוף/פנים, קרם החתלה, קוצץ ציפורניים)'},
+  {id:'pa0041',cat:'suit2',family:'אלוני',sub:'שקית החתלה ראשית',text:'חיתולי Huggies מידה 6 ×22',urgent:true},
+  {id:'pa0042',cat:'suit2',family:'אלוני',sub:'שקית החתלה ראשית',text:'חיתולי שחייה ×10 + מגבונים ×2 חבילות + שקיות לחיתולים ×15'},
+  {id:'pa0043',cat:'suit2',family:'אלוני',sub:'כיס פנימי',text:'שק כביסה ×1 + שקיות אטומות ×2 + זיפר ×5'},
+  {id:'pa0044',cat:'suit2',family:'אלוני',sub:'כיס פנימי',text:'תג שם + AirTag'},
+  {id:'pa0045',cat:'trl1',family:'אלוני',sub:'טל',text:'2 חולצות + מכנס נוח + תחתונים ×2 + גרביים ×2 + פיג׳מה'},
+  {id:'pa0046',cat:'trl1',family:'אלוני',sub:'טל',text:'סט אימון (חולצה+טייץ+חזיית ספורט+גרביים) + בגד ים + מעיל גשם דק'},
+  {id:'pa0047',cat:'trl1',family:'אלוני',sub:'גיא',text:'2 חולצות + מכנס נוח + תחתונים ×2 + גרביים ×2 + פיג׳מה'},
+  {id:'pa0048',cat:'trl1',family:'אלוני',sub:'גיא',text:'סט אימון (חולצה+מכנס+גרביים) + בגד ים + מעיל גשם דק'},
+  {id:'pa0049',cat:'trl1',family:'אלוני',sub:'תום',text:'2 סטים מלאים + מכנס ארוך נוסף + תחתונים ×3 + גרביים ×2 + פיג׳מה'},
+  {id:'pa0050',cat:'trl1',family:'אלוני',sub:'תום',text:'בגד ים + מעיל גשם דק'},
+  {id:'pa0051',cat:'trl1',family:'אלוני',sub:'עמרי',text:'3 סטים מלאים + סט ארוך + גרביים ×2 + פיג׳מה + סווטשרט'},
+  {id:'pa0052',cat:'trl1',family:'אלוני',sub:'עמרי',text:'בגד ים + שק שינה חלופי + מעיל גשם דק'},
+  {id:'pa0053',cat:'trl1',family:'אלוני',sub:'כיס הטרולי',text:'מטרייה מתקפלת + שקיות לבגדים מלוכלכים ×3'},
+  {id:'pa0054',cat:'trl1',family:'אלוני',sub:'כיס הטרולי',text:'תג שם + AirTag'},
+  {id:'pa0055',cat:'trl2',family:'אלוני',sub:'שקית החתלה',text:'חיתולי Huggies מידה 6 ×22 + חיתולי שחייה ×2',urgent:true},
+  {id:'pa0056',cat:'trl2',family:'אלוני',sub:'שקית החתלה',text:'מגבונים ×1 חבילה + קרם החתלה בינוני + משטח החתלה + שקיות לחיתולים ×5'},
+  {id:'pa0057',cat:'trl2',family:'אלוני',sub:'אוכל 48 שעות',text:'פאוצ׳ים לעמרי ×6 + חטיפי תינוקות ×2 + קרקרים ×2'},
+  {id:'pa0058',cat:'trl2',family:'אלוני',sub:'אוכל 48 שעות',text:'חטיפי גרנולה ×6 + בייגלה ×1 + חטיפי פירות ×6 + עוגיות ×1'},
+  {id:'pa0059',cat:'trl2',family:'אלוני',sub:'אוכל 48 שעות',text:'קערית + כפיות ×1–2 + סינרים ×3'},
+  {id:'pa0060',cat:'trl2',family:'אלוני',sub:'בריכה',text:'מצופים + משקפי שחייה + תיק רטוב אטום ×2 + מגבות מיקרופייבר ×2'},
+  {id:'pa0061',cat:'trl2',family:'אלוני',sub:'ציוד משפחתי',text:'בקבוק ספייר לילדות + תיק יום מתקפל'},
+  {id:'pa0062',cat:'trl2',family:'אלוני',sub:'ציוד משפחתי',text:'מפצל חשמל + מתאם תקע ישראל–אירופה ×1–2 + ערכת תפירה + זיפר ×5'},
+  {id:'pa0063',cat:'trl2',family:'אלוני',sub:'ציוד משפחתי',text:'תג שם + AirTag'},
+  {id:'pa0064',cat:'bp1',family:'אלוני',sub:'מסמכים',text:'דרכונים ×4 + כרטיסי טיסה / אישורי צ׳ק־אין',urgent:true},
+  {id:'pa0065',cat:'bp1',family:'אלוני',sub:'מסמכים',text:'אישורי מלון + אישור הזמנת רכב + רישיונות נהיגה (+ בינלאומי)',urgent:true},
+  {id:'pa0066',cat:'bp1',family:'אלוני',sub:'מסמכים',text:'ביטוח נסיעות + מספרי חירום + מרשמים',urgent:true},
+  {id:'pa0067',cat:'bp1',family:'אלוני',sub:'מסמכים',text:'כתובת המלון + צילום דיגיטלי של כל המסמכים (אופליין)'},
+  {id:'pa0068',cat:'bp1',family:'אלוני',sub:'ארנק',text:'כרטיסי אשראי ×2 (בנפרד) + מזומן באירו + ת.ז + מפתחות בית ורכב'},
+  {id:'pa0069',cat:'bp1',family:'אלוני',sub:'תרופות',text:'תרופות קבועות לכל נוסע ל־8 ימים + 3 רזרבה (אריזות מקוריות/מרשמים)',urgent:true},
+  {id:'pa0070',cat:'bp1',family:'אלוני',sub:'תרופות',text:'לילדות: חום/כאב + מזרק מדידה + מדחום + מי מלח לאף + שואב נזלת + אלרגיה/עקיצות לפי גיל',urgent:true},
+  {id:'pa0071',cat:'bp1',family:'אלוני',sub:'תרופות',text:'מבוגרים: משכך כאבים + בטן/שלשול + אלרגיה'},
+  {id:'pa0072',cat:'bp1',family:'אלוני',sub:'תרופות',text:'פלסטרים ×10 + לשלפוחיות ×4 + לילדים ×10 + חיטוי + גזה ×4 + תחבושת אלסטית + מסכות ×4'},
+  {id:'pa0073',cat:'bp1',family:'אלוני',sub:'אלקטרוניקה',text:'טלפונים ×2 + מטענים ×2 + כבל ספייר + שעונים חכמים'},
+  {id:'pa0074',cat:'bp1',family:'אלוני',sub:'אלקטרוניקה',text:'אוזניות מבוגרים ×2 + ילדים ×1 + טאבלט ×1–2 + מטענים'},
+  {id:'pa0075',cat:'bp1',family:'אלוני',sub:'אלקטרוניקה',text:'סוללה ניידת ×1–2 + מטען USB לרכב + מחזיק טלפון + מוניטור לתינוק'},
+  {id:'pa0076',cat:'bp1',family:'אלוני',sub:'כיס עליון',text:'משקפי ראייה/עדשות + שפתון לטל + טישו + אלכוג׳ל'},
+  {id:'pa0077',cat:'bp1',family:'אלוני',sub:'כיס עליון',text:'בקבוקי שתייה ריקים ×2 + חטיפים למבוגרים ×2–4'},
+  {id:'pa0078',cat:'bp2',family:'אלוני',sub:'החלפות תום',text:'החלפה מלאה + תחתונים ×2 + סווטשרט קל + שקית אטומה'},
+  {id:'pa0079',cat:'bp2',family:'אלוני',sub:'החלפות עמרי',text:'החלפות מלאות ×2 + גרביים + סינרים ×2 + חיתול טטרה + שקית אטומה ×2'},
+  {id:'pa0080',cat:'bp2',family:'אלוני',sub:'ערכת החתלה לטיסה',text:'חיתולי Huggies מידה 6 ×6 + מגבוני נסיעות + משטח החתלה + קרם החתלה קטן + שקיות ×5',urgent:true},
+  {id:'pa0081',cat:'bp2',family:'אלוני',sub:'אוכל לטיסה',text:'פאוצ׳ים ×2 + חטיפי תינוקות ×2–3 + נשנושים לתום ×2–3 + כפיות ×2 + מפיות ×10'},
+  {id:'pa0082',cat:'bp2',family:'אלוני',sub:'אוכל לטיסה',text:'בקבוקי שתייה ריקים לילדות ×2 + כוס/בקבוק מוכר של עמרי'},
+  {id:'pa0083',cat:'bp2',family:'אלוני',sub:'בידור תום',text:'חוברת מדבקות + צביעה + טושים רחיצים + ספר + משחק + בובה אהובה'},
+  {id:'pa0084',cat:'bp2',family:'אלוני',sub:'בידור עמרי',text:'צעצועים שקטים ×3–4 + ספר קרטון + נשכן + חפץ שינה מוכר'},
+  {id:'pa0085',cat:'bp2',family:'אלוני',sub:'כיס חיצוני',text:'שמיכה דקה + טישו + מגבוני ידיים + שקיות קטנות ×2'},
+  {id:'pa0086',cat:'strbag',family:'אלוני',sub:'',text:'חיתולי Huggies מידה 6 ×4 + מגבונים + משטח החתלה דק + קרם החתלה קטן'},
+  {id:'pa0087',cat:'strbag',family:'אלוני',sub:'',text:'החלפה מלאה לעמרי + תחתונים והחלפה קלה לתום + חיתול טטרה + שקיות קטנות ×3'},
+  {id:'pa0088',cat:'strbag',family:'אלוני',sub:'',text:'נשנוש לכל ילדה + כובעי שמש לילדות ×2 + קרם הגנה קטן + אלתוש לגיל'},
+  {id:'pa0089',cat:'strbag',family:'אלוני',sub:'',text:'בקבוקי השתייה של הילדות ×2 + כיסוי גשם לעגלה + ווים לעגלה ×2'},
+  {id:'pa0090',cat:'str',family:'אלוני',sub:'',text:'עגלה תקינה ונקייה + ווים מחוברים'},
+  {id:'pa0091',cat:'str',family:'אלוני',sub:'',text:'כיסוי גשם נמצא בתיק העגלה'},
+  {id:'pa0092',cat:'str',family:'אלוני',sub:'',text:'תג שם ומספר טלפון על העגלה'},
+  {id:'pa0093',cat:'str',family:'אלוני',sub:'',text:'מנשא לעמרי בסל העגלה / בטרולי 2'},
+  {id:'pa0094',cat:'str',family:'אלוני',sub:'',text:'לבדוק מדיניות מסירת עגלה בשער המטוס'},
+  {id:'pa0095',cat:'wear',family:'אלוני',sub:'טל',text:'מכנס ארוך + חולצה + שכבה קלה + נעלי ספורט'},
+  {id:'pa0096',cat:'wear',family:'אלוני',sub:'גיא',text:'מכנס ארוך + חולצה + שכבה קלה + נעלי ספורט'},
+  {id:'pa0097',cat:'wear',family:'אלוני',sub:'תום',text:'טייץ/מכנס ארוך + חולצה קצרה + סווטשרט + נעלי ספורט סגורות'},
+  {id:'pa0098',cat:'wear',family:'אלוני',sub:'עמרי',text:'בגד גוף + מכנס ארוך + סווטשרט + גרביים + נעליים'},
+  {id:'pa0099',cat:'shop',family:'אלוני',sub:'',text:'Huggies מידה 6 להשלמה ל־54–56 + חיתולי שחייה ×12'},
+  {id:'pa0100',cat:'shop',family:'אלוני',sub:'',text:'מגבונים 3 חבילות + נסיעות + קרם החתלה מלא+קטן'},
+  {id:'pa0101',cat:'shop',family:'אלוני',sub:'',text:'SPF גוף ×2 + פנים + אלתוש מבוגרים + אלתוש לגיל 4 ושנה'},
+  {id:'pa0102',cat:'shop',family:'אלוני',sub:'',text:'תרופות ילדים בתוקף + מזרקי מדידה + תרופות קבועות ל־8+3 ימים'},
+  {id:'pa0103',cat:'shop',family:'אלוני',sub:'',text:'שקיות אטומות + בקבוקי נסיעות + מתאם תקע ×1–2 + מטען USB לרכב'},
+  {id:'pa0104',cat:'shop',family:'אלוני',sub:'',text:'כיסוי גשם לעגלה + תגי איתור + נשנושים ל־48 שעות + פלסטרים'},
+  {id:'pa0105',cat:'confirm',family:'אלוני',sub:'',text:'לבדוק תחזית 7–10 ימים לפני ושוב 48–72 שעות'},
+  {id:'pa0106',cat:'confirm',family:'אלוני',sub:'',text:'לוודא מיטת תינוק + סדינים + מגבות בריכה במלון'},
+  {id:'pa0107',cat:'confirm',family:'אלוני',sub:'',text:'לאשר 2 כיסאות בטיחות מתאימים ברכב',urgent:true},
+  {id:'pa0108',cat:'confirm',family:'אלוני',sub:'',text:'לבדוק מגבלת משקל/מידות + כללי נוזלים/מזון תינוק בטיסה'},
+  {id:'pa0109',cat:'confirm',family:'אלוני',sub:'',text:'לבדוק מדיניות עגלה עד שער + סופר בדרך מהשדה'},
+  {id:'pa0110',cat:'confirm',family:'אלוני',sub:'',text:'להוריד מפות אופליין + סרטים/מוזיקה לטאבלטים'},
 ];
 
-const CAT_LABELS = {docs:'🛂 מסמכים וכסף',gear:'🎒 ציוד משפחתי כללי',neta:'🧕 נטע',omer:'🧔 עומר',tal:'🧕 טל',guy:'🧔 גיא',lia:'👧 ליה (4)',tom:'👦 תום (4)',romi:'🍼 רומי (1)',omri:'👦 עמרי (2)',meds:'💊 תרופות ועזרה ראשונה',pool:'🏊 בריכה וחדר כושר',food:'🍎 אוכל ונשנושים לטיסה',electr:'🔌 אלקטרוניקה',baby:'👶 עגלה, שינה וחיתולים',apps:'📱 אפליקציות להתקין'};
+const CAT_LABELS = {suit1:'🧳 מזוודה גדולה 1 — מבוגרים',suit2:'🧳 מזוודה גדולה 2 — ילדים',trl1:'🎒 טרולי 1 — גיבוי 48 שעות',trl2:'🎒 טרולי 2 — חיתולים, אוכל ובריכה',bp1:'🎒 תיק גב 1 — מסמכים, תרופות ואלקטרוניקה',bp2:'🎒 תיק גב 2 — טיסה עם הילדים',strbag:'👶 תיק עגלה — שליפה מיידית',str:'🛒 העגלה',wear:'✈️ מה לובשים לטיסה',shop:'🛍️ לקנות לפני האריזה',confirm:'✅ לאשר (לא לארוז)'};
 var WX={};
 function _applyDayWeather(){/* weather shown on the date strip only — no per-card duplicate */}
 const WMO = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',99:'⛈️'};
@@ -3626,6 +3659,17 @@ function deleteAttraction(){
 }
 
 // ═══════════════ PACKING ═══════════════
+function _packItemsHTML(items,checked){
+  var last=null,out='';
+  items.forEach(function(item){
+    if(item.sub&&item.sub!==last){out+='<div class="pack-sub">'+item.sub+'</div>';last=item.sub;}
+    var isDone=!!checked[item.id];
+    var urgentBadge=item.urgent?'<span class="pack-urgent tag-red">⭐ חובה</span>':'';
+    var customDot=item.custom?'<span style="font-size:10px;color:var(--accent);margin-right:4px">עצמי</span>':'';
+    out+='<div class="pack-item'+(isDone?' done':'')+(item.custom?' custom':'')+'" onclick="togglePackItem(this,\''+item.id+'\')"><div class="pack-circle">'+(isDone?'✓':'')+'</div><div class="pack-text">'+item.text+customDot+'</div>'+urgentBadge+'</div>';
+  });
+  return out;
+}
 function renderPacking(){
   const checked=getPackingChecked();
   const customItems=getCustomPackItems();
@@ -3646,16 +3690,7 @@ function renderPacking(){
         <h3>${CAT_LABELS[cat]}</h3>
         <span class="pack-progress">${catDone}/${items.length}</span>
       </div>
-      ${items.map(item=>{
-        const isDone=!!checked[item.id];
-        const urgentBadge=item.urgent?'<span class="pack-urgent tag-red">⭐ חובה</span>':'';
-        const customDot=item.custom?'<span style="font-size:10px;color:var(--accent);margin-right:4px">עצמי</span>':'';
-        return `<div class="pack-item${isDone?' done':''}${item.custom?' custom':''}" onclick="togglePackItem(this,'${item.id}')">
-          <div class="pack-circle">${isDone?'✓':''}</div>
-          <div class="pack-text">${item.text}${customDot}</div>
-          ${urgentBadge}
-        </div>`;
-      }).join('')}
+      ${_packItemsHTML(items,checked)}
     </div>`;
   });
   document.getElementById('packing-list').innerHTML=html;
