@@ -929,7 +929,7 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .pf-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);color:var(--muted);font-family:var(--gs);font-weight:700;font-size:13px;border-radius:12px;cursor:pointer;transition:all .15s}
 .pf-chip:active{transform:scale(.97)}
 .pf-chip.on{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#06231a;border-color:transparent;box-shadow:0 3px 10px rgba(var(--accent-rgb),.22)}
-.pf-selects{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pf-selects{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
 .pf-select{width:100%;height:40px;-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.06) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a9b6ad' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>") no-repeat left 12px center;border:1px solid var(--glass-brd);color:#fff;font-family:var(--gs);font-weight:600;font-size:13px;padding:0 14px 0 30px;border-radius:12px;cursor:pointer;outline:none;text-align:right}
 .pf-select:focus{border-color:rgba(var(--accent-rgb),.55)}
 .pf-select option{background:#123524;color:#fff}
@@ -2348,6 +2348,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <button class="pf-chip" id="pf-must" onclick="togglePackFlag('must')">⭐ חובה</button>
     </div>
     <div class="pf-selects">
+      <select class="pf-select" id="pf-type" onchange="setPackFilter('type',this.value)"><option value="">כל הסוגים</option></select>
       <select class="pf-select" id="pf-person" onchange="setPackFilter('person',this.value)"><option value="">כל האנשים</option></select>
       <select class="pf-select" id="pf-bag" onchange="setPackFilter('bag',this.value)"><option value="">כל התיקים</option></select>
     </div>
@@ -2517,7 +2518,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">48</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">49</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -3701,7 +3702,21 @@ function _packItemsHTML(items,checked){
   });
   return out;
 }
-var _packFilters={bag:'',person:'',must:false,todo:false,q:''};
+var _packFilters={bag:'',person:'',type:'',must:false,todo:false,q:''};
+var TYPE_ORDER=['ביגוד','רחצה','כושר','אלקטרוניקה','תרופות','תינוק','מסמכים','אוכל'];
+var TYPE_LABELS={'ביגוד':'👕 ביגוד','רחצה':'🧴 רחצה','כושר':'🏋️ כושר ובריכה','אלקטרוניקה':'🔌 אלקטרוניקה','תרופות':'💊 תרופות','תינוק':'👶 תינוק','מסמכים':'🛂 מסמכים','אוכל':'🍎 אוכל'};
+function _packType(item){
+  var s=(item.sub||'')+' '+(item.text||'');
+  if(/כושר|אימון|ספורט|בריכ|שחיי/.test(s))return 'כושר';
+  if(/רחצ|שמפו|סבון|שיניים|דאודורנט|איפור|שיער|טיפוח|מרכך|קרם/.test(s))return 'רחצה';
+  if(/אלקטרוני|טלפון|מטען|סוללה|אוזניות|טאבלט|iPad|מתאם|USB|מצלמ/.test(s))return 'אלקטרוניקה';
+  if(/תרופ|פלסטר|מדחום|עזרה ראשונה|חיטוי|גזה|מזרק/.test(s))return 'תרופות';
+  if(/חיתול|מגבונ|החתל|עגלה|שק שינה|בובת שינה|מוצץ|סינר|טטרה/.test(s))return 'תינוק';
+  if(/מסמכ|דרכונ|אשראי|ביטוח|ארנק|מזומן|רישיו/.test(s))return 'מסמכים';
+  if(/אוכל|חטיף|פאוצ|נשנוש|קרקר|עוגי|בייגל/.test(s))return 'אוכל';
+  if(/חולצ|מכנס|גרב|פיג|שמל|בגד ים|נעל|סנדל|כפכפ|סווטשרט|תחתונ|חזיי|טייצ|חצאי|קרדיגן|בגדי גוף|מעיל/.test(s))return 'ביגוד';
+  return '';
+}
 function _packPerson(item){
   var PEOPLE=['נטע','עומר','ליה','רומי','טל','גיא','תום','עמרי'];
   var s=(item.sub||'').trim();var name=s.split(' · ')[0].trim();
@@ -3711,7 +3726,7 @@ function _packPerson(item){
 }
 function setPackFilter(k,v){_packFilters[k]=v;renderPacking();}
 function togglePackFlag(k){_packFilters[k]=!_packFilters[k];renderPacking();}
-function clearPackFilters(){_packFilters={bag:'',person:'',must:false,todo:false,q:''};var s=document.getElementById('pack-search');if(s)s.value='';renderPacking();}
+function clearPackFilters(){_packFilters={bag:'',person:'',type:'',must:false,todo:false,q:''};var s=document.getElementById('pack-search');if(s)s.value='';renderPacking();}
 function _buildPackFilterUI(items){
   var F=_packFilters;
   var order=['נטע','עומר','ליה','רומי','טל','גיא','תום','עמרי'];
@@ -3721,9 +3736,11 @@ function _buildPackFilterUI(items){
   if(psel){var o='<option value="">כל האנשים</option>';order.forEach(function(p){if(have[p])o+='<option value="'+p+'">'+p+'</option>';});if(hasShared)o+='<option value="__shared">משפחתי / כללי</option>';psel.innerHTML=o;psel.value=F.person;}
   var bsel=document.getElementById('pf-bag');
   if(bsel){var o2='<option value="">כל התיקים</option>';Object.keys(CAT_LABELS).forEach(function(c){if(items.some(function(i){return i.cat===c;}))o2+='<option value="'+c+'">'+CAT_LABELS[c]+'</option>';});bsel.innerHTML=o2;bsel.value=F.bag;}
+  var tsel=document.getElementById('pf-type');
+  if(tsel){var haveT={};items.forEach(function(i){var t=_packType(i);if(t)haveT[t]=1;});var o3='<option value="">כל הסוגים</option>';TYPE_ORDER.forEach(function(t){if(haveT[t])o3+='<option value="'+t+'">'+(TYPE_LABELS[t]||t)+'</option>';});tsel.innerHTML=o3;tsel.value=F.type;}
   var mb=document.getElementById('pf-must');if(mb)mb.classList.toggle('on',F.must);
   var tb=document.getElementById('pf-todo');if(tb)tb.classList.toggle('on',F.todo);
-  var cl=document.getElementById('pf-clear');if(cl)cl.style.display=(F.bag||F.person||F.must||F.todo||F.q)?'':'none';
+  var cl=document.getElementById('pf-clear');if(cl)cl.style.display=(F.bag||F.person||F.type||F.must||F.todo||F.q)?'':'none';
 }
 function _packMatch(i,checked){
   var F=_packFilters;
@@ -3731,6 +3748,7 @@ function _packMatch(i,checked){
   if(F.must&&!i.urgent)return false;
   if(F.todo&&checked[i.id])return false;
   if(F.person){var pp=_packPerson(i);if(F.person==='__shared'){if(pp!=='')return false;}else if(pp!==F.person)return false;}
+  if(F.type&&_packType(i)!==F.type)return false;
   if(F.q){var q=F.q.toLowerCase();if((i.text||'').toLowerCase().indexOf(q)<0&&(i.sub||'').toLowerCase().indexOf(q)<0)return false;}
   return true;
 }
@@ -3761,7 +3779,7 @@ function renderPacking(){
   document.getElementById('packing-list').innerHTML=html||'<p style="font-size:13px;color:var(--muted);padding:18px 4px;text-align:center">אין פריטים שתואמים לסינון</p>';
   const ftotal=famItems.length,fdone=famItems.filter(i=>checked[i.id]).length;
   const pct=ftotal?Math.round(fdone/ftotal*100):0;
-  const anyF=_packFilters.bag||_packFilters.person||_packFilters.must||_packFilters.todo||_packFilters.q;
+  const anyF=_packFilters.bag||_packFilters.person||_packFilters.type||_packFilters.must||_packFilters.todo||_packFilters.q;
   document.getElementById('packing-total').textContent=anyF?(allItems.length+' מציג · '+fdone+'/'+ftotal+' ארוז'):(ftotal?`${pct}% · ${fdone}/${ftotal}`:'');
   var pb=document.getElementById('packing-bar');if(pb)pb.style.width=pct+'%';
 }
