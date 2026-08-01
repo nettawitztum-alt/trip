@@ -2517,7 +2517,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">46</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">47</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -4965,10 +4965,6 @@ function addMapsBtn(item){
 // inject the ⋯ menu button on an event row (skips the fixed nap row)
 function addEventMenuBtn(item,iid){
   if(item.querySelector('.tl-menu-btn'))return;
-  const grip=document.createElement('button');
-  grip.className='tl-grip';grip.setAttribute('aria-label','גרירה לשינוי סדר');grip.setAttribute('title','גרור לשינוי הסדר');
-  grip.innerHTML='<i data-feather="menu"></i>';
-  item.insertBefore(grip,item.firstChild);
   const btn=document.createElement('button');
   btn.className='tl-menu-btn';btn.setAttribute('aria-label','אפשרויות אירוע');
   btn.innerHTML='<i data-feather="more-horizontal"></i>';
@@ -4999,8 +4995,7 @@ function buildAddedItem(a){
   const el=document.createElement('div');
   el.className='tl-item tl-added';
   el.dataset.iid=iid;
-  el.innerHTML=`<button class="tl-grip" aria-label="גרירה לשינוי סדר" title="גרור לשינוי הסדר"><i data-feather="menu"></i></button>`+
-    `<div class="tl-time">${escapeHtml(a.time||'')}</div><div class="tl-dot"></div>`+
+  el.innerHTML=`<div class="tl-time">${escapeHtml(a.time||'')}</div><div class="tl-dot"></div>`+
     `<div class="tl-body"><h4><span class="tl-added-tag">נוסף</span>${escapeHtml(a.title||'')}</h4>`+
     `${a.desc?`<p>${escapeHtml(a.desc)}</p>`:'<p></p>'}`+
     (a.location?locButtons(a.location):_mapsLinkHTML(a.title))+
@@ -5008,10 +5003,18 @@ function buildAddedItem(a){
     `<button class="tl-menu-btn" aria-label="אפשרויות אירוע" onclick="event.stopPropagation();openEventMenu('${iid}',this)"><i data-feather="more-horizontal"></i></button>`;
   return el;
 }
+function _cleanReflowEdits(){
+  try{
+    var m=getItinMods();var changed=false;
+    if(m.edits){Object.keys(m.edits).forEach(function(iid){var e=m.edits[iid]||{};var k=Object.keys(e);if(k.length===1&&k[0]==='time'){delete m.edits[iid];changed=true;}});}
+    if(m.order&&Object.keys(m.order).length){m.order={};changed=true;}
+    if(changed){try{localStorage.setItem('austria26_itin',JSON.stringify(m));}catch(e){}}
+    return changed;
+  }catch(e){return false;}
+}
 function _tlTimeMin(it){var e=it.querySelector('.tl-time');var t=e?(e.textContent||'').trim():'';var m=t.match(/(\d{1,2}):(\d{2})/);return m?(+m[1])*60+(+m[2]):9999;}
-function _sortTimelinesByTime(orderMap){
+function _sortTimelinesByTime(){
   document.querySelectorAll('#panel-itinerary .card[id^="d"] .timeline').forEach(function(tl){
-    var c=tl.closest('.card[id^="d"]');if(!c||(orderMap&&orderMap[c.id]))return; // respect a manual drag order
     var items=[].slice.call(tl.querySelectorAll('.tl-item'));
     items.sort(function(a,b){return _tlTimeMin(a)-_tlTimeMin(b);});
     items.forEach(function(it){tl.appendChild(it);});
@@ -5090,7 +5093,7 @@ function applyItinMods(){
   // show reset button if there are any mods
   const hasChanges=m.deleted.length>0||Object.keys(m.moved).length>0||Object.keys(m.edits||{}).length>0||(m.added||[]).length>0||Object.keys(m.order||{}).length>0;
   const rb=document.getElementById('itin-reset-btn');if(rb)rb.style.display=hasChanges?'':'none';
-  _sortTimelinesByTime(m.order||{});
+  _sortTimelinesByTime();
   _refreshDayHeadings();
 }
 
@@ -5261,14 +5264,7 @@ function startCountdown(){
 
 function _timeStr(it){const e=it.querySelector('.tl-time');return e?e.textContent.trim():'';}
 function _evTitle(it){const h=it.querySelector('h4');return h?h.textContent.replace('נוסף','').trim():'';}
-function initItinSortable(){
-  if(!window.Sortable)return;
-  document.querySelectorAll('#panel-itinerary .timeline').forEach(tl=>{
-    if(tl._sortable)return; tl._sortable=true;
-    new Sortable(tl,{handle:'.tl-grip',draggable:'.tl-item',filter:'.tl-deleted',animation:160,forceFallback:true,forceAutoScrollFallback:true,fallbackTolerance:3,
-      onEnd:function(evt){const c=tl.closest('.card[id^="d"]');if(!c)return;if(evt&&evt.item)reflowItemTime(evt.item);persistItinOrder(c.id);}});
-  });
-}
+function initItinSortable(){ /* drag-reorder removed — the agenda is ordered strictly by time */ }
 function openFocusDay(id){const c=document.getElementById(id);if(c){c.classList.add('open');c.scrollIntoView({behavior:'smooth',block:'start'});}}
 var _nnInterval=null;
 function _focusState(){
@@ -5569,6 +5565,7 @@ function initApp(){
   renderRestaurants();
   renderTasks();
   fetchWeather();
+  _cleanReflowEdits();
   initItinIds();
   applyItinMods();
   focusCurrentDay(false);
