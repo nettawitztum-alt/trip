@@ -942,6 +942,9 @@ body{display:flex;flex-direction:column;height:100%;overflow:hidden}
 .pack-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s}
 .pack-item.done .pack-circle{background:var(--primary);border-color:var(--primary);color:white}
 .pack-text{flex:1;font-size:13px;font-weight:600;line-height:1.4}
+.pack-edit{flex:0 0 auto;width:32px;height:32px;border:none;background:none;color:var(--muted);opacity:.5;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer}
+.pack-edit:active{opacity:1;background:rgba(255,255,255,.10)}
+.pack-edit svg{width:15px;height:15px}
 .pack-urgent{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
 .pack-item.custom .pack-text::after{content:' •';color:var(--accent)}
 
@@ -2476,7 +2479,8 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 <div class="modal-overlay" id="add-pack-modal" onclick="closeModalOnBg(event,'add-pack-modal')">
   <div class="modal">
     <div class="modal-handle"></div><button class="modal-x" onclick="closeModal(this.closest('.modal-overlay').id)" aria-label="סגור">✕</button>
-    <div class="modal-title">➕ הוסף פריט לרשימה</div>
+    <div class="modal-title" id="add-pack-title">➕ הוסף פריט לרשימה</div>
+    <input type="hidden" id="pack-edit-id">
     <div class="form-group"><label>שם הפריט *</label><input type="text" class="form-input" id="pack-item-text" placeholder="מה להביא..."></div>
     <div class="form-group"><label>קטגוריה</label>
       <select class="form-select" id="pack-item-category">
@@ -2495,6 +2499,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
       <label for="pack-urgent" style="margin:0;cursor:pointer">⭐ פריט קריטי (אסור לשכוח!)</label>
     </div>
     <button class="btn btn-primary btn-block" onclick="savePackItem()"><i data-feather="save"></i> שמור</button>
+    <button class="btn btn-danger btn-block btn-sm" id="pack-delete-btn" style="display:none;margin-top:8px" onclick="deletePackItem()"><i data-feather="trash-2"></i> מחק פריט</button>
   </div>
 </div>
 
@@ -2518,7 +2523,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">54</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">55</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -4093,6 +4098,7 @@ function deleteAttraction(){
 }
 
 // ═══════════════ PACKING ═══════════════
+var _PENCIL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
 function _packItemsHTML(items,checked){
   var last=null,out='';
   items.forEach(function(item){
@@ -4100,7 +4106,7 @@ function _packItemsHTML(items,checked){
     var isDone=!!checked[item.id];
     var urgentBadge=item.urgent?'<span class="pack-urgent tag-red">⭐ חובה</span>':'';
     var customDot=item.custom?'<span style="font-size:10px;color:var(--accent);margin-right:4px">עצמי</span>':'';
-    out+='<div class="pack-item'+(isDone?' done':'')+(item.custom?' custom':'')+'" onclick="togglePackItem(this,\''+item.id+'\')"><div class="pack-circle">'+(isDone?'✓':'')+'</div><div class="pack-text">'+item.text+customDot+'</div>'+urgentBadge+'</div>';
+    out+='<div class="pack-item'+(isDone?' done':'')+(item.custom?' custom':'')+'" onclick="togglePackItem(this,\''+item.id+'\')"><div class="pack-circle">'+(isDone?'✓':'')+'</div><div class="pack-text">'+item.text+customDot+'</div>'+urgentBadge+'<button class="pack-edit" onclick="event.stopPropagation();openEditPackModal(\''+item.id+'\')" aria-label="ערוך פריט">'+_PENCIL+'</button></div>';
   });
   return out;
 }
@@ -4158,10 +4164,12 @@ function renderPacking(){
   const checked=getPackingChecked();
   const customItems=getCustomPackItems();
   const fam=currentUser?.name||'';
+  const over=getPackOver();
+  const _ap=i=>{var o=over[i.id];if(!o)return i;var j=Object.assign({},i);if(o.text!=null)j.text=o.text;if(o.urgent!=null)j.urgent=o.urgent;if(o.cat!=null)j.cat=o.cat;j._del=!!o.del;return j;};
   const famItems=[
     ...BUILTIN_PACKING.filter(i=>!i.family||i.family===fam),
     ...customItems.map(i=>({...i,custom:true}))
-  ];
+  ].map(_ap).filter(i=>!i._del);
   _buildPackFilterUI(famItems);
   const allItems=famItems.filter(i=>_packMatch(i,checked));
   const cats=Object.keys(CAT_LABELS);
@@ -4192,16 +4200,59 @@ function togglePackItem(el,id){
   savePackingChecked(checked);
   renderPacking();
 }
-function openAddPackModal(){openModal('add-pack-modal')}
+function getPackOver(){return _parseJ(localStorage.getItem('austria26_pack_over'),{})||{};}
+function savePackOver(o){localStorage.setItem('austria26_pack_over',JSON.stringify(o));}
+function _fillPackCats(){var sel=document.getElementById('pack-item-category');if(!sel)return;sel.innerHTML=Object.keys(CAT_LABELS).map(function(c){return '<option value="'+c+'">'+CAT_LABELS[c]+'</option>';}).join('');}
+function openAddPackModal(){
+  document.getElementById('pack-edit-id').value='';
+  _fillPackCats();
+  document.getElementById('pack-item-text').value='';
+  document.getElementById('pack-urgent').checked=false;
+  document.getElementById('add-pack-title').textContent='➕ הוסף פריט לרשימה';
+  var del=document.getElementById('pack-delete-btn');if(del)del.style.display='none';
+  openModal('add-pack-modal');
+}
+function openEditPackModal(id){
+  var all=[...BUILTIN_PACKING,...getCustomPackItems()];
+  var it=all.find(function(x){return x.id===id;});if(!it)return;
+  var o=getPackOver()[id]||{};
+  _fillPackCats();
+  document.getElementById('pack-edit-id').value=id;
+  document.getElementById('pack-item-text').value=(o.text!=null?o.text:it.text)||'';
+  document.getElementById('pack-item-category').value=(o.cat!=null?o.cat:it.cat)||'suit1';
+  document.getElementById('pack-urgent').checked=(o.urgent!=null?o.urgent:!!it.urgent);
+  document.getElementById('add-pack-title').textContent='✏️ ערוך פריט';
+  var del=document.getElementById('pack-delete-btn');if(del)del.style.display='';
+  openModal('add-pack-modal');
+}
 function savePackItem(){
   const text=document.getElementById('pack-item-text').value.trim();
   if(!text){alert('נא להזין שם פריט');return;}
-  const custom=getCustomPackItems();
-  custom.push({id:'cp'+Date.now(),cat:document.getElementById('pack-item-category').value,text,urgent:document.getElementById('pack-urgent').checked,custom:true,addedBy:currentUser?.name||''});
-  saveCustomPackItems(custom);
+  const cat=document.getElementById('pack-item-category').value;
+  const urgent=document.getElementById('pack-urgent').checked;
+  const editId=document.getElementById('pack-edit-id').value;
+  if(editId){
+    var over=getPackOver();var e=Object.assign({},over[editId],{text:text,cat:cat,urgent:urgent});delete e.del;over[editId]=e;savePackOver(over);
+  } else {
+    const custom=getCustomPackItems();
+    custom.push({id:'cp'+Date.now(),cat:cat,text:text,urgent:urgent,custom:true,addedBy:currentUser?.name||''});
+    saveCustomPackItems(custom);
+  }
   closeModal('add-pack-modal');
   document.getElementById('pack-item-text').value='';
   document.getElementById('pack-urgent').checked=false;
+  document.getElementById('pack-edit-id').value='';
+  renderPacking();
+}
+function deletePackItem(){
+  var id=document.getElementById('pack-edit-id').value;if(!id)return;
+  if(!confirm('למחוק את הפריט מהרשימה?'))return;
+  var it=[...BUILTIN_PACKING,...getCustomPackItems()].find(function(x){return x.id===id;});
+  var over=getPackOver();
+  if(it&&it.custom){saveCustomPackItems(getCustomPackItems().filter(function(x){return x.id!==id;}));delete over[id];}
+  else{over[id]=Object.assign({},over[id],{del:true});}
+  savePackOver(over);
+  closeModal('add-pack-modal');
   renderPacking();
 }
 
