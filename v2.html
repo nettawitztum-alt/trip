@@ -2523,7 +2523,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">55</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">56</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -2564,6 +2564,13 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
 /* ═══════════════ TRIP_CONFIG — the only thing a new trip needs to change ═══════════════
    This file is a template. To spin up a different trip, copy the repo and edit
    the values below (a builder flow can generate this object automatically). */
+(function(){try{
+  if(!/[?&]reset\b/.test(location.search))return;
+  try{if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}catch(e){}
+  try{if(window.caches&&caches.keys)caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});});}catch(e){}
+  if(/reset=(data|all)/.test(location.search)){try{for(var i=localStorage.length-1;i>=0;i--){var k=localStorage.key(i);if(k&&k.indexOf('austria26_')===0)localStorage.removeItem(k);}}catch(e){}}
+  setTimeout(function(){try{location.replace(location.origin+location.pathname);}catch(e){location.href=location.pathname;}},800);
+}catch(e){}})();
 const TRIP_CONFIG = {
   theme: { accent: '#7CF0A6' },            // app accent color
   sections: {                              // set false to hide a section everywhere
@@ -3380,9 +3387,9 @@ function getCustomAttractions(){return _filterDeleted('austria26_attrs',_parseJ(
 function saveCustomAttractions(arr){localStorage.setItem('austria26_attrs',JSON.stringify(arr))}
 function packKey(){return 'austria26_pack_'+(currentUser?.name||'guest')}
 function packCustomKey(){return 'austria26_pack_custom_'+(currentUser?.name||'guest')}
-function getPackingChecked(){return JSON.parse(localStorage.getItem(packKey())||'{}')}
+function getPackingChecked(){var v=_parseJ(localStorage.getItem(packKey()),{});return (v&&typeof v==='object'&&!Array.isArray(v))?v:{};}
 function savePackingChecked(obj){localStorage.setItem(packKey(),JSON.stringify(obj))}
-function getCustomPackItems(){return JSON.parse(localStorage.getItem(packCustomKey())||'[]')}
+function getCustomPackItems(){var v=_parseJ(localStorage.getItem(packCustomKey()),[]);return Array.isArray(v)?v:[];}
 function saveCustomPackItems(arr){localStorage.setItem(packCustomKey(),JSON.stringify(arr))}
 function getBookingChecked(){return JSON.parse(localStorage.getItem('austria26_book')||'{}')}
 function saveBookingChecked(obj){localStorage.setItem('austria26_book',JSON.stringify(obj))}
@@ -4160,7 +4167,8 @@ function _packMatch(i,checked){
   if(F.q){var q=F.q.toLowerCase();if((i.text||'').toLowerCase().indexOf(q)<0&&(i.sub||'').toLowerCase().indexOf(q)<0)return false;}
   return true;
 }
-function renderPacking(){
+function _resetPackData(){try{localStorage.removeItem('austria26_pack_over');localStorage.removeItem(packKey());localStorage.removeItem(packCustomKey());}catch(e){}try{renderPacking();}catch(e){}}
+function renderPacking(){try{
   const checked=getPackingChecked();
   const customItems=getCustomPackItems();
   const fam=currentUser?.name||'';
@@ -4192,6 +4200,7 @@ function renderPacking(){
   const anyF=_packFilters.bag||_packFilters.person||_packFilters.type||_packFilters.must||_packFilters.todo||_packFilters.q;
   document.getElementById('packing-total').textContent=anyF?(allItems.length+' מציג · '+fdone+'/'+ftotal+' ארוז'):(ftotal?`${pct}% · ${fdone}/${ftotal}`:'');
   var pb=document.getElementById('packing-bar');if(pb)pb.style.width=pct+'%';
+  }catch(err){console.warn('renderPacking failed',err);try{var _l=document.getElementById('packing-list');if(_l)_l.innerHTML='<div style="padding:24px 12px;text-align:center;color:var(--muted);font-size:13px">אירעה שגיאה בטעינת רשימת הציוד.<br><br><button class="btn btn-outline btn-sm" onclick="_resetPackData()">אפס נתוני ציוד וטען מחדש</button></div>';}catch(e){}}
 }
 function togglePackItem(el,id){
   const checked=getPackingChecked();
@@ -4200,7 +4209,7 @@ function togglePackItem(el,id){
   savePackingChecked(checked);
   renderPacking();
 }
-function getPackOver(){return _parseJ(localStorage.getItem('austria26_pack_over'),{})||{};}
+function getPackOver(){var v=_parseJ(localStorage.getItem('austria26_pack_over'),{});return (v&&typeof v==='object'&&!Array.isArray(v))?v:{};}
 function savePackOver(o){localStorage.setItem('austria26_pack_over',JSON.stringify(o));}
 function _fillPackCats(){var sel=document.getElementById('pack-item-category');if(!sel)return;sel.innerHTML=Object.keys(CAT_LABELS).map(function(c){return '<option value="'+c+'">'+CAT_LABELS[c]+'</option>';}).join('');}
 function openAddPackModal(){
@@ -6156,6 +6165,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <button id="add-fab" onclick="fabAdd()" aria-label="הוספה" title="הוספה"><i data-feather="plus"></i></button>
 <div id="itin-ctx-backdrop" onclick="closeEventMenu()"></div>
 <div id="itin-ctx" role="menu"></div>
-<script>if('serviceWorker' in navigator){var _swReloading=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(_swReloading)return;_swReloading=true;location.reload();});window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(reg){function _chk(){try{reg.update();}catch(e){}}reg.addEventListener('updatefound',function(){var nw=reg.installing;if(nw)nw.addEventListener('statechange',function(){if(nw.state==='installed'&&navigator.serviceWorker.controller){nw.postMessage('skipWaiting');}});});_chk();setInterval(_chk,60000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_chk();});window.addEventListener('focus',_chk);}).catch(function(){});});}</script>
+<script>if('serviceWorker' in navigator&&!/[?&]reset\b/.test(location.search)){var _swReloading=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(_swReloading)return;_swReloading=true;location.reload();});window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(reg){function _chk(){try{reg.update();}catch(e){}}reg.addEventListener('updatefound',function(){var nw=reg.installing;if(nw)nw.addEventListener('statechange',function(){if(nw.state==='installed'&&navigator.serviceWorker.controller){nw.postMessage('skipWaiting');}});});_chk();setInterval(_chk,60000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_chk();});window.addEventListener('focus',_chk);}).catch(function(){});});}</script>
 </body>
 </html>
