@@ -2523,7 +2523,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">57</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">58</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -5322,6 +5322,48 @@ function _unionById(a,b){
 }
 // Merge two state blobs: additive lists union by id (nothing lost); other keys
 // follow the newer side. Deterministic (sorted) so devices converge.
+// Commutative union of two id->object maps. On a genuine field conflict we pick a
+// side-independent winner (JSON-max), so BOTH devices compute the same result and the
+// sync converges instead of ping-ponging forever (which used to OOM-crash the tab).
+function _mergeMap(a,b){
+  a=(a&&typeof a==='object')?a:{};b=(b&&typeof b==='object')?b:{};
+  var seen={},keys=[];
+  Object.keys(a).concat(Object.keys(b)).forEach(function(k){if(!seen[k]){seen[k]=1;keys.push(k);}});
+  keys.sort(); // deterministic key order → identical JSON on both devices → hashes agree
+  var out={};
+  keys.forEach(function(k){
+    if(!(k in a)){out[k]=b[k];return;}
+    if(!(k in b)){out[k]=a[k];return;}
+    var xa=JSON.stringify(a[k]),xb=JSON.stringify(b[k]);
+    out[k]=(xb>xa)?b[k]:a[k];
+  });
+  return out;
+}
+// Packing overrides ({id:{text,cat,urgent,del}}) merged commutatively: deletion wins,
+// missing fields fill in, real conflicts resolve by a fixed rule — never "local always wins".
+function _mergePackOver(a,b){
+  a=(a&&typeof a==='object')?a:{};b=(b&&typeof b==='object')?b:{};
+  var out={},ids={};
+  Object.keys(a).forEach(function(k){ids[k]=1;});Object.keys(b).forEach(function(k){ids[k]=1;});
+  Object.keys(ids).sort().forEach(function(id){
+    var x=a[id],y=b[id];
+    if(x&&!y){out[id]=x;return;}
+    if(y&&!x){out[id]=y;return;}
+    if(!x&&!y)return;
+    if(x.del||y.del){out[id]={del:true};return;}
+    var f={};
+    ['text','cat','urgent'].forEach(function(k){
+      var xv=x[k],yv=y[k];
+      if(xv==null&&yv==null)return;
+      if(xv==null){f[k]=yv;return;}
+      if(yv==null){f[k]=xv;return;}
+      if(xv===yv){f[k]=xv;return;}
+      f[k]=(JSON.stringify(yv)>JSON.stringify(xv))?yv:xv;
+    });
+    out[id]=f;
+  });
+  return out;
+}
 function mergeBlob(local,remote,rNewer){
   const base=rNewer?remote:local;
   const out=Object.assign({},base);
@@ -5335,6 +5377,9 @@ function mergeBlob(local,remote,rNewer){
       let u=_unionById(_parseJ(local[k],[]),_parseJ(remote[k],[]));
       if(del.size)u=u.filter(x=>!del.has(String(x.id)));
       out[k]=JSON.stringify(u);
+    } else if(k==='austria26_pack_over'){
+      // override objects — commutative so two editors of the same list converge (see _mergePackOver)
+      out[k]=JSON.stringify(_mergePackOver(_parseJ(local[k],{}),_parseJ(remote[k],{})));
     } else if(k.indexOf('austria26_pack_')===0||k==='austria26_book'){
       // checked-state (id -> true): union so a refresh/sync never loses a tick
       out[k]=JSON.stringify(Object.assign({},_parseJ(remote[k],{}),_parseJ(local[k],{})));
@@ -5346,15 +5391,24 @@ function mergeBlob(local,remote,rNewer){
     const m={};
     m.added=_unionById(li.added||[],ri.added||[]);
     m.deleted=Array.from(new Set([...(li.deleted||[]),...(ri.deleted||[])])).sort();
-    m.edits=Object.assign({},lo.edits||{},hi.edits||{});   // union every event edit, both sides
-    m.moved=Object.assign({},lo.moved||{},hi.moved||{});
-    m.order=Object.assign({},lo.order||{},hi.order||{});
+    m.edits=_mergeMap(li.edits,ri.edits);   // commutative — both devices agree, sync converges
+    m.moved=_mergeMap(li.moved,ri.moved);
+    m.order=_mergeMap(li.order,ri.order);
     _stripReflow(m);
     out['austria26_itin']=JSON.stringify(m);
   }
   return out;
 }
-let _subscribed=false;
+let _subscribed=false,_snapTimes=[],_syncPaused=false;
+// Safety valve: if remote snapshots arrive in a tight burst (a sync ping-pong), back off
+// for a minute instead of re-rendering on every one — that runaway loop was OOM-crashing iOS.
+function _syncStormGuard(){
+  var now=Date.now();_snapTimes.push(now);
+  _snapTimes=_snapTimes.filter(function(t){return now-t<12000;});
+  if(_syncPaused)return true;
+  if(_snapTimes.length>20){_syncPaused=true;console.warn('cloud sync storm — pausing 60s');setTimeout(function(){_syncPaused=false;_snapTimes=[];},60000);return true;}
+  return false;
+}
 function subscribeState(){
   if(!_db||!_auth||!_auth.currentUser||_subscribed)return;
   _subscribed=true;
@@ -5366,6 +5420,7 @@ function subscribeState(){
     const remoteTime=doc.data().updatedAt||0;
     const rh=hashState(remote);
     if(rh===_lastHash)return; // our own echo / already in sync
+    if(_syncStormGuard())return; // runaway loop — back off before it crashes the tab
     const localBlob=collectState();
     const localTime=Number(localStorage.getItem(MTIME_KEY)||0);
     const merged=mergeBlob(localBlob,remote,remoteTime>=localTime);
@@ -5375,7 +5430,7 @@ function subscribeState(){
       Object.keys(merged).forEach(k=>localStorage.setItem(k,merged[k]));
       if(_origSet)_origSet(MTIME_KEY,String(Math.max(remoteTime,localTime)));
       _applyingRemote=false;
-      if(currentUser){renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();applyContentOverrides();}
+      if(currentUser){try{renderTasks();renderAttractions();renderPacking();renderRestaurants();initBookingChecklist();reloadItinerary();applyContentOverrides();}catch(e){console.warn('remote apply render failed',e);}}
     }
     _lastHash=mh;
     if(mh!==rh){_db.collection('trips').doc(TRIP_ID).set({data:merged,updatedAt:Date.now(),updatedBy:currentUser?.name||''},{merge:true}).catch(e=>console.warn('sync push failed',e));}
