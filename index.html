@@ -2523,7 +2523,7 @@ body.attr-map-view #attr-map-canvas{height:calc(100dvh - 178px);min-height:440px
     <div class="set-sec"><div class="set-sec-h">פרופיל</div><div class="set-row-static">מחובר/ת בתור: <b id="user-modal-name"></b></div><div class="set-field"><input type="text" class="form-input" id="user-new-name" placeholder="שנה שם משפחה..."><button class="btn btn-primary btn-sm" onclick="changeUserName()">עדכן</button></div></div><div class="set-sec" id="user-sync-section" style="display:none"><div class="set-sec-h">סנכרון ענן</div><div id="user-sync-status" class="sync-pill sync-off" style="margin-bottom:10px">☁️ סנכרון כבוי</div><button class="btn-google" id="user-google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         התחבר עם Google לסנכרון
-      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">58</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
+      </button></div><div class="set-sec"><div class="set-sec-h">כלים</div><button class="set-btn" onclick="closeModal('user-modal');shareMyLocation()"><span><i data-feather="map-pin"></i> שתף מיקום נוכחי</span><i data-feather="chevron-left"></i></button></div><div class="set-sec"><div class="set-sec-h">חשבון</div><button class="set-btn set-danger" id="itin-reset-btn" onclick="closeModal('user-modal');resetItinMods()" style="display:none"><span>↺ אפס את כל השינויים בלו&quot;ז</span></button><button class="set-btn set-danger" onclick="logout()"><span><i data-feather="log-out"></i> התנתק ונקה נתונים מקומיים</span></button></div><div class="set-sec"><div class="set-sec-h">גרסה ואבחון</div><div class="set-row-static">גרסה <b id="app-ver">59</b></div><button class="set-btn" onclick="forceUpdate()"><span>🔄 רענן לגרסה האחרונה</span><i data-feather="chevron-left"></i></button></div>
   </div>
 </div>
 
@@ -3391,7 +3391,7 @@ function getPackingChecked(){var v=_parseJ(localStorage.getItem(packKey()),{});r
 function savePackingChecked(obj){localStorage.setItem(packKey(),JSON.stringify(obj))}
 function getCustomPackItems(){var v=_parseJ(localStorage.getItem(packCustomKey()),[]);return Array.isArray(v)?v:[];}
 function saveCustomPackItems(arr){localStorage.setItem(packCustomKey(),JSON.stringify(arr))}
-function getBookingChecked(){return JSON.parse(localStorage.getItem('austria26_book')||'{}')}
+function getBookingChecked(){var v=_parseJ(localStorage.getItem('austria26_book'),{});return (v&&typeof v==='object'&&!Array.isArray(v))?v:{};}
 function saveBookingChecked(obj){localStorage.setItem('austria26_book',JSON.stringify(obj))}
 
 // ═══════════════ LOCK / AUTH ═══════════════
@@ -4397,7 +4397,7 @@ const EDIT_PANELS={
 const EDIT_TEXT_SEL='h2,h3,h4,p,.val,.lbl,.amenity,.sec-title,.ck-text,.ck-sub,.fl-val,.fl-city,.fl-code,.fl-direction,.seat-tag';
 let _editMode=false;
 
-function getContent(){const c=JSON.parse(localStorage.getItem('austria26_content')||'{}');c.text=c.text||{};c.deleted=c.deleted||[];c.added=c.added||{};return c;}
+function getContent(){var c=_parseJ(localStorage.getItem('austria26_content'),{});if(!c||typeof c!=='object'||Array.isArray(c))c={};c.text=(c.text&&typeof c.text==='object'&&!Array.isArray(c.text))?c.text:{};c.deleted=Array.isArray(c.deleted)?c.deleted:[];c.added=(c.added&&typeof c.added==='object'&&!Array.isArray(c.added))?c.added:{};return c;}
 function saveContent(c){localStorage.setItem('austria26_content',JSON.stringify(c));}
 
 function onEditBlur(e){
@@ -5314,6 +5314,8 @@ function pushState(){
 const ADD_KEYS=['austria26_attrs','austria26_rest','austria26_tasks'];
 function _isAddKey(k){return ADD_KEYS.indexOf(k)>=0||k.indexOf('austria26_pack_custom_')===0;}
 function _parseJ(s,d){try{var v=JSON.parse(s);return v==null?d:v;}catch(e){return d}}
+function _arr(x){return Array.isArray(x)?x:[];}
+function _obj(x){return (x&&typeof x==='object'&&!Array.isArray(x))?x:{};}
 function _unionById(a,b){
   const m=new Map();
   (a||[]).forEach(x=>{if(x&&x.id!=null)m.set(String(x.id),x);});
@@ -5389,11 +5391,11 @@ function mergeBlob(local,remote,rNewer){
     const li=_parseJ(local['austria26_itin'],{}),ri=_parseJ(remote['austria26_itin'],{});
     const lo=rNewer?li:ri,hi=rNewer?ri:li;            // hi = newer side, wins per-key conflicts
     const m={};
-    m.added=_unionById(li.added||[],ri.added||[]);
-    m.deleted=Array.from(new Set([...(li.deleted||[]),...(ri.deleted||[])])).sort();
-    m.edits=_mergeMap(li.edits,ri.edits);   // commutative — both devices agree, sync converges
-    m.moved=_mergeMap(li.moved,ri.moved);
-    m.order=_mergeMap(li.order,ri.order);
+    m.added=_unionById(_arr(li.added),_arr(ri.added));
+    m.deleted=Array.from(new Set([..._arr(li.deleted),..._arr(ri.deleted)].map(String))).sort();
+    m.edits=_mergeMap(_obj(li.edits),_obj(ri.edits));   // commutative — both devices agree, sync converges
+    m.moved=_mergeMap(_obj(li.moved),_obj(ri.moved));
+    m.order=_mergeMap(_obj(li.order),_obj(ri.order));
     _stripReflow(m);
     out['austria26_itin']=JSON.stringify(m);
   }
@@ -5442,8 +5444,13 @@ function subscribeState(){
 const DAY_LABELS = {d1:'יום 1 (11.8)',d2:'יום 2 (12.8)',d3:'יום 3 (13.8)',d4:'יום 4 (14.8)',d5:'יום 5 (15.8)',d6:'יום 6 (16.8)',d7:'יום 7 (17.8)',d8:'יום 8 (18.8)'};
 
 function getItinMods(){
-  const m=JSON.parse(localStorage.getItem('austria26_itin')||'{}');
-  m.deleted=m.deleted||[];m.moved=m.moved||{};m.edits=m.edits||{};m.added=m.added||[];m.order=m.order||{};
+  var m=_parseJ(localStorage.getItem('austria26_itin'),{});
+  if(!m||typeof m!=='object'||Array.isArray(m))m={};
+  m.deleted=Array.isArray(m.deleted)?m.deleted:[];
+  m.added=Array.isArray(m.added)?m.added:[];
+  m.moved=(m.moved&&typeof m.moved==='object'&&!Array.isArray(m.moved))?m.moved:{};
+  m.edits=(m.edits&&typeof m.edits==='object'&&!Array.isArray(m.edits))?m.edits:{};
+  m.order=(m.order&&typeof m.order==='object'&&!Array.isArray(m.order))?m.order:{};
   return m;
 }
 function saveItinMods(m){localStorage.setItem('austria26_itin',JSON.stringify(m));toast('✓ נשמר');}
@@ -6122,38 +6129,39 @@ async function forceUpdate(){
   location.reload();
 }
 try{_fitAppHeight();}catch(e){}
+function _safe(fn){try{return fn();}catch(e){console.warn('init/render step failed:',(e&&e.message)||e);}}
 function initApp(){
-  applySections();
-  _fitAppHeight();
+  _safe(applySections);
+  _safe(_fitAppHeight);
   setTimeout(_navWatchdog,120);
   const panel=document.getElementById('panel-itinerary');
   if(_itinOriginalHTML===null&&panel)_itinOriginalHTML=panel.innerHTML; // snapshot pristine itinerary
-  initBookingChecklist();
-  renderAttractions();
-  if(_cleanBadEnrich())renderAttractions();
+  _safe(initBookingChecklist);
+  _safe(renderAttractions);
+  _safe(function(){if(_cleanBadEnrich())renderAttractions();});
   setTimeout(_enrichAllCustom,1500);
-  renderPacking();
-  renderRestaurants();
-  renderTasks();
-  fetchWeather();
-  _cleanReflowEdits();
-  initItinIds();
-  applyItinMods();
-  focusCurrentDay(false);
+  _safe(renderPacking);
+  _safe(renderRestaurants);
+  _safe(renderTasks);
+  _safe(fetchWeather);
+  _safe(_cleanReflowEdits);
+  _safe(initItinIds);
+  _safe(applyItinMods);
+  _safe(function(){focusCurrentDay(false);});
   _selDay=window.currentFocusDay||'d1';
-  buildDateStrip();
-  openDayCard(_selDay);
-  applyDayHero(_selDay);
+  _safe(buildDateStrip);
+  _safe(function(){openDayCard(_selDay);});
+  _safe(function(){applyDayHero(_selDay);});
   var _sa=document.querySelector('.page-scroll-area');
   if(_sa&&!_sa._heroBound){_sa._heroBound=1;_sa.addEventListener('scroll',onHeroScroll,{passive:true});}
-  _heroResize();
-  renderDayFocus();
-  updateNotifBadge();
+  _safe(_heroResize);
+  _safe(renderDayFocus);
+  _safe(updateNotifBadge);
   setTimeout(setStickyOffsets,150);
-  initItinSortable();
-  initEditables();
-  if(_db&&_auth&&_auth.currentUser)subscribeState();
-  if(window.feather)feather.replace();
+  _safe(initItinSortable);
+  _safe(initEditables);
+  if(_db&&_auth&&_auth.currentUser)_safe(subscribeState);
+  if(window.feather)_safe(function(){feather.replace();});
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
