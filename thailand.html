@@ -65,6 +65,7 @@ body{
 /* hotel cards */
 .hcard{background:var(--card);border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);border-radius:20px;margin-bottom:13px;overflow:hidden}
 .hcard .hbanner{height:6px;background:linear-gradient(90deg,var(--blue),var(--turquoise))}
+.hotel-img{width:100%;height:150px;object-fit:cover;display:block;background:var(--soft)}
 .hcard.p2 .hbanner{background:linear-gradient(90deg,var(--sand),#f4a340)}
 .hcard.p3 .hbanner{background:linear-gradient(90deg,var(--coral),#ff9d7a)}
 .hhead{display:flex;align-items:center;gap:11px;padding:14px 15px 0}
@@ -83,7 +84,9 @@ body{
 .hprice .tot{text-align:left}
 .hprice .tot span{font-size:10px;color:var(--muted);display:block;margin-bottom:2px}
 .hprice .tot b.px{font-size:14px;font-weight:700;color:var(--coral);font-family:var(--mono)}
-.haddr{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--muted);line-height:1.5}
+.haddr{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.hsite{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--card-brd);color:var(--blue);font-weight:700;font-size:11.5px;text-decoration:none;border-radius:999px;padding:7px 13px}
+.hsite:active{opacity:.75}
 
 /* map */
 .mapbox{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);height:320px;margin-bottom:10px}
@@ -163,6 +166,9 @@ body{
 
   <div class="hcard p1">
     <div class="hbanner"></div>
+    <img class="hotel-img" alt="Phuket Marriott Resort & Spa, Merlin Beach" loading="lazy" referrerpolicy="no-referrer"
+      src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80&auto=format&fit=crop"
+      onerror="this.style.display='none'">
     <div class="hhead">
       <div class="hnum">1</div>
       <div><h3>Phuket Marriott Resort & Spa, Merlin Beach</h3><p>פאטונג (Tri-Trang Beach) · ★★★★★</p></div>
@@ -174,11 +180,15 @@ body{
         <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="62317.50">6,986 ₪</b></div>
       </div>
       <div class="haddr">📍 99 Muen-Ngoen Rd., Tri-Trang Beach, Patong, Phuket 83150</div>
+      <a class="hsite" href="https://www.marriott.com/en-us/hotels/hktmb-phuket-marriott-resort-and-spa-merlin-beach/overview/" target="_blank" rel="noopener">🔗 אתר המלון</a>
     </div>
   </div>
 
   <div class="hcard p2">
     <div class="hbanner"></div>
+    <img class="hotel-img" alt="Avani+ Khao Lak Resort" loading="lazy" referrerpolicy="no-referrer"
+      src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&q=80&auto=format&fit=crop"
+      onerror="this.style.display='none'">
     <div class="hhead">
       <div class="hnum">2</div>
       <div><h3>Avani+ Khao Lak Resort</h3><p>קאו לאק, פאנגה · Two Bedroom Family Suite</p></div>
@@ -190,11 +200,15 @@ body{
         <div class="tot"><span>סה"כ (כולל מיסים)</span><b class="px" data-thb="128747.75">14,434 ₪</b></div>
       </div>
       <div class="haddr">📍 99 Moo 8, Tumbon Bang Muang, Takua Pa, Phang Nga 82190</div>
+      <a class="hsite" href="https://www.avanihotels.com/en/khao-lak-phang-nga" target="_blank" rel="noopener">🔗 אתר המלון</a>
     </div>
   </div>
 
   <div class="hcard p3">
     <div class="hbanner"></div>
+    <img class="hotel-img" alt="Katathani Phuket Beach Resort" loading="lazy" referrerpolicy="no-referrer"
+      src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=900&q=80&auto=format&fit=crop"
+      onerror="this.style.display='none'">
     <div class="hhead">
       <div class="hnum">3</div>
       <div><h3>Katathani Phuket Beach Resort</h3><p>קאטה נוי · Two Bedroom Teen Suite</p></div>
@@ -206,6 +220,7 @@ body{
         <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="67852.80">7,607 ₪</b></div>
       </div>
       <div class="haddr">📍 14 Kata Noi Road, Karon, Muang, Phuket 83100</div>
+      <a class="hsite" href="https://www.katathani.com/" target="_blank" rel="noopener">🔗 אתר המלון</a>
     </div>
   </div>
 
