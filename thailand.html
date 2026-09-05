@@ -68,13 +68,8 @@ body{
 .hcard .hbanner{height:6px;background:linear-gradient(90deg,var(--blue),var(--turquoise))}
 .hcard.p2 .hbanner{background:linear-gradient(90deg,var(--sand),#f4a340)}
 .hcard.p3 .hbanner{background:linear-gradient(90deg,var(--coral),#ff9d7a)}
-.hotel-img-wrap{position:relative;height:170px;overflow:hidden}
-.hotel-img-wrap .fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:0 20px}
-.hotel-img-wrap .fallback span{font-size:36px}
-.hotel-img-wrap.p1 .fallback{background:linear-gradient(135deg,var(--blue),var(--turquoise))}
-.hotel-img-wrap.p2 .fallback{background:linear-gradient(135deg,var(--sand),#f4a340)}
-.hotel-img-wrap.p3 .fallback{background:linear-gradient(135deg,var(--coral),#ff9d7a)}
-.hotel-img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.hotel-img-wrap{height:170px;overflow:hidden}
+.hotel-img-wrap svg{width:100%;height:100%;display:block}
 .hhead{display:flex;align-items:center;gap:11px;padding:14px 15px 0}
 .hnum{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hcard.p2 .hnum{background:var(--sand);color:#5a3d00}
@@ -177,10 +172,22 @@ body{
   <div class="hcard p1">
     <div class="hbanner"></div>
     <div class="hotel-img-wrap p1">
-      <div class="fallback"><span>🏨</span>Phuket Marriott Resort & Spa, Merlin Beach</div>
-      <img class="hotel-img" alt="Phuket Marriott Resort & Spa, Merlin Beach" loading="lazy" referrerpolicy="no-referrer"
-        src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80&auto=format&fit=crop"
-        onerror="this.style.display='none'">
+      <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Phuket Marriott Resort & Spa, Merlin Beach">
+        <defs>
+          <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ECBFF"/><stop offset="1" stop-color="#D7EEFF"/></linearGradient>
+          <linearGradient id="sea1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2CC9C0"/><stop offset="1" stop-color="#0E93A3"/></linearGradient>
+        </defs>
+        <rect width="400" height="170" fill="url(#sky1)"/>
+        <circle cx="345" cy="34" r="20" fill="#FFD166"/>
+        <rect y="98" width="400" height="72" fill="url(#sea1)"/>
+        <path d="M0 98 Q100 90 200 98 T400 96 V170 H0 Z" fill="#17B8A6" opacity=".45"/>
+        <g transform="translate(44,58)"><rect x="-3" width="6" height="52" fill="#5A3D1A" rx="2"/>
+          <path d="M0 0 Q-28 -8 -42 10 Q-18 0 0 6" fill="#0A5F47"/>
+          <path d="M0 0 Q28 -12 44 4 Q20 -2 0 6" fill="#0A5F47"/>
+          <path d="M0 0 Q-6 -22 4 -36 Q9 -16 1 4" fill="#0A5F47"/></g>
+        <g transform="translate(255,72)"><path d="M0 22 L0 -8 L13 15 Z" fill="#fff"/><rect x="-8" y="20" width="16" height="4" rx="2" fill="#1B2A41"/></g>
+        <rect x="150" y="122" width="210" height="13" rx="6.5" fill="#fff" opacity=".9"/>
+      </svg>
     </div>
     <div class="hhead">
       <div class="hnum">1</div>
@@ -203,10 +210,23 @@ body{
   <div class="hcard p2">
     <div class="hbanner"></div>
     <div class="hotel-img-wrap p2">
-      <div class="fallback"><span>🌊</span>Avani+ Khao Lak Resort</div>
-      <img class="hotel-img" alt="Avani+ Khao Lak Resort" loading="lazy" referrerpolicy="no-referrer"
-        src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&q=80&auto=format&fit=crop"
-        onerror="this.style.display='none'">
+      <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Avani+ Khao Lak Resort">
+        <defs>
+          <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC857"/><stop offset="1" stop-color="#FFE4AE"/></linearGradient>
+          <linearGradient id="sea2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9D5C"/><stop offset="1" stop-color="#F4A340"/></linearGradient>
+        </defs>
+        <rect width="400" height="170" fill="url(#sky2)"/>
+        <circle cx="200" cy="95" r="30" fill="#FFF3D6"/>
+        <rect y="105" width="400" height="65" fill="url(#sea2)"/>
+        <path d="M0 105 Q100 96 200 105 T400 103 V170 H0 Z" fill="#FF7A59" opacity=".4"/>
+        <g transform="translate(70,60)"><rect x="-3" width="6" height="55" fill="#5A3D1A" rx="2"/>
+          <path d="M0 0 Q-30 -10 -46 8 Q-20 -1 0 7" fill="#5A3D1A" opacity=".85"/>
+          <path d="M0 0 Q30 -12 48 3 Q22 -3 0 7" fill="#5A3D1A" opacity=".85"/></g>
+        <g transform="translate(320,65)"><rect x="-3" width="6" height="48" fill="#5A3D1A" rx="2"/>
+          <path d="M0 0 Q-24 -8 -36 6 Q-16 -1 0 6" fill="#5A3D1A" opacity=".85"/>
+          <path d="M0 0 Q24 -10 38 2 Q18 -3 0 6" fill="#5A3D1A" opacity=".85"/></g>
+        <g transform="translate(150,130)"><path d="M-16 0 A16 16 0 0 1 16 0 Z" fill="#fff" opacity=".92"/><rect x="-1.5" y="0" width="3" height="18" fill="#8a5a2a"/></g>
+      </svg>
     </div>
     <div class="hhead">
       <div class="hnum">2</div>
@@ -229,10 +249,23 @@ body{
   <div class="hcard p3">
     <div class="hbanner"></div>
     <div class="hotel-img-wrap p3">
-      <div class="fallback"><span>🌴</span>Katathani Phuket Beach Resort</div>
-      <img class="hotel-img" alt="Katathani Phuket Beach Resort" loading="lazy" referrerpolicy="no-referrer"
-        src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=900&q=80&auto=format&fit=crop"
-        onerror="this.style.display='none'">
+      <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Katathani Phuket Beach Resort">
+        <defs>
+          <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFAE94"/><stop offset="1" stop-color="#FFD9C7"/></linearGradient>
+          <linearGradient id="sea3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A59"/><stop offset="1" stop-color="#EF476F"/></linearGradient>
+        </defs>
+        <rect width="400" height="170" fill="url(#sky3)"/>
+        <circle cx="60" cy="38" r="18" fill="#fff" opacity=".85"/>
+        <rect y="100" width="400" height="70" fill="url(#sea3)"/>
+        <path d="M0 100 Q100 90 200 100 T400 98 V170 H0 Z" fill="#EF476F" opacity=".4"/>
+        <path d="M260 40 L400 40 L400 170 L280 170 Q250 120 260 40 Z" fill="#8A4A3C" opacity=".55"/>
+        <g transform="translate(120,62)"><rect x="-3" width="6" height="50" fill="#5A3D1A" rx="2"/>
+          <path d="M0 0 Q-26 -9 -40 8 Q-18 -1 0 6" fill="#7A2F3A"/>
+          <path d="M0 0 Q26 -11 42 4 Q19 -3 0 6" fill="#7A2F3A"/>
+          <path d="M0 0 Q-5 -20 4 -33 Q8 -14 1 4" fill="#7A2F3A"/></g>
+        <rect x="30" y="128" width="34" height="9" rx="4" fill="#fff" opacity=".85"/>
+        <rect x="72" y="128" width="34" height="9" rx="4" fill="#fff" opacity=".7"/>
+      </svg>
     </div>
     <div class="hhead">
       <div class="hnum">3</div>
