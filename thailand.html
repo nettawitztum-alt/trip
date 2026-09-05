@@ -4,6 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>תאילנד 2027 — טיסות ומלונות</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{
   --gs:'Heebo',sans-serif;--mono:'Space Mono',monospace;
@@ -65,9 +66,15 @@ body{
 /* hotel cards */
 .hcard{background:var(--card);border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);border-radius:20px;margin-bottom:13px;overflow:hidden}
 .hcard .hbanner{height:6px;background:linear-gradient(90deg,var(--blue),var(--turquoise))}
-.hotel-img{width:100%;height:150px;object-fit:cover;display:block;background:var(--soft)}
 .hcard.p2 .hbanner{background:linear-gradient(90deg,var(--sand),#f4a340)}
 .hcard.p3 .hbanner{background:linear-gradient(90deg,var(--coral),#ff9d7a)}
+.hotel-img-wrap{position:relative;height:170px;overflow:hidden}
+.hotel-img-wrap .fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:0 20px}
+.hotel-img-wrap .fallback span{font-size:36px}
+.hotel-img-wrap.p1 .fallback{background:linear-gradient(135deg,var(--blue),var(--turquoise))}
+.hotel-img-wrap.p2 .fallback{background:linear-gradient(135deg,var(--sand),#f4a340)}
+.hotel-img-wrap.p3 .fallback{background:linear-gradient(135deg,var(--coral),#ff9d7a)}
+.hotel-img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
 .hhead{display:flex;align-items:center;gap:11px;padding:14px 15px 0}
 .hnum{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hcard.p2 .hnum{background:var(--sand);color:#5a3d00}
@@ -85,12 +92,15 @@ body{
 .hprice .tot span{font-size:10px;color:var(--muted);display:block;margin-bottom:2px}
 .hprice .tot b.px{font-size:14px;font-weight:700;color:var(--coral);font-family:var(--mono)}
 .haddr{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.hlinks{display:flex;gap:8px;flex-wrap:wrap}
 .hsite{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--card-brd);color:var(--blue);font-weight:700;font-size:11.5px;text-decoration:none;border-radius:999px;padding:7px 13px}
+.hsite.gmap{color:var(--turquoise)}
 .hsite:active{opacity:.75}
 
 /* map */
-.mapbox{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);height:320px;margin-bottom:10px}
-.mapbox svg{width:100%;height:100%;display:block}
+#map{border-radius:20px;overflow:hidden;border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);height:320px;margin-bottom:10px;background:var(--soft)}
+.leaflet-popup-content{font-family:var(--gs);font-size:12.5px;line-height:1.6}
+.leaflet-popup-content a{color:var(--blue);font-weight:700}
 .legend{display:flex;flex-direction:column;gap:7px;margin-bottom:6px;font-size:11.5px;color:var(--muted)}
 .legend .row{display:flex;align-items:center;gap:9px}
 .legend .dot{width:20px;height:20px;border-radius:50%;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -166,9 +176,12 @@ body{
 
   <div class="hcard p1">
     <div class="hbanner"></div>
-    <img class="hotel-img" alt="Phuket Marriott Resort & Spa, Merlin Beach" loading="lazy" referrerpolicy="no-referrer"
-      src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80&auto=format&fit=crop"
-      onerror="this.style.display='none'">
+    <div class="hotel-img-wrap p1">
+      <div class="fallback"><span>🏨</span>Phuket Marriott Resort & Spa, Merlin Beach</div>
+      <img class="hotel-img" alt="Phuket Marriott Resort & Spa, Merlin Beach" loading="lazy" referrerpolicy="no-referrer"
+        src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80&auto=format&fit=crop"
+        onerror="this.style.display='none'">
+    </div>
     <div class="hhead">
       <div class="hnum">1</div>
       <div><h3>Phuket Marriott Resort & Spa, Merlin Beach</h3><p>פאטונג (Tri-Trang Beach) · ★★★★★</p></div>
@@ -180,15 +193,21 @@ body{
         <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="62317.50">5,691 ₪</b></div>
       </div>
       <div class="haddr">📍 99 Muen-Ngoen Rd., Tri-Trang Beach, Patong, Phuket 83150</div>
-      <a class="hsite" href="https://www.marriott.com/en-us/hotels/hktmb-phuket-marriott-resort-and-spa-merlin-beach/overview/" target="_blank" rel="noopener">🔗 אתר המלון</a>
+      <div class="hlinks">
+        <a class="hsite" href="https://www.marriott.com/en-us/hotels/hktmb-phuket-marriott-resort-and-spa-merlin-beach/overview/" target="_blank" rel="noopener">🔗 אתר המלון</a>
+        <a class="hsite gmap" href="https://www.google.com/maps?q=7.8837,98.3038" target="_blank" rel="noopener">📍 גוגל מפות</a>
+      </div>
     </div>
   </div>
 
   <div class="hcard p2">
     <div class="hbanner"></div>
-    <img class="hotel-img" alt="Avani+ Khao Lak Resort" loading="lazy" referrerpolicy="no-referrer"
-      src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&q=80&auto=format&fit=crop"
-      onerror="this.style.display='none'">
+    <div class="hotel-img-wrap p2">
+      <div class="fallback"><span>🌊</span>Avani+ Khao Lak Resort</div>
+      <img class="hotel-img" alt="Avani+ Khao Lak Resort" loading="lazy" referrerpolicy="no-referrer"
+        src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&q=80&auto=format&fit=crop"
+        onerror="this.style.display='none'">
+    </div>
     <div class="hhead">
       <div class="hnum">2</div>
       <div><h3>Avani+ Khao Lak Resort</h3><p>קאו לאק, פאנגה · Two Bedroom Family Suite</p></div>
@@ -200,15 +219,21 @@ body{
         <div class="tot"><span>סה"כ (כולל מיסים)</span><b class="px" data-thb="128747.75">11,758 ₪</b></div>
       </div>
       <div class="haddr">📍 99 Moo 8, Tumbon Bang Muang, Takua Pa, Phang Nga 82190</div>
-      <a class="hsite" href="https://www.avanihotels.com/en/khao-lak-phang-nga" target="_blank" rel="noopener">🔗 אתר המלון</a>
+      <div class="hlinks">
+        <a class="hsite" href="https://www.avanihotels.com/en/khao-lak-phang-nga" target="_blank" rel="noopener">🔗 אתר המלון</a>
+        <a class="hsite gmap" href="https://www.google.com/maps?q=8.7636,98.2625" target="_blank" rel="noopener">📍 גוגל מפות</a>
+      </div>
     </div>
   </div>
 
   <div class="hcard p3">
     <div class="hbanner"></div>
-    <img class="hotel-img" alt="Katathani Phuket Beach Resort" loading="lazy" referrerpolicy="no-referrer"
-      src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=900&q=80&auto=format&fit=crop"
-      onerror="this.style.display='none'">
+    <div class="hotel-img-wrap p3">
+      <div class="fallback"><span>🌴</span>Katathani Phuket Beach Resort</div>
+      <img class="hotel-img" alt="Katathani Phuket Beach Resort" loading="lazy" referrerpolicy="no-referrer"
+        src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=900&q=80&auto=format&fit=crop"
+        onerror="this.style.display='none'">
+    </div>
     <div class="hhead">
       <div class="hnum">3</div>
       <div><h3>Katathani Phuket Beach Resort</h3><p>קאטה נוי · Two Bedroom Teen Suite</p></div>
@@ -220,30 +245,15 @@ body{
         <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="67852.80">6,197 ₪</b></div>
       </div>
       <div class="haddr">📍 14 Kata Noi Road, Karon, Muang, Phuket 83100</div>
-      <a class="hsite" href="https://www.katathani.com/" target="_blank" rel="noopener">🔗 אתר המלון</a>
+      <div class="hlinks">
+        <a class="hsite" href="https://www.katathani.com/" target="_blank" rel="noopener">🔗 אתר המלון</a>
+        <a class="hsite gmap" href="https://www.google.com/maps?q=7.8115,98.2932" target="_blank" rel="noopener">📍 גוגל מפות</a>
+      </div>
     </div>
   </div>
 
   <div class="sec-lbl"><span>🗺️ המלונות על המפה</span><span class="line"></span></div>
-  <div class="mapbox">
-    <svg viewBox="0 0 360 380" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="seaGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#BFE3F5"/><stop offset="1" stop-color="#8FCBE8"/>
-        </linearGradient>
-      </defs>
-      <rect width="360" height="380" fill="url(#seaGrad)"/>
-      <path d="M150 0 L360 0 L360 120 L210 150 L100 130 Z" fill="#BFE7CE"/>
-      <path d="M60 220 Q120 190 180 220 Q210 260 190 310 Q150 360 100 350 Q60 330 60 280 Z" fill="#BFE7CE"/>
-      <text x="255" y="70" text-anchor="middle" font-size="11" fill="#3C6B52" font-family="Heebo">פאנגה (מיינלנד)</text>
-      <text x="130" y="300" text-anchor="middle" font-size="11" fill="#3C6B52" font-family="Heebo">אי פוקט</text>
-      <text x="40" y="200" text-anchor="middle" font-size="10" fill="#4C7E9A" font-family="Heebo">ים אנדמן</text>
-      <path d="M155 170 L120 250 L115 320" stroke="#FF7A59" stroke-width="2" stroke-dasharray="5 4" fill="none" opacity=".7"/>
-      <g><circle cx="155" cy="170" r="15" fill="#FFC857" stroke="#fff" stroke-width="3"/><text x="155" y="175" text-anchor="middle" font-size="14" font-weight="800" fill="#5a3d00">2</text></g>
-      <g><circle cx="120" cy="250" r="15" fill="#2F6FED" stroke="#fff" stroke-width="3"/><text x="120" y="255" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">1</text></g>
-      <g><circle cx="115" cy="320" r="15" fill="#FF7A59" stroke="#fff" stroke-width="3"/><text x="115" y="325" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">3</text></g>
-    </svg>
-  </div>
+  <div id="map"></div>
   <div class="legend">
     <div class="row"><div class="dot" style="background:var(--blue);color:#fff">1</div>Marriott Merlin Beach · פאטונג · 13–17.4</div>
     <div class="row"><div class="dot" style="background:var(--sand);color:#5a3d00">2</div>Avani+ Khao Lak · 17–22.4 (כ-70 ק"מ צפונה)</div>
@@ -261,6 +271,42 @@ body{
   <div class="footer">🌴 נבנה מתוך אישורי ההזמנה בג'ימייל · תאילנד 2027</div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const HOTELS = [
+  { n:1, name:'Phuket Marriott Resort & Spa, Merlin Beach', lat:7.8837, lng:98.3038, color:'#2F6FED', txt:'#fff',
+    site:'https://www.marriott.com/en-us/hotels/hktmb-phuket-marriott-resort-and-spa-merlin-beach/overview/' },
+  { n:2, name:'Avani+ Khao Lak Resort', lat:8.7636, lng:98.2625, color:'#FFC857', txt:'#5a3d00',
+    site:'https://www.avanihotels.com/en/khao-lak-phang-nga' },
+  { n:3, name:'Katathani Phuket Beach Resort', lat:7.8115, lng:98.2932, color:'#FF7A59', txt:'#fff',
+    site:'https://www.katathani.com/' },
+];
+
+(function initMap(){
+  const map = L.map('map', { scrollWheelZoom:false });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+  }).addTo(map);
+
+  const latlngs = HOTELS.map(h => [h.lat, h.lng]);
+  L.polyline(latlngs, { color:'#FF7A59', weight:3, dashArray:'6 6', opacity:.7 }).addTo(map);
+
+  HOTELS.forEach(h => {
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="background:${h.color};color:${h.txt};width:28px;height:28px;border-radius:50%;
+             display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;
+             border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)">${h.n}</div>`,
+      iconSize: [28,28], iconAnchor: [14,14]
+    });
+    L.marker([h.lat, h.lng], { icon }).addTo(map)
+      .bindPopup(`<b>${h.name}</b><br><a href="${h.site}" target="_blank" rel="noopener">אתר המלון ↗</a> ·
+                   <a href="https://www.google.com/maps?q=${h.lat},${h.lng}" target="_blank" rel="noopener">גוגל מפות ↗</a>`);
+  });
+
+  map.fitBounds(latlngs, { padding:[36,36] });
+})();
+</script>
 <script>
 const RATE_TO_THB = { THB:1, USD:32.95, ILS:10.95 };
 const SYMBOL = { THB:'฿', USD:'$', ILS:'₪' };
