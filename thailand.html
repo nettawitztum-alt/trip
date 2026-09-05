@@ -7,105 +7,99 @@
 <style>
 :root{
   --gs:'Heebo',sans-serif;--mono:'Space Mono',monospace;
-  --sea-deep:#073b4c;--sea:#0c5c70;--sea-light:#0e93a3;
-  --turquoise:#06d6a0;--sand:#ffd166;--coral:#ff6b6b;--pink:#ef476f;
-  --card:rgba(255,255,255,.07);--card-hi:rgba(255,255,255,.11);--brd:rgba(255,255,255,.14);
-  --muted:rgba(255,255,255,.68);--ink:#fff;
+  --blue:#2F6FED;--turquoise:#17B8A6;--coral:#FF7A59;--sand:#FFC857;
+  --ink:#1B2A41;--muted:#6B7A90;
+  --card:#ffffff;--card-brd:#EAF0F8;--soft:#F3F7FC;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:var(--gs)}
 html{scroll-behavior:smooth}
 body{
   background:
-    radial-gradient(900px 480px at 15% -8%, rgba(255,209,102,.16), transparent 60%),
-    radial-gradient(700px 420px at 100% 0%, rgba(239,71,111,.14), transparent 55%),
-    linear-gradient(165deg,#052b34 0%,#073b4c 35%,#0a5060 65%,#0e6f7c 100%);
-  background-attachment:fixed;
+    radial-gradient(700px 380px at 10% -6%, rgba(47,111,237,.10), transparent 60%),
+    radial-gradient(600px 360px at 100% 0%, rgba(255,122,89,.12), transparent 55%),
+    linear-gradient(180deg,#EAF4FF 0%,#F3F7FC 45%,#FFF3E9 100%);
   color:var(--ink);min-height:100vh;padding:0 0 60px;
 }
 .wrap{max-width:480px;margin:0 auto;padding:0 16px}
 
 /* hero */
-.hero{position:relative;padding:34px 16px 26px;text-align:center;overflow:hidden;margin-bottom:6px}
-.hero::before{content:'';position:absolute;inset:0;background:
-  radial-gradient(220px 100px at 20% 100%, rgba(6,214,160,.25), transparent 70%),
-  radial-gradient(260px 120px at 85% 10%, rgba(255,209,102,.22), transparent 70%);
-  pointer-events:none}
-.hero .emoji{font-size:34px;margin-bottom:6px}
-.hero h1{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.hero{position:relative;padding:34px 16px 22px;text-align:center;overflow:hidden;margin-bottom:6px}
+.hero .emoji{font-size:36px;margin-bottom:6px}
+.hero h1{font-size:22px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
 .hero p{font-size:13px;color:var(--muted);margin-top:5px}
 .hero .badges{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.hero .badges span{background:rgba(255,255,255,.1);border:1px solid var(--brd);border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:600;color:var(--sand)}
+.hero .badges span{background:#fff;border:1px solid var(--card-brd);box-shadow:0 4px 14px rgba(31,45,61,.06);border-radius:999px;padding:6px 13px;font-size:11.5px;font-weight:700;color:var(--blue)}
 
 /* currency toggle */
-.curwrap{position:sticky;top:0;z-index:20;padding:10px 16px;backdrop-filter:blur(10px);background:rgba(5,35,42,.72);border-bottom:1px solid var(--brd)}
-.curtoggle{max-width:448px;margin:0 auto;display:flex;background:rgba(255,255,255,.08);border:1px solid var(--brd);border-radius:999px;padding:4px;gap:3px}
+.curwrap{position:sticky;top:0;z-index:20;padding:10px 16px;backdrop-filter:blur(10px);background:rgba(255,255,255,.82);border-bottom:1px solid var(--card-brd)}
+.curtoggle{max-width:448px;margin:0 auto;display:flex;background:var(--soft);border:1px solid var(--card-brd);border-radius:999px;padding:4px;gap:3px}
 .curtoggle button{flex:1;border:none;background:transparent;color:var(--muted);font-family:var(--gs);font-weight:700;font-size:13px;padding:8px 0;border-radius:999px;cursor:pointer;transition:.15s}
-.curtoggle button.on{background:var(--turquoise);color:#023024;box-shadow:0 4px 14px rgba(6,214,160,.35)}
+.curtoggle button.on{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(47,111,237,.35)}
 
 /* section labels */
-.sec-lbl{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:var(--sand);text-transform:uppercase;letter-spacing:.04em;margin:26px 2px 10px}
-.sec-lbl .line{flex:1;height:1px;background:linear-gradient(90deg,var(--brd),transparent)}
+.sec-lbl{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:var(--coral);text-transform:uppercase;letter-spacing:.04em;margin:26px 2px 10px}
+.sec-lbl .line{flex:1;height:1px;background:linear-gradient(90deg,var(--card-brd),transparent)}
 
 /* warning */
-.warn{background:linear-gradient(135deg,rgba(255,107,107,.16),rgba(239,71,111,.08));border:1px solid rgba(255,107,107,.4);border-radius:18px;padding:14px 15px;margin-bottom:4px}
-.warn .whead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13.5px;color:var(--coral);margin-bottom:6px}
-.warn p{font-size:12px;color:rgba(255,255,255,.85);line-height:1.7}
-.warn ul{margin:8px 0 0;padding-inline-start:18px;font-size:11.5px;color:var(--muted);line-height:1.8}
+.warn{background:#FFF4EE;border:1px solid #FFD9C7;border-radius:18px;padding:14px 15px;margin-bottom:4px}
+.warn .whead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13.5px;color:#D8531F;margin-bottom:6px}
+.warn p{font-size:12px;color:#5B4436;line-height:1.7}
+.warn ul{margin:8px 0 0;padding-inline-start:18px;font-size:11.5px;color:#7A6455;line-height:1.8}
 
 /* flight card */
-.flcard{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:16px;margin-bottom:12px;backdrop-filter:blur(6px)}
+.flcard{background:var(--card);border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);border-radius:20px;padding:16px;margin-bottom:12px}
 .flrow{display:flex;align-items:center;gap:10px}
 .flrow .airport{text-align:center}
-.flrow .airport b{font-size:21px;font-weight:800;display:block;color:var(--turquoise)}
+.flrow .airport b{font-size:21px;font-weight:800;display:block;color:var(--blue)}
 .flrow .airport span{font-size:10.5px;color:var(--muted)}
 .flpath{flex:1;position:relative;display:flex;align-items:center;justify-content:center;height:20px}
 .flpath::before{content:'';position:absolute;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--sand),transparent)}
-.flpath i{position:relative;font-size:16px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.flpath i{position:relative;font-size:16px}
 .flmeta{display:flex;flex-wrap:wrap;gap:6px 8px;margin-top:11px}
-.flmeta span{font-size:11px;font-weight:600;background:rgba(255,255,255,.08);border:1px solid var(--brd);border-radius:8px;padding:4px 9px;color:var(--muted)}
-.flmeta span b{color:#fff;font-weight:700}
+.flmeta span{font-size:11px;font-weight:600;background:var(--soft);border:1px solid var(--card-brd);border-radius:8px;padding:4px 9px;color:var(--muted)}
+.flmeta span b{color:var(--ink);font-weight:700}
 .flpax{margin-top:9px;font-size:11.5px;color:var(--muted)}
-.fldivider{display:flex;align-items:center;gap:8px;margin:14px 0 12px;color:var(--sand);font-size:11px;font-weight:700}
-.fldivider::before,.fldivider::after{content:'';flex:1;height:1px;background:var(--brd)}
+.fldivider{display:flex;align-items:center;gap:8px;margin:14px 0 12px;color:var(--coral);font-size:11px;font-weight:700}
+.fldivider::before,.fldivider::after{content:'';flex:1;height:1px;background:var(--card-brd)}
 
 /* hotel cards */
-.hcard{background:var(--card);border:1px solid var(--brd);border-radius:20px;margin-bottom:13px;overflow:hidden;backdrop-filter:blur(6px)}
-.hcard .hbanner{height:6px;background:linear-gradient(90deg,var(--turquoise),var(--sea-light))}
+.hcard{background:var(--card);border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);border-radius:20px;margin-bottom:13px;overflow:hidden}
+.hcard .hbanner{height:6px;background:linear-gradient(90deg,var(--blue),var(--turquoise))}
 .hcard.p2 .hbanner{background:linear-gradient(90deg,var(--sand),#f4a340)}
-.hcard.p3 .hbanner{background:linear-gradient(90deg,var(--coral),var(--pink))}
+.hcard.p3 .hbanner{background:linear-gradient(90deg,var(--coral),#ff9d7a)}
 .hhead{display:flex;align-items:center;gap:11px;padding:14px 15px 0}
-.hnum{width:26px;height:26px;border-radius:50%;background:var(--turquoise);color:#023024;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.hcard.p2 .hnum{background:var(--sand);color:#3a2400}
-.hcard.p3 .hnum{background:var(--coral);color:#3a0000}
-.hhead h3{font-size:14.5px;font-weight:700}
+.hnum{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hcard.p2 .hnum{background:var(--sand);color:#5a3d00}
+.hcard.p3 .hnum{background:var(--coral);color:#fff}
+.hhead h3{font-size:14.5px;font-weight:700;color:var(--ink)}
 .hhead p{font-size:11px;color:var(--muted);margin-top:1px}
 .hbody{padding:12px 15px 15px}
 .hdates{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
-.hdates b{color:#fff}
-.hnights{background:rgba(6,214,160,.16);color:var(--turquoise);border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:700}
-.hprice{display:flex;align-items:flex-end;justify-content:space-between;background:rgba(255,255,255,.05);border-radius:14px;padding:10px 13px;margin-bottom:10px}
+.hdates b{color:var(--ink)}
+.hnights{background:rgba(23,184,166,.13);color:var(--turquoise);border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:700}
+.hprice{display:flex;align-items:flex-end;justify-content:space-between;background:var(--soft);border-radius:14px;padding:10px 13px;margin-bottom:10px}
 .hprice .per span{font-size:10.5px;color:var(--muted);display:block;margin-bottom:2px}
-.hprice .per b.px{font-size:19px;font-weight:800;font-family:var(--mono)}
+.hprice .per b.px{font-size:19px;font-weight:800;font-family:var(--mono);color:var(--ink)}
 .hprice .tot{text-align:left}
 .hprice .tot span{font-size:10px;color:var(--muted);display:block;margin-bottom:2px}
-.hprice .tot b.px{font-size:14px;font-weight:700;color:var(--sand);font-family:var(--mono)}
+.hprice .tot b.px{font-size:14px;font-weight:700;color:var(--coral);font-family:var(--mono)}
 .haddr{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--muted);line-height:1.5}
 
 /* map */
-.mapbox{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--brd);height:320px;margin-bottom:10px}
+.mapbox{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--card-brd);box-shadow:0 8px 24px rgba(31,45,61,.07);height:320px;margin-bottom:10px}
 .mapbox svg{width:100%;height:100%;display:block}
 .legend{display:flex;flex-direction:column;gap:7px;margin-bottom:6px;font-size:11.5px;color:var(--muted)}
 .legend .row{display:flex;align-items:center;gap:9px}
 .legend .dot{width:20px;height:20px;border-radius:50%;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
 /* summary */
-.sumcard{background:linear-gradient(135deg,rgba(6,214,160,.16),rgba(255,209,102,.06));border:1px solid rgba(6,214,160,.35);border-radius:20px;padding:16px;margin-top:6px}
+.sumcard{background:linear-gradient(135deg,rgba(47,111,237,.08),rgba(255,200,87,.10));border:1px solid #DCE9FF;border-radius:20px;padding:16px;margin-top:6px}
 .sumrow{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:6px 0;color:var(--muted)}
-.sumrow b.px{color:#fff;font-weight:700;font-family:var(--mono)}
-.sumrow.total{border-top:1px solid rgba(255,255,255,.16);margin-top:6px;padding-top:11px;font-size:14px}
-.sumrow.total b.px{color:var(--turquoise);font-size:19px}
+.sumrow b.px{color:var(--ink);font-weight:700;font-family:var(--mono)}
+.sumrow.total{border-top:1px solid #DCE9FF;margin-top:6px;padding-top:11px;font-size:14px}
+.sumrow.total b.px{color:var(--blue);font-size:19px}
 .note{font-size:10.5px;color:var(--muted);text-align:center;margin-top:10px;font-style:italic;line-height:1.6}
-.footer{text-align:center;font-size:11px;color:var(--muted);margin-top:30px;padding-top:16px;border-top:1px solid var(--brd)}
+.footer{text-align:center;font-size:11px;color:var(--muted);margin-top:30px;padding-top:16px;border-top:1px solid var(--card-brd)}
 </style>
 </head>
 <body>
@@ -176,8 +170,8 @@ body{
     <div class="hbody">
       <div class="hdates">📅 <b>13.4</b> → <b>17.4.27</b> <span class="hnights">4 לילות</span></div>
       <div class="hprice">
-        <div class="per"><span>ממוצע ללילה</span><b class="px" data-thb="15579.38">–</b></div>
-        <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="62317.50">–</b></div>
+        <div class="per"><span>ממוצע ללילה</span><b class="px" data-thb="15579.38">1,747 ₪</b></div>
+        <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="62317.50">6,986 ₪</b></div>
       </div>
       <div class="haddr">📍 99 Muen-Ngoen Rd., Tri-Trang Beach, Patong, Phuket 83150</div>
     </div>
@@ -192,8 +186,8 @@ body{
     <div class="hbody">
       <div class="hdates">📅 <b>17.4</b> → <b>22.4.27</b> <span class="hnights">5 לילות</span></div>
       <div class="hprice">
-        <div class="per"><span>ממוצע ללילה</span><b class="px" data-thb="25749.57">–</b></div>
-        <div class="tot"><span>סה"כ (כולל מיסים)</span><b class="px" data-thb="128747.75">–</b></div>
+        <div class="per"><span>ממוצע ללילה</span><b class="px" data-thb="25749.57">2,887 ₪</b></div>
+        <div class="tot"><span>סה"כ (כולל מיסים)</span><b class="px" data-thb="128747.75">14,434 ₪</b></div>
       </div>
       <div class="haddr">📍 99 Moo 8, Tumbon Bang Muang, Takua Pa, Phang Nga 82190</div>
     </div>
@@ -208,8 +202,8 @@ body{
     <div class="hbody">
       <div class="hdates">📅 <b>22.4</b> → <b>27.4.27</b> <span class="hnights">5 לילות</span></div>
       <div class="hprice">
-        <div class="per"><span>ממוצע ללילה</span><b class="px" data-thb="13570.56">–</b></div>
-        <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="67852.80">–</b></div>
+        <div class="per"><span>ממוצע ללילה</span><b class="px" data-thb="13570.56">1,521 ₪</b></div>
+        <div class="tot"><span>סה"כ (מס + שירות)</span><b class="px" data-thb="67852.80">7,607 ₪</b></div>
       </div>
       <div class="haddr">📍 14 Kata Noi Road, Karon, Muang, Phuket 83100</div>
     </div>
@@ -220,32 +214,32 @@ body{
     <svg viewBox="0 0 360 380" preserveAspectRatio="xMidYMid slice">
       <defs>
         <linearGradient id="seaGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#0e93a3"/><stop offset="1" stop-color="#073b4c"/>
+          <stop offset="0" stop-color="#BFE3F5"/><stop offset="1" stop-color="#8FCBE8"/>
         </linearGradient>
       </defs>
       <rect width="360" height="380" fill="url(#seaGrad)"/>
-      <path d="M150 0 L360 0 L360 120 L210 150 L100 130 Z" fill="#0a5f47"/>
-      <path d="M60 220 Q120 190 180 220 Q210 260 190 310 Q150 360 100 350 Q60 330 60 280 Z" fill="#0a5f47"/>
-      <text x="255" y="70" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.55)" font-family="Heebo">פאנגה (מיינלנד)</text>
-      <text x="130" y="300" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.55)" font-family="Heebo">אי פוקט</text>
-      <text x="40" y="200" text-anchor="middle" font-size="10" fill="rgba(255,255,255,.4)" font-family="Heebo">ים אנדמן</text>
-      <path d="M155 170 L120 250 L115 320" stroke="#ffd166" stroke-width="2" stroke-dasharray="5 4" fill="none" opacity=".7"/>
-      <g><circle cx="155" cy="170" r="15" fill="#ffd166" stroke="#073b4c" stroke-width="3"/><text x="155" y="175" text-anchor="middle" font-size="14" font-weight="800" fill="#3a2400">2</text></g>
-      <g><circle cx="120" cy="250" r="15" fill="#06d6a0" stroke="#073b4c" stroke-width="3"/><text x="120" y="255" text-anchor="middle" font-size="14" font-weight="800" fill="#023024">1</text></g>
-      <g><circle cx="115" cy="320" r="15" fill="#ff6b6b" stroke="#073b4c" stroke-width="3"/><text x="115" y="325" text-anchor="middle" font-size="14" font-weight="800" fill="#3a0000">3</text></g>
+      <path d="M150 0 L360 0 L360 120 L210 150 L100 130 Z" fill="#BFE7CE"/>
+      <path d="M60 220 Q120 190 180 220 Q210 260 190 310 Q150 360 100 350 Q60 330 60 280 Z" fill="#BFE7CE"/>
+      <text x="255" y="70" text-anchor="middle" font-size="11" fill="#3C6B52" font-family="Heebo">פאנגה (מיינלנד)</text>
+      <text x="130" y="300" text-anchor="middle" font-size="11" fill="#3C6B52" font-family="Heebo">אי פוקט</text>
+      <text x="40" y="200" text-anchor="middle" font-size="10" fill="#4C7E9A" font-family="Heebo">ים אנדמן</text>
+      <path d="M155 170 L120 250 L115 320" stroke="#FF7A59" stroke-width="2" stroke-dasharray="5 4" fill="none" opacity=".7"/>
+      <g><circle cx="155" cy="170" r="15" fill="#FFC857" stroke="#fff" stroke-width="3"/><text x="155" y="175" text-anchor="middle" font-size="14" font-weight="800" fill="#5a3d00">2</text></g>
+      <g><circle cx="120" cy="250" r="15" fill="#2F6FED" stroke="#fff" stroke-width="3"/><text x="120" y="255" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">1</text></g>
+      <g><circle cx="115" cy="320" r="15" fill="#FF7A59" stroke="#fff" stroke-width="3"/><text x="115" y="325" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">3</text></g>
     </svg>
   </div>
   <div class="legend">
-    <div class="row"><div class="dot" style="background:var(--turquoise);color:#023024">1</div>Marriott Merlin Beach · פאטונג · 13–17.4</div>
-    <div class="row"><div class="dot" style="background:var(--sand);color:#3a2400">2</div>Avani+ Khao Lak · 17–22.4 (כ-70 ק"מ צפונה)</div>
-    <div class="row"><div class="dot" style="background:var(--coral);color:#3a0000">3</div>Katathani · קאטה נוי · 22–27.4</div>
+    <div class="row"><div class="dot" style="background:var(--blue);color:#fff">1</div>Marriott Merlin Beach · פאטונג · 13–17.4</div>
+    <div class="row"><div class="dot" style="background:var(--sand);color:#5a3d00">2</div>Avani+ Khao Lak · 17–22.4 (כ-70 ק"מ צפונה)</div>
+    <div class="row"><div class="dot" style="background:var(--coral);color:#fff">3</div>Katathani · קאטה נוי · 22–27.4</div>
   </div>
 
   <div class="sumcard">
-    <div class="sumrow"><span>מלון 1 · Marriott (4 לילות)</span><b class="px" data-thb="62317.50">–</b></div>
-    <div class="sumrow"><span>מלון 2 · Avani+ (5 לילות)</span><b class="px" data-thb="128747.75">–</b></div>
-    <div class="sumrow"><span>מלון 3 · Katathani (5 לילות)</span><b class="px" data-thb="67852.80">–</b></div>
-    <div class="sumrow total"><span>סה"כ מלונות (14 לילות)</span><b class="px" data-thb="258918.05">–</b></div>
+    <div class="sumrow"><span>מלון 1 · Marriott (4 לילות)</span><b class="px" data-thb="62317.50">6,986 ₪</b></div>
+    <div class="sumrow"><span>מלון 2 · Avani+ (5 לילות)</span><b class="px" data-thb="128747.75">14,434 ₪</b></div>
+    <div class="sumrow"><span>מלון 3 · Katathani (5 לילות)</span><b class="px" data-thb="67852.80">7,607 ₪</b></div>
+    <div class="sumrow total"><span>סה"כ מלונות (14 לילות)</span><b class="px" data-thb="258918.05">29,027 ₪</b></div>
   </div>
   <div class="note">💡 המרות משוערות: 1$ ≈ 33 ฿ · 1₪ ≈ 8.92 ฿ (שער קבוע להמחשה, לא שער תשלום בפועל). לא כולל מחיר הטיסות — לא מופיע באישור ארקיע. Hyatt Regency Phuket הוזמן ובוטל בחינם, הוחלף ב-Marriott.</div>
 
@@ -266,7 +260,7 @@ function fmt(thbAmount, cur){
 function render(){
   document.querySelectorAll('.px').forEach(el=>{
     const thb = parseFloat(el.dataset.thb);
-    el.textContent = fmt(thb, currentCur);
+    if(!isNaN(thb)) el.textContent = fmt(thb, currentCur);
   });
   document.querySelectorAll('.curtoggle button').forEach(b=>{
     b.classList.toggle('on', b.dataset.cur === currentCur);
